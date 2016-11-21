@@ -1,1 +1,1 @@
-![Карта сайта](/studitmap.png "Карта сайта")
+![Карта сайта](studit/docs/studitmap.png "Карта сайта")
