@@ -60,3 +60,4 @@
 
            </tbody>
 </table>
+https://app.moqups.com/cepblvl@gmail.com/0O558auljl/view/page/a8781f9e4 (можно счелкать по ссылкам)
