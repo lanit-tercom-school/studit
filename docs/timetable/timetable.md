@@ -30,4 +30,5 @@
         </td>
        </tr>
      </tbody>
-  
+
+![Расписание](https://github.com/lanit-tercom-school/studit/blob/master/docs/timetable/timetable.jpg "Расписание")
