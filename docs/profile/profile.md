@@ -158,7 +158,7 @@
 </table>
 
 ![Профиль](https://github.com/lanit-tercom-school/studit/blob/master/docs/profile/profile.png "Профиль")
-![Прогресс](https://github.com/lanit-tercom-school/studit/blob/master/docs/profile/progress.png "Прогресс")
+![Прогресс](https://github.com/lanit-tercom-school/studit/blob/master/docs/profile/progress.jpg "Прогресс")
 ![Настройки](https://github.com/lanit-tercom-school/studit/blob/master/docs/profile/settings.png "Настройки")
 
 ## вторичный функционал
