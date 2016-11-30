@@ -34,7 +34,7 @@
                 - при нажатии на кнопку сообщения около студента, открывается окно быстрого сообщения<br>
                           </td>
         </tr>
-       
+
   <tr>
             <td>
                 Преподаватель принимает студента на курс/проект
@@ -47,7 +47,7 @@
             </td>
 
                     </tr>
-       
+
    <tr>
             <td>
                 Студент подал заявку на курс/проект
@@ -63,4 +63,7 @@
 
            </tbody>
 </table>
+
 https://app.moqups.com/cepblvl@gmail.com/0O558auljl/view/page/a8781f9e4 (можно счелкать по ссылкам)
+
+![Участники](https://github.com/lanit-tercom-school/studit/blob/master/docs/projects/student%20list.png "Участники")

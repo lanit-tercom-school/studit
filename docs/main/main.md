@@ -50,3 +50,5 @@
         </tr>
     </tbody>
 </table>
+
+![Главная страница](https://github.com/lanit-tercom-school/studit/blob/master/docs/main/main.png "Главная страница")
