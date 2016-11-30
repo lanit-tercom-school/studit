@@ -19,3 +19,5 @@
         </tr>
     </tbody>
 </table>
+
+![Страница курса](https://github.com/lanit-tercom-school/studit/blob/master/docs/courses/course.jpg "Страница курса")
