@@ -80,4 +80,5 @@
     </tbody>
 </table>
 
-![Страница проекта](https://github.com/lanit-tercom-school/studit/blob/master/docs/projects/project.png "Страница проекта")
+![Страница проекта](https://github.com/lanit-tercom-school/studit/blob/master/docs/projects/ProjectForTeacher.png "Страница проекта")
+![Страница проекта](https://github.com/lanit-tercom-school/studit/blob/master/docs/projects/ProjectForStudent.png "Страница проекта")
