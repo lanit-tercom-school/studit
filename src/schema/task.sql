@@ -4,7 +4,7 @@
 	"description" varchar(255) NOT NULL,
 	"numberOfTask" int NOT NULL,
 	"tags" varchar NOT NULL,
-	"complexity" int NOT NULL,
+	"priority" int NOT NULL,
 	"project_id" bigint NOT NULL,
 	"project_author_id" bigint NOT NULL,
 	"project_user_id" bigint NOT NULL,
