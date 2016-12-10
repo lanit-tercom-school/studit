@@ -1,8 +1,8 @@
 CREATE TABLE "course" (
-	"id" serial,
-	"title" varchar(255),
-	"discription" TEXT,
-	"rating" double,
+	"id" serial NOT NULL,
+	"title" varchar(255) NOT NULL,
+	"discription" TEXT NOT NULL,
+	"rating" real NOT NULL,
 	CONSTRAINT course_pk PRIMARY KEY ("id")
 ) WITH (
   OIDS=FALSE
@@ -11,9 +11,9 @@ CREATE TABLE "course" (
 
 
 CREATE TABLE "recomend_courses" (
-	"id" serial,
-	"course_id" bigint,
-	"link" serial,
+	"id" serial NOT NULL,
+	"course_id" bigint NOT NULL,
+	"link" serial NOT NULL,
 	CONSTRAINT recomend_courses_pk PRIMARY KEY ("id")
 ) WITH (
   OIDS=FALSE
@@ -22,9 +22,9 @@ CREATE TABLE "recomend_courses" (
 
 
 CREATE TABLE "statistic" (
-	"id" serial,
-	"hours" serial,
-	"course_id" serial,
+	"id" serial NOT NULL,
+	"hours" serial NOT NULL,
+	"course_id" serial NOT NULL,
 	CONSTRAINT statistic_pk PRIMARY KEY ("id")
 ) WITH (
   OIDS=FALSE
