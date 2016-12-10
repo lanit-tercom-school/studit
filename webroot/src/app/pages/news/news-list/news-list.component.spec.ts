@@ -1,11 +1,12 @@
 /* tslint:disable:no-unused-variable */
 
 import { TestBed, async } from '@angular/core/testing';
-import { NewsItemListComponent } from './news-list.component';
+import { NewsListComponent } from './news-list.component';
+import {NewsService} from "../news.service";
 
-describe('Component: NewsItemList', () => {
+describe('Component: NewsList', () => {
   it('should create an instance', () => {
-    let component = new NewsItemListComponent();
+    let component = new NewsListComponent(NewsService);
     expect(component).toBeTruthy();
   });
 });

@@ -1,18 +1,21 @@
 import { Component, OnInit } from '@angular/core';
 import {NewsItem} from "../news-item";
+import {NewsService} from "../news.service";
 
 @Component({
-  selector: 'app-news-item-list',
+  selector: 'app-news-list',
   templateUrl: 'news-list.component.html',
-  styleUrls: ['news-list.component.css']
+  styleUrls: ['news-list.component.css'],
+  providers: [NewsService]
 })
-export class NewsItemListComponent implements OnInit {
+export class NewsListComponent implements OnInit {
 
-  constructor() { }
+  constructor(private newsService: NewsService) { }
 
-  newsItems: NewsItem
+  newsItems: NewsItem[];
 
   ngOnInit() {
+    this.newsItems = this.newsService.getNews();
   }
 
 }
