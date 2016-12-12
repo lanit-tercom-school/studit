@@ -238,3 +238,12 @@ aot/*
 dist/*
 
 yarn.lock
+
+#############
+## Go/beego
+#############
+src/studitapi/.idea/
+src/studitapi/swagger/
+src/studitapi/swagger.zip
+src/studitapi/lastupdate.tmp
+*.exe
