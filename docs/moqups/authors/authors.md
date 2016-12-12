@@ -39,7 +39,7 @@
 Если еще раз нажать на "...", форма свернется.    
 В одно и то же время можно развертывать несколько авторов.    
 ## эскизы
-![Авторы](https://github.com/lanit-tercom-school/studit/blob/master/docs/authors/1480628595.jpg "Авторы")
-![Страница преподавателя](https://github.com/lanit-tercom-school/studit/blob/master/docs/authors/teacher.jpg "Страница преподавателя")
+![Авторы](https://github.com/lanit-tercom-school/studit/blob/master/docs/moqups/authors/1480628595.jpg "Авторы")
+![Страница преподавателя](https://github.com/lanit-tercom-school/studit/blob/master/docs/moqups/authors/teacher.jpg "Страница преподавателя")
 ## moqups
 Страница преподавателя: https://app.moqups.com/sadreeva.u@gmail.com/IQPdVal8CK/view
