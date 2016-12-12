@@ -189,11 +189,12 @@
 </tr>
     </tbody>
 </table>
-
+## эскизы
 ![Профиль](https://github.com/lanit-tercom-school/studit/blob/master/docs/moqups/profile/profile.png "Профиль")
-![Прогресс](https://github.com/lanit-tercom-school/studit/blob/master/docs/moqups/profile/progress.jpg "Прогресс")
+![Прогресс](https://github.com/lanit-tercom-school/studit/blob/master/docs/moqups/profile/progress [2].jpg "Прогресс")
 ![Настройки](https://github.com/lanit-tercom-school/studit/blob/master/docs/moqups/profile/settings.png "Настройки")
-
+## moqups
+Мое обучение (прогресс): https://app.moqups.com/sadreeva.u@gmail.com/IQPdVal8CK/view
 ## вторичный функционал
 * Различная статистика:
     * число пройденных часов
