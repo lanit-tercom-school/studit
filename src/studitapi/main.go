@@ -9,7 +9,7 @@ import (
 )
 
 func init() {
-	orm.RegisterDataBase("default", "postgres", "postgres://postgres:admin@127.0.0.1:5432/studit?sslmode=disable")
+	orm.RegisterDataBase("default", "postgres", "postgres://postgres:postgres@127.0.0.1:5432/studit?sslmode=disable")
 }
 
 func main() {
