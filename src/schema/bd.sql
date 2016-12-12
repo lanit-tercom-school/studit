@@ -46,7 +46,7 @@ CREATE TABLE "project_author" (
 CREATE TABLE "user" (
 	"id" serial NOT NULL,
 	"login" varchar(100) NOT NULL,
-	"password" bit varying(100) NOT NULL,
+	"password" varchar(100) NOT NULL,
 	"nickname" varchar(100) NOT NULL,
 	"description" TEXT NOT NULL,
 	"avatar" varchar(1000) NOT NULL,
