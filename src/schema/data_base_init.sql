@@ -9,17 +9,6 @@ CREATE TABLE "project" (
   OIDS=FALSE
 );
 
-/*Курс*/
-CREATE TABLE "course" (
-	"id" serial NOT NULL,
-	"title" varchar(255) NOT NULL,
-	"description" TEXT NOT NULL,
-	"logo" varchar(1000) NOT NULL,
-	CONSTRAINT course_pk PRIMARY KEY ("id")
-) WITH (
-  OIDS=FALSE
-);
-
 
 /*Отдельная сущность для авторов(организаторов), подчеркивающая статус Автора у пользователя*/
 CREATE TABLE "author" (
@@ -258,6 +247,49 @@ CREATE TABLE "comment" (
 ) WITH (
 OIDS=FALSE
 );
+
+/*Курс*/
+CREATE TABLE "course" (
+	"id" serial NOT NULL,
+	"title" varchar(255) NOT NULL,
+	"discription" TEXT NOT NULL,
+	"logo" varchar(1000) NOT NULL,
+	"rating" real NOT NULL,
+	CONSTRAINT course_pk PRIMARY KEY ("id")
+) WITH (
+  OIDS=FALSE
+);
+
+
+/*Список рекомендованных курсов для данного курса*/
+CREATE TABLE "recomend_courses" (
+	"id" serial NOT NULL,
+	"course_id" bigint NOT NULL,
+	"link" varchar(255) NOT NULL,
+	CONSTRAINT recomend_courses_pk PRIMARY KEY ("id")
+) WITH (
+  OIDS=FALSE
+);
+
+
+/*Дополнительные данные по курсу*/
+CREATE TABLE "statistic" (
+	"id" serial NOT NULL,
+	"hours" bigint NOT NULL,
+	"course_id" bigint NOT NULL,
+	CONSTRAINT statistic_pk PRIMARY KEY ("id")
+) WITH (
+  OIDS=FALSE
+);
+
+
+
+
+ALTER TABLE "recomend_courses" ADD CONSTRAINT "recomend_courses_fk0" FOREIGN KEY ("course_id") REFERENCES "course"("id");
+
+ALTER TABLE "statistic" ADD CONSTRAINT "statistic_fk0" FOREIGN KEY ("course_id") REFERENCES "course"("id");
+
+
 
 ALTER TABLE "test" ADD CONSTRAINT "test_fk0" FOREIGN KEY ("lesson_id") REFERENCES "lesson"("id");
 
