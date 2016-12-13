@@ -242,8 +242,9 @@ yarn.lock
 #############
 ## Go/beego
 #############
-src/studitapi/.idea/
-src/studitapi/swagger/
-src/studitapi/swagger.zip
-src/studitapi/lastupdate.tmp
+service/*.exe
+service/swagger/*
+service/swagger.zip
+service/lastupdate.tmp
+service/*.exe~
 *.exe
