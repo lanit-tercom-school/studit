@@ -5,6 +5,7 @@ import { HttpModule } from '@angular/http';
 
 import { AppComponent } from './app.component';
 import {NewsModule} from "./pages/news/news.module";
+import {ProgressModule} from "./pages/progress/progress.module";
 
 @NgModule({
   declarations: [
@@ -14,7 +15,8 @@ import {NewsModule} from "./pages/news/news.module";
     BrowserModule,
     FormsModule,
     HttpModule,
-    NewsModule
+    NewsModule,
+    ProgressModule
   ],
   providers: [],
   bootstrap: [AppComponent]
