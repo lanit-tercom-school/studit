@@ -1,7 +1,7 @@
 package main
 
 import (
-	_ "github.com/lanit-tercom-school/studit/service/routers"
+	_ "service/routers"
 
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"

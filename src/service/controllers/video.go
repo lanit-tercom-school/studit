@@ -3,7 +3,7 @@ package controllers
 import (
 	"encoding/json"
 	"errors"
-	"github.com/lanit-tercom-school/studit/service/models"
+	"service/models"
 	"strconv"
 	"strings"
 
