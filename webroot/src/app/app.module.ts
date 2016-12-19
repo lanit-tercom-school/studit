@@ -5,6 +5,8 @@ import { HttpModule } from '@angular/http';
 
 import { AppComponent } from './app.component';
 import {NewsModule} from "./pages/news/news.module";
+import {SettingsModule} from "./settings/settings.module";
+import {ProfileModule} from "./profile/profile.module";
 
 @NgModule({
   declarations: [
@@ -14,7 +16,9 @@ import {NewsModule} from "./pages/news/news.module";
     BrowserModule,
     FormsModule,
     HttpModule,
-    NewsModule
+    NewsModule,
+    SettingsModule,
+    ProfileModule
   ],
   providers: [],
   bootstrap: [AppComponent]
