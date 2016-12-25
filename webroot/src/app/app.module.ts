@@ -7,6 +7,8 @@ import { AppComponent } from './app.component';
 import {NewsModule} from "./pages/news/news.module";
 import {SettingsModule} from "./settings/settings.module";
 import {ProfileModule} from "./profile/profile.module";
+import {CoursecardComponent} from "./pages/coursecard/coursecard.component";
+import {CoursecardModule} from "./pages/coursecard/coursecard.module";
 
 @NgModule({
   declarations: [
@@ -18,7 +20,8 @@ import {ProfileModule} from "./profile/profile.module";
     HttpModule,
     NewsModule,
     SettingsModule,
-    ProfileModule
+    ProfileModule,
+    CoursecardModule
   ],
   providers: [],
   bootstrap: [AppComponent]
