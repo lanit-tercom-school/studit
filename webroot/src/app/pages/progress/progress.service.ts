@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import {TaskItem} from "./task-item";
-import {ProjectCardItem} from "./project-card-item";
-import {NotificationItem} from "./notification-item";
+import {TaskItem} from "./task";
+import {ProjectCardItem} from "./project-card";
+import {NotificationItem} from "./notification";
 
 @Injectable()
 export class ProgressService {

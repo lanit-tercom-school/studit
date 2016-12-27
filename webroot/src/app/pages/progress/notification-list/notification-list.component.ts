@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {ProgressService} from "../progress.service";
-import {NotificationItem} from "../notification-item";
+import {NotificationItem} from "../notification";
 
 @Component({
   selector: 'app-notification-list',

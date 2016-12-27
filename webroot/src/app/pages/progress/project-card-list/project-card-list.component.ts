@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {ProgressService} from "../progress.service";
-import {ProjectCardItem} from "../project-card-item";
+import {ProjectCardItem} from "../project-card";
 
 @Component({
   selector: 'app-project-card-list',

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {ProgressService} from "../progress.service";
-import {TaskItem} from "../task-item";
+import {TaskItem} from "../task";
 
 @Component({
   selector: 'app-task-list',
