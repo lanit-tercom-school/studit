@@ -248,3 +248,4 @@ service/swagger.zip
 service/lastupdate.tmp
 service/*.exe~
 *.exe
+pkg/
