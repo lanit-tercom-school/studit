@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ProjectItem } from './project-item/project-item';
 
 @Component({
@@ -8,7 +8,7 @@ import { ProjectItem } from './project-item/project-item';
 })
 export class ProjectListComponent implements OnInit {
 
-  private ProjectList: ProjectItem[];
+  @Input() public ProjectList: ProjectItem[];
 
   constructor() { }
 
