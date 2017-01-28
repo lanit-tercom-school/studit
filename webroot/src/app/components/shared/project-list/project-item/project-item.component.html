@@ -1,4 +1,11 @@
-<div>{{ProjectItem.Id}}</div>
-<div>{{ProjectItem.Name}}</div>
-<div>{{ProjectItem.Description}}</div>
-<div>{{ProjectItem.Picture}}</div>
+<div class="card col-md-4">
+
+    <img class="img" src="{{ProjectItem.Picture}}" alt="Card image cap">
+
+    <div class="card-block text-center">
+        <h4 class="card-title">{{ProjectItem.Name}}</h4>
+        <p class="card-text">{{ProjectItem.Description}}</p>
+        <a href="#{{ProjectItem.Id}}" class="btn btn-primary">Записаться</a>
+    </div>
+
+</div>
