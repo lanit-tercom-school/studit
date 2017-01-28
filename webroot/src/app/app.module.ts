@@ -5,8 +5,12 @@ import { HttpModule } from '@angular/http';
 
 import { AppComponent } from './app.component';
 import {NewsModule} from "./pages/news/news.module";
+<<<<<<< HEAD
 import {SettingsModule} from "./settings/settings.module";
 import {ProfileModule} from "./profile/profile.module";
+=======
+import {ProgressModule} from "./pages/progress/progress.module";
+>>>>>>> origin/feature/progress
 
 @NgModule({
   declarations: [
@@ -17,8 +21,12 @@ import {ProfileModule} from "./profile/profile.module";
     FormsModule,
     HttpModule,
     NewsModule,
+<<<<<<< HEAD
     SettingsModule,
     ProfileModule
+=======
+    ProgressModule
+>>>>>>> origin/feature/progress
   ],
   providers: [],
   bootstrap: [AppComponent]
