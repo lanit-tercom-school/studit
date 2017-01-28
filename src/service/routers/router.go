@@ -8,7 +8,7 @@
 package routers
 
 import (
-	"github.com/lanit-tercom-school/studit/service/controllers"
+	"service/controllers"
 
 	"github.com/astaxie/beego"
 )
