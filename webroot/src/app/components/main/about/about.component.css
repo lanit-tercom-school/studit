@@ -1,0 +1,14 @@
+:host {
+    background: #222 url('/assets/main-cover-top.jpg') center center no-repeat;
+    background-size: about-caption;
+    color: black;
+    height: 100%;
+    display: flex;
+}
+
+#caption {
+    height: 100%;
+    display: flex;
+    text-align: center;
+    align-items: center;
+}
