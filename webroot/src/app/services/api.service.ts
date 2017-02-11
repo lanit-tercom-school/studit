@@ -13,19 +13,19 @@ export class ApiService {
         "Id": 1,
         "Name": "StudIT",
         "Description": "Разработки сайта летней школы и студенческих проектов Ланит-Терком",
-        "Picture": "studit.jpg"
+        "Picture": "project.jpg"
       },
       {
         "Id": 2,
         "Name": "TFS Mobile",
         "Description": "Разработка кроссплатфроменного мобильного клиента для Team Foundation Server",
-        "Picture": "tfsmobile.jpg"
+        "Picture": "project.jpg"
       },
       {
         "Id": 3,
         "Name": "CrossCon",
         "Description": "Разработка мобильного клиента расписания конференций",
-        "Picture": "go.jpg"
+        "Picture": "project.jpg"
       }
     ];
   }  

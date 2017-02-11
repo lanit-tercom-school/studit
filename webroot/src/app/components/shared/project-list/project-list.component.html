@@ -1,8 +1,7 @@
-<div class="container">
-  <div class="row row-flex row-flex-wrap">
-    <div *ngFor="let project of ProjectList">
-      <app-project-item [ProjectItem]="project">
-      </app-project-item>
-    </div>
-  </div>
+<div class="card-group">
+  <app-project-item
+    *ngFor="let project of ProjectList"
+    [ProjectItem]="project">
+  </app-project-item>
+
 </div>
