@@ -21,6 +21,7 @@ import { ProjectListComponent } from './shared/project-list/project-list.compone
 import { ProjectItemComponent } from './shared/project-list/project-item/project-item.component';
 
 import { AboutComponent } from './main/about/about.component';
+import { EnrolmentComponent } from './main/enrolment/enrolment.component';
 
 import { ApiService } from '.././services/api.service';
 import { PartnersComponent } from './main/partners/partners.component';
@@ -34,6 +35,7 @@ import { PartnerItemComponent } from './main/partners/partner-item/partner-item.
     ProjectListComponent,
     ProjectItemComponent,
     AboutComponent,
+    EnrolmentComponent,
     PartnersComponent,
     PartnerItemComponent,
   ],
