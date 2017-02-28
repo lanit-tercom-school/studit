@@ -22,6 +22,7 @@ import { ProjectItemComponent } from './shared/project-list/project-item/project
 
 import { AboutComponent } from './main/about/about.component';
 import { EnrolmentComponent } from './main/enrolment/enrolment.component';
+import { FeaturesComponent } from './main/features/features.component';
 
 import { ApiService } from '.././services/api.service';
 import { PartnersComponent } from './main/partners/partners.component';
@@ -36,6 +37,7 @@ import { PartnerItemComponent } from './main/partners/partner-item/partner-item.
     ProjectItemComponent,
     AboutComponent,
     EnrolmentComponent,
+    FeaturesComponent,
     PartnersComponent,
     PartnerItemComponent,
   ],
