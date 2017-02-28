@@ -240,6 +240,14 @@ dist/*
 yarn.lock
 
 #############
+webroot/node_modules/
+*.exe
+pkg/
+src/service/lastupdate.tmp
+*.exe~
+
+
+#############
 ## Go/beego
 #############
 service/*.exe
@@ -248,3 +256,4 @@ service/swagger.zip
 service/lastupdate.tmp
 service/*.exe~
 *.exe
+pkg/
