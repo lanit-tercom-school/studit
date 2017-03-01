@@ -14,8 +14,7 @@ h1 {
   margin-bottom: 100px;
 }
 
-.btn-primary{
-  width: 15em;
-  height: 3em;
-  border: 0px;
+small
+{
+  font-weight: 600;
 }

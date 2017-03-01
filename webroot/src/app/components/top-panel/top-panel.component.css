@@ -1,0 +1,17 @@
+.nav-item
+{
+    margin: 0px 100px;
+}
+
+.navbar
+{
+    font-size: 1.25rem;
+    font-weight: 500;
+    background-color: white;
+    padding: .5rem 15rem;
+}
+
+#sign-in
+{
+    color: royalblue;
+}
