@@ -1,21 +1,22 @@
 // @APIVersion 1.0.0
-// @Title beego Test API
-// @Description beego has a very cool tools to autogenerate documents for your API
-// @Contact astaxie@gmail.com
+// @Title Lanit-Tercom School API
+// @Description TODO: add some description here
 // @TermsOfServiceUrl http://beego.me/
 // @License Apache 2.0
 // @LicenseUrl http://www.apache.org/licenses/LICENSE-2.0.html
+// @URL https://vk.com/ltschool
 package routers
 
 import (
 	"service/controllers"
 
 	"github.com/astaxie/beego"
+	"github.com/astaxie/beego/logs"
 )
 
 func init() {
 	ns := beego.NewNamespace("/v1",
-
+/*
 		beego.NSNamespace("/recomend_courses",
 			beego.NSInclude(
 				&controllers.RecomendCoursesController{},
@@ -165,6 +166,14 @@ func init() {
 				&controllers.UserCommentsController{},
 			),
 		),
+*/
+		beego.NSNamespace("/land_projects",
+			beego.NSInclude(
+				&controllers.LandingProjectsController{},
+			),
+		),
 	)
+	log := logs.GetLogger()
+	log.Println("connected")
 	beego.AddNamespace(ns)
 }
