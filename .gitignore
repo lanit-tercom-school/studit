@@ -257,3 +257,6 @@ service/lastupdate.tmp
 service/*.exe~
 *.exe
 pkg/
+src/service/swagger/*
+src/github.com/*
+
