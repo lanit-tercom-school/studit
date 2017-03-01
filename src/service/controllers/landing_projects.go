@@ -1,16 +1,13 @@
 package controllers
 
 import (
-	"encoding/json"
-	"errors"
 	"service/models"
-	"strconv"
-	"strings"
 
 	"github.com/astaxie/beego"
+	"github.com/astaxie/beego/logs"
 )
 
-// LandingProjectsController oprations for Project
+// LandingProjectsController operations for Project
 type LandingProjectsController struct {
 	beego.Controller
 }
@@ -31,6 +28,7 @@ func (c *LandingProjectsController) URLMapping() {
 // @Failure 405 Method Not Allowed
 // @router / [post]
 func (c *LandingProjectsController) Post() {
+	logs.Info("wtf post")
 	c.CustomAbort(405, "Method Not Allowed")
 }
 
@@ -48,15 +46,18 @@ func (c *LandingProjectsController) GetOne() {
 // @Title Get All
 // @Description get Projects for Landing page
 // @Success 200 {object} models.Project
-// @Failure 403
+// @Failure 400 Bad Request
 // @router / [get]
 func (c *LandingProjectsController) GetAll() {
 	l, err := models.GetLandingProjects()
+
 	if err != nil {
 		c.Data["json"] = err.Error()
 	} else {
 		c.Data["json"] = l
 	}
+	c.Data["json"] = "OK"
+	logs.Info("wtf getall")
 	c.ServeJSON()
 }
 
@@ -67,7 +68,9 @@ func (c *LandingProjectsController) GetAll() {
 // @Failure 405 Method Not Allowed
 // @router /:id [put]
 func (c *LandingProjectsController) Put() {
+	c.Data["json"] = "OK"
 	c.CustomAbort(405, "Method Not Allowed")
+	c.ServeJSON()
 }
 
 // Delete ...

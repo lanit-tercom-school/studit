@@ -11,6 +11,7 @@ import (
 	"service/controllers"
 
 	"github.com/astaxie/beego"
+	"github.com/astaxie/beego/logs"
 )
 
 func init() {
@@ -166,11 +167,13 @@ func init() {
 			),
 		),
 */
-		beego.NSNamespace("/best_projects",
+		beego.NSNamespace("/land_projects",
 			beego.NSInclude(
-				&controllers.ProjectController{},
+				&controllers.LandingProjectsController{},
 			),
 		),
 	)
+	log := logs.GetLogger()
+	log.Println("connected")
 	beego.AddNamespace(ns)
 }
