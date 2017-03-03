@@ -1,0 +1,27 @@
+h1
+{
+    text-align: center;
+    margin-bottom: 100px;
+}
+
+.partners-list
+{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.container
+{
+    margin: 100px auto;
+}
+
+img
+{
+    opacity: 0.8;
+}
+
+img:hover
+{
+    opacity: 1;
+}
