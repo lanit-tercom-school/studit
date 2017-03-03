@@ -58,7 +58,7 @@ func TestLandingPageGet(t *testing.T) {
 			So(response[0].Id, ShouldEqual, 1)
 			So(response[0].Name, ShouldEqual, "Образовательный портал Lanit-Tercom")
 			So(response[0].Logo, ShouldEqual, "/logo/1.jpg")
-			So(response[0].Description, ShouldEqual, "Разработка образовательно портала для Lanit-Tercom School")
+			So(response[0].Description, ShouldEqual, "Разработка образовательного портала для Lanit-Tercom School")
 
 			/*So(response.projects[1].Id, ShouldEqual, 2)
 			So(response.projects[1].Name, ShouldEqual, "Модный фрилансер")
