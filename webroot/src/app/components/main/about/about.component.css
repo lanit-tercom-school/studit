@@ -1,6 +1,6 @@
 :host {
     background: #222 url('/assets/main-cover-top.jpg') center center no-repeat;
-    background-size: about-caption;
+    background-size: cover;
     color: black;
     height: 100%;
     display: flex;
