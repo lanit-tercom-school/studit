@@ -4,6 +4,7 @@ import (
 	"service/models"
 
 	"github.com/astaxie/beego"
+	"strconv"
 )
 
 // LandingProjectsController operations for Project
@@ -43,12 +44,14 @@ func (c *LandingProjectsController) Post() {
 // @Failure 405 Method Not Allowed
 // @router /:id [get]
 func (c *LandingProjectsController) GetOne() {
-	var response struct{
-		Error string `json:"error"`
+	idStr := c.Ctx.Input.Param(":id")
+	id, _ := strconv.Atoi(idStr)
+	v, err := models.GetProjectById(id)
+	if err != nil {
+		c.Data["json"] = err.Error()
+	} else {
+		c.Data["json"] = v
 	}
-	response.Error = "Method Not Allowed"
-	c.Data["json"] = response
-	c.Ctx.ResponseWriter.WriteHeader(405)
 	c.ServeJSON()
 }
 

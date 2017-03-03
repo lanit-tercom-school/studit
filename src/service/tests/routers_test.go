@@ -11,22 +11,18 @@ import (
 
 	"github.com/astaxie/beego"
 	. "github.com/smartystreets/goconvey/convey"
-	//"runtime"
-	//"path/filepath"
 	"runtime"
 	"path/filepath"
 	_ "service/routers"
 	"github.com/astaxie/beego/orm"
 	_ "github.com/lib/pq"
 )
-// from example
 
 func init() {
 	_, file, _, _ := runtime.Caller(1)
 	apppath, _ := filepath.Abs(filepath.Dir(filepath.Join(file, ".." + string(filepath.Separator))))
 	beego.TestBeegoInit(apppath)
 	orm.RegisterDataBase("default", "postgres", "postgres://postgres:postgres@localhost:5432/studit?sslmode=disable")
-
 }
 
 type ErrorResponseType struct {
@@ -56,7 +52,7 @@ func TestLandingPageGet(t *testing.T) {
 		})*/
 		Convey("There should be a result for db_init_data.go", func() {
 			So(response[0].Id, ShouldEqual, 1)
-			So(response[0].Name, ShouldEqual, "Образовательный портал Lanit-Tercom")
+			So(response[0].Name, ShouldEqual, "Образовательный портал Studit")
 			So(response[0].Logo, ShouldEqual, "/logo/1.jpg")
 			So(response[0].Description, ShouldEqual, "Разработка образовательного портала для Lanit-Tercom School")
 

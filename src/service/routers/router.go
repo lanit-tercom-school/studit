@@ -153,20 +153,20 @@ func init() {
 				&controllers.CommentController{},
 			),
 		),
-
+*/
 		beego.NSNamespace("/user",
 			beego.NSInclude(
 				&controllers.UserController{},
 			),
 		),
-
+/*
 		beego.NSNamespace("/user_comments",
 			beego.NSInclude(
 				&controllers.UserCommentsController{},
 			),
 		),
 */
-		beego.NSNamespace("/land_projects",
+		beego.NSNamespace("/land/projects",
 			beego.NSInclude(
 				&controllers.LandingProjectsController{},
 			),
