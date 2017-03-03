@@ -10,7 +10,7 @@ import (
 	"github.com/astaxie/beego"
 )
 
-// NewsController oprations for News
+// NewsController operations for News
 type NewsController struct {
 	beego.Controller
 }
