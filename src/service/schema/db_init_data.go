@@ -61,7 +61,7 @@ func main() {
 		Avatar: "/logo/1.jpg",
 		Description: "Главный по тарелкам",
 	}
-	fastCheckErr(o.Insert(&project))
+	fastCheckErr(o.Insert(&user))
 
 	user = m.User{
 		Id: 2,
