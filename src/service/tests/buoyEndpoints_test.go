@@ -4,7 +4,7 @@
 
 // Package endpointTests implements tests for the buoy endpoints.
 package endpointTests
-
+/*
 import (
         "net/http"
         "net/http/httptest"
@@ -114,4 +114,4 @@ func TestMissingStation(t *testing.T) {
                         So(len(err.Errors), ShouldEqual, 1)
                 })
         })
-}
+}*/

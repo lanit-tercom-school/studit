@@ -4,7 +4,6 @@ import (
 	"service/models"
 
 	"github.com/astaxie/beego"
-	"github.com/astaxie/beego/logs"
 )
 
 // LandingProjectsController operations for Project
@@ -28,8 +27,13 @@ func (c *LandingProjectsController) URLMapping() {
 // @Failure 405 Method Not Allowed
 // @router / [post]
 func (c *LandingProjectsController) Post() {
-	logs.Info("wtf post")
-	c.CustomAbort(405, "Method Not Allowed")
+	var response struct{
+		Error string `json:"error"`
+	}
+	response.Error = "Method Not Allowed"
+	c.Data["json"] = response
+	c.Ctx.ResponseWriter.WriteHeader(405)
+	c.ServeJSON()
 }
 
 // GetOne ...
@@ -39,7 +43,13 @@ func (c *LandingProjectsController) Post() {
 // @Failure 405 Method Not Allowed
 // @router /:id [get]
 func (c *LandingProjectsController) GetOne() {
-	c.CustomAbort(405, "Method Not Allowed")
+	var response struct{
+		Error string `json:"error"`
+	}
+	response.Error = "Method Not Allowed"
+	c.Data["json"] = response
+	c.Ctx.ResponseWriter.WriteHeader(405)
+	c.ServeJSON()
 }
 
 // GetAll ...
@@ -56,7 +66,6 @@ func (c *LandingProjectsController) GetAll() {
 	} else {
 		c.Data["json"] = l
 	}
-	logs.Info("wtf getall")
 	c.ServeJSON()
 }
 
@@ -67,8 +76,12 @@ func (c *LandingProjectsController) GetAll() {
 // @Failure 405 Method Not Allowed
 // @router /:id [put]
 func (c *LandingProjectsController) Put() {
-	c.Data["json"] = "OK"
-	c.CustomAbort(405, "Method Not Allowed")
+	var response struct{
+		Error string `json:"error"`
+	}
+	response.Error = "Method Not Allowed"
+	c.Data["json"] = response
+	c.Ctx.ResponseWriter.WriteHeader(405)
 	c.ServeJSON()
 }
 
@@ -79,5 +92,11 @@ func (c *LandingProjectsController) Put() {
 // @Failure 405 Method Not Allowed
 // @router /:id [delete]
 func (c *LandingProjectsController) Delete() {
-	c.CustomAbort(405, "Method Not Allowed")
+	var response struct{
+		Error string `json:"error"`
+	}
+	response.Error = "Method Not Allowed"
+	c.Data["json"] = response
+	c.Ctx.ResponseWriter.WriteHeader(405)
+	c.ServeJSON()
 }

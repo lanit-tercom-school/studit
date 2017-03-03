@@ -20,7 +20,7 @@ func main() {
 	project1 := m.Project{
 		Id: 1,
 		Name: "Образовательный портал Lanit-Tercom",
-		Description: "Разработка образовательно портала для Lanit-Tercom School",
+		Description: "Разработка образовательного портала для Lanit-Tercom School",
 		Logo: "/logo/1.jpg",
 	}
 	_, err := o.Insert(&project1)
