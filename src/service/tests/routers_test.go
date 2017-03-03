@@ -60,15 +60,15 @@ func TestLandingPageGet(t *testing.T) {
 			So(response[0].Logo, ShouldEqual, "/logo/1.jpg")
 			So(response[0].Description, ShouldEqual, "Разработка образовательного портала для Lanit-Tercom School")
 
-			/*So(response.projects[1].Id, ShouldEqual, 2)
-			So(response.projects[1].Name, ShouldEqual, "Модный фрилансер")
-			So(response.projects[1].Logo, ShouldEqual, "/logo/2.jpg")
-			So(response.projects[1].Description, ShouldEqual, "Какие же стрелочки вокруг ноубука!")
+			So(response[1].Id, ShouldEqual, 2)
+			So(response[1].Name, ShouldEqual, "Модный фрилансер")
+			So(response[1].Logo, ShouldEqual, "/logo/2.jpg")
+			So(response[1].Description, ShouldEqual, "Какие же стрелочки вокруг ноубука!")
 
-			So(response.projects[2].Id, ShouldEqual, 3)
-			So(response.projects[2].Name, ShouldEqual, "Оригинальное название")
-			So(response.projects[2].Logo, ShouldEqual, "/logo/3.jpg")
-			So(response.projects[2].Description, ShouldEqual, "Click-bait описание")*/
+			So(response[2].Id, ShouldEqual, 3)
+			So(response[2].Name, ShouldEqual, "Оригинальное название")
+			So(response[2].Logo, ShouldEqual, "/logo/3.jpg")
+			So(response[2].Description, ShouldEqual, "Click-bait описание")
 		})
 	})
 }
