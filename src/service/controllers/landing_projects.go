@@ -56,7 +56,6 @@ func (c *LandingProjectsController) GetAll() {
 	} else {
 		c.Data["json"] = l
 	}
-	c.Data["json"] = "OK"
 	logs.Info("wtf getall")
 	c.ServeJSON()
 }
