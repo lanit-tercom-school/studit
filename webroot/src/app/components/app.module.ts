@@ -28,7 +28,21 @@ import { ApiService } from '.././services/api.service';
 import { PartnersComponent } from './main/partners/partners.component';
 import { PartnerItemComponent } from './main/partners/partner-item/partner-item.component';
 
+import { AppRoutingModule } from './app-routing.module';
+
 @NgModule({
+  imports: [
+    BrowserModule,
+    FormsModule,
+    HttpModule,
+    NewsModule,
+    SettingsModule,
+    ProfileModule,
+    ProgressModule,
+    ProfileModule,
+    CoursecardModule,
+    AppRoutingModule,
+  ],
   declarations: [
     AppComponent,
     MainComponent,
@@ -40,17 +54,6 @@ import { PartnerItemComponent } from './main/partners/partner-item/partner-item.
     FeaturesComponent,
     PartnersComponent,
     PartnerItemComponent,
-  ],
-  imports: [
-    BrowserModule,
-    FormsModule,
-    HttpModule,
-    NewsModule,
-    SettingsModule,
-    ProfileModule,
-    ProgressModule,
-    ProfileModule,
-    CoursecardModule,
   ],
   providers: [ApiService],
   bootstrap: [AppComponent]
