@@ -31,6 +31,7 @@ import { SProjectPageComponent } from './pages/s-project-page/s-project-page.com
 import { MaterialsComponent } from './pages/s-project-page/materials/materials.component';
 import { TasksComponent } from './pages/s-project-page/tasks/tasks.component';
 import { ProjNewsComponent } from './pages/s-project-page/proj-news/proj-news.component';
+import { MaterialsItemComponent } from './pages/s-project-page/materials/materials-item/materials-item.component';
 
 import { AppRoutingModule } from './app-routing.module';
 
@@ -62,6 +63,7 @@ import { AppRoutingModule } from './app-routing.module';
     MaterialsComponent,
     TasksComponent,
     ProjNewsComponent,
+    MaterialsItemComponent,
   ],
   providers: [ApiService],
   bootstrap: [AppComponent]
