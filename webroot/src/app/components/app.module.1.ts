@@ -29,7 +29,6 @@ import { PartnerItemComponent } from './main/partners/partner-item/partner-item.
 @NgModule({
   declarations: [
     AppComponent,
-    CardComponent,
     MainComponent,
     TopPanelComponent,
     ProjectListComponent,

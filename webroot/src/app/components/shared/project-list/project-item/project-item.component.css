@@ -1,9 +1,5 @@
-:host {
-    width: 20rem;
-}
-
-.card-block-bottom
+.card
 {
-  margin-bottom: 20pt;
-  text-align: center;
+  text-align: left;
+  border: 0px;
 }

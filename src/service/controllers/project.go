@@ -10,7 +10,7 @@ import (
 	"github.com/astaxie/beego"
 )
 
-// ProjectController oprations for Project
+// ProjectController operations for Project
 type ProjectController struct {
 	beego.Controller
 }

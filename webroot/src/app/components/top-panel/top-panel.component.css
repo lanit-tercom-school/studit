@@ -1,0 +1,24 @@
+.navbar
+{
+    font-size: 1.25rem;
+    font-weight: 500;
+    background-color: white;
+}
+
+.navbar-brand
+{
+    margin-left: 10%;
+}
+
+.navbar-nav
+{
+    margin-left: 20%;
+    margin-right: 10%;
+    width: 100%;
+    justify-content: space-around;
+}
+
+#sign-in
+{
+    color: royalblue;
+}

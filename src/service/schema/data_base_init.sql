@@ -45,7 +45,7 @@ CREATE TABLE "user" (
 );
 
 
-/*Связь пользователя и проекта, на который он записан*/
+/*Связь пользователя и проекта, на который пользователь записан*/
 CREATE TABLE "project_user" (
 	"id" serial NOT NULL,
 	"project_id" bigint NOT NULL,
@@ -147,7 +147,7 @@ CREATE TABLE "tasks_tags_table" (
   OIDS=FALSE
 );
 
-/*Урок - часть Круса*/
+/*Урок - часть Курса*/
 CREATE TABLE "lesson" (
 	"id" serial NOT NULL,
 	"title" varchar(255) NOT NULL,
@@ -228,7 +228,7 @@ CREATE TABLE "user_course" (
 );
 
 
-/*Вспомогательная таблица, устанавливающая соответствие между комментарием и автором*/
+/*Вспомогательная таблица, устанавливающая соответствие между комментарием и его автором*/
 CREATE TABLE "user_comments" (
 	"id" serial NOT NULL,
 	"user_id" bigint NOT NULL,

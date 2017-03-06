@@ -22,23 +22,21 @@ import { ProjectItemComponent } from './shared/project-list/project-item/project
 
 import { AboutComponent } from './main/about/about.component';
 import { EnrolmentComponent } from './main/enrolment/enrolment.component';
+import { FeaturesComponent } from './main/features/features.component';
 
 import { ApiService } from '.././services/api.service';
 import { PartnersComponent } from './main/partners/partners.component';
 import { PartnerItemComponent } from './main/partners/partner-item/partner-item.component';
+import { SProjectPageComponent } from './pages/s-project-page/s-project-page.component';
+import { MaterialsComponent } from './pages/s-project-page/materials/materials.component';
+import { TasksComponent } from './pages/s-project-page/tasks/tasks.component';
+import { ProjNewsComponent } from './pages/s-project-page/proj-news/proj-news.component';
+import { MaterialsItemComponent } from './pages/s-project-page/materials/materials-item/materials-item.component';
+import { AuthorizationComponent } from './pages/authorization/authorization.component';
+
+import { AppRoutingModule } from './app-routing.module';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    MainComponent,
-    TopPanelComponent,
-    ProjectListComponent,
-    ProjectItemComponent,
-    AboutComponent,
-    EnrolmentComponent,
-    PartnersComponent,
-    PartnerItemComponent,
-  ],
   imports: [
     BrowserModule,
     FormsModule,
@@ -49,6 +47,25 @@ import { PartnerItemComponent } from './main/partners/partner-item/partner-item.
     ProgressModule,
     ProfileModule,
     CoursecardModule,
+    AppRoutingModule,
+  ],
+  declarations: [
+    AppComponent,
+    MainComponent,
+    TopPanelComponent,
+    ProjectListComponent,
+    ProjectItemComponent,
+    AboutComponent,
+    EnrolmentComponent,
+    FeaturesComponent,
+    PartnersComponent,
+    PartnerItemComponent,
+    SProjectPageComponent,
+    MaterialsComponent,
+    TasksComponent,
+    ProjNewsComponent,
+    MaterialsItemComponent,
+    AuthorizationComponent,
   ],
   providers: [ApiService],
   bootstrap: [AppComponent]

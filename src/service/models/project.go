@@ -146,3 +146,11 @@ func DeleteProject(id int) (err error) {
 	}
 	return
 }
+
+// Return 3 Projects for landing page. Returns empty list if no Projects exists
+// This is overloaded method for GetAllProject with parameters
+// ([], [], [], [], 0, 3)
+func GetLandingProjects() (ml []interface{}, err error) {
+	var query = make(map[string]string)
+	return GetAllProject(query, []string{}, []string{}, []string{}, 0, 3)
+}
