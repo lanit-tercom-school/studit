@@ -171,6 +171,11 @@ func init() {
 				&controllers.LandingProjectsController{},
 			),
 		),
+		beego.NSNamespace("/auth/",
+			beego.NSInclude(
+				&controllers.AuthController{},
+			),
+		),
 	)
 	beego.AddNamespace(ns)
 }

@@ -4,7 +4,6 @@ import (
 	"service/models"
 
 	"github.com/astaxie/beego"
-	"strconv"
 )
 
 // LandingProjectsController operations for Project
@@ -14,14 +13,14 @@ type LandingProjectsController struct {
 
 // URLMapping ...
 func (c *LandingProjectsController) URLMapping() {
-	c.Mapping("Post", c.Post)
+	//c.Mapping("Post", c.Post)
 	c.Mapping("GetOne", c.GetOne)
 	c.Mapping("GetAll", c.GetAll)
-	c.Mapping("Put", c.Put)
-	c.Mapping("Delete", c.Delete)
+	//c.Mapping("Put", c.Put)
+	//c.Mapping("Delete", c.Delete)
 }
 
-// Post ...
+/*// Post ...
 // @Title Post
 // @Description Method Not Allowed
 // @Success 405 Method Not Allowed
@@ -54,14 +53,14 @@ func (c *LandingProjectsController) GetOne() {
 	}
 	c.ServeJSON()
 }
-
+*/
 // GetAll ...
 // @Title Get All
 // @Description get Projects for Landing page
 // @Success 200 {object} models.Project
 // @Failure 400 Bad Request
 // @router / [get]
-func (c *LandingProjectsController) GetAll() {
+func (c *LandingProjectsController) GetOne() {
 	l, err := models.GetLandingProjects()
 
 	if err != nil {
@@ -72,6 +71,10 @@ func (c *LandingProjectsController) GetAll() {
 	c.ServeJSON()
 }
 
+func (c *LandingProjectsController) GetAll() {
+	c.GetOne()
+}
+/*
 // Put ...
 // @Title Put
 // @Description Method Not Allowed
@@ -102,4 +105,4 @@ func (c *LandingProjectsController) Delete() {
 	c.Data["json"] = response
 	c.Ctx.ResponseWriter.WriteHeader(405)
 	c.ServeJSON()
-}
+}*/

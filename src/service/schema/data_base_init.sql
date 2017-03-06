@@ -37,6 +37,7 @@ CREATE TABLE "user" (
 	"login" varchar(100) NOT NULL,
 	"password" varchar(100) NOT NULL,
 	"nickname" varchar(100) NOT NULL,
+	"session" varchar(100) NOT NULL,
 	"description" TEXT NOT NULL,
 	"avatar" varchar(1000) NOT NULL,
 	CONSTRAINT user_pk PRIMARY KEY ("id")
