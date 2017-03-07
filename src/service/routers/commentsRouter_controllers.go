@@ -13,20 +13,6 @@ func init() {
 			AllowHTTPMethods: []string{"post"},
 			Params: nil})
 
-	beego.GlobalControllerRouter["service/controllers:AuthController"] = append(beego.GlobalControllerRouter["service/controllers:AuthController"],
-		beego.ControllerComments{
-			Method: "GetOne",
-			Router: `/:id`,
-			AllowHTTPMethods: []string{"get"},
-			Params: nil})
-
-	beego.GlobalControllerRouter["service/controllers:AuthController"] = append(beego.GlobalControllerRouter["service/controllers:AuthController"],
-		beego.ControllerComments{
-			Method: "GetAll",
-			Router: `/`,
-			AllowHTTPMethods: []string{"get"},
-			Params: nil})
-
 	beego.GlobalControllerRouter["service/controllers:AuthorController"] = append(beego.GlobalControllerRouter["service/controllers:AuthorController"],
 		beego.ControllerComments{
 			Method: "Post",

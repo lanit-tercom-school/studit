@@ -2,15 +2,24 @@ package controllers
 
 import (
 	"encoding/json"
-	"service/models"
+	_ "service/models"
 
 	"github.com/astaxie/beego"
 	"service/auth"
 )
 
+var sessionName = beego.AppConfig.String("SessionName")
+var sessionLifeTime, sessionLifeTimeErr = beego.AppConfig.Int64("SessionGCMaxLifetime")
+
 // AuthController operations for ContactType
 type AuthController struct {
 	beego.Controller
+}
+
+func init() {
+	if sessionLifeTimeErr != nil {
+		beego.Critical(sessionLifeTimeErr.Error())
+	}
 }
 
 // URLMapping ...
@@ -22,12 +31,13 @@ func (c *AuthController) URLMapping() {
 	//c.Mapping("Delete", c.Delete)
 }
 
+// TODO: добавить нормальные доки
 // Post ...
 // @Title Post
-// @Description create ContactType
-// @Param	body		body 	auth.Usr	true		"body for Usr content"
-// @Success 201 {int} models.ContactType
-// @Failure 403 body is empty
+// @Description login with username and password
+// @Param	body		body 	auth.Usr	true "wtf"
+// @Success 201 {object} auth.SessionStruct
+// @Failure 403 invalid username or password
 // @router / [post]
 func (c *AuthController) Post() {
 	var v auth.Usr
@@ -35,85 +45,45 @@ func (c *AuthController) Post() {
 		user, err := auth.TryToLogin(v.Login, v.Password)
 		if err != nil {
 			c.Data["json"] = err.Error()
+			c.Ctx.ResponseWriter.WriteHeader(403)
 		} else {
-			// TODO: handle session
+			// success, register new session
+			sess := c.StartSession()
+			//TODO: was in example, but didn't work
+			// defer sess.SessionRelease()
+
+			sessionResponse := auth.SessionStruct{
+				Token: sess.SessionID(),
+				UserId: user.Id,
+				ExpiresIn: sessionLifeTime,
+			}
+
+			user_id := sess.Get(sessionName)
+			if user_id == nil {
+				c.SetSession(sessionName, user.Id)
+			}
+
+			c.Data["json"] = sessionResponse
 		}
 	} else {
 		c.Data["json"] = err.Error()
+		c.Ctx.ResponseWriter.WriteHeader(403)
 	}
 	c.ServeJSON()
 }
 
-// GetOne ...
-// @Title Get One
-// @Description get ContactType by id
-// @Success 200 {object} models.ContactType
-// @Failure 403 :id is empty
-// @router /:id [get]
+// TODO: убрать этот костыль
 func (c *AuthController) GetOne() {
-	var response struct{
-		Error string `json:"error"`
-	}
-	response.Error = "Method Not Allowed"
+	response := ErrorResponse{"Not Found"}
 	c.Data["json"] = response
-	c.Ctx.ResponseWriter.WriteHeader(405)
+	c.Ctx.ResponseWriter.WriteHeader(404)
 	c.ServeJSON()
 }
 
-// GetAll ...
-// @Title Get All
-// @Description get ContactType
-// @Success 200 {object} models.ContactType
-// @Failure 403
-// @router / [get]
+// TODO: убрать этот костыль
 func (c *AuthController) GetAll() {
-	var response struct{
-		Error string `json:"error"`
-	}
-	response.Error = "Method Not Allowed"
+	response := ErrorResponse{"Method Not Allowed"}
 	c.Data["json"] = response
 	c.Ctx.ResponseWriter.WriteHeader(405)
 	c.ServeJSON()
 }
-/*
-// Put ...
-// @Title Put
-// @Description update the ContactType
-// @Param	id		path 	string	true		"The id you want to update"
-// @Param	body		body 	models.ContactType	true		"body for ContactType content"
-// @Success 200 {object} models.ContactType
-// @Failure 403 :id is not int
-// @router /:id [put]
-func (c *AuthController) Put() {
-	idStr := c.Ctx.Input.Param(":id")
-	id, _ := strconv.Atoi(idStr)
-	v := models.ContactType{Id: id}
-	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
-		if err := models.UpdateContactTypeById(&v); err == nil {
-			c.Data["json"] = "OK"
-		} else {
-			c.Data["json"] = err.Error()
-		}
-	} else {
-		c.Data["json"] = err.Error()
-	}
-	c.ServeJSON()
-}
-
-// Delete ...
-// @Title Delete
-// @Description delete the ContactType
-// @Param	id		path 	string	true		"The id you want to delete"
-// @Success 200 {string} delete success!
-// @Failure 403 id is empty
-// @router /:id [delete]
-func (c *AuthController) Delete() {
-	idStr := c.Ctx.Input.Param(":id")
-	id, _ := strconv.Atoi(idStr)
-	if err := models.DeleteContactType(id); err == nil {
-		c.Data["json"] = "OK"
-	} else {
-		c.Data["json"] = err.Error()
-	}
-	c.ServeJSON()
-}*/

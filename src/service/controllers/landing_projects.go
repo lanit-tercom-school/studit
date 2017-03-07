@@ -61,6 +61,13 @@ func (c *LandingProjectsController) GetOne() {
 // @Failure 400 Bad Request
 // @router / [get]
 func (c *LandingProjectsController) GetOne() {
+	response := ErrorResponse{"Not Found"}
+	c.Data["json"] = response
+	c.Ctx.ResponseWriter.WriteHeader(404)
+	c.ServeJSON()
+}
+
+func (c *LandingProjectsController) GetAll() {
 	l, err := models.GetLandingProjects()
 
 	if err != nil {
@@ -69,10 +76,6 @@ func (c *LandingProjectsController) GetOne() {
 		c.Data["json"] = l
 	}
 	c.ServeJSON()
-}
-
-func (c *LandingProjectsController) GetAll() {
-	c.GetOne()
 }
 /*
 // Put ...
