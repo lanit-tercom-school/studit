@@ -171,12 +171,19 @@ func init() {
 				&controllers.LandingProjectsController{},
 			),
 		),
-		beego.NSNamespace("/auth/",
+		beego.NSNamespace("/auth/login",
 			beego.NSInclude(
 				&controllers.AuthController{},
 			),
 		),
+		beego.NSNamespace("/auth/logout",
+			beego.NSInclude(
+				&controllers.LogoutController{},
+			),
+		),
 	)
 	beego.AddNamespace(ns)
+	//beego.Router("/v1/auth/login", &controllers.AuthController{}, "post:Login")
+	//beego.Router("/v1/auth/logout", &controllers.AuthController{}, "get:Logout")
 	beego.ErrorController(&controllers.ErrorController{})
 }

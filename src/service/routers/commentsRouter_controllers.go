@@ -195,6 +195,13 @@ func init() {
 			AllowHTTPMethods: []string{"delete"},
 			Params: nil})
 
+	beego.GlobalControllerRouter["service/controllers:LogoutController"] = append(beego.GlobalControllerRouter["service/controllers:LogoutController"],
+		beego.ControllerComments{
+			Method: "GetAll",
+			Router: `/`,
+			AllowHTTPMethods: []string{"get"},
+			Params: nil})
+
 	beego.GlobalControllerRouter["service/controllers:NewsController"] = append(beego.GlobalControllerRouter["service/controllers:NewsController"],
 		beego.ControllerComments{
 			Method: "Post",

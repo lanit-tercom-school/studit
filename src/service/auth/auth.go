@@ -29,9 +29,9 @@ func TryToLogin(login, password string) (user models.User, err error) {
 
 	err = user.Read("login")
 	if err != nil {
-		return
+		return user, errors.New("Can't find User with this login (dev)") // TODO: should be changed to "Invalid login or password"
 	} else if user.Id < 1 {
-		return user, errors.New("Bad user ID") // TODO: should be changed to "Invalid login or password"
+		return user, errors.New("Bad user ID (dev)") // TODO: should be changed to "Invalid login or password"
 	// TODO: UNcomment this on pub } else if user.Password != customStr(password).ToSHA1() {
 	} else if user.Password != password { // TODO: comment this on pub
 		return user, errors.New("Invalid login or password")

@@ -11,7 +11,7 @@ import (
 var sessionName = beego.AppConfig.String("SessionName")
 var sessionLifeTime, sessionLifeTimeErr = beego.AppConfig.Int64("SessionGCMaxLifetime")
 
-// AuthController operations for ContactType
+// Login register and logout operations
 type AuthController struct {
 	beego.Controller
 }
@@ -31,15 +31,8 @@ func (c *AuthController) URLMapping() {
 	//c.Mapping("Delete", c.Delete)
 }
 
-// TODO: добавить нормальные доки
-// Post ...
-// @Title Post
-// @Description login with username and password
-// @Param	body		body 	auth.Usr	true "wtf"
-// @Success 201 {object} auth.SessionStruct
-// @Failure 403 invalid username or password
-// @router / [post]
-func (c *AuthController) Post() {
+
+func (c *AuthController) Login() {
 	var v auth.Usr
 	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
 		user, err := auth.TryToLogin(v.Login, v.Password)
@@ -72,6 +65,38 @@ func (c *AuthController) Post() {
 	c.ServeJSON()
 }
 
+
+func (c *LogoutController) Logout() {
+	// TODO: тут какие-то костыли
+	userToken := c.GetString("token")
+	if userToken != "" {
+		sess := c.StartSession()
+		if userToken == sess.SessionID() {
+			sess.Delete(sessionName)
+			c.DestroySession()
+			c.Data["json"] = SuccessResponse{"OK"}
+		} else {
+			c.Data["json"] = ErrorResponse{"Wrong token"}
+		}
+	} else {
+		c.Data["json"] = ErrorResponse{"Empty token"}
+	}
+	c.ServeJSON()
+}
+
+
+// TODO: добавить нормальные доки
+// Post ...
+// @Title Post
+// @Description login with username and password
+// @Param	body		body 	auth.Usr	true ""
+// @Failure	200	{object} auth.SessionStruct
+// @Failure	403	Invalid username or password
+// @router / [post]
+func (c *AuthController) Post() {
+	c.Login()
+}
+
 // TODO: убрать этот костыль
 func (c *AuthController) GetOne() {
 	response := ErrorResponse{"Not Found"}
@@ -86,4 +111,27 @@ func (c *AuthController) GetAll() {
 	c.Data["json"] = response
 	c.Ctx.ResponseWriter.WriteHeader(405)
 	c.ServeJSON()
+}
+
+type LogoutController struct {
+	beego.Controller
+}
+
+// TODO: убрать этот костыль
+func (c *LogoutController) GetOne() {
+	response := ErrorResponse{"Not Found"}
+	c.Data["json"] = response
+	c.Ctx.ResponseWriter.WriteHeader(404)
+	c.ServeJSON()
+}
+
+// GetAll ...
+// @Title Get All
+// @Description logout current token
+// @Param	token	query	string	false	"Token To Logout"
+// @Failure 200 {object} controllers.SuccessResponse
+// @Failure 400 {object} controllers.ErrorResponse
+// @router / [get]
+func (c *LogoutController) GetAll() {
+	c.Logout()
 }
