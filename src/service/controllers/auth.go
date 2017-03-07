@@ -11,7 +11,7 @@ import (
 var sessionName = beego.AppConfig.String("SessionName")
 var sessionLifeTime, sessionLifeTimeErr = beego.AppConfig.Int64("SessionGCMaxLifetime")
 
-// Login register and logout operations
+// Login, Logout, регистрация и восстановление пароля, получение token
 type AuthController struct {
 	beego.Controller
 }

@@ -9,7 +9,7 @@ import (
 	"github.com/astaxie/beego"
 )
 
-// UserContactController oprations for UserContact
+// Доступ к контактам пользователей
 type UserContactController struct {
 	beego.Controller
 }
@@ -48,7 +48,7 @@ func (c *UserContactController) Post() {
 // TODO: refactor this
 // GetOne ...
 // @Title Get One
-// @Description Возвращает models.UserContact если юзер токена совпадает с владельцем контакта, другими словами список контакто доступен только владельцу
+// @Description Возвращает models.UserContact если юзер токена совпадает с владельцем контакта, другими словами, контакт доступен только владельцу
 // @Param	id		path 	string	true		"The key for staticblock"
 // @Param	token		query 	string	false		"User token for access"
 // @Failure 200 {object} models.UserContact
