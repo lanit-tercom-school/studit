@@ -35,6 +35,7 @@ import { MaterialsItemComponent } from './pages/s-project-page/materials/materia
 import { AuthorizationComponent } from './pages/authorization/authorization.component';
 
 import { AppRoutingModule } from './app-routing.module';
+import {FooterComponent} from "./footer/footer.component";
 
 @NgModule({
   imports: [
@@ -48,6 +49,7 @@ import { AppRoutingModule } from './app-routing.module';
     ProfileModule,
     CoursecardModule,
     AppRoutingModule,
+
   ],
   declarations: [
     AppComponent,
@@ -66,6 +68,7 @@ import { AppRoutingModule } from './app-routing.module';
     ProjNewsComponent,
     MaterialsItemComponent,
     AuthorizationComponent,
+    FooterComponent
   ],
   providers: [ApiService],
   bootstrap: [AppComponent]
