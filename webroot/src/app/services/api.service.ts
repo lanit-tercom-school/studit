@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import { ProjectItem } from './../components/shared/project-list/project-item/project-item';
+import { MaterialsItem } from './../components/pages/s-project-page/materials/materials-item/materials-item';
 
 @Injectable()
 export class ApiService {
@@ -28,5 +29,22 @@ export class ApiService {
         "Picture": "project.jpg"
       }
     ];
-  }  
+  }
+
+  getMaterialsItems(id: number): MaterialsItem[] {
+    return [
+      {
+        "Description": "Resource one",
+        "Link": "#"
+      },
+      {
+        "Description": "Resource two",
+        "Link": "#"
+      },
+      {
+        "Description": "Resource three",
+        "Link": "#"
+      }
+    ];
+  }
 }
