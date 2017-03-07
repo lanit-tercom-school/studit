@@ -1,14 +1,21 @@
-.nav-item
-{
-    margin: 0px 100px;
-}
-
 .navbar
 {
     font-size: 1.25rem;
     font-weight: 500;
     background-color: white;
-    padding: .5rem 15rem;
+}
+
+.navbar-brand
+{
+    margin-left: 10%;
+}
+
+.navbar-nav
+{
+    margin-left: 20%;
+    margin-right: 10%;
+    width: 100%;
+    justify-content: space-around;
 }
 
 #sign-in
