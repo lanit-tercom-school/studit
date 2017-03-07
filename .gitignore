@@ -259,4 +259,4 @@ service/*.exe~
 pkg/
 src/service/swagger/*
 src/github.com/*
-
+src/golang.org/*
