@@ -65,7 +65,7 @@ func (c *AuthController) Login() {
 	c.ServeJSON()
 }
 
-
+// TODO: удалить SuccessResponse и ErrorResponse
 func (c *LogoutController) Logout() {
 	// TODO: тут какие-то костыли
 	userToken := c.GetString("token")

@@ -6,7 +6,7 @@ import (
 	"github.com/astaxie/beego"
 )
 
-// Котроллер для главной/landing страниц
+// Контроллер для главной/landing страниц
 type LandingProjectsController struct {
 	beego.Controller
 }

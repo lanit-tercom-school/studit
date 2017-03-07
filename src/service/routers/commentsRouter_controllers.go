@@ -734,6 +734,13 @@ func init() {
 			AllowHTTPMethods: []string{"get"},
 			Params: nil})
 
+	beego.GlobalControllerRouter["service/controllers:UserContactController"] = append(beego.GlobalControllerRouter["service/controllers:UserContactController"],
+		beego.ControllerComments{
+			Method: "GetAll",
+			Router: `/`,
+			AllowHTTPMethods: []string{"get"},
+			Params: nil})
+
 	beego.GlobalControllerRouter["service/controllers:UserController"] = append(beego.GlobalControllerRouter["service/controllers:UserController"],
 		beego.ControllerComments{
 			Method: "Post",
