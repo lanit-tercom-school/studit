@@ -25,6 +25,7 @@ import { EnrolmentComponent } from './main/enrolment/enrolment.component';
 import { FeaturesComponent } from './main/features/features.component';
 
 import { ApiService } from '.././services/api.service';
+import { AuthService } from '.././services/auth.service';
 import { PartnersComponent } from './main/partners/partners.component';
 import { PartnerItemComponent } from './main/partners/partner-item/partner-item.component';
 import { SProjectPageComponent } from './pages/s-project-page/s-project-page.component';
@@ -37,7 +38,8 @@ import { HomePageComponent } from './pages/home-page/home-page.component';
 
 import {FooterComponent} from "./footer/footer.component";
 
-import { AppRouterProvider } from './routes'
+import { AppRouterProvider } from './routes';
+import {AuthManager} from './authmanager';
 
 @NgModule({
   imports: [
@@ -72,7 +74,7 @@ import { AppRouterProvider } from './routes'
     FooterComponent,
     HomePageComponent,
   ],
-  providers: [ApiService],
+  providers: [ApiService, AuthService, AuthManager],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

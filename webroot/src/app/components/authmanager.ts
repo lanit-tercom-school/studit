@@ -2,11 +2,12 @@ import { Injectable } from '@angular/core';
 
 import { CanActivate, Router, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 
-@Injectable()
+import { AuthService } from './../services/auth.service'
 
+@Injectable()
 export class AuthManager implements CanActivate {
-    
-    constructor(private router: Router, private auth: AuthManager) { }
+
+    constructor(private router: Router) { }
 
     canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
         if (next.url[0].path == 'auth') {
@@ -28,7 +29,7 @@ export class AuthManager implements CanActivate {
                 return false;
             }
         }
-        
+
         return true;
     }
 }
