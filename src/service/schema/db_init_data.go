@@ -261,6 +261,14 @@ func main() {
 	}
 	fastCheckErr(o.Insert(&user_contact3))
 
+	user_contact4 := m.UserContact{
+		Id: 4,
+		UserId: &user1,
+		Contact: "+7-123-456-78-90",
+		ContactTypeId: &contactType2,
+	}
+	fastCheckErr(o.Insert(&user_contact4))
+
 	// add news
 
 	news1 := m.News{

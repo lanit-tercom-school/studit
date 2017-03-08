@@ -16,7 +16,6 @@ type User struct {
 	Nickname    string `orm:"column(nickname)"`
 	Description string `orm:"column(description)"`
 	Avatar      string `orm:"column(avatar)"`
-	Session		string `orm:"column(session)"`
 }
 
 func (t *User) TableName() string {

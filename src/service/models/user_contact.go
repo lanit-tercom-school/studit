@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/astaxie/beego/orm"
+	"github.com/astaxie/beego"
 )
 
 type UserContact struct {
@@ -145,4 +146,22 @@ func DeleteUserContact(id int) (err error) {
 		}
 	}
 	return
+}
+
+func GetAllUserContacts(userId int) (ml []interface{}, err error) {
+	if userId < 0 {
+		err = errors.New("Bad UserId")
+		return nil, err
+	}
+	o := orm.NewOrm()
+	var contacts []UserContact
+	num, err := o.QueryTable(new(UserContact)).Filter("UserId", userId).RelatedSel().All(&contacts)
+	if err != nil {
+		return ml, err
+	}
+	for _, v := range contacts {
+		ml = append(ml, v)
+	}
+	beego.Info(num)
+	return ml, nil
 }
