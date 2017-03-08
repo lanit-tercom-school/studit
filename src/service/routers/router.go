@@ -154,7 +154,7 @@ func init() {
 			),
 		),
 */
-		beego.NSNamespace("/user",
+		beego.NSNamespace("/user/id",
 			beego.NSInclude(
 				&controllers.UserController{},
 			),

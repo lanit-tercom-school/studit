@@ -12,6 +12,32 @@ type UserContactController struct {
 	beego.Controller
 }
 
+func (c *UserContactController) Prepare() {
+	userToken := c.GetString("token")
+	if userToken == "" {
+		c.Data["json"] = "Wrong token (dev)" // TODO: change to `Unauthorized`
+		c.Ctx.Output.SetStatus(400)
+	} else {
+		if jwtManager.Validate(userToken) == nil {
+			claims, _ := jwtManager.Decode(userToken)
+			userid, err := claims.Get("user_id")
+			if err != nil {
+				c.Data["json"] = err.Error()
+				c.Ctx.Output.SetStatus(500) // TODO: change to 400?
+			} else {
+				if int(userid.(float64)) < 0 {
+					c.Data["json"] = err.Error()
+					c.Ctx.Output.SetStatus(500) // TODO: change to 400?
+				}
+			}
+		} else {
+			c.Data["json"] = "Wrong token (dev)" // TODO: change to `Unauthorized`
+			c.Ctx.Output.SetStatus(400)
+		}
+	}
+
+}
+
 // URLMapping ...
 func (c *UserContactController) URLMapping() {
 	//c.Mapping("Post", c.Post)
@@ -51,28 +77,24 @@ func (c *UserContactController) Post() {
 // @Param	token		query 	string	false		"User token for access"
 // @Failure 200 {object} models.UserContact
 // @Failure 200 {object} controllers.ErrorResponse
-// @router /:id [get]
+// @router / [get]
 func (c *UserContactController) GetOne() {
-	userToken := c.GetString("token")
-	if userToken != "" {
-		idStr := c.Ctx.Input.Param(":id")
-		id, _ := strconv.Atoi(idStr)
-		v, err := models.GetUserContactById(id)
-		if err != nil {
-			c.Data["json"] = err.Error()
-		} else {
-			sess := c.StartSession()
-			userId := sess.Get(sessionName)
-			if userId != v.UserId.Id {
-				c.Data["json"] = ErrorResponse{"Forbidden (this contact is not yours) (dev)"} // TODO: change to `Forbidden`
-			} else {
-				// success
-				c.Data["json"] = v
-			}
-		}
+	idStr := c.Ctx.Input.Param(":id")
+	id, _ := strconv.Atoi(idStr)
+	v, err := models.GetUserContactById(id)
+	if err != nil {
+		c.Data["json"] = err.Error()
 	} else {
-		c.Data["json"] = ErrorResponse{"Wrong token (dev)"}  // TODO: change to `Unauthorized`
+		//sess := c.StartSession()
+		userId := 1
+		if userId != v.UserId.Id {
+			c.Data["json"] = "Forbidden (this contact is not yours) (dev)" // TODO: change to `Forbidden`
+		} else {
+			// success
+			c.Data["json"] = v
+		}
 	}
+
 	c.ServeJSON()
 }
 
@@ -84,19 +106,30 @@ func (c *UserContactController) GetOne() {
 // @Failure 403
 // @router / [get]
 func (c *UserContactController) GetAll() {
-	userToken := c.GetString("token")
-	if userToken != "" {
-		sess := c.StartSession()
-		userId := sess.Get(sessionName)
-		if userId != nil {
-			l, err := models.GetAllUserContacts(userId.(int))
+	if c.Ctx.Output.IsOk() {
+		userToken := c.GetString("token")
+		if userToken != "" && jwtManager.Validate(userToken) == nil {
+			claims, err := jwtManager.Decode(userToken)
 			if err != nil {
-				c.Data["json"] = err.Error()  // TODO: change err.Error()
+				c.Data["json"] = "Internal Server Error"
+				c.Ctx.Output.SetStatus(500) // TODO: change to 400?
 			}
-			c.Data["json"] = l
+			userId, err := claims.Get("user_id")
+			if userId.(int) > 0 && err != nil {
+				l, err := models.GetAllUserContacts(userId.(int))
+				if err != nil {
+					c.Data["json"] = err.Error()  // TODO: change err.Error()
+					c.Ctx.ResponseWriter.WriteHeader(403)
+				}
+				c.Data["json"] = l
+			} else {
+				c.Data["json"] = "Internal Server Error"
+				c.Ctx.Output.SetStatus(500) // TODO: change to 400?
+			}
+		} else {
+			c.Data["json"] = "Wrong token (dev)" // TODO: change this
+			c.Ctx.ResponseWriter.WriteHeader(403)
 		}
-	} else {
-		c.Data["json"] = "Wrong token (dev)" // TODO: change this
 	}
 	c.ServeJSON()
 }
