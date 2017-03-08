@@ -1,0 +1,20 @@
+h1 {
+  margin-bottom: 70pt;
+}
+
+.container
+{
+  text-align: center;
+  margin: 100px auto;
+}
+
+small
+{
+  font-weight: 600;
+}
+
+.project-list
+{
+  display: flex;
+  background: whitesmoke;
+}
