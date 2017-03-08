@@ -31,6 +31,12 @@ export class ApiService {
     ];
   }
 
+  getProjectById(id: number): ProjectItem
+  {
+    return this.getProjectItems().find(project => project.Id === id);
+  }
+
+
   getMaterialsItems(id: number): MaterialsItem[] {
     return [
       {
