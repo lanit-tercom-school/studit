@@ -91,11 +91,12 @@ func (c *UserContactController) GetAll() {
 		if userId != nil {
 			l, err := models.GetAllUserContacts(userId.(int))
 			if err != nil {
-				c.Data["json"] = err.Error()
+				c.Data["json"] = err.Error()  // TODO: change err.Error()
 			}
-			beego.Info("normal token")
 			c.Data["json"] = l
 		}
+	} else {
+		c.Data["json"] = "Wrong token (dev)" // TODO: change this
 	}
 	c.ServeJSON()
 }

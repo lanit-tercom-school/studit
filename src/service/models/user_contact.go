@@ -11,10 +11,10 @@ import (
 )
 
 type UserContact struct {
-	Id            int          `orm:"column(id);pk;auto"`
-	Contact       string       `orm:"column(contact)"`
-	ContactTypeId *ContactType `orm:"column(contact_type_id);rel(fk)"`
-	UserId        *User        `orm:"column(user_id);rel(fk)"`
+	Id            int          `orm:"column(id);pk;auto" json:"-"`
+	Contact       string       `orm:"column(contact)" json:"value"`
+	ContactTypeId *ContactType `orm:"column(contact_type_id);rel(fk)" json:"type"`
+	UserId        *User        `orm:"column(user_id);rel(fk)" json:"-"`
 }
 
 func (t *UserContact) TableName() string {
@@ -160,6 +160,11 @@ func GetAllUserContacts(userId int) (ml []interface{}, err error) {
 		return ml, err
 	}
 	for _, v := range contacts {
+		/*m := make(map[string]interface{})
+		val := reflect.ValueOf(v)
+		for _, fname := range user_contact_fields_to_show {
+			m[fname] = val.FieldByName(fname).Interface()
+		}*/
 		ml = append(ml, v)
 	}
 	beego.Info(num)
