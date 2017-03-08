@@ -9,33 +9,7 @@ import (
 
 // Доступ к контактам пользователей
 type UserContactController struct {
-	beego.Controller
-}
-
-func (c *UserContactController) Prepare() {
-	userToken := c.GetString("token")
-	if userToken == "" {
-		c.Data["json"] = "Wrong token (dev)" // TODO: change to `Unauthorized`
-		c.Ctx.Output.SetStatus(400)
-	} else {
-		if jwtManager.Validate(userToken) == nil {
-			claims, _ := jwtManager.Decode(userToken)
-			userid, err := claims.Get("user_id")
-			if err != nil {
-				c.Data["json"] = err.Error()
-				c.Ctx.Output.SetStatus(500) // TODO: change to 400?
-			} else {
-				if int(userid.(float64)) < 0 {
-					c.Data["json"] = err.Error()
-					c.Ctx.Output.SetStatus(500) // TODO: change to 400?
-				}
-			}
-		} else {
-			c.Data["json"] = "Wrong token (dev)" // TODO: change to `Unauthorized`
-			c.Ctx.Output.SetStatus(400)
-		}
-	}
-
+	UserValidationController
 }
 
 // URLMapping ...
@@ -77,27 +51,31 @@ func (c *UserContactController) Post() {
 // @Param	token		query 	string	false		"User token for access"
 // @Failure 200 {object} models.UserContact
 // @Failure 200 {object} controllers.ErrorResponse
-// @router / [get]
+// @router /:id [get]
 func (c *UserContactController) GetOne() {
-	idStr := c.Ctx.Input.Param(":id")
-	id, _ := strconv.Atoi(idStr)
-	v, err := models.GetUserContactById(id)
-	if err != nil {
-		c.Data["json"] = err.Error()
-	} else {
-		//sess := c.StartSession()
-		userId := 1
-		if userId != v.UserId.Id {
-			c.Data["json"] = "Forbidden (this contact is not yours) (dev)" // TODO: change to `Forbidden`
+	beego.Info("in getONE")
+	if c.Ctx.Output.IsOk() {
+		idStr := c.Ctx.Input.Param(":id")
+		id, _ := strconv.Atoi(idStr)
+		v, err := models.GetUserContactById(id)
+		if err != nil {
+			c.Data["json"] = err.Error()
 		} else {
-			// success
-			c.Data["json"] = v
+			//sess := c.StartSession()
+			userId := 1
+			if userId != v.UserId.Id {
+				c.Data["json"] = "Forbidden (this contact is not yours) (dev)" // TODO: change to `Forbidden`
+			} else {
+				// success
+				c.Data["json"] = v
+			}
 		}
 	}
-
+	beego.Info("exit getONE")
 	c.ServeJSON()
 }
 
+// TODO: refactor this
 // GetAll ...
 // @Title Get All
 // @Description get UserContact
@@ -106,29 +84,31 @@ func (c *UserContactController) GetOne() {
 // @Failure 403
 // @router / [get]
 func (c *UserContactController) GetAll() {
+	beego.Info("in getALL")
+	beego.Info(c.Ctx.Output.Status)
 	if c.Ctx.Output.IsOk() {
+		beego.Info("output is ok")
 		userToken := c.GetString("token")
-		if userToken != "" && jwtManager.Validate(userToken) == nil {
-			claims, err := jwtManager.Decode(userToken)
+		claims, err := jwtManager.Decode(userToken)
+		if err != nil {
+			c.Data["json"] = err.Error() // TODO: change to "Internal Server Error"
+			c.Ctx.Output.SetStatus(500) // TODO: change to 400?
+		}
+		userId, err := claims.Get("user_id")
+		if userId.(float64) > 0 && err == nil {
+			l, err := models.GetAllUserContacts(int(userId.(float64)))
 			if err != nil {
-				c.Data["json"] = "Internal Server Error"
-				c.Ctx.Output.SetStatus(500) // TODO: change to 400?
+				c.Data["json"] = err.Error()  // TODO: change err.Error()
+				c.Ctx.ResponseWriter.WriteHeader(403)
 			}
-			userId, err := claims.Get("user_id")
-			if userId.(int) > 0 && err != nil {
-				l, err := models.GetAllUserContacts(userId.(int))
-				if err != nil {
-					c.Data["json"] = err.Error()  // TODO: change err.Error()
-					c.Ctx.ResponseWriter.WriteHeader(403)
-				}
-				c.Data["json"] = l
-			} else {
-				c.Data["json"] = "Internal Server Error"
-				c.Ctx.Output.SetStatus(500) // TODO: change to 400?
-			}
+			c.Data["json"] = l
 		} else {
-			c.Data["json"] = "Wrong token (dev)" // TODO: change this
-			c.Ctx.ResponseWriter.WriteHeader(403)
+			if err != nil {
+				c.Data["json"] = userId.(float64) > 0 // TODO: change to "Internal Server Error"
+			} else {
+				c.Data["json"] = err.Error() // TODO: change to "Internal Server Error"
+			}
+			c.Ctx.Output.SetStatus(500) // TODO: change to 400?
 		}
 	}
 	c.ServeJSON()

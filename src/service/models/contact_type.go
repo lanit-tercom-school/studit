@@ -10,8 +10,8 @@ import (
 )
 
 type ContactType struct {
-	Id   int    `orm:"column(id);pk;auto"`
-	Type string `orm:"column(type)"`
+	Id   int    `orm:"column(id);pk;auto" json:"-"`
+	Type string `orm:"column(type)" json:"type"`
 }
 
 func (t *ContactType) TableName() string {

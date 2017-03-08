@@ -10,11 +10,11 @@ import (
 )
 
 type Course struct {
-	Id          int     `orm:"column(id);pk;auto"`
-	Title       string  `orm:"column(title)"`
-	Discription string  `orm:"column(discription)"`
-	Logo        string  `orm:"column(logo)"`
-	Rating      float32 `orm:"column(rating)"`
+	Id          int     `orm:"column(id);pk;auto" json:"-"`
+	Title       string  `orm:"column(title)" json:"title"`
+	Description string  `orm:"column(description)" json:"desc"`
+	Logo        string  `orm:"column(logo)" json:"logo"`
+	Rating      float32 `orm:"column(rating)" json:"rate"`
 }
 
 func (t *Course) TableName() string {

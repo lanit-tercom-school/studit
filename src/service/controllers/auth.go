@@ -26,7 +26,6 @@ func (c *AuthController) URLMapping() {
 	//c.Mapping("Delete", c.Delete)
 }
 
-
 func (c *AuthController) Login() {
 	var v auth.Usr
 	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
@@ -73,8 +72,6 @@ func (c *LogoutController) Logout() {
 				c.Data["json"] = err.Error()
 				c.Ctx.Output.SetStatus(500) // TODO: change to 400?
 			} else {
-				// TODO: убрать этот костыль, когда добавится возможность удалять(чистить) claims
-				claims.SetTime("exp", time.Now())
 				c.Data["json"] = "OK"
 			}
 
@@ -139,3 +136,48 @@ func (c *LogoutController) GetOne() {
 func (c *LogoutController) GetAll() {
 	c.Logout()
 }
+
+
+type UserValidationController struct {
+	beego.Controller
+}
+
+// Наследовать для контроллеров, требующие валидации юзера
+func (c *UserValidationController) Prepare() {
+	beego.Info("start validation")
+	userToken := c.GetString("token")
+	if userToken == "" {
+		c.Data["json"] = "Wrong token (dev)" // TODO: change to `Unauthorized`
+		c.Ctx.Output.SetStatus(400)
+		c.ServeJSON()
+		c.StopRun()
+	} else {
+		if jwtManager.Validate(userToken) == nil {
+			claims, _ := jwtManager.Decode(userToken)
+			userid, err := claims.Get("user_id")
+			if err != nil {
+				c.Data["json"] = err.Error()
+				c.Ctx.Output.SetStatus(500) // TODO: change to 400?
+				c.ServeJSON()
+				c.StopRun()
+			} else {
+				if int(userid.(float64)) < 0 {
+					c.Data["json"] = err.Error()
+					c.Ctx.Output.SetStatus(500) // TODO: change to 400?
+					c.ServeJSON()
+					c.StopRun()
+				} else {
+					beego.Info("success validation")
+					c.Ctx.Output.SetStatus(200)
+				}
+			}
+		} else {
+			c.Data["json"] = "Wrong token (dev)" // TODO: change to `Unauthorized`
+			c.Ctx.Output.SetStatus(400)
+			c.ServeJSON()
+			c.StopRun()
+		}
+	}
+	beego.Info("exit prepare")
+}
+
