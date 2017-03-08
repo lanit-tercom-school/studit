@@ -143,7 +143,7 @@ type ControllerWithAuthorization struct {
 }
 
 // Наследовать для контроллеров, требующие валидации юзера
-func (c *UserValidationController) Prepare() {
+func (c *ControllerWithAuthorization) Prepare() {
 	beego.Info("start validation")
 	userToken := c.GetString("token")
 	if userToken == "" {
