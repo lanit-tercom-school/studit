@@ -1,17 +1,41 @@
 package controllers
 
 import (
-	"errors"
 	"service/models"
 	"strconv"
-	"strings"
 
 	"github.com/astaxie/beego"
 )
 
-// UserContactController oprations for UserContact
+// Доступ к контактам пользователей
 type UserContactController struct {
 	beego.Controller
+}
+
+func (c *UserContactController) Prepare() {
+	userToken := c.GetString("token")
+	if userToken == "" {
+		c.Data["json"] = "Wrong token (dev)" // TODO: change to `Unauthorized`
+		c.Ctx.Output.SetStatus(400)
+	} else {
+		if jwtManager.Validate(userToken) == nil {
+			claims, _ := jwtManager.Decode(userToken)
+			userid, err := claims.Get("user_id")
+			if err != nil {
+				c.Data["json"] = err.Error()
+				c.Ctx.Output.SetStatus(500) // TODO: change to 400?
+			} else {
+				if int(userid.(float64)) < 0 {
+					c.Data["json"] = err.Error()
+					c.Ctx.Output.SetStatus(500) // TODO: change to 400?
+				}
+			}
+		} else {
+			c.Data["json"] = "Wrong token (dev)" // TODO: change to `Unauthorized`
+			c.Ctx.Output.SetStatus(400)
+		}
+	}
+
 }
 
 // URLMapping ...
@@ -48,98 +72,63 @@ func (c *UserContactController) Post() {
 // TODO: refactor this
 // GetOne ...
 // @Title Get One
-// @Description Возвращает models.UserContact если юзер токена совпадает с владельцем контакта, другими словами список контакто доступен только владельцу
+// @Description Возвращает models.UserContact если юзер токена совпадает с владельцем контакта, другими словами, контакт доступен только владельцу
 // @Param	id		path 	string	true		"The key for staticblock"
 // @Param	token		query 	string	false		"User token for access"
 // @Failure 200 {object} models.UserContact
-// @Failure 403 :id is empty
-// @router /:id [get]
+// @Failure 200 {object} controllers.ErrorResponse
+// @router / [get]
 func (c *UserContactController) GetOne() {
-	userToken := c.GetString("token")
-	if userToken != "" {
-		idStr := c.Ctx.Input.Param(":id")
-		id, _ := strconv.Atoi(idStr)
-		v, err := models.GetUserContactById(id)
-		if err != nil {
-			c.Data["json"] = err.Error()
-		} else {
-			sess := c.StartSession()
-			userId := sess.Get(sessionName)
-			if userId != v.UserId.Id {
-				c.Data["json"] = ErrorResponse{"Forbidden (this contact is not yours) (dev)"} // TODO: change to `Forbidden`
-			} else {
-				// success
-				c.Data["json"] = v
-			}
-		}
+	idStr := c.Ctx.Input.Param(":id")
+	id, _ := strconv.Atoi(idStr)
+	v, err := models.GetUserContactById(id)
+	if err != nil {
+		c.Data["json"] = err.Error()
 	} else {
-		c.Data["json"] = ErrorResponse{"Wrong token (dev)"}  // TODO: change to `Unauthorized`
+		//sess := c.StartSession()
+		userId := 1
+		if userId != v.UserId.Id {
+			c.Data["json"] = "Forbidden (this contact is not yours) (dev)" // TODO: change to `Forbidden`
+		} else {
+			// success
+			c.Data["json"] = v
+		}
 	}
+
 	c.ServeJSON()
 }
-/*
+
 // GetAll ...
 // @Title Get All
 // @Description get UserContact
 // @Param	token	query	string	false	"user token"
 // @Failure 200 {object} models.UserContact
 // @Failure 403
-// @router / [get]*/
-
+// @router / [get]
 func (c *UserContactController) GetAll() {
-	userToken := c.GetString("token")
-	if userToken != "" {
-		sess := c.StartSession()
-		userId := sess.Get(sessionName)
-		if userId != nil {
-
-		}
-		var fields []string
-		var sortby []string
-		var order []string
-		var query = make(map[string]string)
-		var limit int64 = 10
-		var offset int64
-
-		// fields: col1,col2,entity.col3
-		if v := c.GetString("fields"); v != "" {
-			fields = strings.Split(v, ",")
-		}
-		// limit: 10 (default is 10)
-		if v, err := c.GetInt64("limit"); err == nil {
-			limit = v
-		}
-		// offset: 0 (default is 0)
-		if v, err := c.GetInt64("offset"); err == nil {
-			offset = v
-		}
-		// sortby: col1,col2
-		if v := c.GetString("sortby"); v != "" {
-			sortby = strings.Split(v, ",")
-		}
-		// order: desc,asc
-		if v := c.GetString("order"); v != "" {
-			order = strings.Split(v, ",")
-		}
-		// query: k:v,k:v
-		if v := c.GetString("query"); v != "" {
-			for _, cond := range strings.Split(v, ",") {
-				kv := strings.SplitN(cond, ":", 2)
-				if len(kv) != 2 {
-					c.Data["json"] = errors.New("Error: invalid query key/value pair")
-					c.ServeJSON()
-					return
-				}
-				k, v := kv[0], kv[1]
-				query[k] = v
+	if c.Ctx.Output.IsOk() {
+		userToken := c.GetString("token")
+		if userToken != "" && jwtManager.Validate(userToken) == nil {
+			claims, err := jwtManager.Decode(userToken)
+			if err != nil {
+				c.Data["json"] = "Internal Server Error"
+				c.Ctx.Output.SetStatus(500) // TODO: change to 400?
 			}
-		}
-
-		l, err := models.GetAllUserContact(query, fields, sortby, order, offset, limit)
-		if err != nil {
-			c.Data["json"] = err.Error()
+			userId, err := claims.Get("user_id")
+			if userId.(int) > 0 && err != nil {
+				l, err := models.GetAllUserContacts(userId.(int))
+				if err != nil {
+					c.Data["json"] = err.Error()  // TODO: change err.Error()
+					c.Ctx.ResponseWriter.WriteHeader(403)
+				}
+				c.Data["json"] = l
+			} else {
+				c.Data["json"] = "Internal Server Error"
+				c.Ctx.Output.SetStatus(500) // TODO: change to 400?
+			}
 		} else {
-			c.Data["json"] = l
+			c.Data["json"] = "Wrong token (dev)" // TODO: change this
+			c.Ctx.ResponseWriter.WriteHeader(403)
 		}
 	}
 	c.ServeJSON()

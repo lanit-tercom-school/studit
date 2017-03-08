@@ -25,6 +25,7 @@ import { EnrolmentComponent } from './main/enrolment/enrolment.component';
 import { FeaturesComponent } from './main/features/features.component';
 
 import { ApiService } from '.././services/api.service';
+import { AuthService } from '.././services/auth.service';
 import { PartnersComponent } from './main/partners/partners.component';
 import { PartnerItemComponent } from './main/partners/partner-item/partner-item.component';
 import { SProjectPageComponent } from './pages/s-project-page/s-project-page.component';
@@ -33,9 +34,12 @@ import { TasksComponent } from './pages/s-project-page/tasks/tasks.component';
 import { ProjNewsComponent } from './pages/s-project-page/proj-news/proj-news.component';
 import { MaterialsItemComponent } from './pages/s-project-page/materials/materials-item/materials-item.component';
 import { AuthorizationComponent } from './pages/authorization/authorization.component';
+import { HomePageComponent } from './pages/home-page/home-page.component';
 
-import { AppRoutingModule } from './app-routing.module';
 import {FooterComponent} from "./footer/footer.component";
+
+import { AppRouterProvider } from './routes';
+import {AuthManager} from './authmanager';
 
 @NgModule({
   imports: [
@@ -48,8 +52,7 @@ import {FooterComponent} from "./footer/footer.component";
     ProgressModule,
     ProfileModule,
     CoursecardModule,
-    AppRoutingModule,
-
+    AppRouterProvider,
   ],
   declarations: [
     AppComponent,
@@ -68,9 +71,10 @@ import {FooterComponent} from "./footer/footer.component";
     ProjNewsComponent,
     MaterialsItemComponent,
     AuthorizationComponent,
-    FooterComponent
+    FooterComponent,
+    HomePageComponent,
   ],
-  providers: [ApiService],
+  providers: [ApiService, AuthService, AuthManager],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

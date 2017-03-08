@@ -10,7 +10,7 @@ import (
 	"github.com/astaxie/beego"
 )
 
-// UserController oprations for User
+// Получение данных о User, большинство из них общедоступны
 type UserController struct {
 	beego.Controller
 }

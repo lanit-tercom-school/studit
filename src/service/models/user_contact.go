@@ -7,13 +7,14 @@ import (
 	"strings"
 
 	"github.com/astaxie/beego/orm"
+	"github.com/astaxie/beego"
 )
 
 type UserContact struct {
-	Id            int          `orm:"column(id);pk;auto"`
-	Contact       string       `orm:"column(contact)"`
-	ContactTypeId *ContactType `orm:"column(contact_type_id);rel(fk)"`
-	UserId        *User        `orm:"column(user_id);rel(fk)"`
+	Id            int          `orm:"column(id);pk;auto" json:"-"`
+	Contact       string       `orm:"column(contact)" json:"value"`
+	ContactTypeId *ContactType `orm:"column(contact_type_id);rel(fk)" json:"type"`
+	UserId        *User        `orm:"column(user_id);rel(fk)" json:"-"`
 }
 
 func (t *UserContact) TableName() string {
@@ -145,4 +146,27 @@ func DeleteUserContact(id int) (err error) {
 		}
 	}
 	return
+}
+
+func GetAllUserContacts(userId int) (ml []interface{}, err error) {
+	if userId < 0 {
+		err = errors.New("Bad UserId")
+		return nil, err
+	}
+	o := orm.NewOrm()
+	var contacts []UserContact
+	num, err := o.QueryTable(new(UserContact)).Filter("UserId", userId).RelatedSel().All(&contacts)
+	if err != nil {
+		return ml, err
+	}
+	for _, v := range contacts {
+		/*m := make(map[string]interface{})
+		val := reflect.ValueOf(v)
+		for _, fname := range user_contact_fields_to_show {
+			m[fname] = val.FieldByName(fname).Interface()
+		}*/
+		ml = append(ml, v)
+	}
+	beego.Info(num)
+	return ml, nil
 }
