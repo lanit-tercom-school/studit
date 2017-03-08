@@ -37,6 +37,8 @@ import { AuthorizationComponent } from './pages/authorization/authorization.comp
 import { AppRoutingModule } from './app-routing.module';
 import {FooterComponent} from "./footer/footer.component";
 
+import { AppRouterProvider } from './routes'
+
 @NgModule({
   imports: [
     BrowserModule,
@@ -48,8 +50,7 @@ import {FooterComponent} from "./footer/footer.component";
     ProgressModule,
     ProfileModule,
     CoursecardModule,
-    AppRoutingModule,
-
+    AppRouterProvider,
   ],
   declarations: [
     AppComponent,
