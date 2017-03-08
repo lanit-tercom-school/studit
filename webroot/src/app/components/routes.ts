@@ -11,8 +11,8 @@ export const routes: Routes = [
   { path: '', redirectTo: 'main', pathMatch: 'full' },
   { path: 'main', component: MainComponent },
   { path: 'projects', component: ProjectListComponent },
-  { path: 'project', component: SProjectPageComponent, canActivate: [AuthManager] },
-  { path: 'auth', component: AuthorizationComponent, canActivate: [AuthManager] },
+  { path: 'project', component: SProjectPageComponent},
+  { path: 'auth', component: AuthorizationComponent},
 ];
 
 export const AppRouterProvider = RouterModule.forRoot(routes);

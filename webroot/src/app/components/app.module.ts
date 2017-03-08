@@ -33,6 +33,7 @@ import { TasksComponent } from './pages/s-project-page/tasks/tasks.component';
 import { ProjNewsComponent } from './pages/s-project-page/proj-news/proj-news.component';
 import { MaterialsItemComponent } from './pages/s-project-page/materials/materials-item/materials-item.component';
 import { AuthorizationComponent } from './pages/authorization/authorization.component';
+//import { HomePageComponent } from './pages/home-page/home-page.component';
 
 import { AppRoutingModule } from './app-routing.module';
 import {FooterComponent} from "./footer/footer.component";
@@ -69,7 +70,8 @@ import { AppRouterProvider } from './routes'
     ProjNewsComponent,
     MaterialsItemComponent,
     AuthorizationComponent,
-    FooterComponent
+    FooterComponent,
+    //HomePageComponent,
   ],
   providers: [ApiService],
   bootstrap: [AppComponent]
