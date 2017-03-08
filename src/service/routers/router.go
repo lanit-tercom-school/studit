@@ -111,13 +111,13 @@ func init() {
 				&controllers.LessonController{},
 			),
 		),
-*/
+
 		beego.NSNamespace("/project",
 			beego.NSInclude(
 				&controllers.ProjectController{},
 			),
 		),
-/*
+
 		beego.NSNamespace("/project_user",
 			beego.NSInclude(
 				&controllers.ProjectUserController{},
@@ -129,13 +129,13 @@ func init() {
 				&controllers.ContactTypeController{},
 			),
 		),
-
-		beego.NSNamespace("/user_contact",
+*/
+		beego.NSNamespace("/user/contact",
 			beego.NSInclude(
 				&controllers.UserContactController{},
 			),
 		),
-
+/*
 		beego.NSNamespace("/course",
 			beego.NSInclude(
 				&controllers.CourseController{},
@@ -171,6 +171,19 @@ func init() {
 				&controllers.LandingProjectsController{},
 			),
 		),
+		beego.NSNamespace("/auth/login",
+			beego.NSInclude(
+				&controllers.AuthController{},
+			),
+		),
+		beego.NSNamespace("/auth/logout",
+			beego.NSInclude(
+				&controllers.LogoutController{},
+			),
+		),
 	)
 	beego.AddNamespace(ns)
+	//beego.Router("/v1/auth/login", &controllers.AuthController{}, "post:Login")
+	//beego.Router("/v1/auth/logout", &controllers.AuthController{}, "get:Logout")
+	beego.ErrorController(&controllers.ErrorController{})
 }
