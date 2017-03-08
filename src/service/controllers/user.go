@@ -6,13 +6,11 @@ import (
 	"service/models"
 	"strconv"
 	"strings"
-
-	"github.com/astaxie/beego"
 )
 
-// Получение данных о User, большинство из них общедоступны
+// Операции с models.User, для некоторых требуется авторизация
 type UserController struct {
-	beego.Controller
+	ControllerWithAuthorization
 }
 
 // URLMapping ...
@@ -28,20 +26,24 @@ func (c *UserController) URLMapping() {
 // @Title Post
 // @Description create User
 // @Param	body		body 	models.User	true		"body for User content"
+// @Param	token		body	string			false		"admin/moder token"
 // @Success 201 {int} models.User
 // @Failure 403 body is empty
 // @router / [post]
 func (c *UserController) Post() {
-	var v models.User
-	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
-		if _, err := models.AddUser(&v); err == nil {
-			c.Ctx.Output.SetStatus(201)
-			c.Data["json"] = v
+	// TODO: обновить защиту когда будет лвлинг пользователей
+	if c.Ctx.Output.IsOk() {
+		var v models.User
+		if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
+			if _, err := models.AddUser(&v); err == nil {
+				c.Ctx.Output.SetStatus(201)
+				c.Data["json"] = v
+			} else {
+				c.Data["json"] = err.Error()
+			}
 		} else {
 			c.Data["json"] = err.Error()
 		}
-	} else {
-		c.Data["json"] = err.Error()
 	}
 	c.ServeJSON()
 }
@@ -133,21 +135,25 @@ func (c *UserController) GetAll() {
 // @Description update the User
 // @Param	id		path 	string	true		"The id you want to update"
 // @Param	body		body 	models.User	true		"body for User content"
+// @Param	token		body	string			false		"admin/moder token"
 // @Success 200 {object} models.User
 // @Failure 403 :id is not int
 // @router /:id [put]
 func (c *UserController) Put() {
-	idStr := c.Ctx.Input.Param(":id")
-	id, _ := strconv.Atoi(idStr)
-	v := models.User{Id: id}
-	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
-		if err := models.UpdateUserById(&v); err == nil {
-			c.Data["json"] = "OK"
+	// TODO: обновить защиту когда будет лвлинг пользователей
+	if c.Ctx.Output.IsOk() {
+		idStr := c.Ctx.Input.Param(":id")
+		id, _ := strconv.Atoi(idStr)
+		v := models.User{Id: id}
+		if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
+			if err := models.UpdateUserById(&v); err == nil {
+				c.Data["json"] = "OK"
+			} else {
+				c.Data["json"] = err.Error()
+			}
 		} else {
 			c.Data["json"] = err.Error()
 		}
-	} else {
-		c.Data["json"] = err.Error()
 	}
 	c.ServeJSON()
 }
@@ -156,16 +162,20 @@ func (c *UserController) Put() {
 // @Title Delete
 // @Description delete the User
 // @Param	id		path 	string	true		"The id you want to delete"
+// @Param	token		body	string			false		"admin/moder token"
 // @Success 200 {string} delete success!
 // @Failure 403 id is empty
 // @router /:id [delete]
 func (c *UserController) Delete() {
-	idStr := c.Ctx.Input.Param(":id")
-	id, _ := strconv.Atoi(idStr)
-	if err := models.DeleteUser(id); err == nil {
-		c.Data["json"] = "OK"
-	} else {
-		c.Data["json"] = err.Error()
+	// TODO: обновить защиту когда будет лвлинг пользователей
+	if c.Ctx.Output.IsOk() {
+		idStr := c.Ctx.Input.Param(":id")
+		id, _ := strconv.Atoi(idStr)
+		if err := models.DeleteUser(id); err == nil {
+			c.Data["json"] = "OK"
+		} else {
+			c.Data["json"] = err.Error()
+		}
 	}
 	c.ServeJSON()
 }

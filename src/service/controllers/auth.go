@@ -138,7 +138,7 @@ func (c *LogoutController) GetAll() {
 }
 
 
-type UserValidationController struct {
+type ControllerWithAuthorization struct {
 	beego.Controller
 }
 
@@ -149,8 +149,6 @@ func (c *UserValidationController) Prepare() {
 	if userToken == "" {
 		c.Data["json"] = "Wrong token (dev)" // TODO: change to `Unauthorized`
 		c.Ctx.Output.SetStatus(400)
-		c.ServeJSON()
-		c.StopRun()
 	} else {
 		if jwtManager.Validate(userToken) == nil {
 			claims, _ := jwtManager.Decode(userToken)
@@ -158,14 +156,10 @@ func (c *UserValidationController) Prepare() {
 			if err != nil {
 				c.Data["json"] = err.Error()
 				c.Ctx.Output.SetStatus(500) // TODO: change to 400?
-				c.ServeJSON()
-				c.StopRun()
 			} else {
 				if int(userid.(float64)) < 0 {
 					c.Data["json"] = err.Error()
 					c.Ctx.Output.SetStatus(500) // TODO: change to 400?
-					c.ServeJSON()
-					c.StopRun()
 				} else {
 					beego.Info("success validation")
 					c.Ctx.Output.SetStatus(200)
@@ -174,8 +168,6 @@ func (c *UserValidationController) Prepare() {
 		} else {
 			c.Data["json"] = "Wrong token (dev)" // TODO: change to `Unauthorized`
 			c.Ctx.Output.SetStatus(400)
-			c.ServeJSON()
-			c.StopRun()
 		}
 	}
 	beego.Info("exit prepare")

@@ -9,7 +9,7 @@ import (
 
 // Доступ к контактам пользователей
 type UserContactController struct {
-	UserValidationController
+	ControllerWithAuthorization
 }
 
 // URLMapping ...
