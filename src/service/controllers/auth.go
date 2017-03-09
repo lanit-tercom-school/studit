@@ -28,15 +28,6 @@ func (c *AuthController) URLMapping() {
 }
 
 func (c *AuthController) Login() {
-	/*err := c.Ctx.Request.ParseForm()
-	if err != nil {
-		c.Data["json"] = err.Error()
-		c.Ctx.Output.SetStatus(403)
-	} else {*/
-		/*v := auth.Usr{
-			Login: c.Ctx.Request.Form["Login"],
-			Password: c.Ctx.Request.Form["Password"],
-		}*/
 	var v auth.Usr
 	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
 		user, err := auth.TryToLogin(v.Login, v.Password)
