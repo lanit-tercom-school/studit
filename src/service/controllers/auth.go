@@ -8,7 +8,6 @@ import (
 	"service/auth"
 	"github.com/robbert229/jwt"
 	"time"
-	//"net/http"
 )
 
 var jwtManager = jwt.HmacSha256("Secret")
@@ -28,6 +27,8 @@ func (c *AuthController) URLMapping() {
 }
 
 func (c *AuthController) Login() {
+	c.Ctx.ResponseWriter.Header().Add("Access-Control-Allow-Origin", "*")
+	c.Ctx.ResponseWriter.Header().Add("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
 	var v auth.Usr
 	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
 		user, err := auth.TryToLogin(v.Login, v.Password)
@@ -93,7 +94,7 @@ func (c *LogoutController) Logout() {
 // TODO: добавить нормальные доки
 // Post ...
 // @Title Post
-// @Description login with username and password
+// @Description Запрос: auth.Usr, Ответ: auth.SessionStruct
 // @Param	body		body 	auth.Usr	true ""
 // @Failure	200	{object} auth.SessionStruct
 // @Failure	403	Invalid username or password
@@ -129,7 +130,7 @@ func (c *LogoutController) GetOne() {
 
 // GetAll ...
 // @Title Get All
-// @Description logout current token
+// @Description Осуществляет выход пользователя из системы
 // @Param	token	query	string	false	"Token To Logout"
 // @Failure 200 OK
 // @Failure 403 Wrong token
@@ -145,6 +146,14 @@ type ControllerWithAuthorization struct {
 }
 
 // Наследовать для контроллеров, требующие валидации юзера
+// В функции происходит валидация токена для маршрутов, которые этого требуют
+// Внутри метода требуется проверка (нет, если метод+маршрут общедоступны), как прошла валидация токена
+//	// Если проверка прошла успешно, то код ответа будет 200
+//	if c.Ctx.Output.IsOk() {
+//		// доступ разрешен
+//	} else {
+//		// доступ запрещен, обработка (например, 403 "Forbidden")
+//	}
 func (c *ControllerWithAuthorization) Prepare() {
 	beego.Info("start validation")
 	userToken := c.GetString("token")

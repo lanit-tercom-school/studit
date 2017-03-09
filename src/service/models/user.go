@@ -10,12 +10,12 @@ import (
 )
 
 type User struct {
-	Id          int    `orm:"column(id);pk;auto"`
-	Login       string `orm:"column(login)"`
-	Password    string `orm:"column(password)"`
-	Nickname    string `orm:"column(nickname)"`
-	Description string `orm:"column(description)"`
-	Avatar      string `orm:"column(avatar)"`
+	Id          int    `orm:"column(id);pk;auto" json:"-"`
+	Login       string `orm:"column(login)" json:"login"`
+	Password    string `orm:"column(password)" json:"password"`
+	Nickname    string `orm:"column(nickname)" json:"nickname"`
+	Description string `orm:"column(description)" json:"description"`
+	Avatar      string `orm:"column(avatar)" json:"avatar"`
 }
 
 func (t *User) TableName() string {
