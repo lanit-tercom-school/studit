@@ -10,7 +10,7 @@ export class AuthService {
     authenticatenow(user: User) {
         var headers = new Headers();
         
-        headers.append('Content-Type', 'text/x-www-form-urlencoded');
+        headers.append('Content-Type', 'application/x-www-form-urlencoded');
 
         return new Promise((resolve) => {
             this.http.post('http://localhost:8080/v1/auth/login/', JSON.stringify(user), { headers: headers }).subscribe((data) => {
