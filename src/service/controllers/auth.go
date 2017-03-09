@@ -8,6 +8,7 @@ import (
 	"service/auth"
 	"github.com/robbert229/jwt"
 	"time"
+	"net/http"
 )
 
 var jwtManager = jwt.HmacSha256("Secret")
@@ -27,36 +28,45 @@ func (c *AuthController) URLMapping() {
 }
 
 func (c *AuthController) Login() {
-	var v auth.Usr
-	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
-		user, err := auth.TryToLogin(v.Login, v.Password)
-		if err != nil {
-			c.Data["json"] = err.Error()
-			c.Ctx.Output.SetStatus(403)
-		} else {
-			// success, register new session
-			claim := jwt.NewClaim()
-			claim.Set("user_id", user.Id)
-			f := time.Now().Add(time.Hour)
-			claim.SetTime("exp", f)
-
-			token, err := jwtManager.Encode(claim)
+	err := c.Ctx.Request.ParseForm()
+	if err != nil {
+		c.Data["json"] = err.Error()
+		c.Ctx.Output.SetStatus(403)
+	} else {
+		v := auth.Usr{
+			Login: c.Ctx.Request.Form["Login"],
+			Password: c.Ctx.Request.Form["Password"],
+		}
+		if err = json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
+			user, err := auth.TryToLogin(v.Login, v.Password)
 			if err != nil {
 				c.Data["json"] = err.Error()
-				c.Ctx.Output.SetStatus(500)
-			}
+				c.Ctx.Output.SetStatus(403)
+			} else {
+				// success, register new session
+				claim := jwt.NewClaim()
+				claim.Set("user_id", user.Id)
+				f := time.Now().Add(time.Hour)
+				claim.SetTime("exp", f)
 
-			sessionResponse := auth.SessionStruct{
-				Token: token,
-				UserId: user.Id,
-				ExpiresIn: f.Format(time.UnixDate),
-			}
+				token, err := jwtManager.Encode(claim)
+				if err != nil {
+					c.Data["json"] = err.Error()
+					c.Ctx.Output.SetStatus(500)
+				}
 
-			c.Data["json"] = sessionResponse
+				sessionResponse := auth.SessionStruct{
+					Token: token,
+					UserId: user.Id,
+					ExpiresIn: f.Format(time.UnixDate),
+				}
+
+				c.Data["json"] = sessionResponse
+			}
+		} else {
+			c.Data["json"] = err.Error() // TODO: change to "Wrong request"
+			c.Ctx.Output.SetStatus(403)
 		}
-	} else {
-		c.Data["json"] = "Wrong request"
-		c.Ctx.Output.SetStatus(403)
 	}
 	c.ServeJSON()
 }

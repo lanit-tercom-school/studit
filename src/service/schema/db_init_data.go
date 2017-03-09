@@ -240,7 +240,7 @@ func main() {
 	user_contact1 := m.UserContact{
 		Id: 1,
 		UserId: &user1,
-		Contact: "admin@admin.admin",
+		Contact: "a@a",
 		ContactTypeId: &contactType1,
 	}
 	fastCheckErr(o.Insert(&user_contact1))
