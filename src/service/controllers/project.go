@@ -6,13 +6,11 @@ import (
 	"service/models"
 	"strconv"
 	"strings"
-
-	"github.com/astaxie/beego"
 )
 
-// ProjectController operations for Project
+// Операции с models.Project, для некоторых требуется авторизация
 type ProjectController struct {
-	beego.Controller
+	ControllerWithAuthorization
 }
 
 // URLMapping ...
@@ -28,20 +26,24 @@ func (c *ProjectController) URLMapping() {
 // @Title Post
 // @Description create Project
 // @Param	body		body 	models.Project	true		"body for Project content"
+// @Param	token		body	string			false		"admin/moder token"
 // @Success 201 {int} models.Project
 // @Failure 403 body is empty
 // @router / [post]
 func (c *ProjectController) Post() {
-	var v models.Project
-	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
-		if _, err := models.AddProject(&v); err == nil {
-			c.Ctx.Output.SetStatus(201)
-			c.Data["json"] = v
+	// TODO: обновить защиту когда будет лвлинг пользователей
+	if c.Ctx.Output.IsOk() {
+		var v models.Project
+		if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
+			if _, err := models.AddProject(&v); err == nil {
+				c.Ctx.Output.SetStatus(201)
+				c.Data["json"] = v
+			} else {
+				c.Data["json"] = err.Error()
+			}
 		} else {
 			c.Data["json"] = err.Error()
 		}
-	} else {
-		c.Data["json"] = err.Error()
 	}
 	c.ServeJSON()
 }
@@ -51,16 +53,22 @@ func (c *ProjectController) Post() {
 // @Description get Project by id
 // @Param	id		path 	string	true		"The key for staticblock"
 // @Success 200 {object} models.Project
-// @Failure 403 :id is empty
+// @Failure 400 :id is wrong
 // @router /:id [get]
 func (c *ProjectController) GetOne() {
 	idStr := c.Ctx.Input.Param(":id")
-	id, _ := strconv.Atoi(idStr)
-	v, err := models.GetProjectById(id)
+	id, err := strconv.Atoi(idStr)
 	if err != nil {
-		c.Data["json"] = err.Error()
+		c.Data["json"] = err.Error() // TODO: change to "Wrong project id"
+		c.Ctx.Output.SetStatus(400)
 	} else {
-		c.Data["json"] = v
+		v, err := models.GetProjectById(id)
+		if err != nil {
+			c.Data["json"] = err.Error()
+			c.Ctx.Output.SetStatus(400)
+		} else {
+			c.Data["json"] = v
+		}
 	}
 	c.ServeJSON()
 }
@@ -72,7 +80,7 @@ func (c *ProjectController) GetOne() {
 // @Param	fields	query	string	false	"Fields returned. e.g. col1,col2 ..."
 // @Param	sortby	query	string	false	"Sorted-by fields. e.g. col1,col2 ..."
 // @Param	order	query	string	false	"Order corresponding to each sortby field, if single value, apply to all sortby fields. e.g. desc,asc ..."
-// @Param	limit	query	string	false	"Limit the size of result set. Must be an integer"
+// @Param	limit	query	string	false	"Limit the size of result set. Must be an integer. Default 10"
 // @Param	offset	query	string	false	"Start position of result set. Must be an integer"
 // @Success 200 {object} models.Project
 // @Failure 403
@@ -133,21 +141,25 @@ func (c *ProjectController) GetAll() {
 // @Description update the Project
 // @Param	id		path 	string	true		"The id you want to update"
 // @Param	body		body 	models.Project	true		"body for Project content"
+// @Param	token		body	string			false		"admin/moder token"
 // @Success 200 {object} models.Project
 // @Failure 403 :id is not int
 // @router /:id [put]
 func (c *ProjectController) Put() {
-	idStr := c.Ctx.Input.Param(":id")
-	id, _ := strconv.Atoi(idStr)
-	v := models.Project{Id: id}
-	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
-		if err := models.UpdateProjectById(&v); err == nil {
-			c.Data["json"] = "OK"
+	// TODO: обновить защиту когда будет лвлинг пользователей
+	if c.Ctx.Output.IsOk() {
+		idStr := c.Ctx.Input.Param(":id")
+		id, _ := strconv.Atoi(idStr)
+		v := models.Project{Id: id}
+		if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
+			if err := models.UpdateProjectById(&v); err == nil {
+				c.Data["json"] = "OK"
+			} else {
+				c.Data["json"] = err.Error()
+			}
 		} else {
 			c.Data["json"] = err.Error()
 		}
-	} else {
-		c.Data["json"] = err.Error()
 	}
 	c.ServeJSON()
 }
@@ -156,16 +168,20 @@ func (c *ProjectController) Put() {
 // @Title Delete
 // @Description delete the Project
 // @Param	id		path 	string	true		"The id you want to delete"
+// @Param	token		body	string			false		"admin/moder token"
 // @Success 200 {string} delete success!
 // @Failure 403 id is empty
 // @router /:id [delete]
 func (c *ProjectController) Delete() {
-	idStr := c.Ctx.Input.Param(":id")
-	id, _ := strconv.Atoi(idStr)
-	if err := models.DeleteProject(id); err == nil {
-		c.Data["json"] = "OK"
-	} else {
-		c.Data["json"] = err.Error()
+	// TODO: обновить защиту когда будет лвлинг пользователей
+	if c.Ctx.Output.IsOk() {
+		idStr := c.Ctx.Input.Param(":id")
+		id, _ := strconv.Atoi(idStr)
+		if err := models.DeleteProject(id); err == nil {
+			c.Data["json"] = "OK"
+		} else {
+			c.Data["json"] = err.Error()
+		}
 	}
 	c.ServeJSON()
 }

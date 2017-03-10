@@ -35,6 +35,7 @@ import { ProjNewsComponent } from './pages/s-project-page/proj-news/proj-news.co
 import { MaterialsItemComponent } from './pages/s-project-page/materials/materials-item/materials-item.component';
 import { AuthorizationComponent } from './pages/authorization/authorization.component';
 import { HomePageComponent } from './pages/home-page/home-page.component';
+import { ProjectListPageComponent } from './pages/project-list-page/project-list-page.component';
 
 import {FooterComponent} from "./footer/footer.component";
 
@@ -73,6 +74,7 @@ import {AuthManager} from './authmanager';
     AuthorizationComponent,
     FooterComponent,
     HomePageComponent,
+    ProjectListPageComponent,
   ],
   providers: [ApiService, AuthService, AuthManager],
   bootstrap: [AppComponent]

@@ -57,8 +57,8 @@ func main() {
 	user1 := m.User{
 		Id: 1,
 		Nickname: "Admin",
-		Login: "admin@admin.admin",
-		Password: "admin",
+		Login: "a@a",
+		Password: "a",
 		Avatar: "/logo/1.jpg",
 		Description: "Главный по тарелкам",
 	}
@@ -240,7 +240,7 @@ func main() {
 	user_contact1 := m.UserContact{
 		Id: 1,
 		UserId: &user1,
-		Contact: "admin@admin.admin",
+		Contact: "a@a",
 		ContactTypeId: &contactType1,
 	}
 	fastCheckErr(o.Insert(&user_contact1))

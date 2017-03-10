@@ -9,7 +9,7 @@ import (
 
 // Доступ к контактам пользователей
 type UserContactController struct {
-	UserValidationController
+	ControllerWithAuthorization
 }
 
 // URLMapping ...
@@ -49,11 +49,12 @@ func (c *UserContactController) Post() {
 // @Description Возвращает models.UserContact если юзер токена совпадает с владельцем контакта, другими словами, контакт доступен только владельцу
 // @Param	id		path 	string	true		"The key for staticblock"
 // @Param	token		query 	string	false		"User token for access"
-// @Failure 200 {object} models.UserContact
-// @Failure 200 {object} controllers.ErrorResponse
+// @Success 200 {object} models.UserContact
+// @Failure 403 string Forbidden
 // @router /:id [get]
 func (c *UserContactController) GetOne() {
 	beego.Info("in getONE")
+	// TODO: обновить защиту когда будет лвлинг пользователей
 	if c.Ctx.Output.IsOk() {
 		idStr := c.Ctx.Input.Param(":id")
 		id, _ := strconv.Atoi(idStr)
@@ -65,6 +66,7 @@ func (c *UserContactController) GetOne() {
 			userId := 1
 			if userId != v.UserId.Id {
 				c.Data["json"] = "Forbidden (this contact is not yours) (dev)" // TODO: change to `Forbidden`
+				c.Ctx.Output.SetStatus(403)
 			} else {
 				// success
 				c.Data["json"] = v
@@ -80,12 +82,13 @@ func (c *UserContactController) GetOne() {
 // @Title Get All
 // @Description get UserContact
 // @Param	token	query	string	false	"user token"
-// @Failure 200 {object} models.UserContact
-// @Failure 403
+// @Success 200 {object} models.UserContact
+// @Failure 403 Forbidden
 // @router / [get]
 func (c *UserContactController) GetAll() {
 	beego.Info("in getALL")
 	beego.Info(c.Ctx.Output.Status)
+	// TODO: обновить защиту когда будет лвлинг пользователей
 	if c.Ctx.Output.IsOk() {
 		beego.Info("output is ok")
 		userToken := c.GetString("token")

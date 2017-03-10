@@ -9,7 +9,7 @@ import (
 type SessionStruct struct{
 	Token 		string 		`json:"token"`
 	UserId 		int 		`json:"-"`
-	ExpiresIn	string		`json:"expires_in"`
+	ExpiresIn	string		`json:"exp"`
 }
 
 type Usr struct {

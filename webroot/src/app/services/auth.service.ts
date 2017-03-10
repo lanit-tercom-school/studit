@@ -9,11 +9,11 @@ export class AuthService {
 
     authenticatenow(user: User) {
         var headers = new Headers();
-        var creds = 'Login=' + user.email + '&Password=' + user.password;
 
-        headers.append('Content-Type', 'application/X-www-form-urlencoded');
+        headers.append('Content-Type', 'application/x-www-form-urlencoded');
+
         return new Promise((resolve) => {
-            this.http.post('http://localhost:8080/v1/auth/login/', creds, { headers: headers }).subscribe((data) => {
+            this.http.post('http://localhost:8080/v1/auth/login/', JSON.stringify({Login: user.email, Password: user.password}), { headers: headers }).subscribe((data) => {
                 if (data.json().success) {
                     window.localStorage.setItem('auth_key', data.json().token);
                     this.isAuthenticated = true;

@@ -1,20 +1,15 @@
-h1 {
-  margin-bottom: 70pt;
-}
-
 .container
 {
   text-align: center;
-  margin: 100px auto;
-}
-
-small
-{
-  font-weight: 600;
+  margin: 50px auto;
 }
 
 .project-list
 {
   display: flex;
   background: whitesmoke;
+}
+
+h1 {
+  margin-bottom: 50px;
 }
