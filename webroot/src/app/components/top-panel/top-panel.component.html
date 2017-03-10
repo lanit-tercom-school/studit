@@ -28,7 +28,7 @@
           <a class="nav-link" id="sign-in" routerLink="/auth" routerLinkActive="active">Вход</a>
         </div>
         <div *ngIf="isAuthentificated">
-          <a class="nav-link" id="sign-in" routerLink="/auth" routerLinkActive="active" (click)="logout()">Выход</a>
+          <a class="nav-link" id="log-out" routerLink="/auth" routerLinkActive="active" (click)="logout()">Выход</a>
         </div>
       </li>
     </ul>
