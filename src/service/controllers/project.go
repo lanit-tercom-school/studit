@@ -53,16 +53,22 @@ func (c *ProjectController) Post() {
 // @Description get Project by id
 // @Param	id		path 	string	true		"The key for staticblock"
 // @Success 200 {object} models.Project
-// @Failure 403 :id is empty
+// @Failure 400 :id is wrong
 // @router /:id [get]
 func (c *ProjectController) GetOne() {
 	idStr := c.Ctx.Input.Param(":id")
-	id, _ := strconv.Atoi(idStr)
-	v, err := models.GetProjectById(id)
+	id, err := strconv.Atoi(idStr)
 	if err != nil {
-		c.Data["json"] = err.Error()
+		c.Data["json"] = err.Error() // TODO: change to "Wrong project id"
+		c.Ctx.Output.SetStatus(400)
 	} else {
-		c.Data["json"] = v
+		v, err := models.GetProjectById(id)
+		if err != nil {
+			c.Data["json"] = err.Error()
+			c.Ctx.Output.SetStatus(400)
+		} else {
+			c.Data["json"] = v
+		}
 	}
 	c.ServeJSON()
 }

@@ -6,7 +6,7 @@ import (
 
 	"github.com/astaxie/beego"
 	"service/auth"
-	"github.com/robbert229/jwt"
+	"github.com/vetcher/jwt"
 	"time"
 )
 
@@ -72,15 +72,24 @@ func (c *LogoutController) Logout() {
 			claims, _ := jwtManager.Decode(userToken)
 			_, err := claims.Get("user_id")
 			if err != nil {
-				c.Data["json"] = err.Error()
+				c.Data["json"] = err.Error() // TODO: change on production
 				c.Ctx.Output.SetStatus(500) // TODO: change to 400?
 			} else {
+				ban_up_to, err := claims.GetTime("exp")
+				if err != nil {
+					beego.Critical(err)
+					c.Data["json"] = err.Error() // TODO: change on production
+					c.Ctx.Output.SetStatus(500) // TODO: change to 400?
+					c.ServeJSON()
+					c.StopRun()
+				}
+				jwt.GlobalStorage.Ban(userToken, ban_up_to)
 				c.Data["json"] = "OK"
 			}
 
 		} else {
 			c.Data["json"] = err.Error()
-			c.Ctx.Output.SetStatus(500) // TODO: change to 400?
+			c.Ctx.Output.SetStatus(400) // TODO: change to 403?
 		}
 
 	} else {
