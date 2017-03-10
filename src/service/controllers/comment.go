@@ -6,8 +6,6 @@ import (
 	"service/models"
 	"strconv"
 	"strings"
-
-	"github.com/astaxie/beego"
 )
 
 // CommentController oprations for Comment
