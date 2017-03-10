@@ -1,15 +1,27 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, DoCheck } from '@angular/core';
+import { AuthService } from './../../services/auth.service';
 
 @Component({
   selector: 'app-top-panel',
   templateUrl: './top-panel.component.html',
   styleUrls: ['./top-panel.component.css']
 })
-export class TopPanelComponent implements OnInit {
+export class TopPanelComponent implements OnInit, DoCheck {
 
-  constructor() { }
+  private isAuthentificated = false;
+
+  constructor(private auth: AuthService) { }
 
   ngOnInit() {
+    
+  }
+
+  ngDoCheck() {
+    this.isAuthentificated = window.localStorage.getItem("auth_key") != null;
+  }
+
+  logout() {
+    this.auth.unauthentificatenow();
   }
 
 }
