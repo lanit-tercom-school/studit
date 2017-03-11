@@ -4,6 +4,7 @@ import (
 	"service/models"
 	"errors"
 	"crypto/rand"
+	"github.com/astaxie/beego"
 )
 
 type SessionStruct struct{
@@ -23,6 +24,7 @@ type Usr struct {
 // basic http sign in with password and login. Func checks logic+password combo with combo in DB
 func TryToLogin(login, password string) (user models.User, err error) {
 	// create default model
+	beego.Debug(login + " trying to login")
 	user = models.User{
 		Login: login,
 	}

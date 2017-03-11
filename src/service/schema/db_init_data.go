@@ -7,8 +7,8 @@ import (
 	_ "github.com/lib/pq"
 
 	m "service/models"
-	"log"
 	"time"
+	"github.com/astaxie/beego"
 )
 
 func init() {
@@ -17,12 +17,11 @@ func init() {
 
 func fastCheckErr(_ int64, err error) {
 	if err != nil {
-		log.Panic(err.Error())
+		beego.Critical(err.Error())
 	}
 }
 
 func main() {
-	log.SetFlags(log.Ltime | log.Lshortfile)
 	o := orm.NewOrm()
 	o.Using("default")
 
@@ -358,5 +357,5 @@ func main() {
 	}
 	fastCheckErr(o.Insert(&news_tag_con3))
 
-	log.Print("Initial data was successfully added to Database")
+	beego.Info("Initial data was successfully added to Database")
 }

@@ -33,6 +33,7 @@ func (c *AuthController) Login() {
 	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
 		user, err := auth.TryToLogin(v.Login, v.Password)
 		if err != nil {
+			beego.Debug(err.Error())
 			c.Data["json"] = err.Error()
 			c.Ctx.Output.SetStatus(403)
 		} else {
