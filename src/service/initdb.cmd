@@ -1,5 +1,4 @@
-echo on
+echo off
 cd schema
 init.cmd > initdb.log
-cd ..
 echo on
