@@ -6,12 +6,13 @@
     <input type="email" class="form-control" name="email" placeholder="Email address" [(ngModel)]="localUser.email" required autofocus>
     <label for="inputPassword" class="sr-only">Password</label>
     <input type="password" name="password" [(ngModel)]="localUser.password" class="form-control" placeholder="Password" required>
+    <h3>{{error}}</h3>
     <div class="checkbox">
       <label>
             <input type="checkbox" value="remember-me"> Remember me
           </label>
     </div>
-    <button class="btn btn-lg btn-primary btn-block" type="submit" (click)="login()">Sign in</button>
+    <button class="btn btn-lg btn-primary" type="submit" (click)="login()">Sign in</button>
   </form>
 
 </div>

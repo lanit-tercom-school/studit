@@ -13,6 +13,7 @@ import { NgModule } from '@angular/core';
 export class AuthorizationComponent implements OnInit {
 
   private localUser: User = { email: "", password: "" };
+  private error: any;
 
   constructor(private auth: AuthService, private router: Router) { }
 
@@ -25,7 +26,8 @@ export class AuthorizationComponent implements OnInit {
         this.router.navigate(['/home']);
       },
       error => {
-        console.log("invalid login or password");
+        console.log(error);
+        this.error = error;
       });
   }
 }
