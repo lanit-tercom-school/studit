@@ -1,18 +1,31 @@
 <div class="container">
-
-  <form class="form-signin">
-    <h2 class="form-signin-heading">Please sign in</h2>
-    <label for="inputEmail" class="sr-only">Email address</label>
-    <input type="email" class="form-control" name="email" placeholder="Email address" [(ngModel)]="localUser.email" required autofocus>
-    <label for="inputPassword" class="sr-only">Password</label>
-    <input type="password" name="password" [(ngModel)]="localUser.password" class="form-control" placeholder="Password" required>
-    <h3>{{error}}</h3>
-    <div class="checkbox">
-      <label>
-            <input type="checkbox" value="remember-me"> Remember me
-          </label>
+  <h1>Вход</h1>
+  <form class="offset-sm-3">
+    <div class="form-group row">
+      <label for="inputEmail" class="col-sm-2 col-form-label">Email</label>
+      <div class="col-sm-6">
+        <input type="email" class="form-control" name="email" placeholder="Email address" [(ngModel)]="localUser.email" required
+          autofocus>
+      </div>
     </div>
-    <button class="btn btn-lg btn-primary" type="submit" (click)="login()">Sign in</button>
+    <div class="form-group row">
+      <label for="inputPassword" class="col-sm-2 col-form-label">Пароль</label>
+      <div class="col-sm-6">
+        <input type="password" name="password" [(ngModel)]="localUser.password" class="form-control" placeholder="Password" required>
+      </div>
+    </div>
+    <div class="form-group row">
+      <div class="col-sm-6 offset-sm-2">
+        <h3>{{error}}</h3>
+        <div class="checkbox">
+          <label>
+            <input type="checkbox" value="remember-me"> Запомнить
+          </label>
+        </div>
+        <p>Нет аккаунта? <a routerLink="/registration" routerLinkActive="active">Зарегистрироватсья</a></p>
+        <button role="button" class="btn btn-primary" type="submit" (click)="login()">Войти</button>
+      </div>
+    </div>
   </form>
 
 </div>
