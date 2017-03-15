@@ -14,7 +14,7 @@ type LandingProjectsController struct {
 // URLMapping ...
 func (c *LandingProjectsController) URLMapping() {
 	//c.Mapping("Post", c.Post)
-	c.Mapping("GetOne", c.GetOne)
+	c.Mapping("GetOne", c.GetAll)
 	c.Mapping("GetAll", c.GetAll)
 	//c.Mapping("Put", c.Put)
 	//c.Mapping("Delete", c.Delete)
@@ -54,19 +54,19 @@ func (c *LandingProjectsController) GetOne() {
 	c.ServeJSON()
 }
 */
+
+func (c *LandingProjectsController) GetOne() {
+	c.Data["json"] = "Not Found"
+	c.Ctx.ResponseWriter.WriteHeader(404)
+	c.ServeJSON()
+}
+
 // GetAll ...
 // @Title Get All
 // @Description get Projects for Landing page
 // @Success 200 {object} models.Project
 // @Failure 400 Bad Request
 // @router / [get]
-func (c *LandingProjectsController) GetOne() {
-	response := ErrorResponse{"Not Found"}
-	c.Data["json"] = response
-	c.Ctx.ResponseWriter.WriteHeader(404)
-	c.ServeJSON()
-}
-
 func (c *LandingProjectsController) GetAll() {
 	l, err := models.GetLandingProjects()
 

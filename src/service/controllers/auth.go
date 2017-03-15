@@ -28,8 +28,8 @@ func (c *AuthController) URLMapping() {
 }
 
 func (c *AuthController) Login() {
-	c.Ctx.ResponseWriter.Header().Add("Access-Control-Allow-Origin", "*")
-	c.Ctx.ResponseWriter.Header().Add("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
+	//c.Ctx.ResponseWriter.Header().Add("Access-Control-Allow-Origin", "*")
+	//c.Ctx.ResponseWriter.Header().Add("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
 	var v auth.Usr
 	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
 		user, err := auth.TryToLogin(v.Login, v.Password)
@@ -109,12 +109,12 @@ type RegistrationController struct {
 func (c *RegistrationController) Register() {
 	var u models.User
 	err := c.ParseForm(&u)
-	if err != nil {
+	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &u); err != nil {
 		c.Data["json"] = err.Error() //TODO: change to "Invalid Form"
 		c.Ctx.Output.SetStatus(400)
 	}
-	if u.Login == "" || u.Password == "" {
-		c.Data["json"] = "Wrong Login or Password"
+	if u.Login == "" || u.Password == "" || u.Nickname == "" {
+		c.Data["json"] = "Wrong Login/Password/Nickname"
 		c.Ctx.Output.SetStatus(400)
 	}
 	beego.Debug(u)
@@ -154,10 +154,8 @@ func (c *RegistrationController) URLMapping() {
 // mock
 // Post ...
 // @Title Register
-// @Description Проводит преварительную регистрацию пользователя, после требудется подтверждение
-// @Param	Nickname	fromData	string	true	"Имя пользователя"
-// @Param	Login	fromData	string	true	"Почта/логин"
-// @Param	Password	fromData	string	true	"Пароль"
+// @Description Проводит преварительную регистрацию пользователя, после требуется подтверждение
+// @Param	body	body	models.User	true	"Никнейм, логин(email) и пароль обязательны" ""
 // @Success	200 "OK"
 // @Failure	400 "This user is already registered"
 // @router / [post]
@@ -169,7 +167,7 @@ func (c *RegistrationController) Post() {
 // Get ...
 // @Title Activate
 // @Description Активирует аккаунт
-// @Param	pass	query	string	false	"Pass to activate"
+// @Param	pass	query	string	false	"Pass to activate account"
 // @Failure 200 OK
 // @router / [get]
 func (c *RegistrationController) Get() {
