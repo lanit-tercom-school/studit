@@ -15,13 +15,13 @@ type UserController struct {
 
 // URLMapping ...
 func (c *UserController) URLMapping() {
-	c.Mapping("Post", c.Post)
+	//c.Mapping("Post", c.Post)
 	c.Mapping("GetOne", c.GetOne)
 	c.Mapping("GetAll", c.GetAll)
 	c.Mapping("Put", c.Put)
 	c.Mapping("Delete", c.Delete)
 }
-
+/*
 // Post ...
 // @Title Post
 // @Description create User
@@ -31,7 +31,6 @@ func (c *UserController) URLMapping() {
 // @Failure 403 body is empty
 // @router / [post]
 func (c *UserController) Post() {
-	// TODO: обновить защиту когда будет лвлинг пользователей
 	if c.Ctx.Output.IsOk() {
 		var v models.User
 		if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
@@ -46,7 +45,7 @@ func (c *UserController) Post() {
 		}
 	}
 	c.ServeJSON()
-}
+}*/
 
 // GetOne ...
 // @Title Get One

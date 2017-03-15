@@ -181,6 +181,11 @@ func init() {
 				&controllers.LogoutController{},
 			),
 		),
+		beego.NSNamespace("/auth/register",
+			beego.NSInclude(
+				&controllers.RegistrationController{},
+			),
+		),
 	)
 	beego.AddNamespace(ns)
 	beego.ErrorController(&controllers.ErrorController{})

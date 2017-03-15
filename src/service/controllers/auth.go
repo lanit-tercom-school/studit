@@ -8,6 +8,7 @@ import (
 	"service/auth"
 	"github.com/vetcher/jwt"
 	"time"
+	"service/models"
 )
 
 var jwtManager = jwt.HmacSha256("Secret")
@@ -49,7 +50,7 @@ func (c *AuthController) Login() {
 				c.Ctx.Output.SetStatus(500)
 			}
 
-			sessionResponse := auth.SessionStruct{
+			sessionResponse := auth.UserAndToken{
 				Token: token,
 				UserId: user.Id,
 				ExpiresIn: f.Format(time.UnixDate),
@@ -101,12 +102,87 @@ func (c *LogoutController) Logout() {
 }
 
 
+type RegistrationController struct {
+	beego.Controller
+}
+
+func (c *RegistrationController) Register() {
+	var u models.User
+	err := c.ParseForm(&u)
+	if err != nil || u.Login == "" || u.Password == "" {
+		c.Data["json"] = err.Error() //TODO: change to "Invalid Form"
+		c.Ctx.Output.SetStatus(400)
+	}
+	pass := auth.GenerateNewToken(15)
+	err = auth.NewUser(pass, u)
+	if err != nil {
+		c.Data["json"] = err.Error()
+		c.Ctx.Output.SetStatus(500)
+	} else {
+		c.Data["json"] = pass // TODO: CHANGE TO "OK"
+	}
+	c.ServeJSON()
+}
+
+func (c *RegistrationController) Activate() {
+	pass := c.GetString("pass")
+	if pass != "" {
+		err := auth.ActivateUser(pass)
+		if err != nil {
+			c.Data["json"] = err.Error()
+			c.Ctx.Output.SetStatus(400)
+		} else {
+			c.Data["json"] = "Registred"
+		}
+	} else {
+		c.Data["json"] = "Empty pass"
+		c.Ctx.Output.SetStatus(400)
+	}
+	c.ServeJSON()
+}
+
+func (c *RegistrationController) URLMapping() {
+	c.Mapping("Post", c.Post)
+	c.Mapping("Get", c.Get)
+}
+
+// mock
+// Post ...
+// @Title Register
+// @Description FormData login, password, nickname
+// @Param	formdata		body 	auth.Usr	true ""
+// @Success	200
+// @Failure	400
+// @router / [post]
+func (c *RegistrationController) Post() {
+	c.Register()
+}
+
+// mock
+// Get ...
+// @Title Activate
+// @Description Осуществляет выход пользователя из системы
+// @Param	pass	query	string	false	"Pass to activate"
+// @Failure 200 OK
+// @router / [get]
+func (c *RegistrationController) Get() {
+	c.Activate()
+}
+
+// TODO: убрать этот костыль
+func (c *RegistrationController) GetOne() {
+	c.Data["json"] = "Not Found"
+	c.Ctx.ResponseWriter.WriteHeader(404)
+	c.ServeJSON()
+}
+
+
 // TODO: добавить нормальные доки
 // Post ...
 // @Title Post
-// @Description Запрос: auth.Usr, Ответ: auth.SessionStruct
+// @Description Запрос: auth.Usr, Ответ: auth.UserAndToken
 // @Param	body		body 	auth.Usr	true ""
-// @Failure	200	{object} auth.SessionStruct
+// @Success	200	{object} auth.UserAndToken
 // @Failure	403	Invalid username or password
 // @router / [post]
 func (c *AuthController) Post() {

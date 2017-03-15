@@ -7,7 +7,8 @@ import (
 	"github.com/astaxie/beego"
 )
 
-type SessionStruct struct{
+// TODO: rename
+type UserAndToken struct{
 	Token 		string 		`json:"token"`
 	UserId 		int 		`json:"-"`
 	ExpiresIn	string		`json:"exp"`
@@ -43,13 +44,14 @@ func TryToLogin(login, password string) (user models.User, err error) {
 }
 
 // Generates cryptographically secure token (random string)
-func GenerateNewToken() string {
+func GenerateNewToken(n int) string {
 	// template string
 	const alphanum = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
-	var bytes = make([]byte, 10) // TODO: change 10 to `n`
+	var bytes = make([]byte, n) // TODO: change 10 to `n`
 	rand.Read(bytes)
 	for i, b := range bytes {
 		bytes[i] = alphanum[b%byte(len(alphanum))]
 	}
 	return string(bytes)
 }
+
