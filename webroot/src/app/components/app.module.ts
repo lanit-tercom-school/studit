@@ -36,6 +36,9 @@ import { AuthorizationComponent } from './pages/authorization/authorization.comp
 
 import { AppRoutingModule } from './app-routing.module';
 import {FooterComponent} from "./footer/footer.component";
+import {TasksItemComponent} from "./pages/s-project-page/tasks/tasks-item/tasks-item.component";
+import {ProjNewsItemComponent} from "./pages/s-project-page/proj-news/proj-news-item/proj-news-item.component";
+
 
 @NgModule({
   imports: [
@@ -65,6 +68,8 @@ import {FooterComponent} from "./footer/footer.component";
     SProjectPageComponent,
     MaterialsComponent,
     TasksComponent,
+    TasksItemComponent,
+    ProjNewsItemComponent,
     ProjNewsComponent,
     MaterialsItemComponent,
     AuthorizationComponent,
