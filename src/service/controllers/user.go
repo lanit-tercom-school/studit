@@ -52,7 +52,7 @@ func (c *UserController) Post() {
 // @Description get User by id
 // @Param	id		path 	string	true		"The key for staticblock"
 // @Success 200 {object} models.User
-// @Failure 403 :id is empty
+// @Failure 400 :id is empty string
 // @router /:id [get]
 func (c *UserController) GetOne() {
 	idStr := c.Ctx.Input.Param(":id")
@@ -60,8 +60,10 @@ func (c *UserController) GetOne() {
 	v, err := models.GetUserById(id)
 	if err != nil {
 		c.Data["json"] = err.Error()
+		c.Ctx.Output.SetStatus(400)
 	} else {
 		c.Data["json"] = v
+		c.Ctx.Output.SetStatus(200)
 	}
 	c.ServeJSON()
 }
@@ -76,7 +78,7 @@ func (c *UserController) GetOne() {
 // @Param	limit	query	string	false	"Limit the size of result set. Must be an integer"
 // @Param	offset	query	string	false	"Start position of result set. Must be an integer"
 // @Success 200 {object} models.User
-// @Failure 403
+// @Failure 400
 // @router / [get]
 func (c *UserController) GetAll() {
 	var fields []string
@@ -123,8 +125,10 @@ func (c *UserController) GetAll() {
 	l, err := models.GetAllUser(query, fields, sortby, order, offset, limit)
 	if err != nil {
 		c.Data["json"] = err.Error()
+		c.Ctx.Output.SetStatus(400)
 	} else {
 		c.Data["json"] = l
+		c.Ctx.Output.SetStatus(200)
 	}
 	c.ServeJSON()
 }

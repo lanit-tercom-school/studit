@@ -109,17 +109,22 @@ type RegistrationController struct {
 func (c *RegistrationController) Register() {
 	var u models.User
 	err := c.ParseForm(&u)
-	if err != nil || u.Login == "" || u.Password == "" {
+	if err != nil {
 		c.Data["json"] = err.Error() //TODO: change to "Invalid Form"
 		c.Ctx.Output.SetStatus(400)
 	}
+	if u.Login == "" || u.Password == "" {
+		c.Data["json"] = "Wrong Login or Password"
+		c.Ctx.Output.SetStatus(400)
+	}
+	beego.Debug(u)
 	pass := auth.GenerateNewToken(15)
 	err = auth.NewUser(pass, u)
 	if err != nil {
 		c.Data["json"] = err.Error()
 		c.Ctx.Output.SetStatus(500)
 	} else {
-		c.Data["json"] = pass // TODO: CHANGE TO "OK"
+		c.Data["json"] = pass // TODO:! CHANGE TO "OK" !
 	}
 	c.ServeJSON()
 }
@@ -149,10 +154,12 @@ func (c *RegistrationController) URLMapping() {
 // mock
 // Post ...
 // @Title Register
-// @Description FormData login, password, nickname
-// @Param	formdata		body 	auth.Usr	true ""
-// @Success	200
-// @Failure	400
+// @Description Проводит преварительную регистрацию пользователя, после требудется подтверждение
+// @Param	Nickname	fromData	string	true	"Имя пользователя"
+// @Param	Login	fromData	string	true	"Почта/логин"
+// @Param	Password	fromData	string	true	"Пароль"
+// @Success	200 "OK"
+// @Failure	400 "This user is already registered"
 // @router / [post]
 func (c *RegistrationController) Post() {
 	c.Register()
@@ -161,7 +168,7 @@ func (c *RegistrationController) Post() {
 // mock
 // Get ...
 // @Title Activate
-// @Description Осуществляет выход пользователя из системы
+// @Description Активирует аккаунт
 // @Param	pass	query	string	false	"Pass to activate"
 // @Failure 200 OK
 // @router / [get]

@@ -16,7 +16,7 @@ func init() {
 }
 func NewUser(pass string, usr models.User) error {
 	if usr.FindByLogin() {
-		return errors.New("This user is already registred")
+		return errors.New("This user is already registered")
 	}
 	if _, err := unactivated_users[pass]; err {
 		return errors.New("Already in")
@@ -27,6 +27,7 @@ func NewUser(pass string, usr models.User) error {
 
 func ActivateUser(pass string) error {
 	if user, ok := unactivated_users[pass]; ok {
+		delete(unactivated_users, pass)
 		return user.Insert()
 	} else {
 		return errors.New("Wrong pass")
