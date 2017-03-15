@@ -16,23 +16,24 @@ import (
 	_ "service/routers"
 	"github.com/astaxie/beego/orm"
 	_ "github.com/lib/pq"
+	"service/auth"
+	"bytes"
+	"github.com/vetcher/jwt"
+	"time"
 )
 
 func init() {
+	jwt.GlobalStorage = jwt.NewStorage(time.Hour)
 	_, file, _, _ := runtime.Caller(1)
-	apppath, _ := filepath.Abs(filepath.Dir(filepath.Join(file, ".." + string(filepath.Separator))))
-	beego.TestBeegoInit(apppath)
+	path, _ := filepath.Abs(filepath.Dir(filepath.Join(file, ".." + string(filepath.Separator))))
+	beego.TestBeegoInit(path)
 	orm.RegisterDataBase("default", "postgres", "postgres://postgres:postgres@localhost:5432/studit?sslmode=disable")
-}
-
-type ErrorResponseType struct {
-	Error string `json:"error"`
 }
 
 // Tests /landing_page METHODS
 // should return 3 Project structures
 func TestLandingPageGet(t *testing.T) {
-	r, _ := http.NewRequest("GET", "http://localhost:8080/v1/land_projects", nil)
+	r, _ := http.NewRequest("GET", "http://localhost:8080/v1/land/projects", nil)
 	w := httptest.NewRecorder()
 	beego.BeeApp.Handlers.ServeHTTP(w, r)
 
@@ -70,50 +71,93 @@ func TestLandingPageGet(t *testing.T) {
 }
 
 func TestLandingPagePut(t *testing.T) {
-	r, _ := http.NewRequest("PUT", "http://localhost:8080/v1/land_projects/1", nil)
+	r, _ := http.NewRequest("PUT", "http://localhost:8080/v1/land/projects/1", nil)
 	w := httptest.NewRecorder()
 	beego.BeeApp.Handlers.ServeHTTP(w, r)
 
-	var response ErrorResponseType
-
-	json.Unmarshal(w.Body.Bytes(), &response)
 	Convey("Subject: Landing page PUT method\n" + r.URL.String(), t, func() {
-		Convey("Status code should be 405", func() {
-			So(w.Code, ShouldEqual, 405)
-			So(response.Error, ShouldEqual, "Method Not Allowed")
+		Convey("Status code should be 404", func() {
+			So(w.Code, ShouldEqual, 404)
+			So(w.Body.String(), ShouldEqual, "\"Not Found\"")
 		})
 	})
 }
 
 func TestLandingPagePost(t *testing.T) {
-	r, _ := http.NewRequest("POST", "http://localhost:8080/v1/land_projects/", nil)
+	r, _ := http.NewRequest("POST", "http://localhost:8080/v1/land/projects/", nil)
 	w := httptest.NewRecorder()
 	beego.BeeApp.Handlers.ServeHTTP(w, r)
 
-	var response ErrorResponseType
-
-	json.Unmarshal(w.Body.Bytes(), &response)
 	Convey("Subject: Landing page POST method\n", t, func() {
-		Convey("Status code should be 405", func() {
-			So(w.Code, ShouldEqual, 405)
-			So(response.Error, ShouldEqual, "Method Not Allowed")
+		Convey("Status code should be 404", func() {
+			So(w.Code, ShouldEqual, 404)
+			So(w.Body.String(), ShouldEqual, "\"Not Found\"")
 		})
 	})
 }
 
 func TestLandingPageDelete(t *testing.T) {
-	r, _ := http.NewRequest("DELETE", "http://localhost:8080/v1/land_projects/1", nil)
+	r, _ := http.NewRequest("DELETE", "http://localhost:8080/v1/land/projects/1", nil)
 	w := httptest.NewRecorder()
 	beego.BeeApp.Handlers.ServeHTTP(w, r)
 
-	var response ErrorResponseType
-
-	json.Unmarshal(w.Body.Bytes(), &response)
 	Convey("Subject: Landing page DELETE method\n", t, func() {
-		Convey("Status code should be 405", func() {
-			So(w.Code, ShouldEqual, 405)
-			So(response.Error, ShouldEqual, "Method Not Allowed")
+		Convey("Status code should be 404", func() {
+			So(w.Code, ShouldEqual, 404)
+			So(w.Body.String(), ShouldEqual, "\"Not Found\"")
 		})
 	})
 }
 
+func TestLoginAndLogout(t *testing.T) {
+	f, _ := json.Marshal(auth.Usr{Login:"a@a", Password:"a"})
+	r, _ := http.NewRequest("POST", "http://localhost:8080/v1/auth/login", bytes.NewReader(f))
+	w := httptest.NewRecorder()
+	beego.BeeApp.Handlers.ServeHTTP(w, r)
+
+	var response auth.UserAndToken
+	err := json.Unmarshal(w.Body.Bytes(), &response)
+
+	Convey("Subject: Login\n", t, func() {
+		Convey("Status code should be 200", func() {
+			So(w.Code, ShouldEqual, 200)
+			So(err, ShouldEqual, nil)
+		})
+	})
+
+	r, _ = http.NewRequest("GET", "http://localhost:8080/v1/auth/logout/?token=" + response.Token, nil)
+	w = httptest.NewRecorder()
+	beego.BeeApp.Handlers.ServeHTTP(w, r)
+
+	Convey("Subject: Logout (normal)\n", t, func() {
+		Convey("Status code should be 200", func() {
+			So(w.Code, ShouldEqual, 200)
+			So(w.Body.String(), ShouldEqual, "\"OK\"")
+		})
+	})
+}
+
+func TestEmptyLogout(t *testing.T) {
+	r, _ := http.NewRequest("GET", "http://localhost:8080/v1/auth/logout/", nil)
+	w := httptest.NewRecorder()
+	beego.BeeApp.Handlers.ServeHTTP(w, r)
+
+	Convey("Subject: Logout (empty token)\n", t, func() {
+		Convey("Status code should be 400", func() {
+			So(w.Code, ShouldEqual, 400)
+			So(w.Body.String(), ShouldEqual, "\"Empty token\"")
+		})
+	})
+}
+
+func TestWrongTokenLogout(t *testing.T) {
+	r, _ := http.NewRequest("GET", "http://localhost:8080/v1/auth/logout/?token=qwertyuiopasdfghjklzxcvbnm", nil)
+	w := httptest.NewRecorder()
+	beego.BeeApp.Handlers.ServeHTTP(w, r)
+
+	Convey("Subject: Logout (wrong token)\n", t, func() {
+		Convey("Status code should be 400", func() {
+			So(w.Code, ShouldEqual, 400)
+		})
+	})
+}

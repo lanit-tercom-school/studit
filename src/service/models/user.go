@@ -12,10 +12,10 @@ import (
 type User struct {
 	Id          int    `orm:"column(id);pk;auto" json:"-"`
 	Login       string `orm:"column(login)" json:"login"`
-	Password    string `orm:"column(password)" json:"password"`
+	Password    string `orm:"column(password)" json:"-"`
 	Nickname    string `orm:"column(nickname)" json:"nickname"`
-	Description string `orm:"column(description)" json:"description"`
-	Avatar      string `orm:"column(avatar)" json:"avatar"`
+	Description string `orm:"column(description)" json:"description,omitempty"`
+	Avatar      string `orm:"column(avatar)" json:"avatar,omitempty"`
 }
 
 func (t *User) TableName() string {
@@ -168,4 +168,18 @@ func (m *User) Update(fields ...string) error {
 		return err
 	}
 	return nil
+}
+
+// return true if found, false if not
+func (m *User) FindByLogin() bool {
+	var anotherUser User
+	err := orm.NewOrm().QueryTable("user").Filter("login", m.Login).One(&anotherUser)
+	if err == orm.ErrMultiRows {
+		panic(err)
+	} else if err == orm.ErrNoRows {
+		return false
+	} else {
+		return true
+	}
+
 }
