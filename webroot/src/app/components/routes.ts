@@ -17,7 +17,9 @@ export const routes: Routes = [
   { path: 'project/:id', component: SProjectPageComponent},
   { path: 'auth', component: AuthorizationComponent, canActivate: [AuthManager]},
   { path: 'home', component: HomePageComponent, canActivate: [AuthManager]},
-  { path: 'registration', component: RegistrationPageComponent}
+  { path: 'registration', component: RegistrationPageComponent},
+  //otherwise main
+  { path: '**', redirectTo: 'main' }
 ];
 
 export const AppRouterProvider = RouterModule.forRoot(routes);

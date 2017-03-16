@@ -13,7 +13,7 @@ export class TopPanelComponent implements OnInit, DoCheck {
   constructor(private auth: AuthService) { }
 
   ngOnInit() {
-    
+
   }
 
   ngDoCheck() {
@@ -21,6 +21,7 @@ export class TopPanelComponent implements OnInit, DoCheck {
   }
 
   logout() {
+    window.localStorage.removeItem("auth_key");
     this.auth.unauthentificatenow();
   }
 
