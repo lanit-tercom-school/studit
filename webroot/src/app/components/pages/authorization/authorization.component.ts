@@ -12,7 +12,7 @@ import { NgModule } from '@angular/core';
 })
 export class AuthorizationComponent implements OnInit {
 
-  private localUser: User = { email: "", password: "" };
+  private localUser: User = { Login: "", Password: "" };
   private error: any;
 
   constructor(private auth: AuthService, private router: Router) { }
