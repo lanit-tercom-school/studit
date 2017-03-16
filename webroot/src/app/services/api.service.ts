@@ -61,13 +61,17 @@ export class ApiService {
   getProjectNewsItem(id: number): ProjectNewsItem[] {
     return [
       {
-        "Description": "Resource 1",
-        "Links": "#"
+        "Description": "News 1",
+        "Links": "#",
+        "Main":"Topic 1",
+        "Data": "20.07.16 22:10"
 
       },
       {
-        "Description": "Resource 2",
-        "Links": "#"
+        "Description": "News 2",
+        "Links": "#",
+        "Main":"Topic 2",
+        "Data": "19.07.16 16:02"
 
       }
     ];
@@ -76,12 +80,16 @@ export class ApiService {
   getTaskItem(id: number): TasksItem[] {
     return [
       {
-        "Task": "Complete this exercise",
-        "Data": "20.03.17"
+        "Task": "Complete this exercise...",
+        "Open": "More details",
+        "Data": "20.03.17",
+        "Number":"1"
       },
       {
-        "Task": "Change this sentence",
-        "Data": "28.03.17"
+        "Task": "Change this sentence...",
+        "Open": "More details",
+        "Data": "28.03.17",
+        "Number": "2"
 
       }
 

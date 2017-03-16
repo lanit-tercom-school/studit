@@ -8,20 +8,20 @@
             <h3>{{project.Name}}</h3>
             <hr>
             <p class="lead">{{project.Description}}</p>
-            <a href="#" class="btn btn-secondary">Author profile</a>
-            <a href="#" class="btn btn-secondary">Facebook</a>
-            <a href="#" class="btn btn-secondary">Sth</a>
+          <a href="#" class="btn btn-secondary">Facebook</a>
+          <a href="#" class="btn btn-secondary">Sth</a>
         </div>
     </div>
-    <div class="row">
-        <div class="col-sm-3" id="materials">
-            <app-materials [MaterialsList]=getMaterialsItems()></app-materials>
-        </div>
-        <div class="col-sm-6">
-            <app-tasks [TasksItemList]=getTaskItem()></app-tasks>
-        </div>
-        <div class="col-sm-3">
-            <app-proj-news [ProjectNewsList]=getProjectNewsItem() ></app-proj-news>
+  <div class="row">
+    <div class="col-sm-3" id="materials">
+      <app-materials [MaterialsList]=getMaterialsItems()></app-materials>
+    </div>
+    <div class="col-sm-6">
+      <app-tasks [TasksItemList]=getTaskItem()></app-tasks>
+    </div>
+    <div class="col-sm-3">
+      <app-proj-news [ProjectNewsList]=getProjectNewsItem()>
+            <a href="#" class="btn btn-secondary">Author profile</a>) ></app-proj-news>
         </div>
     </div>
 </div>
