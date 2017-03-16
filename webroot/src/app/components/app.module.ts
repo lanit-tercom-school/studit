@@ -39,6 +39,9 @@ import { HomePageComponent } from './pages/home-page/home-page.component';
 import { ProjectListPageComponent } from './pages/project-list-page/project-list-page.component';
 
 import {FooterComponent} from "./footer/footer.component";
+import {TasksItemComponent} from "./pages/s-project-page/tasks/tasks-item/tasks-item.component";
+import {ProjNewsItemComponent} from "./pages/s-project-page/proj-news/proj-news-item/proj-news-item.component";
+
 
 import { AppRouterProvider } from './routes';
 import {AuthManager} from './authmanager';
@@ -70,6 +73,8 @@ import {AuthManager} from './authmanager';
     SProjectPageComponent,
     MaterialsComponent,
     TasksComponent,
+    TasksItemComponent,
+    ProjNewsItemComponent,
     ProjNewsComponent,
     MaterialsItemComponent,
     AuthorizationComponent,

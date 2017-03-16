@@ -2,11 +2,15 @@ import { Injectable } from '@angular/core';
 
 import { ProjectItem } from './../components/shared/project-list/project-item/project-item';
 import { MaterialsItem } from './../components/pages/s-project-page/materials/materials-item/materials-item';
+import {ProjectNewsItem} from "../components/pages/s-project-page/proj-news/proj-news-item/proj-news-item";
+import {TaskItem} from "../components/pages/progress/task";
+import {TasksItem} from "../components/pages/s-project-page/tasks/tasks-item/tasks-item";
 
 @Injectable()
 export class ApiService {
 
-  constructor() { }
+  constructor() {
+  }
 
   getProjectItems(): ProjectItem[] {
     return [
@@ -53,4 +57,35 @@ export class ApiService {
       }
     ];
   }
+
+  getProjectNewsItem(id: number): ProjectNewsItem[] {
+    return [
+      {
+        "Description": "Resource 1",
+        "Links": "#"
+
+      },
+      {
+        "Description": "Resource 2",
+        "Links": "#"
+
+      }
+    ];
+  }
+
+  getTaskItem(id: number): TasksItem[] {
+    return [
+      {
+        "Task": "Complete this exercise",
+        "Data": "20.03.17"
+      },
+      {
+        "Task": "Change this sentence",
+        "Data": "28.03.17"
+
+      }
+
+    ];
+  }
+
 }

@@ -1,6 +1,8 @@
 <h4>Текущие задачи</h4>
 <hr>
 <ul>
+  <app-tasks-item *ngFor="let material of TasksItemList"
+                      [TasksItem]=material></app-tasks-item>
   <li>
     Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laboriosam ratione ducimus quia, quo natus et dolor, dicta animi sint ipsa consequatur, culpa, ipsam est deserunt soluta. Eius dignissimos, accusantium aliquam.
   </li>

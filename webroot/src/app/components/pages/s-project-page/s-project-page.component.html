@@ -18,10 +18,10 @@
             <app-materials [MaterialsList]=getMaterialsItems()></app-materials>
         </div>
         <div class="col-sm-6">
-            <app-tasks></app-tasks>
+            <app-tasks [TasksItemList]=getTaskItem()></app-tasks>
         </div>
         <div class="col-sm-3">
-            <app-proj-news></app-proj-news>
+            <app-proj-news [ProjectNewsList]=getProjectNewsItem() ></app-proj-news>
         </div>
     </div>
 </div>
