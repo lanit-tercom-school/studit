@@ -186,6 +186,11 @@ func init() {
 				&controllers.RegistrationController{},
 			),
 		),
+		beego.NSNamespace("/auth/reset", // reset password
+			beego.NSInclude(
+				&controllers.ResetPasswordController{},
+			),
+		),
 	)
 	beego.AddNamespace(ns)
 	beego.ErrorController(&controllers.ErrorController{})

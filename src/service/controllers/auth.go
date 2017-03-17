@@ -124,6 +124,7 @@ func (c *RegistrationController) Register() {
 		c.Data["json"] = err.Error()
 		c.Ctx.Output.SetStatus(500)
 	} else {
+		// TODO: sent email with `pass`
 		c.Data["json"] = pass // TODO:! CHANGE TO "OK" !
 	}
 	c.ServeJSON()
@@ -231,7 +232,68 @@ func (c *LogoutController) GetAll() {
 	c.Logout()
 }
 
+func (c *ResetPasswordController) URLMapping() {
+	c.Mapping("Get", c.Get)
+}
 
+type ResetPasswordController struct {
+	beego.Controller
+}
+
+func (c *ResetPasswordController) ResetPasswordRequest() {
+	login := c.GetString("login")
+	u := models.User{
+		Login: login,
+	}
+	pass := auth.GenerateNewToken(6)
+	if err := auth.RequestToResetPassword(pass, u); err == nil {
+		// TODO: sent email with `pass` to reset password
+		c.Data["json"] = pass // TODO:! CHANGE TO "OK" !
+	} else {
+		c.Data["json"] = err.Error()
+		c.Ctx.Output.SetStatus(400)
+	}
+	c.ServeJSON()
+}
+
+type ResetPasswordActionJson struct {
+	Pass	string	`json:"pass"`
+	NewPassword	string	`json:"password"`
+}
+
+func (c *ResetPasswordController) ResetPasswordAction() {
+	v := ResetPasswordActionJson{}
+	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err != nil {
+		c.Data["json"] = err.Error()
+		c.Ctx.Output.SetStatus(400)
+	} else {
+
+	}
+	c.ServeJSON()
+}
+
+// TODO добавить верификацию запроса (проверка капчи) для предупреждения ddos
+// Put ...
+// @Title Reset Password Action
+// @Description Сбросить пароль и установить новый
+// @Success 200 "OK"
+// @router / [put]
+func (c *ResetPasswordController) Put() {
+	c.ResetPasswordAction()
+}
+
+// TODO добавить верификацию запроса (проверка капчи) для предупреждения ddos
+// Get ...
+// @Title Reset Password Request
+// @Description Осуществляет запрос на сброс пароля
+// @Param	login	query	string	false	"Token To Logout"
+// @Success 200 "OK"
+// @router / [get]
+func (c *ResetPasswordController) Get() {
+	c.ResetPasswordRequest()
+}
+
+// TODO: встроить собственную проверку валидации, а не полагаться на Output.Status
 type ControllerWithAuthorization struct {
 	beego.Controller
 }

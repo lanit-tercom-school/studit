@@ -33,3 +33,19 @@ func ActivateUser(pass string) error {
 		return errors.New("Wrong pass")
 	}
 }
+
+var reset_passwords map[string]int
+
+func RequestToResetPassword(pass string, usr models.User) error {
+	if user, err := models.GetUserByLogin(usr.Login); err == nil {
+		reset_passwords[pass] = user.Id
+		return nil
+	} else {
+		return err
+	}
+}
+
+func GetUserIdByPass(pass string) (int, bool) {
+	id, err := reset_passwords[pass]
+	return id, err
+}
