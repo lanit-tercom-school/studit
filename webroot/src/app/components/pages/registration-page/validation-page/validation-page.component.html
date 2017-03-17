@@ -1,0 +1,17 @@
+<div class="container">
+  <h1>Введите код подтверждения</h1>
+  <form class="offset-sm-3">
+    <div class="form-group row">
+      <label for="inputName" class="col-sm-2 col-form-label">Код</label>
+      <div class="col-sm-6">
+        <input type="text" name="name" class="form-control" id="inputName" placeholder="Код" [(ngModel)]="validationCode">
+      </div>
+    </div>
+    <div class="form-group row">
+      <div class="offset-sm-2 col-sm-10">
+        <h3>{{message}}</h3>
+        <button role="button" type="submit" class="btn btn-primary" (click)="validate()">Подтвердить</button>
+      </div>
+    </div>
+  </form>
+</div>

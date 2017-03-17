@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from './../../../services/auth.service';
+import {ApiService} from '../../../services/api.service';
 import { Router } from '@angular/router';
+import {UserInfo} from '../../../user-info';
 
 @Component({
   selector: 'app-registration-page',
@@ -9,13 +10,24 @@ import { Router } from '@angular/router';
 })
 export class RegistrationPageComponent implements OnInit {
 
-  private fullName: string;
-  private password: string;
-  private email: string;
+  private user: UserInfo = { login: "", nickname: "", password: "" };
+  private error: string;
 
-  constructor(private auth: AuthService, private router: Router) { }
+  constructor(private api: ApiService, private router: Router) { }
 
   ngOnInit() {
+  }
+
+  register() {
+    this.api.register(this.user).subscribe(
+      data => {
+        localStorage.setItem("validation_key", data)
+        this.router.navigate(['/registration/validate']);
+      },
+      error => {
+        console.log(error);
+        this.error = error;
+      });
   }
 
 }

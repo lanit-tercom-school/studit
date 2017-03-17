@@ -9,6 +9,7 @@ import { ProjectListPageComponent } from './pages/project-list-page/project-list
 import { AuthorizationComponent } from './pages/authorization/authorization.component';
 import { HomePageComponent } from './pages/home-page/home-page.component';
 import { RegistrationPageComponent } from './pages/registration-page/registration-page.component';
+import { ValidationPageComponent } from './pages/registration-page/validation-page/validation-page.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'main', pathMatch: 'full' },
@@ -18,6 +19,7 @@ export const routes: Routes = [
   { path: 'auth', component: AuthorizationComponent, canActivate: [AuthManager]},
   { path: 'home', component: HomePageComponent, canActivate: [AuthManager]},
   { path: 'registration', component: RegistrationPageComponent},
+  { path: 'registration/validate', component: ValidationPageComponent},
   //otherwise main
   { path: '**', redirectTo: 'main' }
 ];
