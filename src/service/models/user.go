@@ -181,5 +181,17 @@ func (m *User) FindByLogin() bool {
 	} else {
 		return true
 	}
+}
 
+// return true if found, false if not
+func GetUserByLogin(login string) (*User, error) {
+	var anotherUser User
+	err := orm.NewOrm().QueryTable("user").Filter("login", login).One(&anotherUser)
+	if err == orm.ErrMultiRows {
+		panic(err)
+	} else if err == orm.ErrNoRows {
+		return nil, errors.New("Not found")
+	} else {
+		return &anotherUser, nil
+	}
 }
