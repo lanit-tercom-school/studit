@@ -30,14 +30,14 @@ func (c *AuthController) URLMapping() {
 func (c *AuthController) Login() {
 	var v auth.Usr
 	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
-		beego.Trace(v.Login + " try to login")
+		beego.Trace(c.Ctx.Input.IP(), v.Login, "try to login")
 		user, err := auth.TryToLogin(v.Login, v.Password)
 		if err != nil {
-			beego.Debug("Login error: " + err.Error())
+			beego.Debug(c.Ctx.Input.IP(), "Login error:" + err.Error())
 			c.Data["json"] = err.Error()
 			c.Ctx.Output.SetStatus(403)
 		} else {
-			beego.Trace(user.Login + ": Success login")
+			beego.Trace(c.Ctx.Input.IP(), user.Login + "| Success login")
 			// success, register new session
 			claim := jwt.NewClaim()
 			claim.Set("user_id", user.Id)
@@ -46,6 +46,7 @@ func (c *AuthController) Login() {
 
 			token, err := jwtManager.Encode(claim)
 			if err != nil {
+				beego.Debug(c.Ctx.Input.IP(), "Encode error (500):" + err.Error())
 				c.Data["json"] = err.Error()
 				c.Ctx.Output.SetStatus(500)
 			}
@@ -55,11 +56,11 @@ func (c *AuthController) Login() {
 				UserId: user.Id,
 				ExpiresIn: f.Format(time.UnixDate),
 			}
-			beego.Trace(user.Login + ": Sent token")
+			beego.Trace(c.Ctx.Input.IP(), user.Login, "| Sent token")
 			c.Data["json"] = sessionResponse
 		}
 	} else {
-		beego.Debug("Login error: " + err.Error())
+		beego.Debug(c.Ctx.Input.IP(), "Login error:" + err.Error())
 		c.Data["json"] = err.Error() // TODO: change to "Wrong request"
 		c.Ctx.Output.SetStatus(403)
 	}
@@ -87,7 +88,7 @@ func (c *LogoutController) Logout() {
 					c.Ctx.Output.SetStatus(500) // TODO: change to 400?
 				} else {
 					jwt.GlobalStorage.Ban(userToken, ban_up_to)
-					beego.Trace(c.Ctx.Input.IP(), ": Success logout")
+					beego.Trace(c.Ctx.Input.IP(), "Success logout")
 					c.Data["json"] = "OK"
 				}
 			}
@@ -98,7 +99,7 @@ func (c *LogoutController) Logout() {
 		}
 
 	} else {
-		beego.Debug(c.Ctx.Input.IP(), ": Empty token")
+		beego.Debug(c.Ctx.Input.IP(), "Empty token")
 		c.Data["json"] = "Empty token"
 		c.Ctx.Output.SetStatus(400)
 	}
@@ -110,37 +111,50 @@ type RegistrationController struct {
 	beego.Controller
 }
 
-func (c *RegistrationController) Register() {
-	var u models.User
+type RegistrationUserModel struct {
+	Login	string	`json:"login"`
+	Password	string	`json:"password"`
+	Nickname	string	`json:"password"`
+}
 
-	beego.Trace("Start Register")
-	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &u); err != nil {
-		beego.Debug("Can't Unmarshal")
+func (c *RegistrationController) Register() {
+	var temp_u RegistrationUserModel
+
+	beego.Trace(c.Ctx.Input.IP(), "Start Register")
+	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &temp_u); err != nil {
+		beego.Debug(c.Ctx.Input.IP(), "Can't Unmarshal:", err.Error())
 		c.Data["json"] = err.Error() //TODO: change to "Invalid Form"
 		c.Ctx.Output.SetStatus(400)
-	}
-	beego.Trace("Correct Unmarshal")
-
-	if u.Login == "" || u.Password == "" || u.Nickname == "" {
-		beego.Debug("Login, Password or Nickname is empty")
-		c.Data["json"] = "Wrong Login/Password/Nickname"
-		c.Ctx.Output.SetStatus(400)
-	}
-	beego.Trace("Good combo login & password & nickname")
-
-	pass := auth.GenerateNewToken(15)
-	beego.Trace(pass)
-	err := auth.NewUser(pass, u)
-	if err != nil {
-		beego.Debug("Register error: " + err.Error())
-		c.Data["json"] = err.Error()
-		c.Ctx.Output.SetStatus(500)
 	} else {
-		// TODO: sent email with `pass`
-		c.Data["json"] = struct {
-			Code string `json:"code"`
-		}{Code: pass} // TODO:! CHANGE TO "OK" !
-		beego.Trace("Register OK")
+		u := models.User{
+			Login: temp_u.Login,
+			Password: temp_u.Password,
+			Nickname: temp_u.Nickname,
+		}
+		beego.Trace(c.Ctx.Input.IP(), "Correct Unmarshal")
+
+		if u.Login == "" || u.Password == "" || u.Nickname == "" {
+			beego.Debug(c.Ctx.Input.IP(), "Login, Password or Nickname is empty")
+			c.Data["json"] = "Wrong Login/Password/Nickname"
+			c.Ctx.Output.SetStatus(400)
+		} else {
+			beego.Trace(c.Ctx.Input.IP(), "Good combo login & password & nickname")
+
+			pass := auth.GenerateNewToken(15)
+			beego.Trace(pass)
+			err := auth.NewUser(pass, u)
+			if err != nil {
+				beego.Debug(c.Ctx.Input.IP(), "Register error:" + err.Error())
+				c.Data["json"] = err.Error()
+				c.Ctx.Output.SetStatus(500)
+			} else {
+				// TODO: sent email with `pass`
+				c.Data["json"] = struct {
+					Code string `json:"code"`
+				}{Code: pass} // TODO:! CHANGE TO "OK" !
+				beego.Trace(c.Ctx.Input.IP(), "Register OK")
+			}
+		}
 	}
 	c.ServeJSON()
 }
@@ -150,15 +164,15 @@ func (c *RegistrationController) Activate() {
 	if pass != "" {
 		err := auth.ActivateUser(pass)
 		if err != nil {
-			beego.Debug("Activation error: " + err.Error())
+			beego.Debug(c.Ctx.Input.IP(), "Activation error: " + err.Error())
 			c.Data["json"] = err.Error()
 			c.Ctx.Output.SetStatus(400)
 		} else {
-			beego.Trace("Activation OK")
+			beego.Trace(c.Ctx.Input.IP(), "Activation OK")
 			c.Data["json"] = "Registred"
 		}
 	} else {
-		beego.Debug("Empty pass")
+		beego.Debug(c.Ctx.Input.IP(), "Empty pass")
 		c.Data["json"] = "Empty pass"
 		c.Ctx.Output.SetStatus(400)
 	}
@@ -263,14 +277,14 @@ func (c *ResetPasswordController) ResetPasswordRequest() {
 	u := models.User{
 		Login: login,
 	}
-	beego.Info(login + " want to reset password")
+	beego.Info(c.Ctx.Input.IP(), login, "want to reset password")
 	pass := auth.GenerateNewToken(6)
 	if err := auth.RequestToResetPassword(pass, u); err == nil {
 		// TODO: sent email with `pass` to reset password
-		beego.Info("Pass for reset password was sent to " + login)
+		beego.Info(c.Ctx.Input.IP(), "Pass for reset password was sent to", login)
 		c.Data["json"] = pass // TODO:! CHANGE TO "OK" !
 	} else {
-		beego.Info("Wrong resetRequest for " + login + ": " + err.Error())
+		beego.Info(c.Ctx.Input.IP(), "Wrong resetRequest for", login, ":", err.Error())
 		c.Data["json"] = err.Error()
 		c.Ctx.Output.SetStatus(400)
 	}
@@ -285,20 +299,20 @@ type ResetPasswordActionJson struct {
 
 func (c *ResetPasswordController) ResetPasswordAction() {
 	v := ResetPasswordActionJson{}
-	beego.Trace("New password reset")
+	beego.Trace(c.Ctx.Input.IP(), "New password reset")
 	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err != nil {
-		beego.Debug("Reset error: " + err.Error())
+		beego.Debug(c.Ctx.Input.IP(), "Reset error:", err.Error())
 		c.Data["json"] = err.Error()
 		c.Ctx.Output.SetStatus(400)
 	} else {
-		beego.Trace("Try to reset for " + v.Login)
+		beego.Trace(c.Ctx.Input.IP(), "Try to reset for", v.Login)
 		err := auth.ResetPassword(v.Login, v.Pass, v.NewPassword)
 		if err != nil {
 			beego.Debug(err.Error())
 			c.Data["json"] = err.Error()
 			c.Ctx.Output.SetStatus(400)
 		} else {
-			beego.Trace("Password was reset for " + v.Login)
+			beego.Trace(c.Ctx.Input.IP(), "Password was reset for", v.Login)
 			c.Data["json"] = "OK"
 		}
 	}
@@ -341,32 +355,36 @@ type ControllerWithAuthorization struct {
 //		// доступ запрещен, обработка (например, 403 "Forbidden")
 //	}
 func (c *ControllerWithAuthorization) Prepare() {
-	beego.Info("start validation")
+	beego.Trace(c.Ctx.Input.IP(), "Start validation")
 	userToken := c.GetString("token")
 	if userToken == "" {
-		c.Data["json"] = "Wrong token (dev)" // TODO: change to `Unauthorized`
+		beego.Debug(c.Ctx.Input.IP(), "Empty token")
+		c.Data["json"] = "Empty token (dev)" // TODO: change to `Unauthorized`
 		c.Ctx.Output.SetStatus(400)
 	} else {
-		if jwtManager.Validate(userToken) == nil {
+		if err := jwtManager.Validate(userToken); err == nil {
 			claims, _ := jwtManager.Decode(userToken)
-			userid, err := claims.Get("user_id")
+			userId, err := claims.Get("user_id")
 			if err != nil {
+				beego.Debug(c.Ctx.Input.IP(), "Can't get user_id", err.Error())
 				c.Data["json"] = err.Error()
 				c.Ctx.Output.SetStatus(500) // TODO: change to 400?
 			} else {
-				if int(userid.(float64)) < 0 {
-					c.Data["json"] = err.Error()
+				if int(userId.(float64)) < 0 {
+					beego.Debug(c.Ctx.Input.IP(), "UserId below 0")
+					c.Data["json"] = "Internal Server Error"
 					c.Ctx.Output.SetStatus(500) // TODO: change to 400?
 				} else {
-					beego.Info("success validation")
+					beego.Trace(c.Ctx.Input.IP(), "Success validation")
 					c.Ctx.Output.SetStatus(200)
 				}
 			}
 		} else {
+			beego.Debug(c.Ctx.Input.IP(), err.Error())
 			c.Data["json"] = "Wrong token (dev)" // TODO: change to `Unauthorized`
 			c.Ctx.Output.SetStatus(400)
 		}
 	}
-	beego.Info("exit prepare")
+	beego.Trace("Exit AUTH Prepare")
 }
 
