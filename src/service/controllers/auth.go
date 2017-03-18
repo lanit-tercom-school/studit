@@ -114,7 +114,7 @@ type RegistrationController struct {
 type RegistrationUserModel struct {
 	Login	string	`json:"login"`
 	Password	string	`json:"password"`
-	Nickname	string	`json:"password"`
+	Nickname	string	`json:"nickname"`
 }
 
 func (c *RegistrationController) Register() {
