@@ -5,10 +5,6 @@ import (
 	"errors"
 )
 
-type UnactivatedUser struct {
-	models.User
-}
-
 var unactivated_users map[string]models.User
 
 func init() {
@@ -34,18 +30,34 @@ func ActivateUser(pass string) error {
 	}
 }
 
-var reset_passwords map[string]int
+// 					   ["login"]struct{"userId", "pass"}
+var reset_passwords map[string]struct{int; string}
 
 func RequestToResetPassword(pass string, usr models.User) error {
 	if user, err := models.GetUserByLogin(usr.Login); err == nil {
-		reset_passwords[pass] = user.Id
+		reset_passwords[user.Login] = struct {int; string}{user.Id, pass}
 		return nil
 	} else {
 		return err
 	}
 }
 
-func GetUserIdByPass(pass string) (int, bool) {
-	id, err := reset_passwords[pass]
-	return id, err
+func ResetPassword(login, pass, newPassword string) error {
+	tuple, err := reset_passwords[login]
+	if err && pass == tuple.string {
+		u, err := models.GetUserById(tuple.int)
+		if err == nil && u.Login == login {
+			u.Password = newPassword
+			u.Update()
+			return nil
+		} else {
+			if err != nil {
+				return err
+			} else {
+				return errors.New("Wrong login")
+			}
+		}
+	} else {
+		return errors.New("Wrong login or pass")
+	}
 }
