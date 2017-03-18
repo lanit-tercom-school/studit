@@ -134,7 +134,9 @@ func (c *RegistrationController) Register() {
 		beego.Trace(c.Ctx.Input.IP(), "Correct Unmarshal")
 
 		if u.Login == "" || u.Password == "" || u.Nickname == "" {
-			beego.Debug(c.Ctx.Input.IP(), "Login, Password or Nickname is empty")
+			beego.Debug(c.Ctx.Input.IP(), "login:", u.Login)
+			beego.Debug(c.Ctx.Input.IP(), "password:", u.Password)
+			beego.Debug(c.Ctx.Input.IP(), "nickname:", u.Nickname)
 			c.Data["json"] = "Wrong Login/Password/Nickname"
 			c.Ctx.Output.SetStatus(400)
 		} else {
