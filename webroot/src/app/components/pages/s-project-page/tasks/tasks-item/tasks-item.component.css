@@ -5,8 +5,7 @@ div
   padding: 0.5rem 0.5rem;
   margin: 1rem auto;
   text-align: right;
-  border-radius: 0.5rem;
-  border: 2px solid navajowhite;
+  border: 1px solid gainsboro;
 }
 .p1{
   font-size: 14px;

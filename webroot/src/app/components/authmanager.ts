@@ -29,6 +29,16 @@ export class AuthManager implements CanActivate {
                 return false;
             }
         }
+        else if (next.url[0].path == 'registration' && next.url[1].path == 'validate') {
+            if (window.localStorage.getItem('validation_code')) {
+                return true;
+            }
+            else {
+                console.log('Restricted');
+                this.router.navigate(['/registration']);
+                return false;
+            }
+        }
 
         return true;
     }

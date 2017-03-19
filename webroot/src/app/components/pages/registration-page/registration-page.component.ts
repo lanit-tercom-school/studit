@@ -21,7 +21,6 @@ export class RegistrationPageComponent implements OnInit {
   register() {
     this.api.register(this.user).subscribe(
       data => {
-        localStorage.setItem("validation_key", data)
         this.router.navigate(['/registration/validate']);
       },
       error => {
