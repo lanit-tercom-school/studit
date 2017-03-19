@@ -20,8 +20,8 @@ import (
 	"bytes"
 	"github.com/vetcher/jwt"
 	"time"
-	"io/ioutil"
 	"strconv"
+	"io/ioutil"
 )
 
 func init() {
@@ -30,7 +30,6 @@ func init() {
 	path, _ := filepath.Abs(filepath.Dir(filepath.Join(file, ".." + string(filepath.Separator))))
 	beego.TestBeegoInit(path)
 	orm.RegisterDataBase("default", "postgres", "postgres://postgres:postgres@localhost:5432/studit?sslmode=disable")
-	go beego.Run()
 }
 
 // Tests /landing_page METHODS
@@ -154,18 +153,18 @@ func TestEmptyLogout(t *testing.T) {
 }
 
 func getTestStrings() []string {
+	var testStrings []string
 	data, err := ioutil.ReadFile(`D:\Files\Work\Prog\big-list-of-naughty-strings\blns.json`)
 	if err != nil {
 		panic(err)
 	}
-	var testStrings []string
 	err = json.Unmarshal(data, &testStrings)
 	if err != nil {
 		panic(err)
 	}
 	str := []string{"qwertyuiopasdfghjklzxcvbnm", "qwertyuiopasdfghjklzxcvbnm.s", "qwertyuiopasdfghjklzxcvbnm.",
 		"qwertyuiopasdfghjklzxcvbnm.asdadsadsadsa.", "qwertyuiopasdfghjklzxcvbnm.sdfghjk.fghjklsa",
-		"<>"}
+		"<>", "!", "@#", "$", "%", "^&*()`~", "#$%"}
 	testStrings = append(testStrings, str...)
 	return testStrings
 }
@@ -176,14 +175,19 @@ func TestWrongTokenLogout(t *testing.T) {
 	for i, str := range testStrings {
 		i := i
 		str := str // capture range variable (from example on https://golang.org/pkg/testing/)
+
 		Convey("String number " + strconv.Itoa(i) + " Sent wrong token " + str, t, func() {
 			requestURL := "http://localhost:8080/v1/auth/logout/?token=" + str
-			r, _ := http.NewRequest("GET", requestURL, nil)
-			w := httptest.NewRecorder()
-			beego.BeeApp.Handlers.ServeHTTP(w, r)
-			Convey("Status code should be 400", func() {
-				So(w.Code, ShouldEqual, 400)
-			})
+			r, err := http.NewRequest("GET", requestURL, nil)
+			if err != nil {
+
+			} else {
+				w := httptest.NewRecorder()
+				beego.BeeApp.Handlers.ServeHTTP(w, r)
+				Convey("Status code should be 400", func() {
+					So(w.Code, ShouldEqual, 400)
+				})
+			}
 		})
 	}
 

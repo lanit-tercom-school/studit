@@ -71,7 +71,7 @@ func (c *AuthController) Login() {
 
 func (c *LogoutController) Logout() {
 	userToken := c.GetString("token")
-	beego.Trace(c.Ctx.Input.IP(), "New logout")
+	beego.Trace(c.Ctx.Input.IP(), "New logout from", userToken)
 	if userToken != "" {
 		if err := jwtManager.Validate(userToken); err == nil {
 			claims, _ := jwtManager.Decode(userToken)

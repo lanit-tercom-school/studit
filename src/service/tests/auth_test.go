@@ -12,7 +12,6 @@ type testPairInt struct {
 }
 
 func TestGenerateNewToken(t *testing.T) {
-	t.Parallel()
 	ns := []testPairInt{
 		{-10, 0},
 		{-1, 0},
