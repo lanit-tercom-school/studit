@@ -1,12 +1,38 @@
 import { Injectable } from '@angular/core';
+import { Http, Headers, Response } from '@angular/http';
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/catch';
+import 'rxjs/add/observable/throw';
 
 import { ProjectItem } from './../components/shared/project-list/project-item/project-item';
 import { MaterialsItem } from './../components/pages/s-project-page/materials/materials-item/materials-item';
+import {ProjectNewsItem} from "../components/pages/s-project-page/proj-news/proj-news-item/proj-news-item";
+import {TaskItem} from "../components/pages/progress/task";
+import {TasksItem} from "../components/pages/s-project-page/tasks/tasks-item/tasks-item";
+import {UserInfo} from "../user-info"
 
 @Injectable()
 export class ApiService {
 
-  constructor() { }
+  constructor(private http: Http) {
+  }
+
+  validate(key: string) {
+        return this.http.get('http://localhost:8080/v1/auth/register/')
+        .map((res: Response) => {res.json()} )
+        .catch((error: any) => { return Observable.throw(error) });
+    }
+
+  register(user: UserInfo) {
+        var headers = new Headers();
+
+        headers.append('Content-Type', 'application/json');
+
+        return this.http.post('http://localhost:8080/v1/auth/register', JSON.stringify(user), { headers: headers })
+            .map((res: Response) => { })
+            .catch((error: any) => { return Observable.throw(error) });
+    }
 
   getProjectItems(): ProjectItem[] {
     return [
@@ -53,4 +79,43 @@ export class ApiService {
       }
     ];
   }
+
+  getProjectNewsItem(id: number): ProjectNewsItem[] {
+    return [
+      {
+        "Description": "News 1",
+        "Links": "#",
+        "Main":"Topic 1",
+        "Data": "20.07.16 22:10"
+
+      },
+      {
+        "Description": "News 2",
+        "Links": "#",
+        "Main":"Topic 2",
+        "Data": "19.07.16 16:02"
+
+      }
+    ];
+  }
+
+  getTaskItem(id: number): TasksItem[] {
+    return [
+      {
+        "Task": "Complete this exercise...",
+        "Open": "More details",
+        "Data": "20.03.17",
+        "Number":"1"
+      },
+      {
+        "Task": "Change this sentence...",
+        "Open": "More details",
+        "Data": "28.03.17",
+        "Number": "2"
+
+      }
+
+    ];
+  }
+
 }
