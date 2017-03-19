@@ -30,14 +30,14 @@ func (c *AuthController) URLMapping() {
 func (c *AuthController) Login() {
 	var v auth.Usr
 	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
-		beego.Trace(c.Ctx.Input.IP(), v.Login, "try to login")
+		beego.Trace(c.Ctx.Input.IP(), v.Login, "Try to login")
 		user, err := auth.TryToLogin(v.Login, v.Password)
 		if err != nil {
-			beego.Debug(c.Ctx.Input.IP(), "Login error:" + err.Error())
+			beego.Debug(c.Ctx.Input.IP(), "Login error (403):", err.Error())
 			c.Data["json"] = err.Error()
 			c.Ctx.Output.SetStatus(403)
 		} else {
-			beego.Trace(c.Ctx.Input.IP(), user.Login + "| Success login")
+			beego.Trace(c.Ctx.Input.IP(), user.Login, "Success login")
 			// success, register new session
 			claim := jwt.NewClaim()
 			claim.Set("user_id", user.Id)
@@ -46,7 +46,7 @@ func (c *AuthController) Login() {
 
 			token, err := jwtManager.Encode(claim)
 			if err != nil {
-				beego.Debug(c.Ctx.Input.IP(), "Encode error (500):" + err.Error())
+				beego.Debug(c.Ctx.Input.IP(), "Encode error (500):", err.Error())
 				c.Data["json"] = err.Error()
 				c.Ctx.Output.SetStatus(500)
 			}
@@ -56,11 +56,11 @@ func (c *AuthController) Login() {
 				UserId: user.Id,
 				ExpiresIn: f.Format(time.UnixDate),
 			}
-			beego.Trace(c.Ctx.Input.IP(), user.Login, "| Sent token")
+			beego.Trace(c.Ctx.Input.IP(), user.Login, "Sent token")
 			c.Data["json"] = sessionResponse
 		}
 	} else {
-		beego.Debug(c.Ctx.Input.IP(), "Login error:" + err.Error())
+		beego.Debug(c.Ctx.Input.IP(), "Login error (403):", err.Error())
 		c.Data["json"] = err.Error() // TODO: change to "Wrong request"
 		c.Ctx.Output.SetStatus(403)
 	}
