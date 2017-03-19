@@ -43,6 +43,9 @@ func TryToLogin(login, password string) (user models.User, err error) {
 
 // Generates cryptographically secure token (random string)
 func GenerateNewToken(n int) string {
+	if n <= 0 {
+		return ""
+	}
 	// template string
 	const alphanum = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
 	var bytes = make([]byte, n) // TODO: change 10 to `n`
