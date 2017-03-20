@@ -20,6 +20,8 @@ import (
 	"bytes"
 	"github.com/vetcher/jwt"
 	"time"
+	"strconv"
+	"io/ioutil"
 )
 
 func init() {
@@ -150,14 +152,43 @@ func TestEmptyLogout(t *testing.T) {
 	})
 }
 
-func TestWrongTokenLogout(t *testing.T) {
-	r, _ := http.NewRequest("GET", "http://localhost:8080/v1/auth/logout/?token=qwertyuiopasdfghjklzxcvbnm", nil)
-	w := httptest.NewRecorder()
-	beego.BeeApp.Handlers.ServeHTTP(w, r)
+func getTestStrings() []string {
+	var testStrings []string
+	data, err := ioutil.ReadFile(`D:\Files\Work\Prog\big-list-of-naughty-strings\blns.json`)
+	if err != nil {
+		panic(err)
+	}
+	err = json.Unmarshal(data, &testStrings)
+	if err != nil {
+		panic(err)
+	}
+	str := []string{"qwertyuiopasdfghjklzxcvbnm", "qwertyuiopasdfghjklzxcvbnm.s", "qwertyuiopasdfghjklzxcvbnm.",
+		"qwertyuiopasdfghjklzxcvbnm.asdadsadsadsa.", "qwertyuiopasdfghjklzxcvbnm.sdfghjk.fghjklsa",
+		"<>", "!", "@#", "$", "%", "^&*()`~", "#$%"}
+	testStrings = append(testStrings, str...)
+	return testStrings
+}
 
-	Convey("Subject: Logout (wrong token)\n", t, func() {
-		Convey("Status code should be 400", func() {
-			So(w.Code, ShouldEqual, 400)
+func TestWrongTokenLogout(t *testing.T) {
+	t.Parallel()
+	testStrings := getTestStrings()
+	for i, str := range testStrings {
+		i := i
+		str := str // capture range variable (from example on https://golang.org/pkg/testing/)
+
+		Convey("String number " + strconv.Itoa(i) + " Sent wrong token " + str, t, func() {
+			requestURL := "http://localhost:8080/v1/auth/logout/?token=" + str
+			r, err := http.NewRequest("GET", requestURL, nil)
+			if err != nil {
+
+			} else {
+				w := httptest.NewRecorder()
+				beego.BeeApp.Handlers.ServeHTTP(w, r)
+				Convey("Status code should be 400", func() {
+					So(w.Code, ShouldEqual, 400)
+				})
+			}
 		})
-	})
+	}
+
 }
