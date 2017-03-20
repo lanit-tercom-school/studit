@@ -7,10 +7,10 @@ import 'rxjs/add/observable/throw';
 
 import { ProjectItem } from './../components/shared/project-list/project-item/project-item';
 import { MaterialsItem } from './../components/pages/s-project-page/materials/materials-item/materials-item';
-import {ProjectNewsItem} from "../components/pages/s-project-page/proj-news/proj-news-item/proj-news-item";
-import {TaskItem} from "../components/pages/progress/task";
-import {TasksItem} from "../components/pages/s-project-page/tasks/tasks-item/tasks-item";
-import {UserInfo} from "../user-info"
+import { ProjectNewsItem } from "../components/pages/s-project-page/proj-news/proj-news-item/proj-news-item";
+import { TaskItem } from "../components/pages/progress/task";
+import { TasksItem } from "../components/pages/s-project-page/tasks/tasks-item/tasks-item";
+import { UserInfo } from "../user-info"
 
 @Injectable()
 export class ApiService {
@@ -19,20 +19,24 @@ export class ApiService {
   }
 
   validate(key: string) {
-        return this.http.get('http://localhost:8080/v1/auth/register/')
-        .map((res: Response) => {res.json()} )
-        .catch((error: any) => { return Observable.throw(error) });
-    }
+    return this.http.get('http://localhost:8080/v1/auth/register/?pass=' + key)
+      .catch((error: any) => { return Observable.throw(error) });
+  }
 
   register(user: UserInfo) {
-        var headers = new Headers();
+    var headers = new Headers();
 
-        headers.append('Content-Type', 'application/json');
+    headers.append('Content-Type', 'application/json');
 
-        return this.http.post('http://localhost:8080/v1/auth/register', JSON.stringify(user), { headers: headers })
-            .map((res: Response) => { })
-            .catch((error: any) => { return Observable.throw(error) });
-    }
+    return this.http.post('http://localhost:8080/v1/auth/register', JSON.stringify(user), { headers: headers })
+      .map((res: Response) => {
+        if (res.json().code)
+          localStorage.setItem('validation_code', res.json().code);
+        else
+          return Observable.throw('no code');
+      })
+      .catch((error: any) => { return Observable.throw(error) });
+  }
 
   getProjectItems(): ProjectItem[] {
     return [
@@ -57,8 +61,7 @@ export class ApiService {
     ];
   }
 
-  getProjectById(id: number): ProjectItem
-  {
+  getProjectById(id: number): ProjectItem {
     return this.getProjectItems().find(project => project.Id === id);
   }
 
@@ -85,14 +88,14 @@ export class ApiService {
       {
         "Description": "News 1",
         "Links": "#",
-        "Main":"Topic 1",
+        "Main": "Topic 1",
         "Data": "20.07.16 22:10"
 
       },
       {
         "Description": "News 2",
         "Links": "#",
-        "Main":"Topic 2",
+        "Main": "Topic 2",
         "Data": "19.07.16 16:02"
 
       }
@@ -105,7 +108,7 @@ export class ApiService {
         "Task": "Complete this exercise...",
         "Open": "More details",
         "Data": "20.03.17",
-        "Number":"1"
+        "Number": "1"
       },
       {
         "Task": "Change this sentence...",

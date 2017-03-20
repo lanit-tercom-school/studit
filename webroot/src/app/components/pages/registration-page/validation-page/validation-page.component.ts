@@ -19,7 +19,8 @@ export class ValidationPageComponent implements OnInit {
     this.api.validate(this.validationCode)
       .subscribe(
       data => {
-        this.message = data;
+        this.message = 'Registered!';
+        localStorage.removeItem("validation_code");
       },
       error => {
         console.log(error);
@@ -28,7 +29,7 @@ export class ValidationPageComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.validationCode = localStorage.getItem("validation_key")
+    this.validationCode = localStorage.getItem("validation_code")
   }
 
 }

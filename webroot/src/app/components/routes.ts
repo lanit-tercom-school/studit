@@ -19,7 +19,7 @@ export const routes: Routes = [
   { path: 'auth', component: AuthorizationComponent, canActivate: [AuthManager]},
   { path: 'home', component: HomePageComponent, canActivate: [AuthManager]},
   { path: 'registration', component: RegistrationPageComponent},
-  { path: 'registration/validate', component: ValidationPageComponent},
+  { path: 'registration/validate', component: ValidationPageComponent, canActivate: [AuthManager]},
   //otherwise main
   { path: '**', redirectTo: 'main' }
 ];
