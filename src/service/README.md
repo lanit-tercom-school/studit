@@ -1,16 +1,16 @@
-#Backend Team
+# Backend Team
 
-##Backend Requirements    
+## Backend Requirements    
 Для успешного запуска локального сервера требуется
 * [golang](https://golang.org/)
 * [postgresql](https://www.postgresql.org/)
 
-##Start Service   
+## Start Service   
 Запускаем сервер:
 1. Клонируем репозиторий
-* Переходим на ветку develop
-* Запускаем консоль в папке `Path/To/Repository/src/service/`
-* Выполнить
+2. Переходим на ветку develop
+3. Запускаем консоль в папке `Path/To/Repository/src/service/`
+4. Выполнить
  ```
  initdb.cmd
  ```
