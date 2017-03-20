@@ -9,19 +9,19 @@ import { AuthService } from './../../services/auth.service';
 export class TopPanelComponent implements OnInit, DoCheck {
 
   private isAuthentificated = false;
+  private currentUser = "";
 
   constructor(private auth: AuthService) { }
 
   ngOnInit() {
-
   }
 
   ngDoCheck() {
     this.isAuthentificated = window.localStorage.getItem("auth_key") != null;
+    this.currentUser = window.localStorage.getItem("current_user");
   }
 
   logout() {
-    window.localStorage.removeItem("auth_key");
     this.auth.unauthentificatenow();
   }
 

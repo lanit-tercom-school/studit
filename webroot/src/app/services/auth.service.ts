@@ -9,19 +9,20 @@ import 'rxjs/add/observable/throw';
 @Injectable()
 export class AuthService {
 
-    isAuthenticated: boolean = false;
-
     constructor(private http: Http) { }
 
     authenticatenow(user: User) {
+
         var headers = new Headers();
 
         headers.append('Content-Type', 'application/json');
 
         return this.http.post('http://localhost:8080/v1/auth/login/', JSON.stringify(user), { headers: headers })
             .map((res: Response) => {
-                if (res.json().token)
+                if (res.json().token) {
                     localStorage.setItem('auth_key', res.json().token);
+                    localStorage.setItem('current_user', user.Login);
+                }
                 else
                     return Observable.throw('no token');
             })
@@ -29,7 +30,7 @@ export class AuthService {
     }
 
     unauthentificatenow() {
-        this.isAuthenticated = false;
+        window.localStorage.removeItem("auth_key");
         return this.http.get('http://localhost:8080/v1/auth/logout/');
     }
 }
