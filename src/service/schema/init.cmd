@@ -1,8 +1,16 @@
+@echo off
+
+set postgres64=C:\Program Files\PostgreSQL\9.6\bin
+set postgres32=C:\Program Files (x86)\PostgreSQL\9.6\bin
+
+IF EXIST "%postgres64%" set path=%path%;%postgres64%
+IF EXIST "%postgres32%" set path=%path%;%postgres32%
+
 cd ..
 cd ..
 cd ..
 set GOPATH=%cd%
-set PATH=%PATH%;%GOPATH%\bin;C:\Program Files\PostgreSQL\9.6\bin
+set PATH=%PATH%;%GOPATH%\bin
 cd src/service/schema
 set PGPASSWORD=postgres
 set PGUSER=postgres
