@@ -38,6 +38,39 @@ export class ApiService {
       .catch((error: any) => { return Observable.throw(error) });
   }
 
+  getPublicAuthorInfoById(author_id: number) {
+    return {
+      "id": 1,
+      "firstName": "Anton",
+      "lastName": "Antonov",
+      "company": "Lanit-Tercom",
+      "rating": 45,
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin iaculis purus at congue aliquam.  Aliquam justo magna, ornare sed condimentum eget, rutrum rutrum leo. Donec condimentum, odio id mollis iaculis, libero tellus tempus purus, eu pellentesque leo tellus a felis. Donec vestibulum tincidunt ante eget gravida. Suspendisse aliquam sagittis ex a congue. Aliquam vitae erat nisl. Proin commodo turpis in molestie consectetur. Praesent gravida nulla quis elit euismod lobortis. Maecenas non tempus lorem. Curabitur luctus dolor ante, sit amet blandit elit pulvinar vel. Pellentesque egestas dolor ornare est vestibulum scelerisque.",
+      "projects": [
+        {
+          "Id": 1,
+          "Name": "StudIT",
+          "Description": "Разработки сайта летней школы и студенческих проектов Ланит-Терком",
+          "Picture": "project.jpg"
+        },
+        {
+          "Id": 2,
+          "Name": "TFS Mobile",
+          "Description": "Разработка кроссплатфроменного мобильного клиента для Team Foundation Server",
+          "Picture": "project.jpg"
+        }
+      ],
+      "courses": [
+        {
+          "Id": 5,
+          "Name": "Name here",
+          "Description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin iaculis purus at congue aliquam.",
+          "Picture": "project.jpg"
+        }
+      ],
+    }
+  }
+
   getProjectItems(): ProjectItem[] {
     return [
       {
@@ -122,12 +155,12 @@ export class ApiService {
   }
 
   private jwt() {
-        // create authorization header with jwt token
-        let currentUser = JSON.parse(localStorage.getItem('current_user'));
-        if (currentUser && currentUser.token) {
-            let headers = new Headers({ 'Authorization': 'Bearer ' + currentUser.token });
-            return new RequestOptions({ headers: headers });
-        }
+    // create authorization header with jwt token
+    let currentUser = JSON.parse(localStorage.getItem('current_user'));
+    if (currentUser && currentUser.token) {
+      let headers = new Headers({ 'Authorization': 'Bearer ' + currentUser.token });
+      return new RequestOptions({ headers: headers });
     }
+  }
 
 }
