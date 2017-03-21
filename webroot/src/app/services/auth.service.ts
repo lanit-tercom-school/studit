@@ -13,24 +13,26 @@ export class AuthService {
 
     authenticatenow(user: User) {
 
-        var headers = new Headers();
+        //var headers = new Headers();
 
-        headers.append('Content-Type', 'application/json');
+        //headers.append('Content-Type', 'application/json');
 
-        return this.http.post('http://localhost:8080/v1/auth/login/', JSON.stringify(user), { headers: headers })
-            .map((res: Response) => {
-                if (res.json().token) {
-                    localStorage.setItem('auth_key', res.json().token);
-                    localStorage.setItem('current_user', user.Login);
+        return this.http.post('http://localhost:8080/v1/auth/login/', JSON.stringify(user)/*, { headers: headers }*/)
+            .map((response: Response) => {
+                // successful login => getting jwt
+                let res = response.json();
+                if (res && res.token) {
+                    // save data for keeping user logged in
+                    res.login = user.Login;
+                    localStorage.setItem('current_user', JSON.stringify(res));
                 }
-                else
-                    return Observable.throw('no token');
-            })
-            .catch((error: any) => { return Observable.throw(error) });
+            });
     }
 
     unauthentificatenow() {
-        window.localStorage.removeItem("auth_key");
-        return this.http.get('http://localhost:8080/v1/auth/logout/');
+        localStorage.removeItem("current_user");
+        //return this.http.get('http://localhost:8080/v1/auth/logout/');
     }
+
+
 }

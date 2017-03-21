@@ -7,11 +7,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HomePageComponent implements OnInit {
 
-  private token: string = "";
-  constructor() { }
+  private currentUser;
+  constructor() {
+    this.currentUser = JSON.parse(localStorage.getItem('current_user'));
+   }
 
   ngOnInit() {
-      this.token = window.localStorage.getItem('auth_key')
   }
 
 }

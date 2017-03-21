@@ -11,7 +11,7 @@ export class AuthManager implements CanActivate {
 
     canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
         if (next.url[0].path == 'auth') {
-            if (window.localStorage.getItem('auth_key')) {
+            if (window.localStorage.getItem('current_user')) {
                 console.log('You are already logged in');
                 this.router.navigate(['/home']);
                 return false;
@@ -20,7 +20,7 @@ export class AuthManager implements CanActivate {
                 return true;
         }
         else if (next.url[0].path == 'home') {
-            if (window.localStorage.getItem('auth_key')) {
+            if (window.localStorage.getItem('current_user')) {
                 return true;
             }
             else {
