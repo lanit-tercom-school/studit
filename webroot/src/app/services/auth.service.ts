@@ -31,7 +31,6 @@ export class AuthService {
 
     unauthentificatenow() {
         localStorage.removeItem("current_user");
-        //return this.http.get('http://localhost:8080/v1/auth/logout/');
     }
 
 

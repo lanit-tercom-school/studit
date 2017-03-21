@@ -10,13 +10,11 @@ import { ApiService } from './../../../services/api.service';
 })
 export class ProjectListPageComponent implements OnInit {
 
+  private ProjectList;
+
   constructor(private apiService: ApiService) { }
 
   ngOnInit() {
+    this.apiService.getProjectItems().subscribe(res => { this.ProjectList = res.json() });
   }
-
-  getProjectList() : ProjectItem [] {
-    return this.apiService.getProjectItems();
-  }
-
 }

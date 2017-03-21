@@ -5,13 +5,6 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/observable/throw';
 
-import { ProjectItem } from './../components/shared/project-list/project-item/project-item';
-import { MaterialsItem } from './../components/pages/s-project-page/materials/materials-item/materials-item';
-import { ProjectNewsItem } from "../components/pages/s-project-page/proj-news/proj-news-item/proj-news-item";
-import { TaskItem } from "../components/pages/progress/task";
-import { TasksItem } from "../components/pages/s-project-page/tasks/tasks-item/tasks-item";
-import { UserInfo } from "../user-info"
-
 @Injectable()
 export class ApiService {
 
@@ -23,7 +16,7 @@ export class ApiService {
       .catch((error: any) => { return Observable.throw(error) });
   }
 
-  register(user: UserInfo) {
+  register(user) {
     var headers = new Headers();
 
     headers.append('Content-Type', 'application/json');
@@ -36,6 +29,10 @@ export class ApiService {
           return Observable.throw('no code');
       })
       .catch((error: any) => { return Observable.throw(error) });
+  }
+
+  getPublicStudentInfoById(student_id: number) {
+    return this.http.get('http://localhost:8080/v1/user/id/' + student_id)
   }
 
   getPublicAuthorInfoById(author_id: number) {
@@ -71,35 +68,16 @@ export class ApiService {
     }
   }
 
-  getProjectItems(): ProjectItem[] {
-    return [
-      {
-        "Id": 1,
-        "Name": "StudIT",
-        "Description": "Разработки сайта летней школы и студенческих проектов Ланит-Терком",
-        "Picture": "project.jpg"
-      },
-      {
-        "Id": 2,
-        "Name": "TFS Mobile",
-        "Description": "Разработка кроссплатфроменного мобильного клиента для Team Foundation Server",
-        "Picture": "project.jpg"
-      },
-      {
-        "Id": 3,
-        "Name": "CrossCon",
-        "Description": "Разработка мобильного клиента расписания конференций",
-        "Picture": "project.jpg"
-      }
-    ];
+  getProjectItems() {
+    return this.http.get('http://localhost:8080/v1/project/').map((response: Response) => response.json());
   }
 
-  getProjectById(id: number): ProjectItem {
-    return this.getProjectItems().find(project => project.Id === id);
+  getProjectById(id: number) {
+    return this.http.get('http://localhost:8080/v1/project/' + id);
   }
 
 
-  getMaterialsItems(id: number): MaterialsItem[] {
+  getMaterialsItems(id: number) {
     return [
       {
         "Description": "Resource one",
@@ -116,7 +94,7 @@ export class ApiService {
     ];
   }
 
-  getProjectNewsItem(id: number): ProjectNewsItem[] {
+  getProjectNewsItem(id: number) {
     return [
       {
         "Description": "News 1",
@@ -135,7 +113,7 @@ export class ApiService {
     ];
   }
 
-  getTaskItem(id: number): TasksItem[] {
+  getTaskItem(id: number) {
     return [
       {
         "Task": "Complete this exercise...",

@@ -10,12 +10,15 @@ import { ApiService } from './../../services/api.service';
 })
 export class MainComponent implements OnInit {
 
+  private projects;
+
   constructor(private apiService: ApiService) { }
 
   ngOnInit() {
+    this.getMainProjectList
   }
 
-  getMainProjectList() : ProjectItem [] {
-    return this.apiService.getProjectItems();
+  getMainProjectList(){
+    this.apiService.getProjectItems().subscribe(res => this.projects = res.json());
   }
 }

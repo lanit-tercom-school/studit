@@ -48,6 +48,7 @@ import { AppRouterProvider } from './routes';
 import { AuthManager } from './authmanager';
 
 import { AuthorPublicPageComponent } from './pages/author-public-page/author-public-page.component';
+import { StudentPublicPageComponent } from './pages/student-public-page/student-public-page.component';
 
 @NgModule({
   imports: [
@@ -87,6 +88,7 @@ import { AuthorPublicPageComponent } from './pages/author-public-page/author-pub
     RegistrationPageComponent,
     ValidationPageComponent,
     AuthorPublicPageComponent,
+    StudentPublicPageComponent,
   ],
   providers: [ApiService, AuthService, AuthManager],
   bootstrap: [AppComponent]
