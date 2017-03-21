@@ -10,16 +10,18 @@ import { AuthorizationComponent } from './pages/authorization/authorization.comp
 import { HomePageComponent } from './pages/home-page/home-page.component';
 import { RegistrationPageComponent } from './pages/registration-page/registration-page.component';
 import { ValidationPageComponent } from './pages/registration-page/validation-page/validation-page.component';
+import { AuthorPublicPageComponent } from './pages/author-public-page/author-public-page.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'main', pathMatch: 'full' },
   { path: 'main', component: MainComponent },
   { path: 'projects', component: ProjectListPageComponent },
-  { path: 'project/:id', component: SProjectPageComponent},
-  { path: 'auth', component: AuthorizationComponent, canActivate: [AuthManager]},
-  { path: 'home', component: HomePageComponent, canActivate: [AuthManager]},
-  { path: 'registration', component: RegistrationPageComponent},
-  { path: 'registration/validate', component: ValidationPageComponent, canActivate: [AuthManager]},
+  { path: 'project/:id', component: SProjectPageComponent },
+  { path: 'auth', component: AuthorizationComponent, canActivate: [AuthManager] },
+  { path: 'home', component: HomePageComponent, canActivate: [AuthManager] },
+  { path: 'registration', component: RegistrationPageComponent },
+  { path: 'registration/validate', component: ValidationPageComponent, canActivate: [AuthManager] },
+  { path: 'author/:id', component: AuthorPublicPageComponent },
   //otherwise main
   { path: '**', redirectTo: 'main' }
 ];
