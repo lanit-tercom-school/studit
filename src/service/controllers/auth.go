@@ -30,6 +30,7 @@ func (c *AuthController) URLMapping() {
 func (c *AuthController) Login() {
 	var v auth.Usr
 	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
+
 		beego.Trace(c.Ctx.Input.IP(), v.Login, "Try to login")
 		user, err := auth.TryToLogin(v.Login, v.Password)
 		if err != nil {
@@ -68,7 +69,8 @@ func (c *AuthController) Login() {
 	c.ServeJSON()
 }
 
-
+// Take token from user to logout him from service
+// Service is vulnerable to login+logout attack, because of banning system
 func (c *LogoutController) Logout() {
 	userToken := c.GetString("token")
 	beego.Trace(c.Ctx.Input.IP(), "New logout from", userToken)

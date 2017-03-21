@@ -9,7 +9,7 @@ import (
 // TODO: rename
 type UserAndToken struct{
 	Token 		string 		`json:"token"`
-	UserId 		int 		`json:"-"`
+	UserId 		int 		`json:"id"`
 	ExpiresIn	string		`json:"exp"`
 }
 
@@ -18,10 +18,7 @@ type Usr struct {
 	Password string
 }
 
-// TODO: добавить регистрацию
-// TODO: добавить восстановление пароля
-// TODO: добавить валидацию email (отправка проверочного кода на почту)
-// basic http sign in with password and login. Func checks logic+password combo with combo in DB
+// basic http sign in with password and login. Func checks logic+password combination with combination in DB
 func TryToLogin(login, password string) (user models.User, err error) {
 	// create default model
 	user = models.User{
@@ -47,11 +44,11 @@ func GenerateNewToken(n int) string {
 		return ""
 	}
 	// template string
-	const alphanum = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+	const alphaNum = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
 	var bytes = make([]byte, n) // TODO: change 10 to `n`
 	rand.Read(bytes)
 	for i, b := range bytes {
-		bytes[i] = alphanum[b%byte(len(alphanum))]
+		bytes[i] = alphaNum[b%byte(len(alphaNum))]
 	}
 	return string(bytes)
 }
