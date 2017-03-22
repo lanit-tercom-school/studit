@@ -28,11 +28,11 @@ import { ApiService } from '.././services/api.service';
 import { AuthService } from '.././services/auth.service';
 import { PartnersComponent } from './main/partners/partners.component';
 import { PartnerItemComponent } from './main/partners/partner-item/partner-item.component';
-import { SProjectPageComponent } from './pages/s-project-page/s-project-page.component';
-import { MaterialsComponent } from './pages/s-project-page/materials/materials.component';
-import { TasksComponent } from './pages/s-project-page/tasks/tasks.component';
-import { ProjNewsComponent } from './pages/s-project-page/proj-news/proj-news.component';
-import { MaterialsItemComponent } from './pages/s-project-page/materials/materials-item/materials-item.component';
+import { StudentProjectPageComponent } from './pages/student-project-page/student-project-page.component';
+import { MaterialsComponent } from './pages/student-project-page/materials/materials.component';
+import { TasksComponent } from './pages/student-project-page/tasks/tasks.component';
+import { ProjNewsComponent } from './pages/student-project-page/proj-news/proj-news.component';
+import { MaterialsItemComponent } from './pages/student-project-page/materials/materials-item/materials-item.component';
 import { AuthorizationComponent } from './pages/authorization/authorization.component';
 import { RegistrationPageComponent } from './pages/registration-page/registration-page.component';
 import { ValidationPageComponent } from './pages/registration-page/validation-page/validation-page.component';
@@ -40,8 +40,8 @@ import { HomePageComponent } from './pages/home-page/home-page.component';
 import { ProjectListPageComponent } from './pages/project-list-page/project-list-page.component';
 
 import { FooterComponent } from "./footer/footer.component";
-import { TasksItemComponent } from "./pages/s-project-page/tasks/tasks-item/tasks-item.component";
-import { ProjNewsItemComponent } from "./pages/s-project-page/proj-news/proj-news-item/proj-news-item.component";
+import { TasksItemComponent } from "./pages/student-project-page/tasks/tasks-item/tasks-item.component";
+import { ProjNewsItemComponent } from "./pages/student-project-page/proj-news/proj-news-item/proj-news-item.component";
 
 
 import { AppRouterProvider } from './routes';
@@ -74,7 +74,7 @@ import { StudentPublicPageComponent } from './pages/student-public-page/student-
     FeaturesComponent,
     PartnersComponent,
     PartnerItemComponent,
-    SProjectPageComponent,
+    StudentProjectPageComponent,
     MaterialsComponent,
     TasksComponent,
     TasksItemComponent,
