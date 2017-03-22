@@ -12,7 +12,7 @@ import { TasksItem } from "./tasks/tasks-item/tasks-item";
   templateUrl: './student-project-page.component.html',
   styleUrls: ['./student-project-page.component.css']
 })
-export class SProjectPageComponent implements OnInit {
+export class StudentProjectPageComponent implements OnInit {
 
   private project;
 
