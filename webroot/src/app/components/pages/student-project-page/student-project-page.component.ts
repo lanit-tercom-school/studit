@@ -8,9 +8,9 @@ import { ProjectNewsItem } from './proj-news/proj-news-item/proj-news-item';
 import { TasksItem } from "./tasks/tasks-item/tasks-item";
 
 @Component({
-  selector: 'app-s-project-page',
-  templateUrl: './s-project-page.component.html',
-  styleUrls: ['./s-project-page.component.css']
+  selector: 'app-student-project-page',
+  templateUrl: './student-project-page.component.html',
+  styleUrls: ['./student-project-page.component.css']
 })
 export class SProjectPageComponent implements OnInit {
 
