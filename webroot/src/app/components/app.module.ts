@@ -5,13 +5,8 @@ import { HttpModule } from '@angular/http';
 
 import { AppComponent } from './app.component';
 
-import { NewsModule } from "./pages/news/news.module";
 import { SettingsModule } from "./settings/settings.module";
 import { ProfileModule } from "./profile/profile.module";
-import { ProgressModule } from "./pages/progress/progress.module";
-
-import { CoursecardComponent } from "./pages/coursecard/coursecard.component";
-import { CoursecardModule } from "./pages/coursecard/coursecard.module";
 
 import { MainComponent } from './main/main.component';
 
@@ -55,12 +50,9 @@ import { StudentPublicPageComponent } from './pages/student-public-page/student-
     BrowserModule,
     FormsModule,
     HttpModule,
-    NewsModule,
     SettingsModule,
     ProfileModule,
-    ProgressModule,
     ProfileModule,
-    CoursecardModule,
     AppRouterProvider,
   ],
   declarations: [
