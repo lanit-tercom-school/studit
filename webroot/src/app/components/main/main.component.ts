@@ -15,10 +15,10 @@ export class MainComponent implements OnInit {
   constructor(private apiService: ApiService) { }
 
   ngOnInit() {
-    this.getMainProjectList
+    this.getMainProjectList();
   }
 
   getMainProjectList(){
-    this.apiService.getProjectItems().subscribe(res => this.projects = res.json());
+    this.apiService.getMainPageProjects().subscribe(res => this.projects = res);
   }
 }

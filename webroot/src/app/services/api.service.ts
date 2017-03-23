@@ -68,6 +68,10 @@ export class ApiService {
     }
   }
 
+  getMainPageProjects() {
+    return this.http.get('http://localhost:8080/v1/land/projects/').map((response: Response) => response.json());
+  }
+
   getProjectItems() {
     return this.http.get('http://localhost:8080/v1/project/').map((response: Response) => response.json());
   }
