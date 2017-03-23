@@ -154,7 +154,7 @@ func TestEmptyLogout(t *testing.T) {
 
 func getTestStrings() []string {
 	var testStrings []string
-	data, err := ioutil.ReadFile(`D:\Files\Work\Prog\big-list-of-naughty-strings\blns.json`)
+	data, err := ioutil.ReadFile(`tests/blns.json`)
 	if err != nil {
 		panic(err)
 	}
