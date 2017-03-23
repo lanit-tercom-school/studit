@@ -63,7 +63,6 @@ func (c *UserController) GetOne() {
 		c.Ctx.Output.SetStatus(400)
 	} else {
 		c.Data["json"] = v
-		c.Ctx.Output.SetStatus(200)
 	}
 	c.ServeJSON()
 }
