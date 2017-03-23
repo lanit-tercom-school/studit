@@ -1,12 +1,12 @@
 import { Routes, RouterModule } from '@angular/router';
 
-import { AuthManager } from './authmanager';
+import { AuthManager } from './../managers/authmanager';
 
 import { MainComponent } from './main/main.component';
 import { ProjectListComponent } from './shared/project-list/project-list.component';
 import { StudentProjectPageComponent } from './pages/student-project-page/student-project-page.component';
 import { ProjectListPageComponent } from './pages/project-list-page/project-list-page.component';
-import { AuthorizationComponent } from './pages/authorization/authorization.component';
+import { AuthorizationPageComponent } from './pages/authorization-page/authorization-page.component';
 import { HomePageComponent } from './pages/home-page/home-page.component';
 import { RegistrationPageComponent } from './pages/registration-page/registration-page.component';
 import { ValidationPageComponent } from './pages/registration-page/validation-page/validation-page.component';
@@ -18,7 +18,7 @@ export const routes: Routes = [
   { path: 'main', component: MainComponent },
   { path: 'projects', component: ProjectListPageComponent },
   { path: 'project/:id', component: StudentProjectPageComponent },
-  { path: 'auth', component: AuthorizationComponent, canActivate: [AuthManager] },
+  { path: 'auth', component: AuthorizationPageComponent, canActivate: [AuthManager] },
   { path: 'home', component: HomePageComponent, canActivate: [AuthManager] },
   { path: 'registration', component: RegistrationPageComponent },
   { path: 'registration/validate', component: ValidationPageComponent, canActivate: [AuthManager] },

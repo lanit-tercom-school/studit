@@ -3,21 +3,21 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 
-import { AuthorizationComponent } from './authorization.component';
+import { AuthorizationPageComponent } from './authorization-page.component';
 
-describe('AuthorizationComponent', () => {
-  let component: AuthorizationComponent;
-  let fixture: ComponentFixture<AuthorizationComponent>;
+describe('AuthorizationPageComponent', () => {
+  let component: AuthorizationPageComponent;
+  let fixture: ComponentFixture<AuthorizationPageComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AuthorizationComponent ]
+      declarations: [ AuthorizationPageComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(AuthorizationComponent);
+    fixture = TestBed.createComponent(AuthorizationPageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

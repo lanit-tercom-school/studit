@@ -5,9 +5,6 @@ import { HttpModule } from '@angular/http';
 
 import { AppComponent } from './app.component';
 
-import { SettingsModule } from "./settings/settings.module";
-import { ProfileModule } from "./profile/profile.module";
-
 import { MainComponent } from './main/main.component';
 
 import { TopPanelComponent } from './top-panel/top-panel.component';
@@ -28,7 +25,7 @@ import { MaterialsComponent } from './pages/student-project-page/materials/mater
 import { TasksComponent } from './pages/student-project-page/tasks/tasks.component';
 import { ProjNewsComponent } from './pages/student-project-page/proj-news/proj-news.component';
 import { MaterialsItemComponent } from './pages/student-project-page/materials/materials-item/materials-item.component';
-import { AuthorizationComponent } from './pages/authorization/authorization.component';
+import { AuthorizationPageComponent } from './pages/authorization-page/authorization-page.component';
 import { RegistrationPageComponent } from './pages/registration-page/registration-page.component';
 import { ValidationPageComponent } from './pages/registration-page/validation-page/validation-page.component';
 import { HomePageComponent } from './pages/home-page/home-page.component';
@@ -40,7 +37,7 @@ import { ProjNewsItemComponent } from "./pages/student-project-page/proj-news/pr
 
 
 import { AppRouterProvider } from './routes';
-import { AuthManager } from './authmanager';
+import { AuthManager } from './../managers/authmanager';
 
 import { AuthorPublicPageComponent } from './pages/author-public-page/author-public-page.component';
 import { StudentPublicPageComponent } from './pages/student-public-page/student-public-page.component';
@@ -50,9 +47,6 @@ import { StudentPublicPageComponent } from './pages/student-public-page/student-
     BrowserModule,
     FormsModule,
     HttpModule,
-    SettingsModule,
-    ProfileModule,
-    ProfileModule,
     AppRouterProvider,
   ],
   declarations: [
@@ -73,7 +67,7 @@ import { StudentPublicPageComponent } from './pages/student-public-page/student-
     ProjNewsItemComponent,
     ProjNewsComponent,
     MaterialsItemComponent,
-    AuthorizationComponent,
+    AuthorizationPageComponent,
     FooterComponent,
     HomePageComponent,
     ProjectListPageComponent,

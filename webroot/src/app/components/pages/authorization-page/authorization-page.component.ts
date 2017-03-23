@@ -5,12 +5,12 @@ import { User } from './user';
 import { NgModule } from '@angular/core';
 
 @Component({
-  selector: 'app-authorization',
-  templateUrl: './authorization.component.html',
-  styleUrls: ['./authorization.component.css'],
+  selector: 'app-authorization-page',
+  templateUrl: './authorization-page.component.html',
+  styleUrls: ['./authorization-page.component.css'],
   providers: [AuthService],
 })
-export class AuthorizationComponent implements OnInit {
+export class AuthorizationPageComponent implements OnInit {
 
   private localUser: User = { Login: "", Password: "" };
   private error: any;
