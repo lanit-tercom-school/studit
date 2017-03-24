@@ -270,9 +270,10 @@ func main() {
 
 	// add news
 
-	news1 := m.News{
+	news1 := m.news{
 		Id: 1,
-		Date: time.Now(),
+		DateOfCreation: time.Now(),
+		LastEdit: time.Now(),
 		Title: "Программисты признаются в своих грехах в знак протеста против собеседований" +
 			" с кодингом «на бумаге» — в Твиттере появился новый флешмоб",
 		Description: "Где проводят такие собеседования?	Такой стиль собеседований широко используется в" +
@@ -283,9 +284,10 @@ func main() {
 	}
 	fastCheckErr(o.Insert(&news1))
 
-	news2 := m.News{
+	news2 := m.news{
 		Id: 2,
-		Date: time.Now(),
+		DateOfCreation: time.Now(),
+		LastEdit: time.Now(),
 		Title: "Недавний сбой в работе облачных сервисов Amazon был вызван опечаткой сотрудника компании",
 		Description: "Крупный сбой в работе облачных сервисов Amazon, из-за которого 28 февраля 2017 года появились" +
 			" проблемы в работе Slack, Trello, Coursera и многих других сайтов, произошёл из-за опечатки одного" +
