@@ -33,7 +33,7 @@ func (c *NewsController) URLMapping() {
 func (c *NewsController) Post() {
 	beego.Trace(c.Ctx.Input.IP(), "Try to POST news")
 	if c.Ctx.Output.IsOk() {
-		var v models.News
+		var v models.NewsJson
 		if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
 			if id, err := models.AddNews(&v); err == nil {
 				beego.Trace(c.Ctx.Input.IP(), "News with id", id, "created")
@@ -62,12 +62,20 @@ func (c *NewsController) Post() {
 // @router /:id [get]
 func (c *NewsController) GetOne() {
 	idStr := c.Ctx.Input.Param(":id")
-	id, _ := strconv.Atoi(idStr)
+	beego.Trace(c.Ctx.Input.IP(), "Get news with id", idStr)
+	id, err := strconv.Atoi(idStr)
+	if err != nil {
+		beego.Debug(c.Ctx.Input.IP(), "GetOne `Atoi` error", err.Error())
+		c.Ctx.Output.SetStatus(400)
+		c.Data["json"] = err.Error()
+	}
 	v, err := models.GetNewsById(id)
 	if err != nil {
+		beego.Debug(c.Ctx.Input.IP(), "GetOne `Atoi` error", err.Error())
 		c.Ctx.Output.SetStatus(400)
 		c.Data["json"] = err.Error()
 	} else {
+		beego.Trace(c.Ctx.Input.IP(), "GetOne OK")
 		c.Data["json"] = v
 	}
 	c.ServeJSON()
@@ -134,8 +142,13 @@ func (c *NewsController) GetAll() {
 func (c *NewsController) Put() {
 	if c.Ctx.Output.IsOk() {
 		idStr := c.Ctx.Input.Param(":id")
-		id, _ := strconv.Atoi(idStr)
-		v := models.News{Id: id}
+		id, err := strconv.Atoi(idStr)
+		if err != nil {
+			beego.Debug(c.Ctx.Input.IP(), "Put `Atoi` error", err.Error())
+			c.Ctx.Output.SetStatus(400)
+			c.Data["json"] = err.Error()
+		}
+		v := models.NewsJson{Id: id}
 		if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
 			if err := models.UpdateNewsById(&v); err == nil {
 				beego.Trace(c.Ctx.Input.IP(), "Put news OK")
@@ -165,7 +178,12 @@ func (c *NewsController) Put() {
 func (c *NewsController) Delete() {
 	if c.Ctx.Output.IsOk() {
 		idStr := c.Ctx.Input.Param(":id")
-		id, _ := strconv.Atoi(idStr)
+		id, err := strconv.Atoi(idStr)
+		if err != nil {
+			beego.Debug(c.Ctx.Input.IP(), "Delete `Atoi` error", err.Error())
+			c.Ctx.Output.SetStatus(400)
+			c.Data["json"] = err.Error()
+		}
 		if err := models.DeleteNews(id); err == nil {
 			beego.Trace(c.Ctx.Input.IP(), "Delete news OK")
 			c.Data["json"] = "OK"
