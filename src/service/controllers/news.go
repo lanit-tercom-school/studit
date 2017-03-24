@@ -2,17 +2,15 @@ package controllers
 
 import (
 	"encoding/json"
-	"errors"
 	"service/models"
 	"strconv"
 	"strings"
-
 	"github.com/astaxie/beego"
 )
 
 // NewsController operations for News
 type NewsController struct {
-	beego.Controller
+	ControllerWithAuthorization
 }
 
 // URLMapping ...
@@ -28,20 +26,29 @@ func (c *NewsController) URLMapping() {
 // @Title Post
 // @Description create News
 // @Param	body		body 	models.News	true		"body for News content"
+// @Param	token		query	string		true		"Access token"
 // @Success 201 {int} models.News
 // @Failure 403 body is empty
 // @router / [post]
 func (c *NewsController) Post() {
-	var v models.News
-	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
-		if _, err := models.AddNews(&v); err == nil {
-			c.Ctx.Output.SetStatus(201)
-			c.Data["json"] = v
+	beego.Trace(c.Ctx.Input.IP(), "Try to POST news")
+	if c.Ctx.Output.IsOk() {
+		var v models.News
+		if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
+			if id, err := models.AddNews(&v); err == nil {
+				beego.Trace(c.Ctx.Input.IP(), "News with id", id, "created")
+				c.Ctx.Output.SetStatus(201)
+				c.Data["json"] = id
+			} else {
+				beego.Debug(c.Ctx.Input.IP(), "Post news `AddNews` error", err.Error())
+				c.Data["json"] = err.Error()
+				c.Ctx.Output.SetStatus(500)
+			}
 		} else {
+			beego.Debug(c.Ctx.Input.IP(), "Post news `Unmarshal` error", err.Error())
 			c.Data["json"] = err.Error()
+			c.Ctx.Output.SetStatus(400)
 		}
-	} else {
-		c.Data["json"] = err.Error()
 	}
 	c.ServeJSON()
 }
@@ -49,7 +56,7 @@ func (c *NewsController) Post() {
 // GetOne ...
 // @Title Get One
 // @Description get News by id
-// @Param	id		path 	string	true		"The key for staticblock"
+// @Param	id		path 	string	true		"The key for static block"
 // @Success 200 {object} models.News
 // @Failure 403 :id is empty
 // @router /:id [get]
@@ -58,6 +65,7 @@ func (c *NewsController) GetOne() {
 	id, _ := strconv.Atoi(idStr)
 	v, err := models.GetNewsById(id)
 	if err != nil {
+		c.Ctx.Output.SetStatus(400)
 		c.Data["json"] = err.Error()
 	} else {
 		c.Data["json"] = v
@@ -67,60 +75,46 @@ func (c *NewsController) GetOne() {
 
 // GetAll ...
 // @Title Get All
-// @Description get News
-// @Param	query	query	string	false	"Filter. e.g. col1:v1,col2:v2 ..."
-// @Param	fields	query	string	false	"Fields returned. e.g. col1,col2 ..."
-// @Param	sortby	query	string	false	"Sorted-by fields. e.g. col1,col2 ..."
-// @Param	order	query	string	false	"Order corresponding to each sortby field, if single value, apply to all sortby fields. e.g. desc,asc ..."
+// @Description Get bunch of news
+// @Param	sort_by	query	string	false	"Sorted-by fields. e.g. title, description, time"
+// @Param	order	query	string	false	"Order corresponding to each sort_by field, if single value, apply to all sort_by fields. e.g. desc,asc ..., can be only `desc` or `asc`, default is asc"
 // @Param	limit	query	string	false	"Limit the size of result set. Must be an integer"
 // @Param	offset	query	string	false	"Start position of result set. Must be an integer"
 // @Success 200 {object} models.News
 // @Failure 403
 // @router / [get]
 func (c *NewsController) GetAll() {
-	var fields []string
-	var sortby []string
+	var sortBy []string
 	var order []string
-	var query = make(map[string]string)
 	var limit int64 = 10
 	var offset int64
-
-	// fields: col1,col2,entity.col3
-	if v := c.GetString("fields"); v != "" {
-		fields = strings.Split(v, ",")
-	}
+	beego.Trace(c.Ctx.Input.IP(), "Parce request params for News")
 	// limit: 10 (default is 10)
 	if v, err := c.GetInt64("limit"); err == nil {
-		limit = v
+		if limit > 20 {
+			limit = 20
+		} else {
+			limit = v
+		}
 	}
 	// offset: 0 (default is 0)
 	if v, err := c.GetInt64("offset"); err == nil {
 		offset = v
 	}
-	// sortby: col1,col2
+	// sortBy: col1,col2
 	if v := c.GetString("sortby"); v != "" {
-		sortby = strings.Split(v, ",")
+		sortBy = strings.Split(v, ",")
 	}
 	// order: desc,asc
 	if v := c.GetString("order"); v != "" {
 		order = strings.Split(v, ",")
 	}
-	// query: k:v,k:v
-	if v := c.GetString("query"); v != "" {
-		for _, cond := range strings.Split(v, ",") {
-			kv := strings.SplitN(cond, ":", 2)
-			if len(kv) != 2 {
-				c.Data["json"] = errors.New("Error: invalid query key/value pair")
-				c.ServeJSON()
-				return
-			}
-			k, v := kv[0], kv[1]
-			query[k] = v
-		}
-	}
 
-	l, err := models.GetAllNews(query, fields, sortby, order, offset, limit)
+	beego.Trace(c.Ctx.Input.IP(), "Select from table")
+	l, err := models.GetAllNews(sortBy, order, offset, limit)
 	if err != nil {
+		beego.Debug(c.Ctx.Input.IP(), "News GetAll `GetAllNews` error", err.Error())
+		c.Ctx.Output.SetStatus(400)
 		c.Data["json"] = err.Error()
 	} else {
 		c.Data["json"] = l
@@ -130,42 +124,56 @@ func (c *NewsController) GetAll() {
 
 // Put ...
 // @Title Put
-// @Description update the News
-// @Param	id		path 	string	true		"The id you want to update"
+// @Description Update(edit) the News with id
+// @Param	id		path 	string	true				"The id you want to update"
 // @Param	body		body 	models.News	true		"body for News content"
-// @Success 200 {object} models.News
+// @Param	token	query	string	true				"Access token"
+// @Success 200 "OK"
 // @Failure 403 :id is not int
 // @router /:id [put]
 func (c *NewsController) Put() {
-	idStr := c.Ctx.Input.Param(":id")
-	id, _ := strconv.Atoi(idStr)
-	v := models.News{Id: id}
-	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
-		if err := models.UpdateNewsById(&v); err == nil {
-			c.Data["json"] = "OK"
+	if c.Ctx.Output.IsOk() {
+		idStr := c.Ctx.Input.Param(":id")
+		id, _ := strconv.Atoi(idStr)
+		v := models.News{Id: id}
+		if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
+			if err := models.UpdateNewsById(&v); err == nil {
+				beego.Trace(c.Ctx.Input.IP(), "Put news OK")
+				c.Data["json"] = "OK"
+			} else {
+				beego.Debug(c.Ctx.Input.IP(), "Put news `UpdateNewsById` error", err.Error())
+				c.Data["json"] = err.Error()
+				c.Ctx.Output.SetStatus(400)
+			}
 		} else {
+			beego.Debug(c.Ctx.Input.IP(), "Put news `Unmarshal` error", err.Error())
 			c.Data["json"] = err.Error()
+			c.Ctx.Output.SetStatus(400)
 		}
-	} else {
-		c.Data["json"] = err.Error()
 	}
 	c.ServeJSON()
 }
 
 // Delete ...
 // @Title Delete
-// @Description delete the News
+// @Description Delete the News
 // @Param	id		path 	string	true		"The id you want to delete"
-// @Success 200 {string} delete success!
+// @Param	token	query	string	true		"Access token"
+// @Success 200 {string} Delete success!
 // @Failure 403 id is empty
 // @router /:id [delete]
 func (c *NewsController) Delete() {
-	idStr := c.Ctx.Input.Param(":id")
-	id, _ := strconv.Atoi(idStr)
-	if err := models.DeleteNews(id); err == nil {
-		c.Data["json"] = "OK"
-	} else {
-		c.Data["json"] = err.Error()
+	if c.Ctx.Output.IsOk() {
+		idStr := c.Ctx.Input.Param(":id")
+		id, _ := strconv.Atoi(idStr)
+		if err := models.DeleteNews(id); err == nil {
+			beego.Trace(c.Ctx.Input.IP(), "Delete news OK")
+			c.Data["json"] = "OK"
+		} else {
+			beego.Debug(c.Ctx.Input.IP(), "Delete news `DeleteNews` error", err.Error())
+			c.Data["json"] = err.Error()
+			c.Ctx.Output.SetStatus(400)
+		}
 	}
 	c.ServeJSON()
 }

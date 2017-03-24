@@ -364,6 +364,7 @@ func (c *ControllerWithAuthorization) Prepare() {
 	if userToken == "" {
 		beego.Debug(c.Ctx.Input.IP(), "Empty token")
 		c.Data["json"] = "Empty token (dev)" // TODO: change to `Unauthorized`
+		//c.Ctx.Output.SetStatus(401)
 	} else {
 		if err := jwtManager.Validate(userToken); err == nil {
 			claims, _ := jwtManager.Decode(userToken)
@@ -385,6 +386,7 @@ func (c *ControllerWithAuthorization) Prepare() {
 		} else {
 			beego.Debug(c.Ctx.Input.IP(), err.Error())
 			c.Data["json"] = "Wrong token (dev)" // TODO: change to `Unauthorized`
+			//c.Ctx.Output.SetStatus(401)
 		}
 	}
 	beego.Trace("Exit AUTH Controller")
