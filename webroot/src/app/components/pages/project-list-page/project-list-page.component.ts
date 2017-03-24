@@ -15,6 +15,6 @@ export class ProjectListPageComponent implements OnInit {
   constructor(private apiService: ApiService) { }
 
   ngOnInit() {
-    this.apiService.getProjectItems().subscribe(res => { this.ProjectList = res.json() });
+    this.apiService.getProjectItems().subscribe(res => { this.ProjectList = res });
   }
 }
