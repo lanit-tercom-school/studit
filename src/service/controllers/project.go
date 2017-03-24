@@ -141,7 +141,7 @@ func (c *ProjectController) GetAll() {
 // @Description update the Project
 // @Param	id		path 	string	true		"The id you want to update"
 // @Param	body		body 	models.Project	true		"body for Project content"
-// @Param	token		body	string			false		"admin/moder token"
+// @Param	token		query	string			false		"admin/moder token"
 // @Success 200 {object} models.Project
 // @Failure 403 :id is not int
 // @router /:id [put]
@@ -168,7 +168,7 @@ func (c *ProjectController) Put() {
 // @Title Delete
 // @Description delete the Project
 // @Param	id		path 	string	true		"The id you want to delete"
-// @Param	token		body	string			false		"admin/moder token"
+// @Param	token		query	string			false		"admin/moder token"
 // @Success 200 {string} delete success!
 // @Failure 403 id is empty
 // @router /:id [delete]
