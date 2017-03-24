@@ -6,13 +6,36 @@ import (
 	"time"
 
 	"github.com/astaxie/beego/orm"
+	"strings"
 )
 
 type News struct {
-	Id          int       `orm:"column(id);pk;auto"`
-	Title       string    `orm:"column(title)"`
-	Description string    `orm:"column(description)"`
-	Date        time.Time `orm:"column(date);type(date)"`
+	Id          			int       		`orm:"column(id);pk;auto"`
+	Title       			string    		`orm:"column(title)"`
+	Description 			string    		`orm:"column(description)"`
+	DateOfCreation        	time.Time 		`orm:"column(date_of_creation);type(date)"`
+	LastEdit        		time.Time 		`orm:"column(last_edit);type(date)"`
+	Tags					string	  		`orm:"column(tags)"`
+}
+
+type NewsJson struct {
+	Id				int			`json:"id"`
+	Title       	string    	`json:"title"`
+	Description 	string    	`json:"desc"`
+	Created        	time.Time 	`json:"created"`
+	Edited        	time.Time 	`json:"edited"`
+	Tags			[]string	`json:"tags"`
+}
+
+func (t *News) translate() NewsJson {
+	return NewsJson{
+		Id: t.Id,
+		Title: t.Title,
+		Description: t.Description,
+		Created: t.DateOfCreation,
+		Edited: t.LastEdit,
+		Tags: strings.Split(t.Tags, ","),
+	}
 }
 
 func (t *News) TableName() string {
