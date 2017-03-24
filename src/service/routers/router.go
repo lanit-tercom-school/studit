@@ -75,13 +75,13 @@ func init() {
 				&controllers.TasksTagsTableController{},
 			),
 		),
-
+*/
 		beego.NSNamespace("/news",
 			beego.NSInclude(
 				&controllers.NewsController{},
 			),
 		),
-
+/*
 		beego.NSNamespace("/news_tags",
 			beego.NSInclude(
 				&controllers.NewsTagsController{},
