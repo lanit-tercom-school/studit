@@ -42,6 +42,9 @@ import { AuthManager } from './../managers/authmanager';
 import { AuthorPublicPageComponent } from './pages/author-public-page/author-public-page.component';
 import { StudentPublicPageComponent } from './pages/student-public-page/student-public-page.component';
 
+import { MainNewsPageComponent } from './pages/main-news-page/main-news-page.component';
+import { MainNewsItemComponent } from './pages/main-news-page/main-news-item/main-news-item.component';
+
 @NgModule({
   imports: [
     BrowserModule,
@@ -75,6 +78,8 @@ import { StudentPublicPageComponent } from './pages/student-public-page/student-
     ValidationPageComponent,
     AuthorPublicPageComponent,
     StudentPublicPageComponent,
+    MainNewsPageComponent,
+    MainNewsItemComponent,
   ],
   providers: [ApiService, AuthService, AuthManager],
   bootstrap: [AppComponent]
