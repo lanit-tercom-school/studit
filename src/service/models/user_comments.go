@@ -11,10 +11,10 @@ import (
 )
 
 type UserComments struct {
-	Id        int       `orm:"column(id);pk;auto"`
-	UserId    *User     `orm:"column(user_id);rel(fk)"`
-	CommentId *Comment  `orm:"column(comment_id);rel(fk)"`
-	Date      time.Time `orm:"column(date);type(date)"`
+	Id        int       `orm:"column(id);pk;auto" json:"-"`
+	UserId    *User     `orm:"column(user_id);rel(fk)" json:"user_id"`
+	CommentId *Comment  `orm:"column(comment_id);rel(fk)" json:"msg_id"`
+	Date      time.Time `orm:"column(date);type(date)" json:"date"`
 }
 
 func (t *UserComments) TableName() string {

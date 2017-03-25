@@ -1,9 +1,9 @@
-// @APIVersion 1.0.0
+// @APIVersion 1.0.0 TODO: change this
 // @Title Lanit-Tercom School API
 // @Description TODO: add some description here
-// @TermsOfServiceUrl http://beego.me/
-// @License Apache 2.0
-// @LicenseUrl http://www.apache.org/licenses/LICENSE-2.0.html
+// @TermsOfServiceUrl TODO: change this http://beego.me/
+// @License TODO: change license Apache 2.0
+// @LicenseUrl TODO: change license http://www.apache.org/licenses/LICENSE-2.0.html
 // @URL https://vk.com/ltschool
 package routers
 
@@ -75,13 +75,13 @@ func init() {
 				&controllers.TasksTagsTableController{},
 			),
 		),
-
+*/
 		beego.NSNamespace("/news",
 			beego.NSInclude(
 				&controllers.NewsController{},
 			),
 		),
-
+/*
 		beego.NSNamespace("/news_tags",
 			beego.NSInclude(
 				&controllers.NewsTagsController{},
@@ -129,13 +129,13 @@ func init() {
 				&controllers.ContactTypeController{},
 			),
 		),
-
-		beego.NSNamespace("/user_contact",
+*/
+		beego.NSNamespace("/user/contact",
 			beego.NSInclude(
 				&controllers.UserContactController{},
 			),
 		),
-
+/*
 		beego.NSNamespace("/course",
 			beego.NSInclude(
 				&controllers.CourseController{},
@@ -154,7 +154,7 @@ func init() {
 			),
 		),
 */
-		beego.NSNamespace("/user",
+		beego.NSNamespace("/user/id",
 			beego.NSInclude(
 				&controllers.UserController{},
 			),
@@ -171,6 +171,27 @@ func init() {
 				&controllers.LandingProjectsController{},
 			),
 		),
+		beego.NSNamespace("/auth/login",
+			beego.NSInclude(
+				&controllers.AuthController{},
+			),
+		),
+		beego.NSNamespace("/auth/logout",
+			beego.NSInclude(
+				&controllers.LogoutController{},
+			),
+		),
+		beego.NSNamespace("/auth/register",
+			beego.NSInclude(
+				&controllers.RegistrationController{},
+			),
+		),
+		beego.NSNamespace("/auth/reset", // reset password
+			beego.NSInclude(
+				&controllers.ResetPasswordController{},
+			),
+		),
 	)
 	beego.AddNamespace(ns)
+	beego.ErrorController(&controllers.ErrorController{})
 }

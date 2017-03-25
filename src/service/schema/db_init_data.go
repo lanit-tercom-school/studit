@@ -7,8 +7,8 @@ import (
 	_ "github.com/lib/pq"
 
 	m "service/models"
-	"log"
 	"time"
+	"github.com/astaxie/beego"
 )
 
 func init() {
@@ -17,12 +17,11 @@ func init() {
 
 func fastCheckErr(_ int64, err error) {
 	if err != nil {
-		log.Panic(err.Error())
+		beego.Critical(err.Error())
 	}
 }
 
 func main() {
-	log.SetFlags(log.Ltime | log.Lshortfile)
 	o := orm.NewOrm()
 	o.Using("default")
 
@@ -57,8 +56,8 @@ func main() {
 	user1 := m.User{
 		Id: 1,
 		Nickname: "Admin",
-		Login: "admin@admin.admin",
-		Password: "admin",
+		Login: "a@a",
+		Password: "a",
 		Avatar: "/logo/1.jpg",
 		Description: "Главный по тарелкам",
 	}
@@ -240,7 +239,7 @@ func main() {
 	user_contact1 := m.UserContact{
 		Id: 1,
 		UserId: &user1,
-		Contact: "admin@admin.admin",
+		Contact: "a@a",
 		ContactTypeId: &contactType1,
 	}
 	fastCheckErr(o.Insert(&user_contact1))
@@ -260,6 +259,14 @@ func main() {
 		ContactTypeId: &contactType1,
 	}
 	fastCheckErr(o.Insert(&user_contact3))
+
+	user_contact4 := m.UserContact{
+		Id: 4,
+		UserId: &user1,
+		Contact: "+7-123-456-78-90",
+		ContactTypeId: &contactType2,
+	}
+	fastCheckErr(o.Insert(&user_contact4))
 
 	// add news
 
@@ -350,5 +357,5 @@ func main() {
 	}
 	fastCheckErr(o.Insert(&news_tag_con3))
 
-	log.Print("Initial data was successfully added to Database")
+	beego.Info("Initial data was successfully added to Database")
 }

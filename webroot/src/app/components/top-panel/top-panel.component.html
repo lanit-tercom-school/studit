@@ -1,6 +1,7 @@
 <!-- Just an image -->
 <nav class="navbar navbar-toggleable-md navbar-light">
-  <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+  <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav"
+    aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
   <a class="navbar-brand" routerLink="" routerLinkActive="active">
@@ -9,17 +10,39 @@
   <div class="collapse navbar-collapse" id="navbarNav">
     <ul class="navbar-nav">
       <li class="nav-item active">
-        <a class="nav-link" routerLink="/main" routerLinkActive="active">Главная <span class="sr-only">(current)</span></a>
+        <div *ngIf="currentUser == undefined">
+          <a class="nav-link" routerLink="/main" routerLinkActive="active">Главная <span class="sr-only"></span></a>
+        </div>
+        <div *ngIf="currentUser">
+          <a class="nav-link" routerLink="/home" routerLinkActive="active">Домой <span class="sr-only"></span></a>
+        </div>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#">Новости</a>
+        <a class="nav-link" routerLink="/news" routerLinkActive="active">Новости</a>
       </li>
       <li class="nav-item">
         <a class="nav-link" routerLink="/projects" routerLinkActive="active">Проекты</a>
       </li>
-      <li class="nav-item">
-        <a class="nav-link" id="sign-in" routerLink="/auth" routerLinkActive="active">Вход</a>
-      </li>
+      <div *ngIf="currentUser == undefined">
+        <li class="nav-item">
+          <a class="nav-link" id="sign-in" routerLink="/auth" routerLinkActive="active">Вход</a>
+        </li>
+      </div>
+      <div *ngIf="currentUser">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+            <i class="fa fa-user-circle fa-lg" aria-hidden="true"></i> {{currentUser.login}}
+          </a>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" href="#"><i class="fa fa-address-card fa-fw" aria-hidden="true"></i> Личный кабинет</a>
+            <a class="dropdown-item" href="#"><i class="fa fa-cog fa-fw" aria-hidden="true"></i> Настройки</a>
+            <a class="dropdown-item" href="#"><i class="fa fa-bell-o fa-fw" aria-hidden="true"></i> Уведомления</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" id="log-out" routerLink="/auth" routerLinkActive="active" (click)="logout()">
+              <i class="fa fa-times-circle fa=fw" aria-hidden="true"></i> Выход</a>
+          </div>
+        </li>
+      </div>
     </ul>
   </div>
 </nav>

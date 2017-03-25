@@ -1,0 +1,15 @@
+.container
+{
+  text-align: center;
+  margin: 50px auto;
+}
+
+.project-list
+{
+  display: flex;
+  background: whitesmoke;
+}
+
+h1 {
+  margin-bottom: 50px;
+}

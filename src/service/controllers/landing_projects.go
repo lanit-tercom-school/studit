@@ -4,24 +4,23 @@ import (
 	"service/models"
 
 	"github.com/astaxie/beego"
-	"strconv"
 )
 
-// LandingProjectsController operations for Project
+// Контроллер для главной/landing страниц
 type LandingProjectsController struct {
 	beego.Controller
 }
 
 // URLMapping ...
 func (c *LandingProjectsController) URLMapping() {
-	c.Mapping("Post", c.Post)
-	c.Mapping("GetOne", c.GetOne)
+	//c.Mapping("Post", c.Post)
+	c.Mapping("GetOne", c.GetAll)
 	c.Mapping("GetAll", c.GetAll)
-	c.Mapping("Put", c.Put)
-	c.Mapping("Delete", c.Delete)
+	//c.Mapping("Put", c.Put)
+	//c.Mapping("Delete", c.Delete)
 }
 
-// Post ...
+/*// Post ...
 // @Title Post
 // @Description Method Not Allowed
 // @Success 405 Method Not Allowed
@@ -54,6 +53,13 @@ func (c *LandingProjectsController) GetOne() {
 	}
 	c.ServeJSON()
 }
+*/
+
+func (c *LandingProjectsController) GetOne() {
+	c.Data["json"] = "Not Found"
+	c.Ctx.ResponseWriter.WriteHeader(404)
+	c.ServeJSON()
+}
 
 // GetAll ...
 // @Title Get All
@@ -71,7 +77,7 @@ func (c *LandingProjectsController) GetAll() {
 	}
 	c.ServeJSON()
 }
-
+/*
 // Put ...
 // @Title Put
 // @Description Method Not Allowed
@@ -102,4 +108,4 @@ func (c *LandingProjectsController) Delete() {
 	c.Data["json"] = response
 	c.Ctx.ResponseWriter.WriteHeader(405)
 	c.ServeJSON()
-}
+}*/

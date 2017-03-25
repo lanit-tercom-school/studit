@@ -10,8 +10,8 @@ import (
 )
 
 type Comment struct {
-	Id   int   `orm:"column(id);pk;auto"`
-	Text int64 `orm:"column(text)"`
+	Id   int   `orm:"column(id);pk;auto" json:"-"`
+	Text int64 `orm:"column(text)" json:"text"`
 }
 
 func (t *Comment) TableName() string {

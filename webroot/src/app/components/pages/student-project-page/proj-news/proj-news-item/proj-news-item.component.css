@@ -1,0 +1,23 @@
+div
+{
+  background: whitesmoke;
+  width: 100%;
+  padding: 0.5rem 0.5rem;
+  margin: 1rem auto;
+  text-align: right;
+  border: 1px solid gainsboro;
+}
+
+p
+{
+  text-align: left;
+}
+.p1{
+  float:left;
+  font-size: 10px;
+}
+
+li
+{
+  list-style-type: none;
+}

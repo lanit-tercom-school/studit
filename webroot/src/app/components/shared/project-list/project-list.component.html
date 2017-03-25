@@ -1,15 +1,6 @@
-<div class="container">
-  <h1>
-    Студенческие проекты
-  </h1>
-  <div class="row">
-      <div class="card-deck col-sm-12">
-        <app-project-item
-          *ngFor="let project of ProjectList"
-          [ProjectItem]="project">
-        </app-project-item>
-      </div>
+<div class="row">
+  <div class="card-deck col-sm-12">
+    <app-project-item *ngFor="let project of ProjectList" [ProjectItem]="project">
+    </app-project-item>
   </div>
-  <br><br><br>
-    <button role="button" class="btn btn-primary btn-lg" href="#"><small>ПОКАЗАТЬ БОЛЬШЕ</small></button>
 </div>

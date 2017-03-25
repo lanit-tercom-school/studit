@@ -10,12 +10,12 @@ import (
 )
 
 type User struct {
-	Id          int    `orm:"column(id);pk;auto"`
-	Login       string `orm:"column(login)"`
-	Password    string `orm:"column(password)"`
-	Nickname    string `orm:"column(nickname)"`
-	Description string `orm:"column(description)"`
-	Avatar      string `orm:"column(avatar)"`
+	Id          int    `orm:"column(id);pk;auto" json:"id"`
+	Login       string `orm:"column(login)" json:"login"`
+	Password    string `orm:"column(password)" json:"-"`
+	Nickname    string `orm:"column(nickname)" json:"nickname"`
+	Description string `orm:"column(description)" json:"description,omitempty"`
+	Avatar      string `orm:"column(avatar)" json:"avatar,omitempty"`
 }
 
 func (t *User) TableName() string {
@@ -147,4 +147,51 @@ func DeleteUser(id int) (err error) {
 		}
 	}
 	return
+}
+
+func (m *User) Insert() error {
+	if _, err := orm.NewOrm().Insert(m); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (m *User) Read(fields ...string) error {
+	if err := orm.NewOrm().Read(m, fields...); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (m *User) Update(fields ...string) error {
+	if _, err := orm.NewOrm().Update(m, fields...); err != nil {
+		return err
+	}
+	return nil
+}
+
+// return true if found, false if not
+func (m *User) FindByLogin() bool {
+	var anotherUser User
+	err := orm.NewOrm().QueryTable("user").Filter("login", m.Login).One(&anotherUser)
+	if err == orm.ErrMultiRows {
+		panic(err)
+	} else if err == orm.ErrNoRows {
+		return false
+	} else {
+		return true
+	}
+}
+
+// return true if found, false if not
+func GetUserByLogin(login string) (*User, error) {
+	var anotherUser User
+	err := orm.NewOrm().QueryTable("user").Filter("login", login).One(&anotherUser)
+	if err == orm.ErrMultiRows {
+		panic(err)
+	} else if err == orm.ErrNoRows {
+		return nil, errors.New("Not found")
+	} else {
+		return &anotherUser, nil
+	}
 }

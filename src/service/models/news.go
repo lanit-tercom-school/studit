@@ -3,8 +3,6 @@ package models
 import (
 	"errors"
 	"fmt"
-	"reflect"
-	"strings"
 	"time"
 
 	"github.com/astaxie/beego/orm"
@@ -46,47 +44,41 @@ func GetNewsById(id int) (v *News, err error) {
 
 // GetAllNews retrieves all News matches certain condition. Returns empty list if
 // no records exist
-func GetAllNews(query map[string]string, fields []string, sortby []string, order []string,
+func GetAllNews(sortBy []string, order []string,
 	offset int64, limit int64) (ml []interface{}, err error) {
 	o := orm.NewOrm()
 	qs := o.QueryTable(new(News))
-	// query k=v
-	for k, v := range query {
-		// rewrite dot-notation to Object__Attribute
-		k = strings.Replace(k, ".", "__", -1)
-		qs = qs.Filter(k, v)
-	}
 	// order by:
 	var sortFields []string
-	if len(sortby) != 0 {
-		if len(sortby) == len(order) {
+	if len(sortBy) != 0 {
+		if len(sortBy) == len(order) {
 			// 1) for each sort field, there is an associated order
-			for i, v := range sortby {
-				orderby := ""
+			for i, v := range sortBy {
+				orderBy := ""
 				if order[i] == "desc" {
-					orderby = "-" + v
+					orderBy = "-" + v
 				} else if order[i] == "asc" {
-					orderby = v
+					orderBy = v
 				} else {
 					return nil, errors.New("Error: Invalid order. Must be either [asc|desc]")
 				}
-				sortFields = append(sortFields, orderby)
+				sortFields = append(sortFields, orderBy)
 			}
 			qs = qs.OrderBy(sortFields...)
-		} else if len(sortby) != len(order) && len(order) == 1 {
+		} else if len(sortBy) != len(order) && len(order) == 1 {
 			// 2) there is exactly one order, all the sorted fields will be sorted by this order
-			for _, v := range sortby {
-				orderby := ""
+			for _, v := range sortBy {
+				orderBy := ""
 				if order[0] == "desc" {
-					orderby = "-" + v
+					orderBy = "-" + v
 				} else if order[0] == "asc" {
-					orderby = v
+					orderBy = v
 				} else {
 					return nil, errors.New("Error: Invalid order. Must be either [asc|desc]")
 				}
-				sortFields = append(sortFields, orderby)
+				sortFields = append(sortFields, orderBy)
 			}
-		} else if len(sortby) != len(order) && len(order) != 1 {
+		} else if len(sortBy) != len(order) && len(order) != 1 {
 			return nil, errors.New("Error: 'sortby', 'order' sizes mismatch or 'order' size is not 1")
 		}
 	} else {
@@ -97,21 +89,9 @@ func GetAllNews(query map[string]string, fields []string, sortby []string, order
 
 	var l []News
 	qs = qs.OrderBy(sortFields...)
-	if _, err = qs.Limit(limit, offset).All(&l, fields...); err == nil {
-		if len(fields) == 0 {
-			for _, v := range l {
-				ml = append(ml, v)
-			}
-		} else {
-			// trim unused fields
-			for _, v := range l {
-				m := make(map[string]interface{})
-				val := reflect.ValueOf(v)
-				for _, fname := range fields {
-					m[fname] = val.FieldByName(fname).Interface()
-				}
-				ml = append(ml, m)
-			}
+	if _, err = qs.Limit(limit, offset).All(&l); err == nil {
+		for _, v := range l {
+			ml = append(ml, v)
 		}
 		return ml, nil
 	}

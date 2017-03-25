@@ -6,13 +6,11 @@ import (
 	"service/models"
 	"strconv"
 	"strings"
-
-	"github.com/astaxie/beego"
 )
 
 // CommentController oprations for Comment
 type CommentController struct {
-	beego.Controller
+	ControllerWithAuthorization
 }
 
 // URLMapping ...
@@ -24,6 +22,7 @@ func (c *CommentController) URLMapping() {
 	c.Mapping("Delete", c.Delete)
 }
 
+// TODO: обновить документацию
 // Post ...
 // @Title Post
 // @Description create Comment
@@ -31,17 +30,24 @@ func (c *CommentController) URLMapping() {
 // @Success 201 {int} models.Comment
 // @Failure 403 body is empty
 // @router / [post]
+// TODO: Переработать!!!
 func (c *CommentController) Post() {
-	var v models.Comment
-	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
-		if _, err := models.AddComment(&v); err == nil {
-			c.Ctx.Output.SetStatus(201)
-			c.Data["json"] = v
+	if c.Ctx.Output.IsOk() {
+		token := c.GetString("token")
+		claims, _ := jwtManager.Decode(token)
+		_, _ = claims.Get("user_id") // TODO: тут должна быть обработка ошибки
+
+		var v models.Comment
+		if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
+			if _, err := models.AddComment(&v); err == nil {
+				c.Ctx.Output.SetStatus(201)
+				c.Data["json"] = v
+			} else {
+				c.Data["json"] = err.Error()
+			}
 		} else {
 			c.Data["json"] = err.Error()
 		}
-	} else {
-		c.Data["json"] = err.Error()
 	}
 	c.ServeJSON()
 }
