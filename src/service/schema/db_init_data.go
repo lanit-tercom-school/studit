@@ -270,24 +270,24 @@ func main() {
 
 	// add news
 
-	news1 := m.news{
+	news1 := m.NewsJson{
 		Id: 1,
-		DateOfCreation: time.Now(),
-		LastEdit: time.Now(),
+		Created: time.Now(),
+		Edited: time.Now(),
 		Title: "Программисты признаются в своих грехах в знак протеста против собеседований" +
 			" с кодингом «на бумаге» — в Твиттере появился новый флешмоб",
-		Description: "Где проводят такие собеседования?	Такой стиль собеседований широко используется в" +
+		Description: "Где проводят такие собеседования? Такой стиль собеседований широко используется в" +
 			" IT-индустрии, в том числе в таких компаниях, как Google и Amazon. Кандидатам не дают никакого доступа" +
 			" к справочным материалам и просят решить какую-либо техническую задачу, что, по мнению уже благополучно" +
 			" работающих где-либо программистов, деморализует и не выявляет реальных навыков.",
-		Tags: "Other",
+		Tags: []string{"Other"},
 	}
-	fastCheckErr(o.Insert(&news1))
+	fastCheckErr(m.AddNews(&news1))
 
-	news2 := m.news{
+	news2 := m.NewsJson{
 		Id: 2,
-		DateOfCreation: time.Now(),
-		LastEdit: time.Now(),
+		Created: time.Now(),
+		Edited: time.Now(),
 		Title: "Недавний сбой в работе облачных сервисов Amazon был вызван опечаткой сотрудника компании",
 		Description: "Крупный сбой в работе облачных сервисов Amazon, из-за которого 28 февраля 2017 года появились" +
 			" проблемы в работе Slack, Trello, Coursera и многих других сайтов, произошёл из-за опечатки одного" +
@@ -308,9 +308,9 @@ func main() {
 			" в системах «определённого уровня». Также компания пообещала исправить работу информационной" +
 			" панели AWS Service Health Dashboard, которая не показывала информацию о сбоях, так как сама" +
 			" зависела от упавшего сервиса S3.",
-		Tags: "Other,World",
+		Tags: []string{"Other", "World"},
 	}
-	fastCheckErr(o.Insert(&news2))
+	fastCheckErr(m.AddNews(&news2))
 
 	beego.Info("Initial data was successfully added to Database")
 }

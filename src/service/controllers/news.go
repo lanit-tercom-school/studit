@@ -25,9 +25,9 @@ func (c *NewsController) URLMapping() {
 // Post ...
 // @Title Post
 // @Description create News
-// @Param	body		body 	models.News	true		"body for News content"
+// @Param	body		body 	models.NewsJson	true		"body for News content"
 // @Param	token		query	string		true		"Access token"
-// @Success 201 {int} models.News
+// @Success 201 {int} models.NewsJson
 // @Failure 403 body is empty
 // @router / [post]
 func (c *NewsController) Post() {
@@ -49,6 +49,8 @@ func (c *NewsController) Post() {
 			c.Data["json"] = err.Error()
 			c.Ctx.Output.SetStatus(400)
 		}
+	} else {
+		c.Ctx.Output.SetStatus(400)
 	}
 	c.ServeJSON()
 }
@@ -57,7 +59,7 @@ func (c *NewsController) Post() {
 // @Title Get One
 // @Description get News by id
 // @Param	id		path 	string	true		"The key for static block"
-// @Success 200 {object} models.News
+// @Success 200 {object} models.NewsJson
 // @Failure 403 :id is empty
 // @router /:id [get]
 func (c *NewsController) GetOne() {
@@ -88,7 +90,7 @@ func (c *NewsController) GetOne() {
 // @Param	order	query	string	false	"Order corresponding to each sort_by field, if single value, apply to all sort_by fields. e.g. desc,asc ..., can be only `desc` or `asc`, default is asc"
 // @Param	limit	query	string	false	"Limit the size of result set. Must be an integer"
 // @Param	offset	query	string	false	"Start position of result set. Must be an integer"
-// @Success 200 {object} models.News
+// @Success 200 {object} models.NewsJson
 // @Failure 403
 // @router / [get]
 func (c *NewsController) GetAll() {
@@ -134,7 +136,7 @@ func (c *NewsController) GetAll() {
 // @Title Put
 // @Description Update(edit) the News with id
 // @Param	id		path 	string	true				"The id you want to update"
-// @Param	body		body 	models.News	true		"body for News content"
+// @Param	body		body 	models.NewsJson	true		"body for News content"
 // @Param	token	query	string	true				"Access token"
 // @Success 200 "OK"
 // @Failure 403 :id is not int
@@ -163,6 +165,8 @@ func (c *NewsController) Put() {
 			c.Data["json"] = err.Error()
 			c.Ctx.Output.SetStatus(400)
 		}
+	} else {
+		c.Ctx.Output.SetStatus(400)
 	}
 	c.ServeJSON()
 }
@@ -192,6 +196,8 @@ func (c *NewsController) Delete() {
 			c.Data["json"] = err.Error()
 			c.Ctx.Output.SetStatus(400)
 		}
+	} else {
+		c.Ctx.Output.SetStatus(400)
 	}
 	c.ServeJSON()
 }

@@ -8,13 +8,16 @@ import (
 	"github.com/vetcher/jwt"
 	"time"
 	"github.com/astaxie/beego/plugins/cors"
+	"os"
 )
 
 func init() {
 	jwt.GlobalStorage = jwt.NewStorage(time.Hour)
-	err := orm.RegisterDataBase("default", "postgres", "postgres://postgres:postgres@localhost:5432/studit?sslmode=disable")
+	postgresStrConfig := "postgres://postgres:postgres@localhost:5432/studit?sslmode=disable"
+	err := orm.RegisterDataBase("default", "postgres", postgresStrConfig)
 	if err != nil {
 		beego.Critical(err.Error())
+		panic(err)
 	}
 }
 
@@ -31,6 +34,7 @@ func main() {
 		beego.BConfig.WebConfig.StaticDir["/swagger"] = "swagger"
 		beego.BConfig.WebConfig.StaticDir["/logo"] = "logo"
 	}
+	os.Mkdir("logs", 0777)
 	beego.SetLogger("file", `{"filename":"logs/test.log"}`/*"\"logs/\ + time.Now().Format(\"2006-01-02 15_04") + ".log""*/)
 	beego.Info("")
 	beego.Run()

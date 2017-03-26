@@ -84,8 +84,8 @@ CREATE TABLE "news" (
 	"id" serial NOT NULL,
 	"title" varchar(255) NOT NULL,
 	"description" TEXT NOT NULL,
-	"date_of_creation" DATE NOT NULL,
-	"last_edit" DATE NOT NULL,
+	"date_of_creation" TIMESTAMP NOT NULL,
+	"last_edit" TIMESTAMP NOT NULL,
 	"tags" varchar(1000) NOT NULL,
 	CONSTRAINT news_pk PRIMARY KEY ("id")
 ) WITH (
@@ -290,12 +290,6 @@ ALTER TABLE "task" ADD CONSTRAINT "task_fk2" FOREIGN KEY ("project_user_id") REF
 
 ALTER TABLE "tasks_tags_table" ADD CONSTRAINT "tasks_tags_table_fk0" FOREIGN KEY ("task_id") REFERENCES "task"("id");
 ALTER TABLE "tasks_tags_table" ADD CONSTRAINT "tasks_tags_table_fk1" FOREIGN KEY ("tag_id") REFERENCES "tag"("id");
-
-
-
-ALTER TABLE "news_news_tags" ADD CONSTRAINT "news_news_tags_fk0" FOREIGN KEY ("news_id") REFERENCES "news"("id");
-ALTER TABLE "news_news_tags" ADD CONSTRAINT "news_news_tags_fk1" FOREIGN KEY ("news_tags_id") REFERENCES "news_tags"("id");
-
 
 ALTER TABLE "author" ADD CONSTRAINT "author_fk0" FOREIGN KEY ("user_id") REFERENCES "user"("id");
 

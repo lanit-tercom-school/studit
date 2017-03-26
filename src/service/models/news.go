@@ -13,8 +13,8 @@ type news struct {
 	Id          			int       		`orm:"column(id);pk;auto"`
 	Title       			string    		`orm:"column(title)"`
 	Description 			string    		`orm:"column(description)"`
-	DateOfCreation        	time.Time 		`orm:"column(date_of_creation);type(date)"`
-	LastEdit        		time.Time 		`orm:"column(last_edit);type(date)"`
+	DateOfCreation        	time.Time 		`orm:"column(date_of_creation);type(datetime)"`
+	LastEdit        		time.Time 		`orm:"column(last_edit);type(datetime)"`
 	Tags					string	  		`orm:"column(tags)"`
 }
 
@@ -70,11 +70,12 @@ func AddNews(m *NewsJson) (id int64, err error) {
 
 // GetNewsById retrieves News by Id. Returns error if
 // Id doesn't exist
-func GetNewsById(id int) (v *NewsJson, err error) {
+func GetNewsById(id int) (m *NewsJson, err error) {
 	o := orm.NewOrm()
-	v = &news{Id: id}
+	v := &news{Id: id}
 	if err = o.Read(v); err == nil {
-		m := &v.translate()
+		m_temp := v.translate()  // need a temp variable
+		m = &m_temp
 		return m, nil
 	}
 	return nil, err
