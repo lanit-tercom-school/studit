@@ -88,6 +88,7 @@ func (c *NewsController) GetOne() {
 // @Description Get bunch of news
 // @Param	sort_by	query	string	false	"Sorted-by fields. e.g. title, description, time"
 // @Param	order	query	string	false	"Order corresponding to each sort_by field, if single value, apply to all sort_by fields. e.g. desc,asc ..., can be only `desc` or `asc`, default is asc"
+// @Param	tag		query	string	false	"Filter by one and only one tag. e.g. Other"
 // @Param	limit	query	string	false	"Limit the size of result set. Must be an integer"
 // @Param	offset	query	string	false	"Start position of result set. Must be an integer"
 // @Success 200 {object} models.NewsJson
@@ -98,6 +99,7 @@ func (c *NewsController) GetAll() {
 	var order []string
 	var limit int64 = 10
 	var offset int64
+	var tag string
 	beego.Trace(c.Ctx.Input.IP(), "Parce request params for News")
 	// limit: 10 (default is 10)
 	if v, err := c.GetInt64("limit"); err == nil {
@@ -119,9 +121,13 @@ func (c *NewsController) GetAll() {
 	if v := c.GetString("order"); v != "" {
 		order = strings.Split(v, ",")
 	}
+	// tag: Other
+	if v := c.GetString("tag"); v != "" {
+		tag = v
+	}
 
 	beego.Trace(c.Ctx.Input.IP(), "Select from table")
-	l, err := models.GetAllNews(sortBy, order, offset, limit)
+	l, err := models.GetAllNews(sortBy, order, offset, limit, tag)
 	if err != nil {
 		beego.Debug(c.Ctx.Input.IP(), "News GetAll `GetAllNews` error", err.Error())
 		c.Ctx.Output.SetStatus(400)
