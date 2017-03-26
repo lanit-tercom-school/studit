@@ -2,29 +2,27 @@ package models
 
 import (
 	"errors"
-	"fmt"
 	"time"
-
 	"github.com/astaxie/beego/orm"
 	"strings"
 )
 
 type news struct {
-	Id          			int       		`orm:"column(id);pk;auto"`
-	Title       			string    		`orm:"column(title)"`
-	Description 			string    		`orm:"column(description)"`
-	DateOfCreation        	time.Time 		`orm:"column(date_of_creation);type(datetime)"`
-	LastEdit        		time.Time 		`orm:"column(last_edit);type(datetime)"`
-	Tags					string	  		`orm:"column(tags)"`
+	Id                      int             `orm:"column(id);pk;auto"`
+	Title                   string          `orm:"column(title)"`
+	Description             string          `orm:"column(description)"`
+	DateOfCreation          time.Time       `orm:"column(date_of_creation);type(datetime)"`
+	LastEdit                time.Time       `orm:"column(last_edit);type(datetime)"`
+	Tags                    string          `orm:"column(tags)"`
 }
 
 type NewsJson struct {
-	Id				int			`json:"id"`
-	Title       	string    	`json:"title"`
-	Description 	string    	`json:"description"`
-	Created        	time.Time 	`json:"created"`
-	Edited        	time.Time 	`json:"edited"`
-	Tags			[]string	`json:"tags"`
+	Id              int         `json:"id"`
+	Title           string      `json:"title"`
+	Description     string      `json:"description"`
+	Created         time.Time   `json:"created"`
+	Edited          time.Time   `json:"edited"`
+	Tags            []string    `json:"tags"`
 }
 
 func (t *news) translate() NewsJson {
@@ -106,6 +104,9 @@ func TagInString(tag string, tags string) bool {
 func GetAllNews(sortBy []string, order []string, offset int64, limit int64, tag string) (ml []interface{}, err error) {
 	o := orm.NewOrm()
 	qs := o.QueryTable(new(news))
+
+	// Step 1: parse input args to SQL syntax
+
 	// order by:
 	var sortFields []string
 	if len(sortBy) != 0 {
@@ -141,9 +142,11 @@ func GetAllNews(sortBy []string, order []string, offset int64, limit int64, tag 
 		}
 	} else {
 		if len(order) != 0 {
-			return nil, errors.New("Error: unused 'order' fields")
+			return nil, errors.New("Error: Unused 'order' fields")
 		}
 	}
+
+	// Step 2: Select items from table with params
 
 	var l []news
 	qs = qs.OrderBy(sortFields...)
@@ -175,10 +178,7 @@ func UpdateNewsById(m *NewsJson) (err error) {
 	v := news{Id: m.Id}
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
-		var num int64
-		if num, err = o.Update(&t); err == nil {
-			fmt.Println("Number of records updated in database:", num)
-		}
+		_, err = o.Update(&t)
 	}
 	return
 }
@@ -190,10 +190,7 @@ func DeleteNews(id int) (err error) {
 	v := news{Id: id}
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
-		var num int64
-		if num, err = o.Delete(&news{Id: id}); err == nil {
-			fmt.Println("Number of records deleted in database:", num)
-		}
+		_, err = o.Delete(&news{Id: id})
 	}
 	return
 }
