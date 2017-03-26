@@ -6,38 +6,78 @@ import (
 	"time"
 
 	"github.com/astaxie/beego/orm"
+	"strings"
 )
 
-type News struct {
-	Id          int       `orm:"column(id);pk;auto"`
-	Title       string    `orm:"column(title)"`
-	Description string    `orm:"column(description)"`
-	Date        time.Time `orm:"column(date);type(date)"`
+type news struct {
+	Id          			int       		`orm:"column(id);pk;auto"`
+	Title       			string    		`orm:"column(title)"`
+	Description 			string    		`orm:"column(description)"`
+	DateOfCreation        	time.Time 		`orm:"column(date_of_creation);type(datetime)"`
+	LastEdit        		time.Time 		`orm:"column(last_edit);type(datetime)"`
+	Tags					string	  		`orm:"column(tags)"`
 }
 
-func (t *News) TableName() string {
+type NewsJson struct {
+	Id				int			`json:"id"`
+	Title       	string    	`json:"title"`
+	Description 	string    	`json:"description"`
+	Created        	time.Time 	`json:"created"`
+	Edited        	time.Time 	`json:"edited"`
+	Tags			[]string	`json:"tags"`
+}
+
+func (t *news) translate() NewsJson {
+	return NewsJson{
+		Id: t.Id,
+		Title: t.Title,
+		Description: t.Description,
+		Created: t.DateOfCreation,
+		Edited: t.LastEdit,
+		Tags: strings.Split(t.Tags, ","),
+	}
+}
+
+func (t *NewsJson) translate() news {
+	return news{
+		Id: t.Id,
+		Title: t.Title,
+		Description: t.Description,
+		DateOfCreation: t.Created,
+		LastEdit: t.Edited,
+		Tags: strings.Join(t.Tags, ","),
+	}
+}
+
+func (t *news) TableName() string {
 	return "news"
 }
 
 func init() {
-	orm.RegisterModel(new(News))
+	orm.RegisterModel(new(news))
 }
 
 // AddNews insert a new News into database and returns
 // last inserted Id on success.
-func AddNews(m *News) (id int64, err error) {
+func AddNews(m *NewsJson) (id int64, err error) {
+	v := m.translate()
+	v.Id = 0 // for auto inc
+	v.DateOfCreation = time.Now()
+	v.LastEdit = time.Now()
 	o := orm.NewOrm()
-	id, err = o.Insert(m)
+	id, err = o.Insert(&v)
 	return
 }
 
 // GetNewsById retrieves News by Id. Returns error if
 // Id doesn't exist
-func GetNewsById(id int) (v *News, err error) {
+func GetNewsById(id int) (m *NewsJson, err error) {
 	o := orm.NewOrm()
-	v = &News{Id: id}
+	v := &news{Id: id}
 	if err = o.Read(v); err == nil {
-		return v, nil
+		m_temp := v.translate()  // need a temp variable
+		m = &m_temp
+		return m, nil
 	}
 	return nil, err
 }
@@ -47,7 +87,7 @@ func GetNewsById(id int) (v *News, err error) {
 func GetAllNews(sortBy []string, order []string,
 	offset int64, limit int64) (ml []interface{}, err error) {
 	o := orm.NewOrm()
-	qs := o.QueryTable(new(News))
+	qs := o.QueryTable(new(news))
 	// order by:
 	var sortFields []string
 	if len(sortBy) != 0 {
@@ -87,11 +127,11 @@ func GetAllNews(sortBy []string, order []string,
 		}
 	}
 
-	var l []News
+	var l []news
 	qs = qs.OrderBy(sortFields...)
 	if _, err = qs.Limit(limit, offset).All(&l); err == nil {
 		for _, v := range l {
-			ml = append(ml, v)
+			ml = append(ml, v.translate())
 		}
 		return ml, nil
 	}
@@ -100,13 +140,15 @@ func GetAllNews(sortBy []string, order []string,
 
 // UpdateNews updates News by Id and returns error if
 // the record to be updated doesn't exist
-func UpdateNewsById(m *News) (err error) {
+func UpdateNewsById(m *NewsJson) (err error) {
+	m.Edited = time.Now()
+	t := m.translate()
 	o := orm.NewOrm()
-	v := News{Id: m.Id}
+	v := news{Id: m.Id}
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
 		var num int64
-		if num, err = o.Update(m); err == nil {
+		if num, err = o.Update(&t); err == nil {
 			fmt.Println("Number of records updated in database:", num)
 		}
 	}
@@ -117,11 +159,11 @@ func UpdateNewsById(m *News) (err error) {
 // the record to be deleted doesn't exist
 func DeleteNews(id int) (err error) {
 	o := orm.NewOrm()
-	v := News{Id: id}
+	v := news{Id: id}
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
 		var num int64
-		if num, err = o.Delete(&News{Id: id}); err == nil {
+		if num, err = o.Delete(&news{Id: id}); err == nil {
 			fmt.Println("Number of records deleted in database:", num)
 		}
 	}
