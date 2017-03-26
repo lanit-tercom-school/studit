@@ -271,7 +271,7 @@ func main() {
 	// add news
 
 	news1 := m.NewsJson{
-		Id: 1,
+		Id: 0,
 		Created: time.Now(),
 		Edited: time.Now(),
 		Title: "Программисты признаются в своих грехах в знак протеста против собеседований" +
@@ -285,7 +285,7 @@ func main() {
 	fastCheckErr(m.AddNews(&news1))
 
 	news2 := m.NewsJson{
-		Id: 2,
+		Id: 0,
 		Created: time.Now(),
 		Edited: time.Now(),
 		Title: "Недавний сбой в работе облачных сервисов Amazon был вызван опечаткой сотрудника компании",

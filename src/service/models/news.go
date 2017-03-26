@@ -61,6 +61,7 @@ func init() {
 // last inserted Id on success.
 func AddNews(m *NewsJson) (id int64, err error) {
 	v := m.translate()
+	v.Id = 0 // for auto inc
 	v.DateOfCreation = time.Now()
 	v.LastEdit = time.Now()
 	o := orm.NewOrm()
