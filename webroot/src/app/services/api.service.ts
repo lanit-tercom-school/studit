@@ -136,6 +136,42 @@ export class ApiService {
     ];
   }
 
+  getProjectTaskItem(id: number) {
+    return [
+      {
+        "Number": "645",
+        "TaskName": "Complete this exercise...",
+        "Data": "20.03.17",
+        "Author": "Roman",
+        "Addressee": "User1",
+        "Tags" : ["tag1", "tag2"],
+        "Rating": "3"
+
+      },
+      {
+      "Number": "645",
+      "TaskName": "Name of Task",
+      "Data": "20.03.17",
+      "Author": "Konstantin",
+      "Addressee": "User2",
+      "Tags" :  ["tag1", "tag2"],
+      "Rating": "3"
+      },
+
+      {
+      "Number": "645",
+      "TaskName": "Name of Task",
+      "Data": "20.03.17",
+      "Author": "Sheldon",
+      "Addressee": "User3",
+      "Tags" :  ["some tag", "some tag 2"],
+      "Rating": "4"
+      }
+
+    ];
+  }
+
+
   private jwt() {
     // create authorization-page header with jwt token
     let currentUser = JSON.parse(localStorage.getItem('current_user'));

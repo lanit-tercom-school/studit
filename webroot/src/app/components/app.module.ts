@@ -45,6 +45,9 @@ import { StudentPublicPageComponent } from './pages/student-public-page/student-
 import { MainNewsPageComponent } from './pages/main-news-page/main-news-page.component';
 import { MainNewsItemComponent } from './pages/main-news-page/main-news-item/main-news-item.component';
 
+import { ProjectTasksPageComponent } from './pages/project-tasks-page/project-tasks-page.component';
+import { ProjectTaskItemComponent } from './pages/project-tasks-page/project-all-tasks/project-task-item/project-task-item.component';
+import { ProjectAllTasksComponent } from './pages/project-tasks-page/project-all-tasks/project-all-tasks.component'
 @NgModule({
   imports: [
     BrowserModule,
@@ -80,6 +83,9 @@ import { MainNewsItemComponent } from './pages/main-news-page/main-news-item/mai
     StudentPublicPageComponent,
     MainNewsPageComponent,
     MainNewsItemComponent,
+    ProjectTasksPageComponent,
+    ProjectTaskItemComponent,
+    ProjectAllTasksComponent,
   ],
   providers: [ApiService, AuthService, AuthManager],
   bootstrap: [AppComponent]

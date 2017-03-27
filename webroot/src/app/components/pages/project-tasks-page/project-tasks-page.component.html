@@ -1,0 +1,63 @@
+	<div class="container">
+   <div class = "row" >
+		        <div class="col col-2 projsidebar">
+
+		          <div class="list-group">
+		            <a  href="#" class="list-group-item sidebaritem">Apps</a>
+		            <a href="#" class="list-group-item sidebaritem">Games</a>
+		            <a href="#" class="list-group-item sidebaritem">Movies</a>
+		            <a href="#" class="list-group-item sidebaritem">Books</a>
+		            <a href="#" class="list-group-item sidebaritem">Newspapers</a>
+		          </div>
+
+					<!--		<form>
+								 <fieldset>
+								<h3>Filters</h3>
+								<form>
+									<h5>Filter 1</h5>
+                  <label><input type="radio" name="filter1" value="value1" checked> Pizza</label><br>
+                  <label><input type="radio" name="filter1" value="value2"> Pizza</label><br>
+									<label><input type="radio" name="filter1" value="value3"> Pizza</label>
+                 </form>
+								 <form>
+								 <h5>Filter 2</h5>
+								 <label><input type="radio" name="filter2" value="value1" checked> Pizza</label><br>
+								 <label><input type="radio" name="filter2" value="value2"> Pizza</label><br>
+								 <label><input type="radio" name="filter2" value="value3"> Pizza</label>
+								</form>
+								<input type="checkbox" name="check1" id="check1" value="Yes">
+                <label for="check1">Check me out</label><br>
+
+								<input type="checkbox" name="check2" id="check2" value="Yes">
+                <label for="check2">Check me out</label><br>
+
+								<input type="checkbox" name="check3" id="check3" value="Yes">
+                <label for="check3">Check me out</label><br>
+
+                <input type="submit" value="Apply"><br><br>
+                <input type="reset"  value="Reset all">
+							</fieldset>
+						</form> -->
+
+		        </div><!--/.sidebar-offcanvas-->
+
+	  <div class = "col" align = "right">
+		  <div class = "row projheader">
+		    <div class="col" >
+		   	  <h2 class = "text-center">Welcome to Project1 task list!</h2>
+	  	  </div>
+
+	  	 <div class="col colsearch">
+			  <!--<span class="fa fa-search"></span>-->
+        <input type = "search" class = "input-medium " placeholder="Search..." />
+		   </div>
+      </div>
+		<div align = "center">
+   <app-project-all-tasks [ProjectTaskItemList]=getProjectTaskItem()></app-project-all-tasks>
+	 <div class = "showbutton">
+	   <a href="#" class="btn btn-secondary" >Show more...</a>
+   </div>
+    </div>
+  </div>
+</div>
+</div>
