@@ -136,7 +136,7 @@ export class ApiService {
     ];
   }
 
-  getProjectTaskItem(id: number) {
+  getProjectAllTaskItem(id: number) {
     return [
       {
         "Number": "645",
@@ -171,8 +171,32 @@ export class ApiService {
     ];
   }
 
+  getProjectStudentTaskItem(id: number) {
+    return [
+      {
+        "Number": "645",
+        "TaskName": "This is my task",
+        "Data": "20.03.17",
+        "Author": "Roman",
+        "Addressee": "Me",
+        "Tags" : ["tag1", "tag2"],
+        "Rating": "3"
 
-  private jwt() {
+      },
+      {
+      "Number": "645",
+      "TaskName": "This is my task too",
+      "Data": "20.03.17",
+      "Author": "Konstantin",
+      "Addressee": "Me",
+      "Tags" :  ["tag1", "tag2"],
+      "Rating": "3"
+      }
+
+    ];
+  }
+
+    private jwt() {
     // create authorization-page header with jwt token
     let currentUser = JSON.parse(localStorage.getItem('current_user'));
     if (currentUser && currentUser.token) {

@@ -46,8 +46,8 @@ import { MainNewsPageComponent } from './pages/main-news-page/main-news-page.com
 import { MainNewsItemComponent } from './pages/main-news-page/main-news-item/main-news-item.component';
 
 import { ProjectTasksPageComponent } from './pages/project-tasks-page/project-tasks-page.component';
-import { ProjectTaskItemComponent } from './pages/project-tasks-page/project-all-tasks/project-task-item/project-task-item.component';
-import { ProjectAllTasksComponent } from './pages/project-tasks-page/project-all-tasks/project-all-tasks.component'
+import { ProjectTaskItemComponent } from './pages/project-tasks-page/project-task-list/project-task-item/project-task-item.component';
+import { ProjectTaskListComponent } from './pages/project-tasks-page/project-task-list/project-task-list.component'
 @NgModule({
   imports: [
     BrowserModule,
@@ -85,7 +85,7 @@ import { ProjectAllTasksComponent } from './pages/project-tasks-page/project-all
     MainNewsItemComponent,
     ProjectTasksPageComponent,
     ProjectTaskItemComponent,
-    ProjectAllTasksComponent,
+    ProjectTaskListComponent,
   ],
   providers: [ApiService, AuthService, AuthManager],
   bootstrap: [AppComponent]

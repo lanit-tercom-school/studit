@@ -53,7 +53,12 @@
 		   </div>
       </div>
 		<div align = "center">
-   <app-project-all-tasks [ProjectTaskItemList]=getProjectTaskItem()></app-project-all-tasks>
+		<br><h4 align = "left">My Tasks</h4><br>
+      <app-project-task-list [ProjectTaskItemList]=getProjectStudentTaskItem()></app-project-task-list>
+     <hr>
+			<br><h4 align = "left">All Tasks</h4><br>
+	      <app-project-task-list [ProjectTaskItemList]=getProjectAllTaskItem()></app-project-task-list>
+
 	 <div class = "showbutton">
 	   <a href="#" class="btn btn-secondary" >Show more...</a>
    </div>

@@ -3,16 +3,16 @@ import {Input} from "@angular/core/src/metadata/directives";
 import {ProjectTaskItem} from "./project-task-item/project-task-item";
 
 @Component({
-  selector: 'app-project-all-tasks',
-  templateUrl: './project-all-tasks.component.html',
-  styleUrls: ['./project-all-tasks.component.css']
+  selector: 'app-project-task-list',
+  templateUrl: './project-task-list.component.html',
+  styleUrls: ['./project-task-list.component.css']
 })
-export class ProjectAllTasksComponent implements OnInit {
+export class ProjectTaskListComponent implements OnInit {
   @Input() public ProjectTaskItemList:ProjectTaskItem[];
   constructor() { }
 
   ngOnInit() {
-  
+
   }
 
 }

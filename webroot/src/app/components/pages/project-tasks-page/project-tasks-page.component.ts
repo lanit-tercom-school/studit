@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ApiService } from './../../../services/api.service';
 import { ActivatedRoute, Params } from '@angular/router';
 import { ProjectItem } from './../../shared/project-list/project-item/project-item';
-///import { ProjectTaskItem } from './proj-news/proj-news-item/proj-news-item';
-import { ProjectTaskItem } from "./project-all-tasks/project-task-item/project-task-item";
+
+import { ProjectTaskItem } from "./project-task-list/project-task-item/project-task-item";
 
 @Component({
   selector: 'app-project-tasks-page',
@@ -25,7 +25,10 @@ ngOnInit() {
     });
 }
 
-getProjectTaskItem(): ProjectTaskItem[] {
-  return this.apiService.getProjectTaskItem(1);
+getProjectAllTaskItem(): ProjectTaskItem[] {
+  return this.apiService.getProjectAllTaskItem(1);
+}
+getProjectStudentTaskItem(): ProjectTaskItem[] {
+  return this.apiService.getProjectStudentTaskItem(1);
 }
 }
