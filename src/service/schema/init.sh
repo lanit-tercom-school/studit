@@ -1,5 +1,3 @@
-@echo off
-
 export GOPATH=$PWD/../../..
 export PATH=$PATH:$GOPATH/bin
 export PGPASSWORD=postgres
