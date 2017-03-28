@@ -1,5 +1,10 @@
 .container
 {
-    margin:10% auto;
-    word-break:break-all;
+    margin: 2% auto;
+    word-break: break-all;
+}
+
+.home-content
+{
+    margin: 3% auto;
 }
