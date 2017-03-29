@@ -6,6 +6,7 @@ import (
 	"service/models"
 	"strconv"
 	"strings"
+	"github.com/astaxie/beego"
 )
 
 // Операции с models.Project, для некоторых требуется авторизация
@@ -57,18 +58,20 @@ func (c *ProjectController) Post() {
 // @router /:id [get]
 func (c *ProjectController) GetOne() {
 	idStr := c.Ctx.Input.Param(":id")
+	beego.Trace(c.Ctx.Input.IP(), "Get project with id", idStr)
 	id, err := strconv.Atoi(idStr)
 	if err != nil {
-		c.Data["json"] = err.Error() // TODO: change to "Wrong project id"
+		beego.Debug(c.Ctx.Input.IP(), "GetOne `Atoi` error", err.Error())
 		c.Ctx.Output.SetStatus(400)
+		c.Data["json"] = err.Error() // TODO: change to "Wrong project id"
+	}
+	v, err := models.GetProjectById(id)
+	if err != nil {
+		c.Ctx.Output.SetStatus(400)
+		c.Data["json"] = err.Error()
 	} else {
-		v, err := models.GetProjectById(id)
-		if err != nil {
-			c.Data["json"] = err.Error()
-			c.Ctx.Output.SetStatus(400)
-		} else {
-			c.Data["json"] = v
-		}
+		beego.Trace(c.Ctx.Input.IP(), "GetOne OK")
+		c.Data["json"] = v
 	}
 	c.ServeJSON()
 }
@@ -176,7 +179,12 @@ func (c *ProjectController) Delete() {
 	// TODO: обновить защиту когда будет лвлинг пользователей
 	if c.Ctx.Output.IsOk() {
 		idStr := c.Ctx.Input.Param(":id")
-		id, _ := strconv.Atoi(idStr)
+		id, err := strconv.Atoi(idStr)
+		if err != nil {
+			beego.Debug(c.Ctx.Input.IP(), "Delete 'Atoi' error", err.Error())
+			c.Ctx.Output.SetStatus(400)
+			c.Data["json"] = err.Error()
+		}
 		if err := models.DeleteProject(id); err == nil {
 			c.Data["json"] = "OK"
 		} else {
