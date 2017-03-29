@@ -14,17 +14,22 @@ export class AuthorizationPageComponent implements OnInit {
 
   private localUser: User = { Login: "", Password: "" };
   private error: any;
+  private ReturnUrl:string
 
   constructor(private auth: AuthService, private router: Router) { }
 
   ngOnInit() {
     this.auth.unauthentificatenow();
+    this.ReturnUrl = this.router.routerState.snapshot.root.queryParams['ReturnUrl']||'/home';
+    console.log("Tadam");
+    console.log(this.ReturnUrl);
   }
 
   login() {
     this.auth.authenticatenow(this.localUser).subscribe(
       data => {
-        this.router.navigate(['/home']);
+        console.log("redirectTo",this.ReturnUrl);
+        this.router.navigate([this.ReturnUrl]);
       },
       error => {
         console.log(error);

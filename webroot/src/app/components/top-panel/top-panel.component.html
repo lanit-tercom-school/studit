@@ -25,7 +25,7 @@
       </li>
       <div *ngIf="currentUser == undefined">
         <li class="nav-item">
-          <a class="nav-link" id="sign-in" routerLink="/auth" routerLinkActive="active">Вход</a>
+          <a class="nav-link" id="sign-in" routerLink="/auth" routerLinkActive="active" [queryParams]="{'ReturnUrl':url}">Вход</a>
         </li>
       </div>
       <div *ngIf="currentUser">
