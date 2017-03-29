@@ -73,7 +73,7 @@ func (c *NewsController) GetOne() {
 	}
 	v, err := models.GetNewsById(id)
 	if err != nil {
-		beego.Debug(c.Ctx.Input.IP(), "GetOne `Atoi` error", err.Error())
+		beego.Debug(c.Ctx.Input.IP(), "GetOne `GetNewsById` error", err.Error())
 		c.Ctx.Output.SetStatus(400)
 		c.Data["json"] = err.Error()
 	} else {

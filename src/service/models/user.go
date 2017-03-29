@@ -10,20 +10,22 @@ import (
 )
 
 type User struct {
-	Id          int    `orm:"column(id);pk;auto" json:"id"`
-	Login       string `orm:"column(login)" json:"login"`
-	Password    string `orm:"column(password)" json:"-"`
-	Nickname    string `orm:"column(nickname)" json:"nickname"`
-	Description string `orm:"column(description)" json:"description,omitempty"`
-	Avatar      string `orm:"column(avatar)" json:"avatar,omitempty"`
+    Id                  int     `orm:"column(id);pk;auto"                   json:"id"`
+    Login               string  `orm:"column(login)"                        json:"login"`
+    Password            string  `orm:"column(password)"                     json:"-"`
+    Nickname            string  `orm:"column(nickname)"                     json:"nickname"`
+    Description         string  `orm:"column(description)"                  json:"description,omitempty"`
+    Avatar              string  `orm:"column(avatar)"                       json:"avatar,omitempty"`
+    // viewer - 0, registered user - 1, teacher - 2, admin 3, default is 0
+    PermissionLevel     int     `orm:"column(permission_level);default(0)"  json:"permission_level"`
 }
 
 func (t *User) TableName() string {
-	return "user"
+    return "user"
 }
 
 func init() {
-	orm.RegisterModel(new(User))
+    orm.RegisterModel(new(User))
 }
 
 // AddUser insert a new User into database and returns
