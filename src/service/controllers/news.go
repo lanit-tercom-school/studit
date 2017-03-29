@@ -25,15 +25,15 @@ func (c *NewsController) URLMapping() {
 // Post ...
 // @Title Post
 // @Description create News
-// @Param	body		body 	models.News	true		"body for News content"
+// @Param	body		body 	models.NewsJson	true		"body for News content"
 // @Param	token		query	string		true		"Access token"
-// @Success 201 {int} models.News
+// @Success 201 {int} models.NewsJson
 // @Failure 403 body is empty
 // @router / [post]
 func (c *NewsController) Post() {
 	beego.Trace(c.Ctx.Input.IP(), "Try to POST news")
 	if c.Ctx.Output.IsOk() {
-		var v models.News
+		var v models.NewsJson
 		if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
 			if id, err := models.AddNews(&v); err == nil {
 				beego.Trace(c.Ctx.Input.IP(), "News with id", id, "created")
@@ -49,6 +49,8 @@ func (c *NewsController) Post() {
 			c.Data["json"] = err.Error()
 			c.Ctx.Output.SetStatus(400)
 		}
+	} else {
+		c.Ctx.Output.SetStatus(400)
 	}
 	c.ServeJSON()
 }
@@ -57,17 +59,25 @@ func (c *NewsController) Post() {
 // @Title Get One
 // @Description get News by id
 // @Param	id		path 	string	true		"The key for static block"
-// @Success 200 {object} models.News
+// @Success 200 {object} models.NewsJson
 // @Failure 403 :id is empty
 // @router /:id [get]
 func (c *NewsController) GetOne() {
 	idStr := c.Ctx.Input.Param(":id")
-	id, _ := strconv.Atoi(idStr)
+	beego.Trace(c.Ctx.Input.IP(), "Get news with id", idStr)
+	id, err := strconv.Atoi(idStr)
+	if err != nil {
+		beego.Debug(c.Ctx.Input.IP(), "GetOne `Atoi` error", err.Error())
+		c.Ctx.Output.SetStatus(400)
+		c.Data["json"] = err.Error()
+	}
 	v, err := models.GetNewsById(id)
 	if err != nil {
+		beego.Debug(c.Ctx.Input.IP(), "GetOne `Atoi` error", err.Error())
 		c.Ctx.Output.SetStatus(400)
 		c.Data["json"] = err.Error()
 	} else {
+		beego.Trace(c.Ctx.Input.IP(), "GetOne OK")
 		c.Data["json"] = v
 	}
 	c.ServeJSON()
@@ -80,7 +90,7 @@ func (c *NewsController) GetOne() {
 // @Param	order	query	string	false	"Order corresponding to each sort_by field, if single value, apply to all sort_by fields. e.g. desc,asc ..., can be only `desc` or `asc`, default is asc"
 // @Param	limit	query	string	false	"Limit the size of result set. Must be an integer"
 // @Param	offset	query	string	false	"Start position of result set. Must be an integer"
-// @Success 200 {object} models.News
+// @Success 200 {object} models.NewsJson
 // @Failure 403
 // @router / [get]
 func (c *NewsController) GetAll() {
@@ -126,7 +136,7 @@ func (c *NewsController) GetAll() {
 // @Title Put
 // @Description Update(edit) the News with id
 // @Param	id		path 	string	true				"The id you want to update"
-// @Param	body		body 	models.News	true		"body for News content"
+// @Param	body		body 	models.NewsJson	true		"body for News content"
 // @Param	token	query	string	true				"Access token"
 // @Success 200 "OK"
 // @Failure 403 :id is not int
@@ -134,8 +144,13 @@ func (c *NewsController) GetAll() {
 func (c *NewsController) Put() {
 	if c.Ctx.Output.IsOk() {
 		idStr := c.Ctx.Input.Param(":id")
-		id, _ := strconv.Atoi(idStr)
-		v := models.News{Id: id}
+		id, err := strconv.Atoi(idStr)
+		if err != nil {
+			beego.Debug(c.Ctx.Input.IP(), "Put `Atoi` error", err.Error())
+			c.Ctx.Output.SetStatus(400)
+			c.Data["json"] = err.Error()
+		}
+		v := models.NewsJson{Id: id}
 		if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
 			if err := models.UpdateNewsById(&v); err == nil {
 				beego.Trace(c.Ctx.Input.IP(), "Put news OK")
@@ -150,6 +165,8 @@ func (c *NewsController) Put() {
 			c.Data["json"] = err.Error()
 			c.Ctx.Output.SetStatus(400)
 		}
+	} else {
+		c.Ctx.Output.SetStatus(400)
 	}
 	c.ServeJSON()
 }
@@ -165,7 +182,12 @@ func (c *NewsController) Put() {
 func (c *NewsController) Delete() {
 	if c.Ctx.Output.IsOk() {
 		idStr := c.Ctx.Input.Param(":id")
-		id, _ := strconv.Atoi(idStr)
+		id, err := strconv.Atoi(idStr)
+		if err != nil {
+			beego.Debug(c.Ctx.Input.IP(), "Delete `Atoi` error", err.Error())
+			c.Ctx.Output.SetStatus(400)
+			c.Data["json"] = err.Error()
+		}
 		if err := models.DeleteNews(id); err == nil {
 			beego.Trace(c.Ctx.Input.IP(), "Delete news OK")
 			c.Data["json"] = "OK"
@@ -174,6 +196,8 @@ func (c *NewsController) Delete() {
 			c.Data["json"] = err.Error()
 			c.Ctx.Output.SetStatus(400)
 		}
+	} else {
+		c.Ctx.Output.SetStatus(400)
 	}
 	c.ServeJSON()
 }

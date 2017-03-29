@@ -34,7 +34,7 @@
             <i class="fa fa-user-circle fa-lg" aria-hidden="true"></i> {{currentUser.login}}
           </a>
           <div class="dropdown-menu">
-            <a class="dropdown-item" href="#"><i class="fa fa-address-card fa-fw" aria-hidden="true"></i> Личный кабинет</a>
+            <a class="dropdown-item" routerLink="/student/{{currentUser.id}}" routerLinkActive="active"><i class="fa fa-address-card fa-fw" aria-hidden="true"></i> Мой профиль</a>
             <a class="dropdown-item" href="#"><i class="fa fa-cog fa-fw" aria-hidden="true"></i> Настройки</a>
             <a class="dropdown-item" href="#"><i class="fa fa-bell-o fa-fw" aria-hidden="true"></i> Уведомления</a>
             <div class="dropdown-divider"></div>

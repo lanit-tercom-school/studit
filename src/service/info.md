@@ -23,7 +23,7 @@
 # Дополнительные понятия
 
 * [google.com](http://google.com), [yandex.ru](http://yandex.ru)
-* Beego routing, controllers, models, logging, [orm](https://beego.me/docs/mvc/model/orm.md)
+* [Beego](https://astaxie.gitbooks.io/build-web-application-with-golang/en/) routing, controllers, models, logging, [orm](https://beego.me/docs/mvc/model/orm.md)
 * Лог(log), логирование, уровни логирования
 * Тестирование приложений, юнит-тесты (unit tests), [golang testing](https://golang.org/pkg/testing/)
 
