@@ -15,24 +15,24 @@ type NewsController struct {
 
 // URLMapping ...
 func (c *NewsController) URLMapping() {
-	c.Mapping("Post", c.Post)
-	c.Mapping("GetOne", c.GetOne)
-	c.Mapping("GetAll", c.GetAll)
-	c.Mapping("Put", c.Put)
-	c.Mapping("Delete", c.Delete)
+    c.Mapping("Post", c.Post)
+    c.Mapping("GetOne", c.GetOne)
+    c.Mapping("GetAll", c.GetAll)
+    c.Mapping("Put", c.Put)
+    c.Mapping("Delete", c.Delete)
 }
 
 // Post ...
 // @Title Post
 // @Description create News
-// @Param	body		body 	models.NewsJson	true		"body for News content"
-// @Param	token		query	string		true		"Access token"
+// @Param   body        body    models.NewsJson true    "Body for News content, fields `id`, `created`, `edited` ignores"
+// @Param   token       query   string          true    "Access token, Permission Level should be 2"
 // @Success 201 {int} models.NewsJson
 // @Failure 403 body is empty
 // @router / [post]
 func (c *NewsController) Post() {
 	beego.Trace(c.Ctx.Input.IP(), "Try to POST news")
-	if c.Ctx.Output.IsOk() {
+	if c.CurrentUser.PermissionLevel == 2 {
 		var v models.NewsJson
 		if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
 			if id, err := models.AddNews(&v); err == nil {
@@ -50,6 +50,7 @@ func (c *NewsController) Post() {
 			c.Ctx.Output.SetStatus(400)
 		}
 	} else {
+        beego.Debug(c.Ctx.Input.IP(), "Access denied for `Post`")
 		c.Ctx.Output.SetStatus(400)
 	}
 	c.ServeJSON()
@@ -91,7 +92,7 @@ func (c *NewsController) GetOne() {
 // @Param   tag         query   string  false   "Filter by one and only one tag. e.g. Other"
 // @Param   limit       query   string  false   "Limit the size of result set. Must be an integer"
 // @Param   offset      query   string  false   "Start position of result set. Must be an integer"
-// @Success 200 {object} models.NewsJson
+// @Success 200 {object} []models.NewsJson
 // @Failure 403
 // @router / [get]
 func (c *NewsController) GetAll() {
@@ -143,12 +144,12 @@ func (c *NewsController) GetAll() {
 // @Description Update(edit) the News with id
 // @Param   id      path    string              true        "The id you want to update"
 // @Param   body    body    models.NewsJson     true        "Body for News content, id, created and edited fields ignores"
-// @Param   token   query   string              true        "Access token"
+// @Param   token   query   string              true        "Access token, Permission Level should be 2"
 // @Success 200 "OK"
 // @Failure 403 :id is not int
 // @router /:id [put]
 func (c *NewsController) Put() {
-	if c.Ctx.Output.IsOk() {
+	if c.CurrentUser.PermissionLevel == 2 {
 		idStr := c.Ctx.Input.Param(":id")
 		id, err := strconv.Atoi(idStr)
 		if err != nil {
@@ -172,6 +173,7 @@ func (c *NewsController) Put() {
 			c.Ctx.Output.SetStatus(400)
 		}
 	} else {
+        beego.Debug(c.Ctx.Input.IP(), "Access denied for `Put`")
 		c.Ctx.Output.SetStatus(400)
 	}
 	c.ServeJSON()
@@ -181,12 +183,12 @@ func (c *NewsController) Put() {
 // @Title Delete
 // @Description Delete the News
 // @Param	id		path 	string	true		"The id you want to delete"
-// @Param	token	query	string	true		"Access token"
+// @Param	token	query	string	true		"Access token, Permission Level should be 2"
 // @Success 200 {string} Delete success!
 // @Failure 403 id is empty
 // @router /:id [delete]
 func (c *NewsController) Delete() {
-	if c.Ctx.Output.IsOk() {
+	if c.CurrentUser.PermissionLevel == 2 {
 		idStr := c.Ctx.Input.Param(":id")
 		id, err := strconv.Atoi(idStr)
 		if err != nil {
@@ -203,6 +205,7 @@ func (c *NewsController) Delete() {
 			c.Ctx.Output.SetStatus(400)
 		}
 	} else {
+        beego.Debug(c.Ctx.Input.IP(), "Access denied for `Delete`")
 		c.Ctx.Output.SetStatus(400)
 	}
 	c.ServeJSON()

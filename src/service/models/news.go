@@ -8,12 +8,12 @@ import (
 )
 
 type news struct {
-	Id                      int             `orm:"column(id);pk;auto"`
-	Title                   string          `orm:"column(title)"`
-	Description             string          `orm:"column(description)"`
-	DateOfCreation          time.Time       `orm:"column(date_of_creation);type(datetime)"`
-	LastEdit                time.Time       `orm:"column(last_edit);type(datetime)"`
-	Tags                    string          `orm:"column(tags)"`
+	Id                  int         `orm:"column(id);pk;auto"`
+	Title               string      `orm:"column(title)"`
+	Description         string      `orm:"column(description)"`
+	DateOfCreation      time.Time   `orm:"column(date_of_creation);type(datetime)"`
+	LastEdit            time.Time   `orm:"column(last_edit);type(datetime)"`
+	Tags                string      `orm:"column(tags)"`
 }
 
 type NewsJson struct {
