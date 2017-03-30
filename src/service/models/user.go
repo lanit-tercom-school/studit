@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"reflect"
 	"strings"
-
 	"github.com/astaxie/beego/orm"
 )
 
@@ -16,7 +15,8 @@ type User struct {
     Nickname            string  `orm:"column(nickname)"                     json:"nickname"`
     Description         string  `orm:"column(description)"                  json:"description,omitempty"`
     Avatar              string  `orm:"column(avatar)"                       json:"avatar,omitempty"`
-    // viewer - 0, registered user - 1, teacher - 2, admin 3, default is 0
+    // viewer - -1, registered user - 0, teacher - 1, admin 2, default is -1
+    // Can't be higher than `auth.MaxPermissionLevel` !
     PermissionLevel     int     `orm:"column(permission_level);default(0)"  json:"permission_level"`
 }
 
