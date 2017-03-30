@@ -15,24 +15,24 @@ type NewsController struct {
 
 // URLMapping ...
 func (c *NewsController) URLMapping() {
-	c.Mapping("Post", c.Post)
-	c.Mapping("GetOne", c.GetOne)
-	c.Mapping("GetAll", c.GetAll)
-	c.Mapping("Put", c.Put)
-	c.Mapping("Delete", c.Delete)
+    c.Mapping("Post", c.Post)
+    c.Mapping("GetOne", c.GetOne)
+    c.Mapping("GetAll", c.GetAll)
+    c.Mapping("Put", c.Put)
+    c.Mapping("Delete", c.Delete)
 }
 
 // Post ...
 // @Title Post
 // @Description create News
-// @Param	body		body 	models.NewsJson	true		"body for News content"
-// @Param	token		query	string		true		"Access token"
+// @Param   body        body    models.NewsJson true    "Body for News content, fields `id`, `created`, `edited` ignores"
+// @Param   token       query   string          true    "Access token, Permission Level should be 2"
 // @Success 201 {int} models.NewsJson
 // @Failure 403 body is empty
 // @router / [post]
 func (c *NewsController) Post() {
 	beego.Trace(c.Ctx.Input.IP(), "Try to POST news")
-	if c.Ctx.Output.IsOk() {
+	if c.CurrentUser.PermissionLevel == 2 {
 		var v models.NewsJson
 		if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
 			if id, err := models.AddNews(&v); err == nil {
@@ -50,6 +50,7 @@ func (c *NewsController) Post() {
 			c.Ctx.Output.SetStatus(400)
 		}
 	} else {
+        beego.Debug(c.Ctx.Input.IP(), "Access denied for `Post`")
 		c.Ctx.Output.SetStatus(400)
 	}
 	c.ServeJSON()
@@ -58,7 +59,7 @@ func (c *NewsController) Post() {
 // GetOne ...
 // @Title Get One
 // @Description get News by id
-// @Param	id		path 	string	true		"The key for static block"
+// @Param   id      path    string  true    "The key for static block"
 // @Success 200 {object} models.NewsJson
 // @Failure 403 :id is empty
 // @router /:id [get]
@@ -73,7 +74,7 @@ func (c *NewsController) GetOne() {
 	}
 	v, err := models.GetNewsById(id)
 	if err != nil {
-		beego.Debug(c.Ctx.Input.IP(), "GetOne `Atoi` error", err.Error())
+		beego.Debug(c.Ctx.Input.IP(), "GetOne `GetNewsById` error", err.Error())
 		c.Ctx.Output.SetStatus(400)
 		c.Data["json"] = err.Error()
 	} else {
@@ -86,11 +87,12 @@ func (c *NewsController) GetOne() {
 // GetAll ...
 // @Title Get All
 // @Description Get bunch of news
-// @Param	sort_by	query	string	false	"Sorted-by fields. e.g. title, description, time"
-// @Param	order	query	string	false	"Order corresponding to each sort_by field, if single value, apply to all sort_by fields. e.g. desc,asc ..., can be only `desc` or `asc`, default is asc"
-// @Param	limit	query	string	false	"Limit the size of result set. Must be an integer"
-// @Param	offset	query	string	false	"Start position of result set. Must be an integer"
-// @Success 200 {object} models.NewsJson
+// @Param   sort_by     query   string  false   "Sorted-by fields. e.g. title, description, time"
+// @Param   order       query   string  false   "Order corresponding to each sort_by field, if single value, apply to all sort_by fields. e.g. desc,asc ..., can be only `desc` or `asc`, default is asc"
+// @Param   tag         query   string  false   "Filter by one and only one tag. e.g. Other"
+// @Param   limit       query   string  false   "Limit the size of result set. Must be an integer"
+// @Param   offset      query   string  false   "Start position of result set. Must be an integer"
+// @Success 200 {object} []models.NewsJson
 // @Failure 403
 // @router / [get]
 func (c *NewsController) GetAll() {
@@ -98,6 +100,7 @@ func (c *NewsController) GetAll() {
 	var order []string
 	var limit int64 = 10
 	var offset int64
+	var tag string
 	beego.Trace(c.Ctx.Input.IP(), "Parce request params for News")
 	// limit: 10 (default is 10)
 	if v, err := c.GetInt64("limit"); err == nil {
@@ -119,9 +122,13 @@ func (c *NewsController) GetAll() {
 	if v := c.GetString("order"); v != "" {
 		order = strings.Split(v, ",")
 	}
+	// tag: Other
+	if v := c.GetString("tag"); v != "" {
+		tag = v
+	}
 
 	beego.Trace(c.Ctx.Input.IP(), "Select from table")
-	l, err := models.GetAllNews(sortBy, order, offset, limit)
+	l, err := models.GetAllNews(sortBy, order, offset, limit, tag)
 	if err != nil {
 		beego.Debug(c.Ctx.Input.IP(), "News GetAll `GetAllNews` error", err.Error())
 		c.Ctx.Output.SetStatus(400)
@@ -135,14 +142,14 @@ func (c *NewsController) GetAll() {
 // Put ...
 // @Title Put
 // @Description Update(edit) the News with id
-// @Param	id		path 	string	true				"The id you want to update"
-// @Param	body		body 	models.NewsJson	true		"body for News content"
-// @Param	token	query	string	true				"Access token"
+// @Param   id      path    string              true        "The id you want to update"
+// @Param   body    body    models.NewsJson     true        "Body for News content, id, created and edited fields ignores"
+// @Param   token   query   string              true        "Access token, Permission Level should be 2"
 // @Success 200 "OK"
 // @Failure 403 :id is not int
 // @router /:id [put]
 func (c *NewsController) Put() {
-	if c.Ctx.Output.IsOk() {
+	if c.CurrentUser.PermissionLevel == 2 {
 		idStr := c.Ctx.Input.Param(":id")
 		id, err := strconv.Atoi(idStr)
 		if err != nil {
@@ -166,6 +173,7 @@ func (c *NewsController) Put() {
 			c.Ctx.Output.SetStatus(400)
 		}
 	} else {
+        beego.Debug(c.Ctx.Input.IP(), "Access denied for `Put`")
 		c.Ctx.Output.SetStatus(400)
 	}
 	c.ServeJSON()
@@ -175,12 +183,12 @@ func (c *NewsController) Put() {
 // @Title Delete
 // @Description Delete the News
 // @Param	id		path 	string	true		"The id you want to delete"
-// @Param	token	query	string	true		"Access token"
+// @Param	token	query	string	true		"Access token, Permission Level should be 2"
 // @Success 200 {string} Delete success!
 // @Failure 403 id is empty
 // @router /:id [delete]
 func (c *NewsController) Delete() {
-	if c.Ctx.Output.IsOk() {
+	if c.CurrentUser.PermissionLevel == 2 {
 		idStr := c.Ctx.Input.Param(":id")
 		id, err := strconv.Atoi(idStr)
 		if err != nil {
@@ -197,6 +205,7 @@ func (c *NewsController) Delete() {
 			c.Ctx.Output.SetStatus(400)
 		}
 	} else {
+        beego.Debug(c.Ctx.Input.IP(), "Access denied for `Delete`")
 		c.Ctx.Output.SetStatus(400)
 	}
 	c.ServeJSON()
