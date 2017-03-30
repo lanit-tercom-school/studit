@@ -13,6 +13,8 @@ import { ValidationPageComponent } from './pages/registration-page/validation-pa
 import { AuthorPublicPageComponent } from './pages/author-public-page/author-public-page.component';
 import { StudentPublicPageComponent } from './pages/student-public-page/student-public-page.component';
 
+import { MainNewsPageComponent } from './pages/main-news-page/main-news-page.component';
+
 export const routes: Routes = [
   { path: '', redirectTo: 'main', pathMatch: 'full' },
   { path: 'main', component: MainComponent },
@@ -24,6 +26,7 @@ export const routes: Routes = [
   { path: 'registration/validate', component: ValidationPageComponent, canActivate: [AuthManager] },
   { path: 'author/:id', component: AuthorPublicPageComponent },
   { path: 'student/:id', component: StudentPublicPageComponent },
+  { path: 'news', component: MainNewsPageComponent },
   //otherwise main
   { path: '**', redirectTo: 'main' }
 ];

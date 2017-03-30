@@ -60,6 +60,7 @@ func main() {
 		Password: "a",
 		Avatar: "/logo/1.jpg",
 		Description: "Главный по тарелкам",
+		PermissionLevel: 2,
 	}
 	fastCheckErr(o.Insert(&user1))
 
@@ -70,6 +71,7 @@ func main() {
 		Password: "moder",
 		Avatar: "/logo/2.jpg",
 		Description: "Главный по молоткам",
+        PermissionLevel: 1,
 	}
 	fastCheckErr(o.Insert(&user2))
 
@@ -80,6 +82,7 @@ func main() {
 		Password: "пароль",
 		Avatar: "/logo/3.jpg",
 		Description: "ЮЮЮ, ААА",
+        PermissionLevel: 0,
 	}
 	fastCheckErr(o.Insert(&user3))
 

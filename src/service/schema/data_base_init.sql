@@ -22,10 +22,10 @@ CREATE TABLE "author" (
 
 /*Связь автора(создателя) проекта с проектом*/
 CREATE TABLE "project_author" (
-	"id" serial NOT NULL,
-	"author_id" bigint NOT NULL,
-	"project_id" bigint NOT NULL,
-	CONSTRAINT project_author_pk PRIMARY KEY ("id")
+  "id" serial NOT NULL,
+  "author_id" bigint NOT NULL,
+  "project_id" bigint NOT NULL,
+  CONSTRAINT project_author_pk PRIMARY KEY ("id")
 ) WITH (
   OIDS=FALSE
 );
@@ -33,13 +33,14 @@ CREATE TABLE "project_author" (
 
 /*Пользователь*/
 CREATE TABLE "user" (
-	"id" serial NOT NULL,
-	"login" varchar(100) NOT NULL,
-	"password" varchar(100) NOT NULL,
-	"nickname" varchar(100) NOT NULL,
-	"description" TEXT NOT NULL,
-	"avatar" varchar(1000) NOT NULL,
-	CONSTRAINT user_pk PRIMARY KEY ("id")
+  "id" serial NOT NULL,
+  "login" varchar(100) NOT NULL,
+  "password" varchar(100) NOT NULL,
+  "nickname" varchar(100) NOT NULL,
+  "description" TEXT NOT NULL,
+  "avatar" varchar(1000) NOT NULL,
+  "permission_level" INT NOT NULL,
+  CONSTRAINT user_pk PRIMARY KEY ("id")
 ) WITH (
   OIDS=FALSE
 );
@@ -47,12 +48,12 @@ CREATE TABLE "user" (
 
 /*Связь пользователя и проекта, на который пользователь записан*/
 CREATE TABLE "project_user" (
-	"id" serial NOT NULL,
-	"project_id" bigint NOT NULL,
-	"user_id" bigint NOT NULL,
-    "signed_date" DATE NOT NULL,
-	"progress" int NOT NULL,
-	CONSTRAINT project_user_pk PRIMARY KEY ("id")
+  "id" serial NOT NULL,
+  "project_id" bigint NOT NULL,
+  "user_id" bigint NOT NULL,
+  "signed_date" DATE NOT NULL,
+  "progress" int NOT NULL,
+  CONSTRAINT project_user_pk PRIMARY KEY ("id")
 ) WITH (
   OIDS=FALSE
 );
@@ -84,7 +85,7 @@ CREATE TABLE "news" (
 	"id" serial NOT NULL,
 	"title" varchar(255) NOT NULL,
 	"description" TEXT NOT NULL,
-	"date_of_creation" TIMESTAMP NOT NULL,
+	"date_of_creation" TIMESTAMP WITH TIME ZONE NOT NULL,
 	"last_edit" TIMESTAMP NOT NULL,
 	"tags" varchar(1000) NOT NULL,
 	CONSTRAINT news_pk PRIMARY KEY ("id")
