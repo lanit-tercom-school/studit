@@ -4,6 +4,10 @@ import (
 	"testing"
 	"service/models"
 	. "github.com/smartystreets/goconvey/convey"
+	"net/http"
+	"net/http/httptest"
+	"github.com/astaxie/beego"
+	"encoding/json"
 )
 
 func TestNewsModel(t *testing.T) {
@@ -52,4 +56,28 @@ func TestNewsModel(t *testing.T) {
 		So(err, ShouldNotBeNil)
 		So(t_news_t, ShouldBeNil)
 	})
+}
+
+func TestNewsGetAllWithTag(t *testing.T) {
+	tags := []string{"Other", "World", "School"}
+	for _, tag := range tags {
+		tag := tag // capture range variable (from example on https://golang.org/pkg/testing/)
+		Convey("Subject: Get all news with filter by tag", t, func() {
+			requestPath := "http://localhost:8080/v1/news/?tag=" + tag
+			r, _ := http.NewRequest("GET", requestPath, nil)
+			w := httptest.NewRecorder()
+			beego.BeeApp.Handlers.ServeHTTP(w, r)
+
+			var response []models.NewsJson
+			err := json.Unmarshal(w.Body.Bytes(), &response)
+			Convey("Response news should contain only news with current tag", func() {
+				So(err, ShouldBeNil)
+				for _, object := range response {
+					So(models.TagInArrayOfStrings(tag, object.Tags), ShouldBeTrue)
+				}
+			})
+		})
+
+
+	}
 }
