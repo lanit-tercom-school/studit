@@ -116,7 +116,7 @@ type RegistrationController struct {
 }
 
 type RegistrationUserModel struct {
-	Login	string	`json:"login"`
+	Login		string	`json:"login"`
 	Password	string	`json:"password"`
 	Nickname	string	`json:"nickname"`
 }
@@ -212,13 +212,6 @@ func (c *RegistrationController) Post() {
 func (c *RegistrationController) Get() {
 	c.Activate()
 }
-/*
-// TODO: убрать этот костыль
-func (c *RegistrationController) GetOne() {
-	c.Data["json"] = "Not Found"
-	c.Ctx.ResponseWriter.WriteHeader(404)
-	c.ServeJSON()
-}*/
 
 
 // TODO: добавить нормальные доки
@@ -401,6 +394,7 @@ type ControllerWithAuthorization struct {
 // В функции происходит валидация токена для контроллеров, которые этого требуют
 // Внутри метода требуется проверка (нет, если метод+маршрут общедоступны), какой уровень доступа
 // Уровень доступа хранится в `c.CurrentUser.PermissionLevel` и изменять его вне этой функции небезопасно
+// При условии PermissionLevel == -1 не гарантируется правильный Id
 func (c *ControllerWithAuthorization) Prepare() {
     beego.Trace(c.Ctx.Input.IP(), "Start validation")
     clientToken := c.Ctx.Input.Header("Bearer-token")
