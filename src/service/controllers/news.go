@@ -25,8 +25,8 @@ func (c *NewsController) URLMapping() {
 // Post ...
 // @Title Post
 // @Description create News
-// @Param   body        body    models.NewsJson true    "Body for News content, fields `id`, `created`, `edited` ignores"
-// @Param   token       query   string          true    "Access token, Permission Level should be 2"
+// @Param   body                body        models.NewsJson true    "Body for News content, fields `id`, `created`, `edited` ignores"
+// @Param   Bearer-token        header      string          true    "Access token, Permission Level should be 2"
 // @Success 201 OK
 // @Failure 400 body is empty
 // @Failure 400 Forbidden
@@ -144,9 +144,9 @@ func (c *NewsController) GetAll() {
 // Put ...
 // @Title Put
 // @Description Update(edit) the News with id
-// @Param   id      path    string              true        "The id you want to update"
-// @Param   body    body    models.NewsJson     true        "Body for News content, id, created and edited fields ignores"
-// @Param   token   query   string              true        "Access token, Permission Level should be 2"
+// @Param   id              path        string              true        "The id you want to update"
+// @Param   body            body        models.NewsJson     true        "Body for News content, id, created and edited fields ignores"
+// @Param   Bearer-token    header      string              true        "Access token, Permission Level should be 2"
 // @Success 200 OK
 // @Failure 403 :id is not int
 // @Failure 403 Forbidden
@@ -186,8 +186,8 @@ func (c *NewsController) Put() {
 // Delete ...
 // @Title Delete
 // @Description Delete the News
-// @Param	id		path 	string	true		"The id you want to delete"
-// @Param	token	query	string	true		"Access token, Permission Level should be 2"
+// @Param   id              path    string  true    "The id you want to delete"
+// @Param   Bearer-token    header  string  true    "Access token, Permission Level should be 2"
 // @Success 200 OK
 // @Failure 403 id is empty
 // @Failure 403 Forbidden

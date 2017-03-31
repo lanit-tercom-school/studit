@@ -194,7 +194,7 @@ func (c *RegistrationController) URLMapping() {
 // Post ...
 // @Title Register
 // @Description Проводит преварительную регистрацию пользователя, после требуется подтверждение
-// @Param	body	body	models.User	true	"Никнейм, логин(email) и пароль обязательны" ""
+// @Param	body	body	controllers.RegistrationUserModel	true	"Никнейм, логин(email) и пароль обязательны" ""
 // @Success	200 "OK"
 // @Failure	400 "This user is already registered"
 // @router / [post]
@@ -403,7 +403,7 @@ type ControllerWithAuthorization struct {
 // Уровень доступа хранится в `c.CurrentUser.PermissionLevel` и изменять его вне этой функции небезопасно
 func (c *ControllerWithAuthorization) Prepare() {
     beego.Trace(c.Ctx.Input.IP(), "Start validation")
-    clientToken := c.GetString("token")
+    clientToken := c.Ctx.Input.Header("Bearer-token")
     if clientToken == "" {
         beego.Debug(c.Ctx.Input.IP(), "Empty token")
         c.CurrentUser.PermissionLevel = -1
