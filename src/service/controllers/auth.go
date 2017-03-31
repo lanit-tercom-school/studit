@@ -226,7 +226,7 @@ func (c *RegistrationController) GetOne() {
 // @Title Post
 // @Description Запрос: auth.Usr, Ответ: auth.UserAndToken
 // @Param	body		body 	auth.Usr	true ""
-// @Success	200	{object} auth.UserAndToken
+// @Success	200	{object} auth.UserAndToken Description
 // @Failure	403	Invalid username or password
 // @router / [post]
 func (c *AuthController) Post() {

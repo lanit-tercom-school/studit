@@ -64,7 +64,7 @@ func (c *LandingProjectsController) GetOne() {
 // GetAll ...
 // @Title Get All
 // @Description get Projects for Landing page
-// @Success 200 {object} models.Project
+// @Success 200 {object} models.Project Get best projects for main/landing page
 // @Failure 400 Bad Request
 // @router / [get]
 func (c *LandingProjectsController) GetAll() {
