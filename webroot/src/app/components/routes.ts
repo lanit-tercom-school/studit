@@ -14,6 +14,7 @@ import { AuthorPublicPageComponent } from './pages/author-public-page/author-pub
 import { StudentPublicPageComponent } from './pages/student-public-page/student-public-page.component';
 
 import { MainNewsPageComponent } from './pages/main-news-page/main-news-page.component';
+import { ProjectTasksPageComponent } from './pages/project-tasks-page/project-tasks-page.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'main', pathMatch: 'full' },
@@ -27,6 +28,7 @@ export const routes: Routes = [
   { path: 'author/:id', component: AuthorPublicPageComponent },
   { path: 'student/:id', component: StudentPublicPageComponent },
   { path: 'news', component: MainNewsPageComponent },
+  { path: 'projects/tasks', component: ProjectTasksPageComponent },
   //otherwise main
   { path: '**', redirectTo: 'main' }
 ];
