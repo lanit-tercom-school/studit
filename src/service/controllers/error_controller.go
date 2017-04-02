@@ -11,8 +11,10 @@ type ErrorController struct{
 
 func (c *ErrorController) Error404()  {
 	if beego.BConfig.RunMode == "dev" {
+		beego.Trace("Redirect")
 		c.Redirect(c.Ctx.Input.Site()+":"+strconv.Itoa(c.Ctx.Input.Port()), 301)
 	} else if beego.BConfig.RunMode == "prod" {
+		beego.Trace("Not Found")
 		c.Data["json"] = "Not Found"
 		c.Ctx.ResponseWriter.WriteHeader(404)
 		c.ServeJSON()
