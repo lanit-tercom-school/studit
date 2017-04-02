@@ -70,7 +70,15 @@ export class ApiService {
   }
 
   getMainPageProjects() {
-    return this.http.get(environment.apiUrl + '/v1/land/projects/').map((response: Response) => response.json());
+    return this.http.get(environment.apiUrl + '/v1/land/projects/')
+      .map((response: Response) => {
+        var res = response.json();
+        res.forEach(element => {
+          element.Logo = environment.apiUrl + element.Logo;
+        });
+        return res;
+      });
+    
   }
 
   getProjectItems() {
