@@ -22,10 +22,10 @@ CREATE TABLE "author" (
 
 /*Связь автора(создателя) проекта с проектом*/
 CREATE TABLE "project_author" (
-	"id" serial NOT NULL,
-	"author_id" bigint NOT NULL,
-	"project_id" bigint NOT NULL,
-	CONSTRAINT project_author_pk PRIMARY KEY ("id")
+  "id" serial NOT NULL,
+  "author_id" bigint NOT NULL,
+  "project_id" bigint NOT NULL,
+  CONSTRAINT project_author_pk PRIMARY KEY ("id")
 ) WITH (
   OIDS=FALSE
 );
@@ -33,13 +33,14 @@ CREATE TABLE "project_author" (
 
 /*Пользователь*/
 CREATE TABLE "user" (
-	"id" serial NOT NULL,
-	"login" varchar(100) NOT NULL,
-	"password" varchar(100) NOT NULL,
-	"nickname" varchar(100) NOT NULL,
-	"description" TEXT NOT NULL,
-	"avatar" varchar(1000) NOT NULL,
-	CONSTRAINT user_pk PRIMARY KEY ("id")
+  "id" serial NOT NULL,
+  "login" varchar(100) NOT NULL,
+  "password" varchar(100) NOT NULL,
+  "nickname" varchar(100) NOT NULL,
+  "description" TEXT NOT NULL,
+  "avatar" varchar(1000) NOT NULL,
+  "permission_level" INT NOT NULL,
+  CONSTRAINT user_pk PRIMARY KEY ("id")
 ) WITH (
   OIDS=FALSE
 );
@@ -47,12 +48,12 @@ CREATE TABLE "user" (
 
 /*Связь пользователя и проекта, на который пользователь записан*/
 CREATE TABLE "project_user" (
-	"id" serial NOT NULL,
-	"project_id" bigint NOT NULL,
-	"user_id" bigint NOT NULL,
-    "signed_date" DATE NOT NULL,
-	"progress" int NOT NULL,
-	CONSTRAINT project_user_pk PRIMARY KEY ("id")
+  "id" serial NOT NULL,
+  "project_id" bigint NOT NULL,
+  "user_id" bigint NOT NULL,
+  "signed_date" TIMESTAMP WITH TIME ZONE NOT NULL,
+  "progress" int NOT NULL,
+  CONSTRAINT project_user_pk PRIMARY KEY ("id")
 ) WITH (
   OIDS=FALSE
 );
@@ -84,29 +85,10 @@ CREATE TABLE "news" (
 	"id" serial NOT NULL,
 	"title" varchar(255) NOT NULL,
 	"description" TEXT NOT NULL,
-	"date" DATE NOT NULL,
+	"date_of_creation" TIMESTAMP WITH TIME ZONE NOT NULL,
+	"last_edit" TIMESTAMP NOT NULL,
+	"tags" varchar(1000) NOT NULL,
 	CONSTRAINT news_pk PRIMARY KEY ("id")
-) WITH (
-  OIDS=FALSE
-);
-
-
-/*Новостные теги*/
-CREATE TABLE "news_tags" (
-	"id" serial NOT NULL,
-	"text" TEXT NOT NULL,
-	CONSTRAINT news_tags_pk PRIMARY KEY ("id")
-) WITH (
-  OIDS=FALSE
-);
-
-
-/*Свяь новостных тегов и новостей*/
-CREATE TABLE "news_news_tags" (
-	"id" serial NOT NULL,
-	"news_id" bigint NOT NULL,
-	"news_tags_id" bigint NOT NULL,
-	CONSTRAINT news_news_tags_pk PRIMARY KEY ("id")
 ) WITH (
   OIDS=FALSE
 );
@@ -220,7 +202,7 @@ CREATE TABLE "user_course" (
 	"id" serial NOT NULL,
 	"user_id" bigint NOT NULL,
 	"course_id" bigint NOT NULL,
-	"date" DATE NOT NULL,
+	"date" TIMESTAMP WITH TIME ZONE NOT NULL,
 	"progress" int NOT NULL,
 	CONSTRAINT user_course_pk PRIMARY KEY ("id")
 ) WITH (
@@ -233,7 +215,7 @@ CREATE TABLE "user_comments" (
 	"id" serial NOT NULL,
 	"user_id" bigint NOT NULL,
 	"comment_id" bigint NOT NULL, -- в случае цитирования или комментирования комментария
-	"date" DATE NOT NULL,
+	"date" TIMESTAMP WITH TIME ZONE NOT NULL,
 	CONSTRAINT user_comments_pk PRIMARY KEY ("id")
 ) WITH (
   OIDS=FALSE
@@ -309,12 +291,6 @@ ALTER TABLE "task" ADD CONSTRAINT "task_fk2" FOREIGN KEY ("project_user_id") REF
 
 ALTER TABLE "tasks_tags_table" ADD CONSTRAINT "tasks_tags_table_fk0" FOREIGN KEY ("task_id") REFERENCES "task"("id");
 ALTER TABLE "tasks_tags_table" ADD CONSTRAINT "tasks_tags_table_fk1" FOREIGN KEY ("tag_id") REFERENCES "tag"("id");
-
-
-
-ALTER TABLE "news_news_tags" ADD CONSTRAINT "news_news_tags_fk0" FOREIGN KEY ("news_id") REFERENCES "news"("id");
-ALTER TABLE "news_news_tags" ADD CONSTRAINT "news_news_tags_fk1" FOREIGN KEY ("news_tags_id") REFERENCES "news_tags"("id");
-
 
 ALTER TABLE "author" ADD CONSTRAINT "author_fk0" FOREIGN KEY ("user_id") REFERENCES "user"("id");
 

@@ -9,6 +9,8 @@ import (
 	m "service/models"
 	"time"
 	"github.com/astaxie/beego"
+	"fmt"
+	"service/auth"
 )
 
 func init() {
@@ -52,34 +54,45 @@ func main() {
 	fastCheckErr(o.Insert(&project3))
 
 	// add users
-
+	avatar_seed := auth.GenerateNewToken(6)
+	color_str := auth.GenerateRandomColor()
 	user1 := m.User{
 		Id: 1,
 		Nickname: "Admin",
 		Login: "a@a",
 		Password: "a",
-		Avatar: "/logo/1.jpg",
+		Avatar: fmt.Sprintf("%s%s?colors=%s&colors=%s&size=%s", auth.AvatarTemplatePath, avatar_seed,
+			color_str, "FFFFFF", auth.AvatarTemplateSize),
 		Description: "Главный по тарелкам",
+		PermissionLevel: 2,
 	}
 	fastCheckErr(o.Insert(&user1))
 
+	avatar_seed = auth.GenerateNewToken(6)
+	color_str = auth.GenerateRandomColor()
 	user2 := m.User{
 		Id: 2,
 		Nickname: "Moderator",
 		Login: "moder@moder.moder",
 		Password: "moder",
-		Avatar: "/logo/2.jpg",
+		Avatar: fmt.Sprintf("%s%s?colors=%s&colors=%s&size=%s", auth.AvatarTemplatePath, avatar_seed,
+			color_str, "FFFFFF", auth.AvatarTemplateSize),
 		Description: "Главный по молоткам",
+        PermissionLevel: 1,
 	}
 	fastCheckErr(o.Insert(&user2))
 
+	avatar_seed = auth.GenerateNewToken(6)
+	color_str = auth.GenerateRandomColor()
 	user3 := m.User{
 		Id: 3,
 		Nickname: "Егорка2003",
 		Login: "egorka2003@maaail.ru",
 		Password: "пароль",
-		Avatar: "/logo/3.jpg",
+		Avatar: fmt.Sprintf("%s%s?colors=%s&colors=%s&size=%s", auth.AvatarTemplatePath, avatar_seed,
+			color_str, "FFFFFF", auth.AvatarTemplateSize),
 		Description: "ЮЮЮ, ААА",
+        PermissionLevel: 0,
 	}
 	fastCheckErr(o.Insert(&user3))
 
@@ -270,21 +283,24 @@ func main() {
 
 	// add news
 
-	news1 := m.News{
-		Id: 1,
-		Date: time.Now(),
+	news1 := m.NewsJson{
+		Id: 0,
+		Created: time.Now(),
+		Edited: time.Now(),
 		Title: "Программисты признаются в своих грехах в знак протеста против собеседований" +
 			" с кодингом «на бумаге» — в Твиттере появился новый флешмоб",
-		Description: "Где проводят такие собеседования?	Такой стиль собеседований широко используется в" +
+		Description: "Где проводят такие собеседования? Такой стиль собеседований широко используется в" +
 			" IT-индустрии, в том числе в таких компаниях, как Google и Amazon. Кандидатам не дают никакого доступа" +
 			" к справочным материалам и просят решить какую-либо техническую задачу, что, по мнению уже благополучно" +
 			" работающих где-либо программистов, деморализует и не выявляет реальных навыков.",
+		Tags: []string{"Other"},
 	}
-	fastCheckErr(o.Insert(&news1))
+	fastCheckErr(m.AddNews(&news1))
 
-	news2 := m.News{
-		Id: 2,
-		Date: time.Now(),
+	news2 := m.NewsJson{
+		Id: 0,
+		Created: time.Now(),
+		Edited: time.Now(),
 		Title: "Недавний сбой в работе облачных сервисов Amazon был вызван опечаткой сотрудника компании",
 		Description: "Крупный сбой в работе облачных сервисов Amazon, из-за которого 28 февраля 2017 года появились" +
 			" проблемы в работе Slack, Trello, Coursera и многих других сайтов, произошёл из-за опечатки одного" +
@@ -305,57 +321,9 @@ func main() {
 			" в системах «определённого уровня». Также компания пообещала исправить работу информационной" +
 			" панели AWS Service Health Dashboard, которая не показывала информацию о сбоях, так как сама" +
 			" зависела от упавшего сервиса S3.",
+		Tags: []string{"Other", "World"},
 	}
-	fastCheckErr(o.Insert(&news2))
-
-	// add tags for news (only)
-
-	n_tag1 := m.NewsTags{
-		Id: 100,
-		Text: "Other",
-	}
-	fastCheckErr(o.Insert(&n_tag1))
-
-	n_tag2 := m.NewsTags{
-		Id: 101,
-		Text: "Blog",
-	}
-	fastCheckErr(o.Insert(&n_tag2))
-
-	n_tag3 := m.NewsTags{
-		Id: 102,
-		Text: "World",
-	}
-	fastCheckErr(o.Insert(&n_tag3))
-
-	n_tag4 := m.NewsTags{
-		Id: 103,
-		Text: "Technologies",
-	}
-	fastCheckErr(o.Insert(&n_tag4))
-
-	// connect news tags with news
-
-	news_tag_con1 := m.NewsNewsTags{
-		Id: 1,
-		NewsId: &news1,
-		NewsTagsId: &n_tag1,
-	}
-	fastCheckErr(o.Insert(&news_tag_con1))
-
-	news_tag_con2 := m.NewsNewsTags{
-		Id: 2,
-		NewsId: &news2,
-		NewsTagsId: &n_tag1,
-	}
-	fastCheckErr(o.Insert(&news_tag_con2))
-
-	news_tag_con3 := m.NewsNewsTags{
-		Id: 3,
-		NewsId: &news2,
-		NewsTagsId: &n_tag3,
-	}
-	fastCheckErr(o.Insert(&news_tag_con3))
+	fastCheckErr(m.AddNews(&news2))
 
 	beego.Info("Initial data was successfully added to Database")
 }

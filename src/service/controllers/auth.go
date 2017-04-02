@@ -42,6 +42,7 @@ func (c *AuthController) Login() {
 			// success, register new session
 			claim := jwt.NewClaim()
 			claim.Set("user_id", user.Id)
+            claim.Set("perm_lvl", user.PermissionLevel)
 			f := time.Now().Add(time.Hour)
 			claim.SetTime("exp", f)
 
@@ -56,6 +57,7 @@ func (c *AuthController) Login() {
 				Token: token,
 				UserId: user.Id,
 				ExpiresIn: f.Format(time.UnixDate),
+                PermissionLevel: user.PermissionLevel,
 			}
 			beego.Trace(c.Ctx.Input.IP(), user.Login, "Sent token")
 			c.Data["json"] = sessionResponse
@@ -114,7 +116,7 @@ type RegistrationController struct {
 }
 
 type RegistrationUserModel struct {
-	Login	string	`json:"login"`
+	Login		string	`json:"login"`
 	Password	string	`json:"password"`
 	Nickname	string	`json:"nickname"`
 }
@@ -192,7 +194,7 @@ func (c *RegistrationController) URLMapping() {
 // Post ...
 // @Title Register
 // @Description Проводит преварительную регистрацию пользователя, после требуется подтверждение
-// @Param	body	body	models.User	true	"Никнейм, логин(email) и пароль обязательны" ""
+// @Param	body	body	controllers.RegistrationUserModel	true	"Никнейм, логин(email) и пароль обязательны" ""
 // @Success	200 "OK"
 // @Failure	400 "This user is already registered"
 // @router / [post]
@@ -210,13 +212,6 @@ func (c *RegistrationController) Post() {
 func (c *RegistrationController) Get() {
 	c.Activate()
 }
-/*
-// TODO: убрать этот костыль
-func (c *RegistrationController) GetOne() {
-	c.Data["json"] = "Not Found"
-	c.Ctx.ResponseWriter.WriteHeader(404)
-	c.ServeJSON()
-}*/
 
 
 // TODO: добавить нормальные доки
@@ -224,7 +219,7 @@ func (c *RegistrationController) GetOne() {
 // @Title Post
 // @Description Запрос: auth.Usr, Ответ: auth.UserAndToken
 // @Param	body		body 	auth.Usr	true ""
-// @Success	200	{object} auth.UserAndToken
+// @Success	200	{object} auth.UserAndToken Description
 // @Failure	403	Invalid username or password
 // @router / [post]
 func (c *AuthController) Post() {
@@ -344,51 +339,72 @@ func (c *ResetPasswordController) Get() {
 	c.ResetPasswordRequest()
 }
 
-// TODO: встроить собственную проверку валидации, а не полагаться на Output.Status
+
+type CurrentClient struct {
+    UserId              int
+    PermissionLevel     int
+}
+
+
+// Функция проверяет валидность токена и его полей и предоставляет Id пользователя и его уровень допуска
+// для следующих методов контроллера
+// `token` не должен быть пустой строкой
+func newClient(token string) (client CurrentClient) {
+    client = CurrentClient{
+        UserId: -1,
+        PermissionLevel: -1,
+    }
+    if err := jwtManager.Validate(token); err == nil {
+        claims, _ := jwtManager.Decode(token) // err не нужна, т.к. проверяется во время .Validate()
+        userId, err := claims.Get("user_id")
+        userPermissionLevel, err1 := claims.Get("perm_lvl")
+        if err != nil {
+            beego.Critical("Can't get user_id", err.Error())
+
+        } else if int(userId.(float64)) < 0 {
+            beego.Critical("UserId below 0")
+
+        } else if err1 != nil {
+            beego.Critical("Can't get perm_lvl", err.Error())
+
+        } else if int(userPermissionLevel.(float64)) < 0 {
+            beego.Critical("UserPermissionLevel below 0")
+
+        } else if int(userPermissionLevel.(float64)) > auth.MaxPermissionLevel {
+            beego.Critical("UserPermissionLevel is", userPermissionLevel, "that higher than", auth.MaxPermissionLevel)
+
+        } else {
+            beego.Trace("Success validation for", userId, ", Permission level", userPermissionLevel)
+            client.UserId = int(userId.(float64))
+            client.PermissionLevel = int(userPermissionLevel.(float64))
+        }
+    } else {
+        beego.Debug("Invalid token", err.Error())
+    }
+    return
+}
+
+// Контроллер с функцией проверки авторизации перед вызовом основных методов Get, Post, etc...
 type ControllerWithAuthorization struct {
 	beego.Controller
+	CurrentUser CurrentClient
 }
 
 // Наследовать для контроллеров, требующие валидации юзера
-// В функции происходит валидация токена для маршрутов, которые этого требуют
-// Внутри метода требуется проверка (нет, если метод+маршрут общедоступны), как прошла валидация токена
-//	// Если проверка прошла успешно, то код ответа будет 200
-//	if c.Ctx.Output.IsOk() {
-//		// доступ разрешен
-//	} else {
-//		// доступ запрещен, обработка (например, 403 "Forbidden")
-//	}
+// В функции происходит валидация токена для контроллеров, которые этого требуют
+// Внутри метода требуется проверка (нет, если метод+маршрут общедоступны), какой уровень доступа
+// Уровень доступа хранится в `c.CurrentUser.PermissionLevel` и изменять его вне этой функции небезопасно
+// При условии PermissionLevel == -1 не гарантируется правильный Id
 func (c *ControllerWithAuthorization) Prepare() {
-	beego.Trace(c.Ctx.Input.IP(), "Start validation")
-	userToken := c.GetString("token")
-	if userToken == "" {
-		beego.Debug(c.Ctx.Input.IP(), "Empty token")
-		c.Data["json"] = "Empty token (dev)" // TODO: change to `Unauthorized`
-		//c.Ctx.Output.SetStatus(401)
-	} else {
-		if err := jwtManager.Validate(userToken); err == nil {
-			claims, _ := jwtManager.Decode(userToken)
-			userId, err := claims.Get("user_id")
-			if err != nil {
-				beego.Debug(c.Ctx.Input.IP(), "Can't get user_id", err.Error())
-				c.Data["json"] = err.Error()
-				c.Ctx.Output.SetStatus(500) // TODO: change to 400?
-			} else {
-				if int(userId.(float64)) < 0 {
-					beego.Debug(c.Ctx.Input.IP(), "UserId below 0")
-					c.Data["json"] = "Internal Server Error"
-					c.Ctx.Output.SetStatus(500) // TODO: change to 400?
-				} else {
-					beego.Trace(c.Ctx.Input.IP(), "Success validation")
-					c.Ctx.Output.SetStatus(200)
-				}
-			}
-		} else {
-			beego.Debug(c.Ctx.Input.IP(), err.Error())
-			c.Data["json"] = "Wrong token (dev)" // TODO: change to `Unauthorized`
-			//c.Ctx.Output.SetStatus(401)
-		}
-	}
-	beego.Trace("Exit AUTH Controller")
+    beego.Trace(c.Ctx.Input.IP(), "Start validation")
+    clientToken := c.Ctx.Input.Header("Bearer-token")
+    if clientToken == "" {
+        beego.Debug(c.Ctx.Input.IP(), "Empty token")
+        c.CurrentUser.PermissionLevel = -1
+        c.Data["json"] = "Empty token (dev)" // TODO: change to `Unauthorized`
+    } else {
+        c.CurrentUser = newClient(clientToken)
+    }
+    beego.Trace("Exit AUTH Controller")
 }
 
