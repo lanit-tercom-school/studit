@@ -36,7 +36,7 @@ import { TasksItemComponent } from "./pages/student-project-page/tasks/tasks-ite
 import { ProjNewsItemComponent } from "./pages/student-project-page/proj-news/proj-news-item/proj-news-item.component";
 
 
-import { AppRouterProvider } from './routes';
+import { AppRouterProvider, AppProjectRouterProvider } from './routes';
 import { AuthManager } from './../managers/authmanager';
 
 import { AuthorPublicPageComponent } from './pages/author-public-page/author-public-page.component';
@@ -54,6 +54,7 @@ import { ProjectTaskListComponent } from './pages/project-tasks-page/project-tas
     FormsModule,
     HttpModule,
     AppRouterProvider,
+    AppProjectRouterProvider,
   ],
   declarations: [
     AppComponent,
