@@ -12,3 +12,11 @@
 {
     margin: 30px
 }
+
+h2 {
+  font-family: "PT Sans Caption", sans-serif;
+}
+
+p {
+  font-family: 'Roboto', sans-serif;
+}
