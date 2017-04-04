@@ -14,7 +14,11 @@ import (
 )
 
 func init() {
-	orm.RegisterDataBase("default", "postgres", "postgres://postgres:postgres@localhost:5432/studit?sslmode=disable")
+	err := orm.RegisterDataBase("default", "postgres", "postgres://postgres:postgres@localhost:5432/studit?sslmode=disable")
+	if err != nil {
+		beego.Critical(err.Error())
+		panic(err)
+	}
 }
 
 func fastCheckErr(_ int64, err error) {
