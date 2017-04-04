@@ -1,11 +1,7 @@
 h3 {
   margin-bottom: 40px;
-  font-family: "PT Sans Caption", sans-serif;
 }
 
-h4 {
-  font-family: "Roboto", sans-serif;
-}
 .btn-danger{
   width: 220px;
   border: 0px;
@@ -15,7 +11,4 @@ h4 {
 {
   margin-top: 100px;
   margin-bottom: 100px;
-}
-button {
-  font-family: "Roboto", sans-serif;
 }
