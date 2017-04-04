@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {Input} from "@angular/core/src/metadata/directives";
+import {Input} from "@angular/core";
 import {ProjectTaskItem} from "./project-task-item/project-task-item";
 
 @Component({
