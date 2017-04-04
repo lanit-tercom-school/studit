@@ -1,5 +1,6 @@
 h1 {
   margin-bottom: 70pt;
+  font-family: "PT Sans Caption", sans-serif;
 }
 
 .container
@@ -11,6 +12,7 @@ h1 {
 small
 {
   font-weight: 600;
+  font-family: "Roboto", sans-serif;
 }
 
 .project-list
