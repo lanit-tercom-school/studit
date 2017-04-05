@@ -1,5 +1,5 @@
 <div class="container">
-  <h1>Вход</h1>
+  <h1 align="center">Войти в аккаунт</h1>
   <form class="offset-sm-3">
     <div class="form-group row">
       <label for="inputEmail" class="col-sm-2 col-form-label">Email</label>
@@ -22,8 +22,10 @@
             <input type="checkbox" value="remember-me"> Запомнить
           </label>
         </div>
-        <p>Нет аккаунта? <a routerLink="/registration" routerLinkActive="active">Зарегистрироватсья</a></p>
-        <button role="button" class="btn btn-primary" type="submit" (click)="login()">Войти</button>
+        <button role="button" class="btn btn-primary btn-block" type="submit" (click)="login()">Войти</button>
+        <br>
+        <p align="center">Нет аккаунта?</p>
+        <p> <button type="button" class="btn btn-secondary btn-block" routerLink="/registration" routerLinkActive="active">Зарегистрироваться</button></p>
       </div>
     </div>
   </form>
