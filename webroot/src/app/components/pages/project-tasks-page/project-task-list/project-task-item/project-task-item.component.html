@@ -1,0 +1,20 @@
+<li>
+  <div class = "taskcard">
+  <div class="row">
+    <div class = "col p1">
+    <h5 align = "left"> №{{ProjectTaskItem.Number}} {{ProjectTaskItem.TaskName}}</h5>
+    </div>
+  </div>
+
+    <p class = "text-muted" align = "center"> Click on the card to read more... </p>
+    <div class="row">
+      <div  class = "col ">
+        <p class = "p2" align = "left">Author:  <a href="#">{{ProjectTaskItem.Author}}</a>        For:  <a href="#">{{ProjectTaskItem.Addressee}}</a></p>
+       </div>
+      <div  class = "col">
+        <p class = "p3" align = "right"><i>Tags: <a class = "blacktag" href="#">{{ProjectTaskItem.Tags[0]}}</a>, <a class = "blacktag" href="#">{{ProjectTaskItem.Tags[1]}}</a>...</i></p>
+      </div>
+</div>
+</div>
+</li>
+<br>

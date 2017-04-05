@@ -8,17 +8,20 @@ import (
 
 // TODO: rename
 type UserAndToken struct{
-	Token 		string 		`json:"token"`
-	UserId 		int 		`json:"id"`
-	ExpiresIn	string		`json:"exp"`
+    Token           string      `json:"token"`
+    UserId          int         `json:"id"`
+    ExpiresIn       string      `json:"exp"`
+    PermissionLevel int         `json:"perm_lvl"`
 }
 
 type Usr struct {
-	Login string
-	Password string
+    Login string
+    Password string
 }
 
-// basic http sign in with password and login. Func checks logic+password combination with combination in DB
+const MaxPermissionLevel int = 2
+
+// basic http sign in with password and login. Func checks login+password combination with same combination in DB
 func TryToLogin(login, password string) (user models.User, err error) {
 	// create default model
 	user = models.User{
@@ -30,7 +33,7 @@ func TryToLogin(login, password string) (user models.User, err error) {
 		return user, errors.New("Can't find User with this login (dev)") // TODO: should be changed to "Invalid login or password"
 	} else if user.Id < 1 {
 		return user, errors.New("Bad user ID (dev)") // TODO: should be changed to "Invalid login or password"
-	// TODO: UNcomment this on pub } else if user.Password != customStr(password).ToSHA1() {
+	// } else if user.Password != customStr(password).ToSHA1() { // TODO: UNcomment this on pub
 	} else if user.Password != password { // TODO: comment this on pub
 		return user, errors.New("Invalid login or password")
 	} else {
@@ -39,13 +42,13 @@ func TryToLogin(login, password string) (user models.User, err error) {
 }
 
 // Generates cryptographically secure token (random string)
-func GenerateNewToken(n int) string {
-	if n <= 0 {
+func GenerateNewToken(count int) string {
+	if count <= 0 {
 		return ""
 	}
 	// template string
 	const alphaNum = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
-	var bytes = make([]byte, n) // TODO: change 10 to `n`
+	var bytes = make([]byte, count)
 	rand.Read(bytes)
 	for i, b := range bytes {
 		bytes[i] = alphaNum[b%byte(len(alphaNum))]
@@ -53,3 +56,13 @@ func GenerateNewToken(n int) string {
 	return string(bytes)
 }
 
+func GenerateRandomColor() string {
+	// template string
+	const alphaNum = "0123456789ABCDEF"
+	var bytes = make([]byte, 6)
+	rand.Read(bytes)
+	for i, b := range bytes {
+		bytes[i] = alphaNum[b%byte(len(alphaNum))]
+	}
+	return string(bytes)
+}

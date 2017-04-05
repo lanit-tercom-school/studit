@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers, RequestOptions, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
+import { environment } from '../../environments/environment';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/observable/throw';
@@ -12,7 +13,7 @@ export class ApiService {
   }
 
   validate(key: string) {
-    return this.http.get('http://localhost:8080/v1/auth/register/?pass=' + key)
+    return this.http.get(environment.apiUrl + '/v1/auth/register/?pass=' + key)
       .catch((error: any) => { return Observable.throw(error) });
   }
 
@@ -21,7 +22,7 @@ export class ApiService {
 
     headers.append('Content-Type', 'application/json');
 
-    return this.http.post('http://localhost:8080/v1/auth/register', JSON.stringify(user), { headers: headers })
+    return this.http.post(environment.apiUrl + '/v1/auth/register', JSON.stringify(user), { headers: headers })
       .map((res: Response) => {
         if (res.json().code)
           localStorage.setItem('validation_code', res.json().code);
@@ -32,7 +33,7 @@ export class ApiService {
   }
 
   getPublicStudentInfoById(student_id: number) {
-    return this.http.get('http://localhost:8080/v1/user/id/' + student_id)
+    return this.http.get(environment.apiUrl + '/v1/user/id/' + student_id)
   }
 
   getPublicAuthorInfoById(author_id: number) {
@@ -69,15 +70,23 @@ export class ApiService {
   }
 
   getMainPageProjects() {
-    return this.http.get('http://localhost:8080/v1/land/projects/').map((response: Response) => response.json());
+    return this.http.get(environment.apiUrl + '/v1/land/projects/')
+      .map((response: Response) => {
+        var res = response.json();
+        res.forEach(element => {
+          element.Logo = environment.apiUrl + element.Logo;
+        });
+        return res;
+      });
+    
   }
 
   getProjectItems() {
-    return this.http.get('http://localhost:8080/v1/project/').map((response: Response) => response.json());
+    return this.http.get(environment.apiUrl + '/v1/project/').map((response: Response) => response.json());
   }
 
   getProjectById(id: number) {
-    return this.http.get('http://localhost:8080/v1/project/' + id);
+    return this.http.get(environment.apiUrl + '/v1/project/' + id);
   }
 
 
@@ -136,7 +145,67 @@ export class ApiService {
     ];
   }
 
-  private jwt() {
+  getProjectAllTaskItem(id: number) {
+    return [
+      {
+        "Number": "645",
+        "TaskName": "Complete this exercise...",
+        "Data": "20.03.17",
+        "Author": "Roman",
+        "Addressee": "User1",
+        "Tags" : ["tag1", "tag2"],
+        "Rating": "3"
+
+      },
+      {
+      "Number": "645",
+      "TaskName": "Name of Task",
+      "Data": "20.03.17",
+      "Author": "Konstantin",
+      "Addressee": "User2",
+      "Tags" :  ["tag1", "tag2"],
+      "Rating": "3"
+      },
+
+      {
+      "Number": "645",
+      "TaskName": "Name of Task",
+      "Data": "20.03.17",
+      "Author": "Sheldon",
+      "Addressee": "User3",
+      "Tags" :  ["some tag", "some tag 2"],
+      "Rating": "4"
+      }
+
+    ];
+  }
+
+  getProjectStudentTaskItem(id: number) {
+    return [
+      {
+        "Number": "645",
+        "TaskName": "This is my task",
+        "Data": "20.03.17",
+        "Author": "Roman",
+        "Addressee": "Me",
+        "Tags" : ["tag1", "tag2"],
+        "Rating": "3"
+
+      },
+      {
+      "Number": "645",
+      "TaskName": "This is my task too",
+      "Data": "20.03.17",
+      "Author": "Konstantin",
+      "Addressee": "Me",
+      "Tags" :  ["tag1", "tag2"],
+      "Rating": "3"
+      }
+
+    ];
+  }
+
+    private jwt() {
     // create authorization-page header with jwt token
     let currentUser = JSON.parse(localStorage.getItem('current_user'));
     if (currentUser && currentUser.token) {
