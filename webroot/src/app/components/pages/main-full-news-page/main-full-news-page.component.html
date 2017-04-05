@@ -1,0 +1,14 @@
+	<div class="container">
+		<h1>Новости</h1>
+
+		<div *ngFor="let item of newsItems">
+			 	<h4>{{ item.Title}}</h4>
+				<p>{{ item.Date}}</p>
+				<img src="{{item.Image}}" alt="">
+				<p class="text">{{ item.Text}}</p>
+		</div>
+		<p>Источник: <a class = "link" href="#">ссылка</a></p>
+			<div align = "right">
+			<button role="button" class="page-link" routerLink = "/news">Назад</button>
+		</div>
+	</div>

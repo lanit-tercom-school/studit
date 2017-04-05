@@ -44,6 +44,7 @@ import { StudentPublicPageComponent } from './pages/student-public-page/student-
 
 import { MainNewsPageComponent } from './pages/main-news-page/main-news-page.component';
 import { MainNewsItemComponent } from './pages/main-news-page/main-news-item/main-news-item.component';
+import { MainFullNewsPageComponent } from './pages/main-full-news-page/main-full-news-page.component';
 
 import { ProjectTasksPageComponent } from './pages/project-tasks-page/project-tasks-page.component';
 import { ProjectTaskItemComponent } from './pages/project-tasks-page/project-task-list/project-task-item/project-task-item.component';
@@ -84,6 +85,7 @@ import { ProjectTaskListComponent } from './pages/project-tasks-page/project-tas
     StudentPublicPageComponent,
     MainNewsPageComponent,
     MainNewsItemComponent,
+    MainFullNewsPageComponent,
     ProjectTasksPageComponent,
     ProjectTaskItemComponent,
     ProjectTaskListComponent,
