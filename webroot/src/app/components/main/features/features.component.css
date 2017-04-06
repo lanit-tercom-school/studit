@@ -10,5 +10,16 @@
 
 .row
 {
-    margin: 30px
+    margin: 30px;
+}
+
+.feature-block{
+    display: flex;
+    justify-content: space-around;
+}
+
+.feature-img{
+    margin: 1rem auto;
+    display: flex;
+    justify-content: space-around;
 }

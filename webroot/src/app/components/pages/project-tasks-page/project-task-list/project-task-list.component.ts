@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import {Input} from "@angular/core/src/metadata/directives";
-import {ProjectTaskItem} from "./project-task-item/project-task-item";
+import {Input} from "@angular/core";
+import {ProjectTaskItem} from "models/project-task-item";
 
 @Component({
   selector: 'app-project-task-list',

@@ -3,3 +3,12 @@
   text-align: left;
   border: 0px;
 }
+
+.card-block{
+  min-height: 12rem;
+}
+
+.card-img-top{
+  height: 300;
+  width: 100%;
+}

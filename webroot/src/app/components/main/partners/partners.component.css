@@ -4,24 +4,19 @@ h1
     margin-bottom: 100px;
 }
 
-.partners-list
-{
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-}
-
 .container
 {
     margin: 100px auto;
 }
 
-img
-{
-    opacity: 0.8;
+.partners-list{
+    display: flex;
+    justify-content: space-around;
 }
 
-img:hover
-{
-    opacity: 1;
+.partner-card{
+    align-items: center;
+    display: flex;
+    justify-content: space-around;
+    margin: 2rem auto;
 }

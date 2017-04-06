@@ -1,7 +1,6 @@
 <app-about>
 </app-about>
 <app-features></app-features>
-<app-partners></app-partners>
 <div class="project-list">
     <div class="container">
         <h1>
@@ -10,7 +9,8 @@
         <app-project-list [ProjectList]="projects">
         </app-project-list>
         <br><br><br>
-        <button role="button" class="btn btn-primary btn-lg" href="#"><small>ПОКАЗАТЬ БОЛЬШЕ</small></button>
+        <button role="button" class="btn btn-primary btn-lg" routerLink="/projects"><small>ПОКАЗАТЬ БОЛЬШЕ</small></button>
     </div>
 </div>
 <app-enrolment></app-enrolment>
+<app-partners [PartnersList]="partners"></app-partners>

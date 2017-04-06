@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {Input} from "@angular/core/src/metadata/directives";
+import {Input} from "@angular/core";
 import {ProjectNewsItem} from "./proj-news-item/proj-news-item";
 
 @Component({
