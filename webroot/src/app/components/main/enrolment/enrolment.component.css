@@ -7,9 +7,15 @@ h3 {
   margin-bottom: 40px;
 }
 
+.enrolment-info{
+    display: flex;
+    justify-content: space-around;
+}
+
 .btn-danger{
-  width: 220px;
   border: 0px;
+  max-width: 15rem;
+  margin-top: 2rem;
 }
 
 .container
