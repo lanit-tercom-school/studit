@@ -3,7 +3,7 @@ import { ApiService } from './../../../services/api.service';
 import { ActivatedRoute, Params } from '@angular/router';
 import { ProjectItem } from './../../shared/project-list/project-item/project-item';
 
-import { ProjectTaskItem } from "./project-task-list/project-task-item/project-task-item";
+import { ProjectTaskItem } from "models/project-task-item";
 
 @Component({
   selector: 'app-project-tasks-page',
