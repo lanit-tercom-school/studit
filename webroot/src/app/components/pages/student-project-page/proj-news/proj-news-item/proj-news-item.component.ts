@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ProjectNewsItem} from "./proj-news-item";
-import {Input} from "@angular/core/src/metadata/directives";
+import {Input} from "@angular/core";
 
 @Component({
   selector: 'app-proj-news-item',

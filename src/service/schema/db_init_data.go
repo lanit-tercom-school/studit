@@ -14,7 +14,11 @@ import (
 )
 
 func init() {
-	orm.RegisterDataBase("default", "postgres", "postgres://postgres:postgres@localhost:5432/studit?sslmode=disable")
+	err := orm.RegisterDataBase("default", "postgres", "postgres://postgres:postgres@localhost:5432/studit?sslmode=disable")
+	if err != nil {
+		beego.Critical(err.Error())
+		panic(err)
+	}
 }
 
 func fastCheckErr(_ int64, err error) {
@@ -33,7 +37,7 @@ func main() {
 		Id: 1,
 		Name: "Образовательный портал Studit",
 		Description: "Разработка образовательного портала для Lanit-Tercom School",
-		Logo: "/logo/1.jpg",
+		Logo: "/files/1.jpg",
 	}
 	fastCheckErr(o.Insert(&project1))
 
@@ -41,7 +45,7 @@ func main() {
 		Id: 2,
 		Name: "Модный фрилансер",
 		Description: "Какие же стрелочки вокруг ноубука!",
-		Logo: "/logo/2.jpg",
+		Logo: "/files/2.jpg",
 	}
 	fastCheckErr(o.Insert(&project2))
 
@@ -49,7 +53,7 @@ func main() {
 		Id: 3,
 		Name: "Оригинальное название",
 		Description: "Click-bait описание",
-		Logo: "/logo/3.jpg",
+		Logo: "/files/3.jpg",
 	}
 	fastCheckErr(o.Insert(&project3))
 
