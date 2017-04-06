@@ -1,12 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-export class MainNewsItem {
-  constructor(
-    public Image: string,
-    public Date: string,
-    public Title: string,
-    public Text: string) { }
-}
+import {MainNewsItem} from "models/main-news-item";
 
 @Component({
   selector: 'app-main-full-news-page',

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {ProjectTaskItem} from "./project-task-item";
+import {ProjectTaskItem} from "models//project-task-item";
 import {Input} from "@angular/core";
 
 @Component({
