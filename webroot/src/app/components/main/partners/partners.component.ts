@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {Input} from '@angular/core';
 
 @Component({
   selector: 'app-partners',
@@ -6,6 +7,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./partners.component.css']
 })
 export class PartnersComponent implements OnInit {
+
+  @Input() public PartnersList;
 
   constructor() { }
 
