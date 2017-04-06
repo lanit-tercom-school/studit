@@ -3,7 +3,7 @@ body {
     height:100%;
 }
 
-.navbar, a, p, button{
+* {
   font-family: 'Roboto', sans-serif;
 }
 
