@@ -3,10 +3,11 @@ img {
 }
 p.date {
     font-size: 14px;
+    color: #969595;
     margin-bottom: 0px;
 }
 p.header {
-    margin-top: 10px;
+    margin-top: 0px;
     font-size: 20px;
     margin-bottom: 10px;
 }
@@ -17,5 +18,35 @@ p.text {
 }
 .row.item {
     margin-top: 10px;
-    margin-bottom: 20px;
+    margin-bottom: 50px;
+}
+
+.ton_cont{
+    width: 100%;
+    text-align: center;
+    height: 100%;
+    display: none;
+    position: absolute;
+    height: 165px;
+    width: 160px;
+}
+.img_cont {
+    height: 165px;
+    width: 160px;
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+    padding: 5px;
+}
+.ton_cont i{
+    font-size: 55px;
+    color: rgba(255, 255, 255, 0.8);
+    line-height: 160px;
+    opacity: 1;
+    display: block;
+}
+.img_big_cont:hover .ton_cont{
+    cursor: pointer;
+    display: block;
+    background: rgba(0, 0, 0, 0.5);
 }

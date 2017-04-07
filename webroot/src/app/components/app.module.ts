@@ -52,6 +52,9 @@ import { ProjectTaskListComponent } from './pages/project-tasks-page/project-tas
 
 import { HomeProjectsViewComponent } from './pages/home-page/home-projects-view/home-projects-view.component';
 
+import { AlertComponent } from './alert/alert.component';
+import { AlertService } from '.././services/alert.service';
+
 @NgModule({
   imports: [
     BrowserModule,
@@ -93,8 +96,9 @@ import { HomeProjectsViewComponent } from './pages/home-page/home-projects-view/
     ProjectTaskItemComponent,
     ProjectTaskListComponent,
     HomeProjectsViewComponent,
+    AlertComponent,
   ],
-  providers: [ApiService, AuthService, AuthManager],
+  providers: [ApiService, AuthService, AuthManager, AlertService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
