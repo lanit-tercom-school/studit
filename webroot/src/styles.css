@@ -1,3 +1,11 @@
+:root
+{
+  --primary-color: #2A2E31;
+  --logo-color: #1CB5DE;
+  --section-color: #E7F4FB;
+  --accent-color: #D94949;
+}
+
 html,
 body {
     height:100%;
@@ -34,42 +42,42 @@ body {
 
 h1, h2, h3, h4 {
   font-family: "PT Sans Caption", sans-serif;
-  color: #2A2E31;
+  color: var(--primary-color);
 }
 
 .navbar, .footer {
-  background-color: #2A2E31;
+  background-color: var(--primary-color);
 }
 
 .navbar-light .navbar-nav .nav-link{
-  color: #E7F4FB;
+  color: var(--section-color);
 }
 .navbar-light .navbar-nav .nav-link.active{
-  color: #D94949;
+  color: var(--accent-color);
 }
 
 .main-highlited{
-  background-color: #E7F4FB;
+  background-color: var(--section-color);
 }
 
 .btn-outline-danger{
-  border-color: #D94949;
-  color: #2A2E31;
+  border-color: var(--accent-color);
+  color: var(--primary-color);
 }
 
 .btn-outline-danger:hover{
-  border-color: #D94949;
-  color: #E7F4FB;
-  background-color: #D94949;
+  border-color: var(--accent-color);
+  color: var(--section-color);
+  background-color: var(--accent-color);
 }
 
 .btn-outline-primary{
-  border-color: #1CB5DE;
-  color: #2A2E31;
+  border-color: var(--logo-color);
+  color: var(--primary-color);
 }
 
 .btn-outline-primary:hover{
-  border-color: #1CB5DE;
-  color: #E7F4FB;
-  background-color: #1CB5DE;
+  border-color: var(--logo-color);
+  color: var(--section-color);
+  background-color: var(--logo-color);
 }
