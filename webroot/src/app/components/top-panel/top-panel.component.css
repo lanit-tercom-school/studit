@@ -2,7 +2,6 @@
 {
     font-size: 1.25rem;
     font-weight: 500;
-    background-color: #EEEEEE;
 }
 
 .navbar-brand
@@ -20,7 +19,7 @@
 
 #sign-in
 {
-    color: royalblue;
+    color: #1CB5DE;
 }
 
 #log-out

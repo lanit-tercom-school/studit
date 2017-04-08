@@ -34,4 +34,20 @@ body {
 
 h1, h2, h3, h4 {
   font-family: "PT Sans Caption", sans-serif;
+  color: #2A2E31;
+}
+
+.navbar, .footer {
+  background-color: #2A2E31;
+}
+
+.navbar-light .navbar-nav .nav-link{
+  color: #E7F4FB;
+}
+.navbar-light .navbar-nav .nav-link.active{
+  color: #D94949;
+}
+
+.main-highlited{
+  background-color: #E7F4FB;
 }
