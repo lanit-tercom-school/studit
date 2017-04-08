@@ -36,7 +36,7 @@ import { TasksItemComponent } from "./pages/student-project-page/tasks/tasks-ite
 import { ProjNewsItemComponent } from "./pages/student-project-page/proj-news/proj-news-item/proj-news-item.component";
 
 
-import { AppRouterProvider } from './routes';
+import { AppRouterProvider, AppProjectRouterProvider } from './routes';
 import { AuthManager } from './../managers/authmanager';
 
 import { AuthorPublicPageComponent } from './pages/author-public-page/author-public-page.component';
@@ -44,6 +44,13 @@ import { StudentPublicPageComponent } from './pages/student-public-page/student-
 
 import { MainNewsPageComponent } from './pages/main-news-page/main-news-page.component';
 import { MainNewsItemComponent } from './pages/main-news-page/main-news-item/main-news-item.component';
+import { MainFullNewsPageComponent } from './pages/main-full-news-page/main-full-news-page.component';
+
+import { ProjectTasksPageComponent } from './pages/project-tasks-page/project-tasks-page.component';
+import { ProjectTaskItemComponent } from './pages/project-tasks-page/project-task-list/project-task-item/project-task-item.component';
+import { ProjectTaskListComponent } from './pages/project-tasks-page/project-task-list/project-task-list.component';
+
+import { HomeProjectsViewComponent } from './pages/home-page/home-projects-view/home-projects-view.component';
 
 @NgModule({
   imports: [
@@ -51,6 +58,7 @@ import { MainNewsItemComponent } from './pages/main-news-page/main-news-item/mai
     FormsModule,
     HttpModule,
     AppRouterProvider,
+    AppProjectRouterProvider,
   ],
   declarations: [
     AppComponent,
@@ -80,6 +88,11 @@ import { MainNewsItemComponent } from './pages/main-news-page/main-news-item/mai
     StudentPublicPageComponent,
     MainNewsPageComponent,
     MainNewsItemComponent,
+    MainFullNewsPageComponent,
+    ProjectTasksPageComponent,
+    ProjectTaskItemComponent,
+    ProjectTaskListComponent,
+    HomeProjectsViewComponent,
   ],
   providers: [ApiService, AuthService, AuthManager],
   bootstrap: [AppComponent]

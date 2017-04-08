@@ -3,6 +3,12 @@ package auth
 import (
 	"service/models"
 	"errors"
+	"fmt"
+)
+
+const (
+	AvatarTemplatePath string = "http://tinygraphs.com/squares/"
+	AvatarTemplateSize string = "100"
 )
 
 var unactivated_users map[string]models.User
@@ -24,6 +30,10 @@ func NewUser(pass string, usr models.User) error {
 func ActivateUser(pass string) error {
 	if user, ok := unactivated_users[pass]; ok {
 		delete(unactivated_users, pass)
+		avatar_seed := GenerateNewToken(6)
+		color_str := GenerateRandomColor()
+		user.Avatar = fmt.Sprintf("%s%s?colors=%s&colors=%s&size=%s", AvatarTemplatePath, avatar_seed,
+			color_str, "FFFFFF", AvatarTemplateSize)
 		return user.Insert()
 	} else {
 		return errors.New("Wrong pass")

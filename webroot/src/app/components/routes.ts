@@ -14,21 +14,51 @@ import { AuthorPublicPageComponent } from './pages/author-public-page/author-pub
 import { StudentPublicPageComponent } from './pages/student-public-page/student-public-page.component';
 
 import { MainNewsPageComponent } from './pages/main-news-page/main-news-page.component';
+import { ProjectTasksPageComponent } from './pages/project-tasks-page/project-tasks-page.component';
+import { HomeProjectsViewComponent } from './pages/home-page/home-projects-view/home-projects-view.component';
+
+import { MainFullNewsPageComponent } from './pages/main-full-news-page/main-full-news-page.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'main', pathMatch: 'full' },
   { path: 'main', component: MainComponent },
   { path: 'projects', component: ProjectListPageComponent },
-  { path: 'project/:id', component: StudentProjectPageComponent },
   { path: 'auth', component: AuthorizationPageComponent, canActivate: [AuthManager] },
-  { path: 'home', component: HomePageComponent, canActivate: [AuthManager] },
+  {
+    path: 'home',
+    component: HomePageComponent,
+    canActivate: [AuthManager],
+    children: [{
+      path: '',
+      redirectTo: 'projects',
+      pathMatch: 'full',
+    },
+    {
+      path: 'projects',
+      component: HomeProjectsViewComponent,
+    }]
+  },
   { path: 'registration', component: RegistrationPageComponent },
   { path: 'registration/validate', component: ValidationPageComponent, canActivate: [AuthManager] },
   { path: 'author/:id', component: AuthorPublicPageComponent },
   { path: 'student/:id', component: StudentPublicPageComponent },
   { path: 'news', component: MainNewsPageComponent },
-  //otherwise main
-  { path: '**', redirectTo: 'main' }
+  { path: 'news/somenews', component: MainFullNewsPageComponent },
+];
+
+export const projectRoutes: Routes = [
+  {
+    path: 'project/:id',
+    children: [{
+      path: '',
+      pathMatch: 'full',
+      component: StudentProjectPageComponent,
+    }, {
+      path: 'tasks',
+      component: ProjectTasksPageComponent,
+    }]
+  }
 ];
 
 export const AppRouterProvider = RouterModule.forRoot(routes);
+export const AppProjectRouterProvider = RouterModule.forChild(projectRoutes);

@@ -1,14 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
-export class MainNewsItem {
-  constructor(
-    public Image: string,
-    public Date: string,
-    public Titile: string,
-    public Text: string) { }
-}
 
-/*import {MainNewsItem} from "/webroot/src/app/models/main-news-item";*/
+import {MainNewsItem} from "models/main-news-item";
 
 @Component({
   selector: 'app-main-news-item',

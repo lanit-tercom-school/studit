@@ -1,0 +1,35 @@
+
+input{
+   border-radius: 5px;
+}
+
+.projheader{
+  background-color: whitesmoke;
+  vertical-align: middle;
+  padding: 15px 0px 15px 0px
+}
+
+.projsidebar{
+  border-right: 2px solid rgba(0,0,0,.2);
+  padding : 0;
+  //margin:0 auto;
+}
+
+ .sidebaritem{
+  color: black;
+  text-align: left;
+  padding: 20px 5px 20px 7px;
+  text-decoration: none;
+
+}
+
+.colsearch{
+   margin: auto;
+}
+
+.sidebaritem:hover{
+background: whitesmoke;
+}
+.showbutton{
+  margin-bottom: 20px;
+}

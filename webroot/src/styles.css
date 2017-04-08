@@ -1,4 +1,83 @@
+:root
+{
+  --primary-color: #2A2E31;
+  --logo-color: #1CB5DE;
+  --section-color: #E7F4FB;
+  --accent-color: #D94949;
+}
+
 html,
 body {
     height:100%;
+}
+
+.loader {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 1;
+  border: 16px solid darkgray;
+  border-radius: 50%;
+  border-top: 16px solid darkcyan;
+  width: 120px;
+  height: 120px;
+  margin: -75px 0 0 -75px;
+  -webkit-animation: spin 2s linear infinite;
+  animation: spin 2s linear infinite;
+}
+
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+* {
+  font-family: 'Roboto', sans-serif;
+}
+
+h1, h2, h3, h4 {
+  font-family: "PT Sans Caption", sans-serif;
+  color: var(--primary-color);
+}
+
+.navbar, .footer {
+  background-color: var(--primary-color);
+}
+
+.navbar-light .navbar-nav .nav-link{
+  color: var(--section-color);
+}
+.navbar-light .navbar-nav .nav-link.active{
+  color: var(--accent-color);
+}
+
+.main-highlited{
+  background-color: var(--section-color);
+}
+
+.btn-outline-danger{
+  border-color: var(--accent-color);
+  color: var(--primary-color);
+}
+
+.btn-outline-danger:hover{
+  border-color: var(--accent-color);
+  color: var(--section-color);
+  background-color: var(--accent-color);
+}
+
+.btn-outline-primary{
+  border-color: var(--logo-color);
+  color: var(--primary-color);
+}
+
+.btn-outline-primary:hover{
+  border-color: var(--logo-color);
+  color: var(--section-color);
+  background-color: var(--logo-color);
 }
