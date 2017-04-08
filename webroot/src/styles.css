@@ -51,3 +51,25 @@ h1, h2, h3, h4 {
 .main-highlited{
   background-color: #E7F4FB;
 }
+
+.btn-outline-danger{
+  border-color: #D94949;
+  color: #2A2E31;
+}
+
+.btn-outline-danger:hover{
+  border-color: #D94949;
+  color: #E7F4FB;
+  background-color: #D94949;
+}
+
+.btn-outline-primary{
+  border-color: #1CB5DE;
+  color: #2A2E31;
+}
+
+.btn-outline-primary:hover{
+  border-color: #1CB5DE;
+  color: #E7F4FB;
+  background-color: #1CB5DE;
+}
