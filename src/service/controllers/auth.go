@@ -71,46 +71,7 @@ func (c *AuthController) Login() {
 	c.ServeJSON()
 }
 
-// Take token from user to logout him from service
-// Service is vulnerable to login+logout attack, because of banning system
-func (c *LogoutController) Logout() {
-	userToken := c.GetString("token")
-	beego.Trace(c.Ctx.Input.IP(), "New logout from", userToken)
-	if userToken != "" {
-		if err := jwtManager.Validate(userToken); err == nil {
-			claims, _ := jwtManager.Decode(userToken)
-			_, err := claims.Get("user_id")
-			if err != nil {
-				beego.Debug(c.Ctx.Input.IP(), ":", err.Error())
-				c.Data["json"] = err.Error() // TODO: change on production
-				c.Ctx.Output.SetStatus(500) // TODO: change to 400?
-			} else {
-				ban_up_to, err := claims.GetTime("exp")
-				if err != nil {
-					beego.Critical(c.Ctx.Input.IP(), ":", err.Error())
-					c.Data["json"] = err.Error() // TODO: change on production
-					c.Ctx.Output.SetStatus(500) // TODO: change to 400?
-				} else {
-					jwt.GlobalStorage.Ban(userToken, ban_up_to)
-					beego.Trace(c.Ctx.Input.IP(), "Success logout")
-					c.Data["json"] = "OK"
-				}
-			}
-		} else {
-			beego.Debug(c.Ctx.Input.IP(), ":", err.Error())
-			c.Data["json"] = err.Error()
-			c.Ctx.Output.SetStatus(400) // TODO: change to 403?
-		}
-
-	} else {
-		beego.Debug(c.Ctx.Input.IP(), "Empty token")
-		c.Data["json"] = "Empty token"
-		c.Ctx.Output.SetStatus(400)
-	}
-	c.ServeJSON()
-}
-
-
+// Регистрация нового пользователя
 type RegistrationController struct {
 	beego.Controller
 }
@@ -240,33 +201,11 @@ func (c *AuthController) GetAll() {
 	c.ServeJSON()
 }
 
-type LogoutController struct {
-	beego.Controller
-}
-
-// TODO: убрать этот костыль
-func (c *LogoutController) GetOne() {
-	c.Data["json"] = "Not Found"
-	c.Ctx.ResponseWriter.WriteHeader(404)
-	c.ServeJSON()
-}
-
-// GetAll ...
-// @Title Get All
-// @Description Осуществляет выход пользователя из системы
-// @Param	token	query	string	false	"Token To Logout"
-// @Failure 200 OK
-// @Failure 403 Wrong token
-// @Failure 400 Empty token
-// @router / [get]
-func (c *LogoutController) GetAll() {
-	c.Logout()
-}
-
 func (c *ResetPasswordController) URLMapping() {
 	c.Mapping("Get", c.Get)
 }
 
+// Запрос на сброс пароля
 type ResetPasswordController struct {
 	beego.Controller
 }
