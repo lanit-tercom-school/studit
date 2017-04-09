@@ -16,6 +16,7 @@ var unactivated_users map[string]models.User
 func init() {
 	unactivated_users = make(map[string]models.User)
 }
+
 func NewUser(pass string, usr models.User) error {
 	if usr.FindByLogin() {
 		return errors.New("This user is already registered")
@@ -23,6 +24,7 @@ func NewUser(pass string, usr models.User) error {
 	if _, err := unactivated_users[pass]; err {
 		return errors.New("Already in")
 	}
+	usr.Password = CustomStr(usr.Password).ToSHA1()
 	unactivated_users[pass] = usr
 	return nil
 }
