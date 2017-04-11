@@ -14,6 +14,7 @@ type Project struct {
 	Name        string `orm:"column(name)"`
 	Description string `orm:"column(description)"`
 	Logo        string `orm:"column(logo)"`
+	Author      *ProjectAuthor `orm:"reverse(one)"`
 }
 
 func (t *Project) TableName() string {

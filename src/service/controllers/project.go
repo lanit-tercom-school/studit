@@ -149,20 +149,33 @@ func (c *ProjectController) GetAll() {
 // @Failure 403 :id is not int
 // @router /:id [put]
 func (c *ProjectController) Put() {
-	// TODO: обновить защиту когда будет лвлинг пользователей
-	if c.Ctx.Output.IsOk() {
+	// TODO: добавить автора к проекту
+	if userLevel := c.CurrentUser.PermissionLevel; userLevel == 2 || userLevel == 1 {
 		idStr := c.Ctx.Input.Param(":id")
-		id, _ := strconv.Atoi(idStr)
+		id, err := strconv.Atoi(idStr)
+		if err != nil {
+			beego.Debug(c.Ctx.Input.IP(), "Put `Atoi` error", err.Error())
+			c.Ctx.Output.SetStatus(400)
+			c.Data["json"] = err.Error()
+		}
 		v := models.Project{Id: id}
 		if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
 			if err := models.UpdateProjectById(&v); err == nil {
+				beego.Trace(c.Ctx.Input.IP(), "Put project OK")
 				c.Data["json"] = "OK"
 			} else {
+				beego.Debug(c.Ctx.Input.IP(), "Put news `UpdateProjectById` error", err.Error())
 				c.Data["json"] = err.Error()
+				c.Ctx.Output.SetStatus(400)
 			}
 		} else {
+			beego.Debug(c.Ctx.Input.IP(), "Put project `Unmarshal` error", err.Error())
 			c.Data["json"] = err.Error()
+			c.Ctx.Output.SetStatus(400)
 		}
+	} else {
+		beego.Debug(c.Ctx.Input.IP(), "Access denied for `Put`")
+		c.Ctx.Output.SetStatus(400)
 	}
 	c.ServeJSON()
 }
@@ -176,8 +189,7 @@ func (c *ProjectController) Put() {
 // @Failure 403 id is empty
 // @router /:id [delete]
 func (c *ProjectController) Delete() {
-	// TODO: обновить защиту когда будет лвлинг пользователей
-	if c.Ctx.Output.IsOk() {
+	if c.CurrentUser.PermissionLevel == 2 {
 		idStr := c.Ctx.Input.Param(":id")
 		id, err := strconv.Atoi(idStr)
 		if err != nil {
@@ -190,6 +202,9 @@ func (c *ProjectController) Delete() {
 		} else {
 			c.Data["json"] = err.Error()
 		}
+	} else {
+		beego.Debug(c.Ctx.Input.IP(), "Access denied for `Delete`")
+		c.Ctx.Output.SetStatus(400)
 	}
 	c.ServeJSON()
 }
