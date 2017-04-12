@@ -1,7 +1,9 @@
 export class NewsItem {
   constructor(
-    public Image: string,
-    public Date: string,
-    public Title: string,
-    public Text: string) { }
+    public created: string,
+    public description: string,
+    public edited: string,
+    public id: 0,
+    public tags : {},
+    public title: string) { }
 }

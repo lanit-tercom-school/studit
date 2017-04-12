@@ -207,9 +207,13 @@ export class ApiService {
   }
 
   getNewsPage() {
-   return this.http.get(environment.apiUrl + '/news/').map((response: Response) => response.json());
+   return this.http.get(environment.apiUrl + '/v1/news/').map((response: Response) => response.json());
   }
 
+  getNewsById(id_: number) {
+    return this.http.get(environment.apiUrl + '/v1/news/' + id_)
+      .map((response: Response) => response.json());
+     }
 
     private jwt() {
     // create authorization-page header with jwt token

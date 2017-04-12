@@ -1,11 +1,11 @@
 	<div class="container">
 		<h1>Новости</h1>
 
-		<div *ngFor="let item of newsItems">
-			 	<h4>{{ item.Title}}</h4>
-				<p>{{ item.Date}}</p>
-				<img src="{{item.Image}}" alt="">
-				<p class="text">{{ item.Text}}</p>
+		<div>
+			 	<h4>{{ myItems.title}}</h4>
+				<p>{{ myItems.edited}}</p>
+				<img src="{{myItems.image}}" alt="Waiting for picture...">
+				<p class="text">{{ myItems.description}}</p>
 		</div>
 		<p>Источник: <a class = "link" href="#">ссылка</a></p>
 			<div align = "right">
