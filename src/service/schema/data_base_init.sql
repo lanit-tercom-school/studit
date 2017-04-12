@@ -85,6 +85,7 @@ CREATE TABLE "news" (
 	"id" serial NOT NULL,
 	"title" varchar(255) NOT NULL,
 	"description" TEXT NOT NULL,
+	"image" varchar(255) NOT NULL,
 	"date_of_creation" TIMESTAMP WITH TIME ZONE NOT NULL,
 	"last_edit" TIMESTAMP NOT NULL,
 	"tags" varchar(1000) NOT NULL,
