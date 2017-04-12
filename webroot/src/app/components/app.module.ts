@@ -12,6 +12,9 @@ import { TopPanelComponent } from './top-panel/top-panel.component';
 import { ProjectListComponent } from './shared/project-list/project-list.component';
 import { ProjectItemComponent } from './shared/project-list/project-item/project-item.component';
 
+import { NewsListComponent } from './shared/news-list/news-list.component';
+import { NewsItemComponent } from './shared/news-list/news-item/news-item.component';
+
 import { AboutComponent } from './main/about/about.component';
 import { EnrolmentComponent } from './main/enrolment/enrolment.component';
 import { FeaturesComponent } from './main/features/features.component';
@@ -43,7 +46,6 @@ import { AuthorPublicPageComponent } from './pages/author-public-page/author-pub
 import { StudentPublicPageComponent } from './pages/student-public-page/student-public-page.component';
 
 import { MainNewsPageComponent } from './pages/main-news-page/main-news-page.component';
-import { MainNewsItemComponent } from './pages/main-news-page/main-news-item/main-news-item.component';
 import { MainFullNewsPageComponent } from './pages/main-full-news-page/main-full-news-page.component';
 
 import { ProjectTasksPageComponent } from './pages/project-tasks-page/project-tasks-page.component';
@@ -87,7 +89,8 @@ import { HomeProjectsViewComponent } from './pages/home-page/home-projects-view/
     AuthorPublicPageComponent,
     StudentPublicPageComponent,
     MainNewsPageComponent,
-    MainNewsItemComponent,
+    NewsListComponent,
+    NewsItemComponent,
     MainFullNewsPageComponent,
     ProjectTasksPageComponent,
     ProjectTaskItemComponent,

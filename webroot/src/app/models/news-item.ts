@@ -1,4 +1,4 @@
-export class MainNewsItem {
+export class NewsItem {
   constructor(
     public Image: string,
     public Date: string,

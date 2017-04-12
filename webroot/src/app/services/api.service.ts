@@ -78,7 +78,7 @@ export class ApiService {
         });
         return res;
       });
-    
+
   }
 
   getProjectItems() {
@@ -125,6 +125,7 @@ export class ApiService {
       }
     ];
   }
+
 
   getTaskItem(id: number) {
     return [
@@ -204,6 +205,11 @@ export class ApiService {
 
     ];
   }
+
+  getNewsPage() {
+   return this.http.get(environment.apiUrl + '/news/').map((response: Response) => response.json());
+  }
+
 
     private jwt() {
     // create authorization-page header with jwt token
