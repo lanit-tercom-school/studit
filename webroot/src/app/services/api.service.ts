@@ -210,7 +210,7 @@ export class ApiService {
    return this.http.get(environment.apiUrl + '/v1/news/').map((response: Response) => response.json());
   }
 
-  getNewsById(id_: number) {
+  getNewsById(id_ : number) {
     return this.http.get(environment.apiUrl + '/v1/news/' + id_)
       .map((response: Response) => response.json());
      }

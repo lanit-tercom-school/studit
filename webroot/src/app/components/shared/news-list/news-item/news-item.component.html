@@ -1,10 +1,7 @@
 
-	<!--<div class="col col-md-3 col-lg-2">
-		<img src="{{NewsItem.Image}}" alt="">
-	</div>-->
 	<div class = "newscard">
 		<p class="newscard-text">{{ NewsItem.edited| date: 'dd.mm.yyyy'}}</p>
 		<h4 class="newscard-title">{{ NewsItem.title}}</h4>
 		<p class="newscard-text">{{NewsItem.description.split(".", 1)}}...</p>
-		<a class="link" href ="news/{{NewsItem.id}}">Читать далее</a>
+		<a [routerLink]="['/news',  NewsItem.id]">Читать далее</a>
 </div>
