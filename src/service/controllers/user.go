@@ -57,13 +57,25 @@ func (c *UserController) Post() {
 // @router /:id [get]
 func (c *UserController) GetOne() {
 	idStr := c.Ctx.Input.Param(":id")
-	id, _ := strconv.Atoi(idStr)
-	v, err := models.GetUserById(id)
-	if err != nil {
-		c.Data["json"] = err.Error()
-		c.Ctx.Output.SetStatus(400)
+	id, err := strconv.Atoi(idStr)
+	if err!= nil {
+		v, err := models.GetUserById(id)
+		if err != nil {
+			c.Data["json"] = err.Error()
+			c.Ctx.Output.SetStatus(400)
+		} else {
+			out := models.User{
+				Id: v.Id,
+				Nickname: v.Nickname,
+				Description: v.Description,
+				Avatar: v.Avatar,
+			}
+			c.Data["json"] = out
+		}
 	} else {
-		c.Data["json"] = v
+		beego.Debug(c.Ctx.Input.IP(), "GetOne user `Atoi` error", err.Error())
+		c.Ctx.Output.SetStatus(400)
+		c.Data["json"] = err.Error()
 	}
 	c.ServeJSON()
 }
