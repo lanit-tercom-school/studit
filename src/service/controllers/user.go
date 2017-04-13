@@ -149,13 +149,14 @@ func (c *UserController) Put() {
 			idStr := c.Ctx.Input.Param(":id")
 			id, err := strconv.Atoi(idStr)
 			if err != nil {
-				beego.Debug(c.Ctx.Input.IP(), "Put `Atoi` error", err.Error())
+				beego.Debug(c.Ctx.Input.IP(), "Put user `Atoi` error", err.Error())
 				c.Ctx.Output.SetStatus(400)
 				c.Data["json"] = err.Error()
 			} else if c.CurrentUser.UserId == id {
 				v := models.User{Id: id}
 				if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
 					if err := models.UpdateUserById(&v); err == nil {
+
 						beego.Trace(c.Ctx.Input.IP(), "Put user OK")
 						c.Data["json"] = "OK"
 					} else {
@@ -168,13 +169,12 @@ func (c *UserController) Put() {
 					c.Data["json"] = err.Error()
 					c.Ctx.Output.SetStatus(400)
 				}
-			} else {
-				beego.Debug(c.Ctx.Input.IP(), "Access denied for `Put`")
-				c.Ctx.Output.SetStatus(403)
-				c.Data["json"] = "Forbidden"
 			}
-
-		}
+		} else {
+			beego.Debug(c.Ctx.Input.IP(), "Access denied for user `Put`")
+			c.Ctx.Output.SetStatus(403)
+			c.Data["json"] = "Forbidden"
+			}
 	} else {
 		c.Ctx.Output.SetStatus(401)
 		c.Data["json"] = "Unauthorized"

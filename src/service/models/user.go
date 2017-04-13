@@ -19,6 +19,14 @@ type User struct {
     // Can't be higher than `auth.MaxPermissionLevel` !
     PermissionLevel     int     `orm:"column(permission_level);default(0)"  json:"permission_level"`
 }
+func (t* User) translateToUpdate() User {
+	return User{
+		Id: t.Id,
+		Nickname: t.Nickname,
+		Description: t.Description,
+		Avatar: t.Avatar,
+	}
+}
 
 func (t *User) TableName() string {
     return "user"
@@ -125,6 +133,7 @@ func GetAllUser(query map[string]string, fields []string, sortby []string, order
 // the record to be updated doesn't exist
 func UpdateUserById(m *User) (err error) {
 	o := orm.NewOrm()
+	*m=m.translateToUpdate()
 	v := User{Id: m.Id}
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
