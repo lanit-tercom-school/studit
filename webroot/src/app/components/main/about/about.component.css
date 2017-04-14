@@ -1,14 +1,21 @@
-:host {
-    background: #222 url('/assets/main-cover-top.jpg') center center no-repeat;
+#cover {
+    background: #222 url('https://img3.goodfon.ru/original/1920x1080/b/83/arhitektura-kalkulyator.jpg') center center no-repeat;
     background-size: cover;
-    color: black;
-    height: 100%;
+    height: 93%;
+    text-align: center;
     display: flex;
+    align-items: center;
 }
 
-#caption {
-    height: 100%;
-    display: flex;
-    text-align: center;
-    align-items: center;
+#cover-caption {
+    width: 100%;
+}
+
+h1, p{
+    color:black;
+}
+
+p{
+    font-size: x-large;
+    font-weight: 550;
 }

@@ -4,6 +4,8 @@ import { AuthManager } from './../managers/authmanager';
 
 import { MainComponent } from './main/main.component';
 import { ProjectListComponent } from './shared/project-list/project-list.component';
+import { NewsListComponent } from './shared/news-list/news-list.component';
+
 import { StudentProjectPageComponent } from './pages/student-project-page/student-project-page.component';
 import { ProjectListPageComponent } from './pages/project-list-page/project-list-page.component';
 import { AuthorizationPageComponent } from './pages/authorization-page/authorization-page.component';
@@ -43,7 +45,7 @@ export const routes: Routes = [
   { path: 'author/:id', component: AuthorPublicPageComponent },
   { path: 'student/:id', component: StudentPublicPageComponent },
   { path: 'news', component: MainNewsPageComponent },
-  { path: 'news/somenews', component: MainFullNewsPageComponent },
+  { path: 'news/:id', component: MainFullNewsPageComponent },
 ];
 
 export const projectRoutes: Routes = [

@@ -9,10 +9,6 @@
 * [Система контроля версий](https://ru.wikipedia.org/wiki/Система_управления_версиями) (VCS), [еще тут](https://git-scm.com/book/ru/v1/%D0%92%D0%B2%D0%B5%D0%B4%D0%B5%D0%BD%D0%B8%D0%B5-%D0%9E-%D0%BA%D0%BE%D0%BD%D1%82%D1%80%D0%BE%D0%BB%D0%B5-%D0%B2%D0%B5%D1%80%D1%81%D0%B8%D0%B9)
 * [Git](https://git-scm.com/book/ru/v1) (не вдаваясь в подробности)
 
-* [Токен](https://ru.wikipedia.org/wiki/%D0%A2%D0%BE%D0%BA%D0%B5%D0%BD)
-* [Хеширование](https://ru.wikipedia.org/wiki/Хеширование)
-* [JWT](https://en.wikipedia.org/wiki/JSON_Web_Token)
-
 * [База данных](https://ru.wikipedia.org/wiki/База_данных)
 * [SQL](https://ru.wikipedia.org/wiki/SQL)
 * [ORM](https://ru.wikipedia.org/wiki/ORM)
@@ -30,6 +26,9 @@
 * [Beego](https://astaxie.gitbooks.io/build-web-application-with-golang/en/) routing, controllers, models, logging, [orm](https://beego.me/docs/mvc/model/orm.md)
 * Лог(log), логирование, уровни логирования
 * Тестирование приложений, юнит-тесты (unit tests), [golang testing](https://golang.org/pkg/testing/)
+* [Токен](https://ru.wikipedia.org/wiki/%D0%A2%D0%BE%D0%BA%D0%B5%D0%BD)
+* [Хеширование](https://ru.wikipedia.org/wiki/Хеширование)
+* [JWT](https://en.wikipedia.org/wiki/JSON_Web_Token)
 
 # Утонченный вкус
 

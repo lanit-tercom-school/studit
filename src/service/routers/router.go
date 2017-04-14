@@ -172,9 +172,9 @@ func init() {
 				&controllers.AuthController{},
 			),
 		),
-		beego.NSNamespace("/auth/logout",
+		beego.NSNamespace("/auth/change",
 			beego.NSInclude(
-				&controllers.LogoutController{},
+				&controllers.ChangePasswordController{},
 			),
 		),
 		beego.NSNamespace("/auth/register",

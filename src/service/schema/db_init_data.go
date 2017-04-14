@@ -64,7 +64,7 @@ func main() {
 		Id: 1,
 		Nickname: "Admin",
 		Login: "a@a",
-		Password: "a",
+		Password: auth.CustomStr("a").ToSHA1(),
 		Avatar: fmt.Sprintf("%s%s?colors=%s&colors=%s&size=%s", auth.AvatarTemplatePath, avatar_seed,
 			color_str, "FFFFFF", auth.AvatarTemplateSize),
 		Description: "Главный по тарелкам",
@@ -78,7 +78,7 @@ func main() {
 		Id: 2,
 		Nickname: "Moderator",
 		Login: "moder@moder.moder",
-		Password: "moder",
+		Password: auth.CustomStr("moder").ToSHA1(),
 		Avatar: fmt.Sprintf("%s%s?colors=%s&colors=%s&size=%s", auth.AvatarTemplatePath, avatar_seed,
 			color_str, "FFFFFF", auth.AvatarTemplateSize),
 		Description: "Главный по молоткам",
@@ -92,7 +92,7 @@ func main() {
 		Id: 3,
 		Nickname: "Егорка2003",
 		Login: "egorka2003@maaail.ru",
-		Password: "пароль",
+		Password: auth.CustomStr("пароль").ToSHA1(),
 		Avatar: fmt.Sprintf("%s%s?colors=%s&colors=%s&size=%s", auth.AvatarTemplatePath, avatar_seed,
 			color_str, "FFFFFF", auth.AvatarTemplateSize),
 		Description: "ЮЮЮ, ААА",
@@ -298,6 +298,7 @@ func main() {
 			" к справочным материалам и просят решить какую-либо техническую задачу, что, по мнению уже благополучно" +
 			" работающих где-либо программистов, деморализует и не выявляет реальных навыков.",
 		Tags: []string{"Other"},
+		Image: "https://image.freepik.com/free-vector/programmer-working-on-the-computer_23-2147505689.jpg",
 	}
 	fastCheckErr(m.AddNews(&news1))
 
@@ -326,6 +327,7 @@ func main() {
 			" панели AWS Service Health Dashboard, которая не показывала информацию о сбоях, так как сама" +
 			" зависела от упавшего сервиса S3.",
 		Tags: []string{"Other", "World"},
+		Image: "http://frank.jou.ufl.edu/wp-content/uploads/2015/05/ThinkstockPhotos-Website.jpg",
 	}
 	fastCheckErr(m.AddNews(&news2))
 

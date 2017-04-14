@@ -1,6 +1,5 @@
 :host{
   display: flex;
-  background-color: whitesmoke;
 }
 
 h3 {
@@ -12,8 +11,7 @@ h3 {
     justify-content: space-around;
 }
 
-.btn-danger{
-  border: 0px;
+.btn{
   max-width: 15rem;
   margin-top: 2rem;
 }

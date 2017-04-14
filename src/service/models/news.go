@@ -14,6 +14,7 @@ type news struct {
 	DateOfCreation      time.Time   `orm:"column(date_of_creation);type(datetime)"`
 	LastEdit            time.Time   `orm:"column(last_edit);type(datetime)"`
 	Tags                string      `orm:"column(tags)"`
+	Image               string      `orm:"columt(image)"`
 }
 
 type NewsJson struct {
@@ -23,6 +24,7 @@ type NewsJson struct {
 	Created         time.Time   `json:"created"`
 	Edited          time.Time   `json:"edited"`
 	Tags            []string    `json:"tags"`
+	Image           string      `json:"image"`
 }
 
 func (t *news) translate() NewsJson {
@@ -33,6 +35,7 @@ func (t *news) translate() NewsJson {
 		Created: t.DateOfCreation,
 		Edited: t.LastEdit,
 		Tags: strings.Split(t.Tags, ","),
+		Image: t.Image,
 	}
 }
 
@@ -44,6 +47,7 @@ func (t *NewsJson) translate() news {
 		DateOfCreation: t.Created,
 		LastEdit: t.Edited,
 		Tags: strings.Join(t.Tags, ","),
+		Image: t.Image,
 	}
 }
 
