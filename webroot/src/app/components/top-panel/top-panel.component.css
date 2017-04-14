@@ -4,15 +4,12 @@
     font-weight: 500;
 }
 
-.navbar-brand
-{
-    margin-left: 10%;
-}
+
 
 .navbar-nav
 {
-    margin-left: 20%;
-    margin-right: 10%;
+    margin-left: 50%;
+    margin-right: 25%;
     width: 100%;
     justify-content: space-around;
 }
