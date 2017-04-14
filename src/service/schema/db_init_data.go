@@ -553,7 +553,7 @@ func main() {
 		Tags: []string{"Other", "World"},
 		Image: "https://image.freepik.com/free-vector/programmer-working-on-the-computer_23-2147505689.jpg",
 	}
-	fastCheckErr(o.Insert(&news3))
+	fastCheckErr(m.AddNews(&news3))
 
 	news4 := m.NewsJson{
 		Id: 4,
@@ -575,7 +575,7 @@ func main() {
 		Tags: []string{"Other"},
 		Image: "http://frank.jou.ufl.edu/wp-content/uploads/2015/05/ThinkstockPhotos-Website.jpg",
 	}
-	fastCheckErr(o.Insert(&news4))
+	fastCheckErr(m.AddNews(&news4))
 
 	// add tasks
 
@@ -764,7 +764,7 @@ func main() {
 	fastCheckErr(o.Insert(&rec_course4))
 
 	//add tests
-
+/*
 	test1 := m.Test{
 		Id: 		1,
 		Title:		"Тест 1 урок 1 курс 1",
@@ -824,7 +824,7 @@ func main() {
 	fastCheckErr(o.Insert(&task_fortest4))
 
 	//add Practises
-
+*/
 	practise1 := m.Practise{
 		Id:		1,
 		LessonId: 	&lesson1,
@@ -891,7 +891,7 @@ func main() {
 	fastCheckErr(o.Insert(&video5))
 
 	//add Variants
-
+/*
 	variant1 := m.Variant{
 		Id :	400,
 		Text:	"Вариант  ответа 1",
@@ -939,7 +939,7 @@ func main() {
 		TaskForTestId: &task_fortest3,
 	}
 	fastCheckErr(o.Insert(&variant6))
-
+*/
 
 	beego.Info("Initial data was successfully added to Database")
 }
