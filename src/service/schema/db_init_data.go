@@ -500,6 +500,7 @@ func main() {
 			" к справочным материалам и просят решить какую-либо техническую задачу, что, по мнению уже благополучно" +
 			" работающих где-либо программистов, деморализует и не выявляет реальных навыков.",
 		Tags: []string{"Other"},
+		Image: "https://image.freepik.com/free-vector/programmer-working-on-the-computer_23-2147505689.jpg",
 	}
 	fastCheckErr(m.AddNews(&news1))
 
@@ -528,7 +529,7 @@ func main() {
 			" панели AWS Service Health Dashboard, которая не показывала информацию о сбоях, так как сама" +
 			" зависела от упавшего сервиса S3.",
 		Tags: []string{"Other", "World"},
-		Image: "https://image.freepik.com/free-vector/programmer-working-on-the-computer_23-2147505689.jpg",
+		Image: "http://frank.jou.ufl.edu/wp-content/uploads/2015/05/ThinkstockPhotos-Website.jpg",
 	}
 	fastCheckErr(m.AddNews(&news2))
 
@@ -550,7 +551,7 @@ func main() {
 			" сети. Фактически, LinkedIn окончательно «сжег мосты»: компания предпочла, чтобы ее ресурс остался" +
 			" заблокированным, чем выполнять требования Роскомнадзора и ФЗ-152. ",
 		Tags: []string{"Other", "World"},
-		Image: "http://frank.jou.ufl.edu/wp-content/uploads/2015/05/ThinkstockPhotos-Website.jpg",
+		Image: "https://image.freepik.com/free-vector/programmer-working-on-the-computer_23-2147505689.jpg",
 	}
 	fastCheckErr(o.Insert(&news3))
 
@@ -572,6 +573,7 @@ func main() {
 			" признался в своем твите, что за Master-ом скрывается очередная версия системы искусственного" +
 			" интеллекта AlphaGo.",
 		Tags: []string{"Other"},
+		Image: "http://frank.jou.ufl.edu/wp-content/uploads/2015/05/ThinkstockPhotos-Website.jpg",
 	}
 	fastCheckErr(o.Insert(&news4))
 
