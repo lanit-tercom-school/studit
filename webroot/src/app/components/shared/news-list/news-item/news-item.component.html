@@ -1,6 +1,6 @@
 
 	<div class = "newscard">
-		<p class="newscard-text">{{ NewsItem.edited| date: 'dd.mm.yyyy'}}</p>
+		<p class="newscard-text">{{ NewsItem.edited| date: 'short'}}</p>
 		<h4 class="newscard-title">{{ NewsItem.title}}</h4>
 		<p class="newscard-text">{{NewsItem.description.split(".", 1)}}...</p>
 		<a [routerLink]="['/news',  NewsItem.id]">Читать далее</a>
