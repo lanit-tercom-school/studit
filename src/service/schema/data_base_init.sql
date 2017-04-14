@@ -225,7 +225,7 @@ CREATE TABLE "user_comments" (
 /*Комментарий пользователя*/
 CREATE TABLE "comment" (
   "id" serial NOT NULL,
-  "text" bigint NOT NULL,
+  "text" TEXT NOT NULL,
   CONSTRAINT comment_pk PRIMARY KEY ("id")
 ) WITH (
 OIDS=FALSE
