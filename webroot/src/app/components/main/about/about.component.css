@@ -1,5 +1,5 @@
 #cover {
-    background: white;
+    background: var(--section-color);
     background-size: cover;
     height: 93%;
     text-align: center;
@@ -14,7 +14,10 @@
 h1, p{
     color:black;
 }
-
+.container .reg
+{
+    margin-top: 50px;
+}
 p{
     font-size: x-large;
     font-weight: 550;
