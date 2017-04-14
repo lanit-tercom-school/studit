@@ -134,9 +134,9 @@ func main() {
 	color_str = auth.GenerateRandomColor()
 	user5 := m.User{
 		Id: 5,
-		Nickname: "S1ayeR#1",
+		Nickname: "S1ayeR1",
 		Login: "slayer342@bbk.ru",
-		Password: auth.CustomStr("lalalalala").ToSHA1(),
+		Password: auth.CustomStr("lala").ToSHA1(),
 		Avatar: fmt.Sprintf("%s%s?colors=%s&colors=%s&size=%s", auth.AvatarTemplatePath, avatar_seed,
 			color_str, "FFFFFF", auth.AvatarTemplateSize),
 		Description: "bjklknufu",
@@ -528,6 +528,7 @@ func main() {
 			" панели AWS Service Health Dashboard, которая не показывала информацию о сбоях, так как сама" +
 			" зависела от упавшего сервиса S3.",
 		Tags: []string{"Other", "World"},
+		Image: "https://image.freepik.com/free-vector/programmer-working-on-the-computer_23-2147505689.jpg",
 	}
 	fastCheckErr(m.AddNews(&news2))
 
@@ -549,6 +550,7 @@ func main() {
 			" сети. Фактически, LinkedIn окончательно «сжег мосты»: компания предпочла, чтобы ее ресурс остался" +
 			" заблокированным, чем выполнять требования Роскомнадзора и ФЗ-152. ",
 		Tags: []string{"Other", "World"},
+		Image: "http://frank.jou.ufl.edu/wp-content/uploads/2015/05/ThinkstockPhotos-Website.jpg",
 	}
 	fastCheckErr(o.Insert(&news3))
 
