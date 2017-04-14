@@ -26,9 +26,9 @@ func (c *ProjectController) URLMapping() {
 // Post ...
 // @Title Post
 // @Description create Project
-// @Param	body	body 	models.Project	true		"body for Project content"
-// @Param	token	query   string          true    "Access token, Permission Level should be 2"
-// @Success 201 {int} models.Project
+// @Param	body		body 	models.Project	true		"body for Project content"
+// @Param	Bearer-token		header	string			    true		"Access token, Permission Level should be 1"
+// @Success 201 OK
 // @Failure 403 body is empty
 // @router / [post]
 func (c *ProjectController) Post() {
@@ -62,7 +62,7 @@ func (c *ProjectController) Post() {
 // @Title Get One
 // @Description get Project by id
 // @Param	id		path 	string	true		"The key for staticblock"
-// @Success 200 {object} models.Project
+// @Success 200 {object} models.Project	Get project with specified id
 // @Failure 400 :id is wrong
 // @router /:id [get]
 func (c *ProjectController) GetOne() {
@@ -95,7 +95,7 @@ func (c *ProjectController) GetOne() {
 // @Param	order	query	string	false	"Order corresponding to each sortby field, if single value, apply to all sortby fields. e.g. desc,asc ..."
 // @Param	limit	query	string	false	"Limit the size of result set. Must be an integer. Default 10"
 // @Param	offset	query	string	false	"Start position of result set. Must be an integer"
-// @Success 200 {object} models.Project
+// @Success 200 {object} []models.Project Get array of projects filtered with specified filters (wtf this description)
 // @Failure 403
 // @router / [get]
 func (c *ProjectController) GetAll() {
@@ -155,10 +155,10 @@ func (c *ProjectController) GetAll() {
 // Put ...
 // @Title Put
 // @Description update the Project
-// @Param	id	path 	string	true		"The id you want to update"
-// @Param	body	body 	models.Project	true	"body for Project content"
-// @Param	token	query   string          true    "Access token, Permission Level should be 2"
-// @Success 200 {object} models.Project
+// @Param	id		path 	string	true		"The id you want to update"
+// @Param	body		body 	models.Project	true		"body for Project content"
+// @Param	Bearer-token		header	string			true		"Access token, Permission Level should be 2"
+// @Success 200 {object} models.Project Description
 // @Failure 403 :id is not int
 // @router /:id [put]
 func (c *ProjectController) Put() {
@@ -196,9 +196,9 @@ func (c *ProjectController) Put() {
 // Delete ...
 // @Title Delete
 // @Description delete the Project
-// @Param	id	path 	string	true	"The id you want to delete"
-// @Param	token	query   string	true    "Access token, Permission Level should be 2"
-// @Success 200 {string} delete success!
+// @Param	id		path 	string	true		"The id you want to delete"
+// @Param	Bearer-token		header	string			true		"Access token, Permission Level should be 2"
+// @Success 200 OK
 // @Failure 403 id is empty
 // @router /:id [delete]
 func (c *ProjectController) Delete() {

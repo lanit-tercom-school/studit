@@ -33,25 +33,58 @@ func TryToLogin(login, password string) (user models.User, err error) {
 		return user, errors.New("Can't find User with this login (dev)") // TODO: should be changed to "Invalid login or password"
 	} else if user.Id < 1 {
 		return user, errors.New("Bad user ID (dev)") // TODO: should be changed to "Invalid login or password"
-	// } else if user.Password != customStr(password).ToSHA1() { // TODO: UNcomment this on pub
-	} else if user.Password != password { // TODO: comment this on pub
+	} else if user.Password != CustomStr(password).ToSHA1() { // TODO: UNComment this on pub
+	//} else if user.Password != password { // TODO: comment this on pub
 		return user, errors.New("Invalid login or password")
 	} else {
 		return user, nil  // all OK
 	}
 }
 
+func TryToChangePassword(user_id int, password string) (user *models.User, err error) {
+	// create default model
+	user, err = models.GetUserById(user_id)
+
+	if err != nil {
+		return user, errors.New("Can't find User with this login (dev)") // TODO: should be changed to "Invalid login or password"
+	} else if user.Id < 1 {
+		return user, errors.New("Bad user ID (dev)") // TODO: should be changed to "Invalid login or password"
+	} else if user.Password != CustomStr(password).ToSHA1() { // TODO: UNComment this on pub
+	//} else if user.Password != password { // TODO: comment this on pub
+		return user, errors.New("Invalid login or password")
+	} else {
+		return user, nil  // all OK
+	}
+}
+
+func ChangePasswordForUser(user *models.User) error {
+	user.Password = CustomStr(user.Password).ToSHA1()
+	return user.Update()
+}
+
 // Generates cryptographically secure token (random string)
-func GenerateNewToken(n int) string {
-	if n <= 0 {
+func GenerateNewToken(count int) string {
+	if count <= 0 {
 		return ""
 	}
 	// template string
 	const alphaNum = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
-	var bytes = make([]byte, n) // TODO: change 10 to `n`
+	var bytes = make([]byte, count)
 	rand.Read(bytes)
 	for i, b := range bytes {
 		bytes[i] = alphaNum[b%byte(len(alphaNum))]
 	}
 	return string(bytes)
 }
+
+func GenerateRandomColor() string {
+	// template string
+	const alphaNum = "0123456789ABCDEF"
+	var bytes = make([]byte, 6)
+	rand.Read(bytes)
+	for i, b := range bytes {
+		bytes[i] = alphaNum[b%byte(len(alphaNum))]
+	}
+	return string(bytes)
+}
+

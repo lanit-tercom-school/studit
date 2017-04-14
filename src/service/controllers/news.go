@@ -25,10 +25,11 @@ func (c *NewsController) URLMapping() {
 // Post ...
 // @Title Post
 // @Description create News
-// @Param   body        body    models.NewsJson true    "Body for News content, fields `id`, `created`, `edited` ignores"
-// @Param   token       query   string          true    "Access token, Permission Level should be 2"
-// @Success 201 {int} models.NewsJson
-// @Failure 403 body is empty
+// @Param   body                body        models.NewsJson true    "Body for News content, fields `id`, `created`, `edited` ignores"
+// @Param   Bearer-token        header      string          true    "Access token, Permission Level should be 2"
+// @Success 201 OK
+// @Failure 400 body is empty
+// @Failure 400 Forbidden
 // @router / [post]
 func (c *NewsController) Post() {
 	beego.Trace(c.Ctx.Input.IP(), "Try to POST news")
@@ -51,7 +52,8 @@ func (c *NewsController) Post() {
 		}
 	} else {
         beego.Debug(c.Ctx.Input.IP(), "Access denied for `Post`")
-		c.Ctx.Output.SetStatus(400)
+		c.Ctx.Output.SetStatus(403)
+        c.Data["json"] = "Forbidden"
 	}
 	c.ServeJSON()
 }
@@ -60,7 +62,7 @@ func (c *NewsController) Post() {
 // @Title Get One
 // @Description get News by id
 // @Param   id      path    string  true    "The key for static block"
-// @Success 200 {object} models.NewsJson
+// @Success 200 {object} models.NewsJson    Description
 // @Failure 403 :id is empty
 // @router /:id [get]
 func (c *NewsController) GetOne() {
@@ -92,8 +94,8 @@ func (c *NewsController) GetOne() {
 // @Param   tag         query   string  false   "Filter by one and only one tag. e.g. Other"
 // @Param   limit       query   string  false   "Limit the size of result set. Must be an integer"
 // @Param   offset      query   string  false   "Start position of result set. Must be an integer"
-// @Success 200 {object} []models.NewsJson
-// @Failure 403
+// @Success 200 {object} []models.NewsJson  Description
+// @Failure 400 Error
 // @router / [get]
 func (c *NewsController) GetAll() {
 	var sortBy []string
@@ -142,11 +144,12 @@ func (c *NewsController) GetAll() {
 // Put ...
 // @Title Put
 // @Description Update(edit) the News with id
-// @Param   id      path    string              true        "The id you want to update"
-// @Param   body    body    models.NewsJson     true        "Body for News content, id, created and edited fields ignores"
-// @Param   token   query   string              true        "Access token, Permission Level should be 2"
-// @Success 200 "OK"
+// @Param   id              path        string              true        "The id you want to update"
+// @Param   body            body        models.NewsJson     true        "Body for News content, id, created and edited fields ignores"
+// @Param   Bearer-token    header      string              true        "Access token, Permission Level should be 2"
+// @Success 200 OK
 // @Failure 403 :id is not int
+// @Failure 403 Forbidden
 // @router /:id [put]
 func (c *NewsController) Put() {
 	if c.CurrentUser.PermissionLevel == 2 {
@@ -175,6 +178,7 @@ func (c *NewsController) Put() {
 	} else {
         beego.Debug(c.Ctx.Input.IP(), "Access denied for `Put`")
 		c.Ctx.Output.SetStatus(400)
+        c.Data["json"] = "Forbidden"
 	}
 	c.ServeJSON()
 }
@@ -182,10 +186,11 @@ func (c *NewsController) Put() {
 // Delete ...
 // @Title Delete
 // @Description Delete the News
-// @Param	id		path 	string	true		"The id you want to delete"
-// @Param	token	query	string	true		"Access token, Permission Level should be 2"
-// @Success 200 {string} Delete success!
+// @Param   id              path    string  true    "The id you want to delete"
+// @Param   Bearer-token    header  string  true    "Access token, Permission Level should be 2"
+// @Success 200 OK
 // @Failure 403 id is empty
+// @Failure 403 Forbidden
 // @router /:id [delete]
 func (c *NewsController) Delete() {
 	if c.CurrentUser.PermissionLevel == 2 {
@@ -207,6 +212,7 @@ func (c *NewsController) Delete() {
 	} else {
         beego.Debug(c.Ctx.Input.IP(), "Access denied for `Delete`")
 		c.Ctx.Output.SetStatus(400)
+        c.Data["json"] = "Forbidden"
 	}
 	c.ServeJSON()
 }

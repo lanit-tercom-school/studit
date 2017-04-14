@@ -1,5 +1,4 @@
 :host {
-    background: whitesmoke;
     display: flex;
 }
 
@@ -10,5 +9,11 @@
 
 .row
 {
-    margin: 30px
+    margin: 30px;
+}
+
+.feature-img{
+    margin: 1rem auto;
+    display: flex;
+    justify-content: space-around;
 }

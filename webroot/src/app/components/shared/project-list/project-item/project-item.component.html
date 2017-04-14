@@ -1,10 +1,10 @@
 <div class="card">
   <a routerLink="/project/{{ProjectItem.Id}}" routerLinkActive="active">
-    <img class="card-img-top" height="300" src="http://localhost:8080{{ProjectItem.Logo}}" width="100%" alt="Card image cap">
-  </a>
+    <img class="card-img-top" height="300" src="{{ProjectItem.Logo}}" alt="Card image cap">
   <div class="card-block">
     <h4 class="card-title">{{ProjectItem.Name}}</h4>
     <p class="card-text">{{ProjectItem.Description}}</p>
-    <p class="card-text" style="text-align: right;"><small>{{ProjectItem.Id}}</small></p>
+    <p class="card-text" style="text-align: right;"></p>
   </div>
+  </a>
 </div>

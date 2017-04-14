@@ -31,8 +31,10 @@ func main() {
 	}))
 	if beego.BConfig.RunMode == "dev" {
 		beego.BConfig.WebConfig.DirectoryIndex = true
-		beego.BConfig.WebConfig.StaticDir["/swagger"] = "swagger"
-		beego.BConfig.WebConfig.StaticDir["/logo"] = "logo"
+		beego.SetStaticPath("/", "static")
+		beego.SetStaticPath("/swagger", "swagger")
+		beego.SetStaticPath("/logo", "logo")
+		beego.SetStaticPath("/assets", "assets")
 	}
 	os.Mkdir("logs", 0777)
 	beego.SetLogger("file", `{"filename":"logs/test.log"}`/*"\"logs/\ + time.Now().Format(\"2006-01-02 15_04") + ".log""*/)

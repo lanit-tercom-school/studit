@@ -1,0 +1,14 @@
+	<div class="container">
+		<h1>Новости</h1>
+
+		<div *ngIf="readingNews">
+			 	<h4>{{ readingNews.title}}</h4>
+				<p>{{ readingNews.edited| date: 'dd.mm.yyyy'}}</p>
+				<img src="{{readingNews.image}}" alt="Waiting for picture...">
+				<p class="text">{{ readingNews.description}}</p>
+		</div>
+		<p>Источник: <a class = "link" href="#">ссылка</a></p>
+			<div align = "right">
+			<button role="button" class="page-link" routerLink = "/news">Назад</button>
+		</div>
+	</div>
