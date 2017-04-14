@@ -58,7 +58,7 @@ h1, h2, h3, h4 {
 
 .navbar-light .navbar-nav .nav-link:hover
 {
-  color:var(--dark-logo-color);
+  color: white;
 }
 
 .navbar-light .navbar-nav .nav-link.active
@@ -68,7 +68,7 @@ h1, h2, h3, h4 {
 
 .navbar-light .navbar-nav .nav-link.active:hover
 {
-  color: var(--dark-logo-color);
+  color:  white;
 }
 
 .main-highlited{
