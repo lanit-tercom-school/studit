@@ -34,7 +34,7 @@ func (c *ProjectController) URLMapping() {
 func (c *ProjectController) Post() {
 	// TODO: добавить автора к проекту
 	beego.Trace(c.Ctx.Input.IP(), "Try to POST project")
-	if userLevel := c.CurrentUser.PermissionLevel; userLevel == 2 || userLevel == 1 {
+	if c.CurrentUser.PermissionLevel == 2 || c.CurrentUser.PermissionLevel == 1 {
 		var v models.Project
 		if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
 			if id, err := models.AddProject(&v); err == nil {
@@ -163,7 +163,7 @@ func (c *ProjectController) GetAll() {
 // @router /:id [put]
 func (c *ProjectController) Put() {
 	// TODO: добавить автора к проекту
-	if userLevel := c.CurrentUser.PermissionLevel; userLevel == 2 || userLevel == 1 {
+	if c.CurrentUser.PermissionLevel == 2 || c.CurrentUser.PermissionLevel == 1 {
 		idStr := c.Ctx.Input.Param(":id")
 		id, err := strconv.Atoi(idStr)
 		if err != nil {
