@@ -51,11 +51,24 @@ h1, h2, h3, h4 {
   background-color: var(--primary-color);
 }
 
-.navbar-light .navbar-nav .nav-link{
+.navbar-light .navbar-nav .nav-link 
+{
   color: var(--section-color);
 }
-.navbar-light .navbar-nav .nav-link.active{
-  color: var(--accent-color);
+
+.navbar-light .navbar-nav .nav-link:hover
+{
+  color:var(--dark-logo-color);
+}
+
+.navbar-light .navbar-nav .nav-link.active
+{
+  color: var(--section-color);
+}
+
+.navbar-light .navbar-nav .nav-link.active:hover
+{
+  color: var(--dark-logo-color);
 }
 
 .main-highlited{
