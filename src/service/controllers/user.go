@@ -58,19 +58,19 @@ func (c *UserController) Post() {
 func (c *UserController) GetOne() {
 	idStr := c.Ctx.Input.Param(":id")
 	id, err := strconv.Atoi(idStr)
-	if err!= nil {
+	if err== nil {
 		v, err := models.GetUserById(id)
 		if err != nil {
+			beego.Debug(c.Ctx.Input.IP(), "GetOne user id not found", err.Error())
 			c.Data["json"] = err.Error()
 			c.Ctx.Output.SetStatus(400)
 		} else {
-			out := models.User{
+			c.Data["json"] = models.User{
 				Id: v.Id,
 				Nickname: v.Nickname,
 				Description: v.Description,
 				Avatar: v.Avatar,
-			}
-			c.Data["json"] = out
+				}
 		}
 	} else {
 		beego.Debug(c.Ctx.Input.IP(), "GetOne user `Atoi` error", err.Error())
