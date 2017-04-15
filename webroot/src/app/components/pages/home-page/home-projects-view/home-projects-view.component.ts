@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-
+import {ProjectItem} from '../../../shared/project-list/project-item/project-item'
 @Component({
   selector: 'app-home-projects-view',
   templateUrl: './home-projects-view.component.html',
@@ -7,17 +7,32 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HomeProjectsViewComponent implements OnInit {
   private id:string;
+  private ProjectList:ProjectItem[];
   constructor() { }
 
   ngOnInit() {
+    this.getId();
+    this.ProjectList = this.getProjectsByUserId(this.id);
   }
   getId()
   {
-    this.id=JSON.parse(localStorage.getItem("current_user")).token;
-    console.log(this.id);
+    this.id=JSON.parse(localStorage.getItem("current_user")).id;
   }
-  getProjectsById(id:string)
+  getProjectsByUserId(id:string)
   {
-
+    return [
+    {
+    "Id": 3,
+    "Name": "Оригинальное название",
+    "Description": "Click-bait описание",
+    "Logo": "/files/3.jpg"
+    },
+    {
+    "Id": 2,
+    "Name": "Модный фрилансер",
+    "Description": "Какие же стрелочки вокруг ноубука!",
+    "Logo": "/files/2.jpg"
+    }
+    ]
   }
 }
