@@ -136,9 +136,7 @@ func UpdateUserById(n *User) (err error) {
 			Description: n.Description,
 			Avatar: n.Avatar,
 		}
-		if num, err = o.Update(&m); err == nil {
-			fmt.Println("Number of records updated in database:", num)
-		}
+		num, err = o.Update(&m)
 	}
 	return
 }
