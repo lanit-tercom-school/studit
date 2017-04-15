@@ -12,15 +12,15 @@
                         
                         <form>
                             <div class="form-group row"> 
-                                    <input type="email" class="form-control form-control-lg" id="emailInput" placeholder="Email">
+                                   <input type="email" name="email" class="form-control" id="inputEmail3" placeholder="Email" [(ngModel)]="user.login">
                             </div>
                             <div class="form-group row"> 
-                                    <input type="username" class="form-control form-control-lg" id="usernameInput" placeholder="Имя">
+                                    <input type="text" name="name" class="form-control" id="inputName" placeholder="Полное имя" [(ngModel)]="user.nickname">
                             </div>
                             <div class="form-group row"> 
-                                    <input type="password" class="form-control form-control-lg" id="passwordInput" placeholder="Пароль">
+                                   <input type="password" name="password" class="form-control" id="inputPassword3" placeholder="Пароль" [(ngModel)]="user.password">
                             </div>
-                            <button role="button" class="btn btn-lg btn-warning" role="button">Зарегистрироваться</button>
+                            <button role="button" class="btn btn-lg btn-warning" role="button" (click)="register()">Зарегистрироваться</button>
                         </form>
                     </div>
                 </div>
