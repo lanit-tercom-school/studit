@@ -150,7 +150,7 @@ func (c *UserController) GetAll() {
 // @Description update the User
 // @Param	id		path 	string	true		"The id you want to update"
 // @Param	body		body 	models.User	true		"body for User content"
-// @Param	token		body	string			false		"admin/moder token"
+// @Param   Bearer-token        header      string          true    "Access token, Permission Level should be 2"
 // @Success 200 {object} models.User
 // @Failure 403 :id is not int
 // @router /:id [put]
@@ -165,6 +165,7 @@ func (c *UserController) Put() {
 		} else if c.CurrentUser.UserId == id {
 			v := models.User{Id: id}
 			if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
+				v.Id = id
 				if err := models.UpdateUserById(&v); err == nil {
 					beego.Trace(c.Ctx.Input.IP(), "Put user OK")
 					c.Data["json"] = "OK"
