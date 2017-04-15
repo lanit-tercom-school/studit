@@ -18,4 +18,5 @@ small
 .project-list
 {
   display: flex;
+  background: var(--section-color);
 }
