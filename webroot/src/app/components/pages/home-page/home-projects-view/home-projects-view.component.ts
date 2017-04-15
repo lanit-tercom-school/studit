@@ -6,10 +6,18 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./home-projects-view.component.css']
 })
 export class HomeProjectsViewComponent implements OnInit {
-
+  private id:string;
   constructor() { }
 
   ngOnInit() {
   }
+  getId()
+  {
+    this.id=JSON.parse(localStorage.getItem("current_user")).token;
+    console.log(this.id);
+  }
+  getProjectsById(id:string)
+  {
 
+  }
 }
