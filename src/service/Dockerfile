@@ -5,4 +5,4 @@ COPY src/service/conf/ /usr/bin/backend/conf/
 
 EXPOSE 8081
 
-CMD ["/usr/bin/service"]
+CMD ["/usr/bin/backend/service"]
