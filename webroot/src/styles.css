@@ -1,3 +1,11 @@
+:root
+{
+  --primary-color: #2A2E31;
+  --logo-color: #1CB5DE;
+  --section-color: #E7F4FB;
+  --accent-color: #D94949;
+}
+
 html,
 body {
     height:100%;
@@ -34,4 +42,42 @@ body {
 
 h1, h2, h3, h4 {
   font-family: "PT Sans Caption", sans-serif;
+  color: var(--primary-color);
+}
+
+.nav-con, .footer {
+  background-color: var(--primary-color);
+}
+
+.navbar-light .navbar-nav .nav-link{
+  color: var(--section-color);
+}
+.navbar-light .navbar-nav .nav-link.active{
+  color: var(--accent-color);
+}
+
+.main-highlited{
+  background-color: var(--section-color);
+}
+
+.btn-outline-danger{
+  border-color: var(--accent-color);
+  color: var(--primary-color);
+}
+
+.btn-outline-danger:hover{
+  border-color: var(--accent-color);
+  color: var(--section-color);
+  background-color: var(--accent-color);
+}
+
+.btn-outline-primary{
+  border-color: var(--logo-color);
+  color: var(--primary-color);
+}
+
+.btn-outline-primary:hover{
+  border-color: var(--logo-color);
+  color: var(--section-color);
+  background-color: var(--logo-color);
 }

@@ -11,7 +11,7 @@ import (
 
 type Comment struct {
 	Id   int   `orm:"column(id);pk;auto" json:"-"`
-	Text int64 `orm:"column(text)" json:"text"`
+	Text string `orm:"column(text)" json:"text"`
 }
 
 func (t *Comment) TableName() string {

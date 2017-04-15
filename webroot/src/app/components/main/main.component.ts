@@ -19,15 +19,15 @@ export class MainComponent implements OnInit {
     this.getMainProjectList();
     this.partners = [{
       src: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/Microsoft_logo_(2012).svg/2000px-Microsoft_logo_(2012).svg.png",
-      link: "#"
+      link: "https://www.microsoft.com/ru-ru/"
     },
     {
       src: "https://upload.wikimedia.org/wikipedia/ru/0/00/The_Faculty_of_Mathematics_and_Mechanics_Logo.png",
-      link: "#"
+      link: "http://www.math.spbu.ru/rus/"
     },
     {
       src: "http://www.sporos.narod.ru/images/logo_spbgu.jpg",
-      link: "#"
+      link: "http://spbu.ru/"
     }];
   }
 

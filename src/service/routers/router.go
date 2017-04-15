@@ -111,13 +111,13 @@ func init() {
 				&controllers.LessonController{},
 			),
 		),
-
+*/
 		beego.NSNamespace("/project",
 			beego.NSInclude(
 				&controllers.ProjectController{},
 			),
 		),
-
+/*
 		beego.NSNamespace("/project_user",
 			beego.NSInclude(
 				&controllers.ProjectUserController{},
@@ -174,9 +174,9 @@ func init() {
 				&controllers.AuthController{},
 			),
 		),
-		beego.NSNamespace("/auth/logout",
+		beego.NSNamespace("/auth/change",
 			beego.NSInclude(
-				&controllers.LogoutController{},
+				&controllers.ChangePasswordController{},
 			),
 		),
 		beego.NSNamespace("/auth/register",

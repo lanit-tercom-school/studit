@@ -33,12 +33,33 @@ func TryToLogin(login, password string) (user models.User, err error) {
 		return user, errors.New("Can't find User with this login (dev)") // TODO: should be changed to "Invalid login or password"
 	} else if user.Id < 1 {
 		return user, errors.New("Bad user ID (dev)") // TODO: should be changed to "Invalid login or password"
-	// } else if user.Password != customStr(password).ToSHA1() { // TODO: UNcomment this on pub
-	} else if user.Password != password { // TODO: comment this on pub
+	} else if user.Password != CustomStr(password).ToSHA1() { // TODO: UNComment this on pub
+	//} else if user.Password != password { // TODO: comment this on pub
 		return user, errors.New("Invalid login or password")
 	} else {
 		return user, nil  // all OK
 	}
+}
+
+func TryToChangePassword(user_id int, password string) (user *models.User, err error) {
+	// create default model
+	user, err = models.GetUserById(user_id)
+
+	if err != nil {
+		return user, errors.New("Can't find User with this login (dev)") // TODO: should be changed to "Invalid login or password"
+	} else if user.Id < 1 {
+		return user, errors.New("Bad user ID (dev)") // TODO: should be changed to "Invalid login or password"
+	} else if user.Password != CustomStr(password).ToSHA1() { // TODO: UNComment this on pub
+	//} else if user.Password != password { // TODO: comment this on pub
+		return user, errors.New("Invalid login or password")
+	} else {
+		return user, nil  // all OK
+	}
+}
+
+func ChangePasswordForUser(user *models.User) error {
+	user.Password = CustomStr(user.Password).ToSHA1()
+	return user.Update()
 }
 
 // Generates cryptographically secure token (random string)
@@ -66,3 +87,4 @@ func GenerateRandomColor() string {
 	}
 	return string(bytes)
 }
+
