@@ -151,11 +151,13 @@ func init() {
 				&controllers.CommentController{},
 			),
 		),
+*/
 		beego.NSNamespace("/user/id",
 			beego.NSInclude(
 				&controllers.UserController{},
 			),
 		),
+/*
 		beego.NSNamespace("/user_comments",
 			beego.NSInclude(
 				&controllers.UserCommentsController{},
