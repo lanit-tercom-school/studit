@@ -1,3 +1,11 @@
 .newscard{
-  margin-bottom: 20px;
+  margin-left: 15px;
+  margin-bottom: 40px;
+}
+.blacktag{
+  color: black;
+  font-style: italic;
+}
+.blacktag:hover{
+  text-decoration: underline;
 }
