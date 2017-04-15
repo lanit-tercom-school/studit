@@ -6,6 +6,7 @@ import (
 	"service/models"
 	"strconv"
 	"strings"
+	"github.com/astaxie/beego"
 )
 
 // Операции с models.User, для некоторых требуется авторизация
@@ -56,13 +57,25 @@ func (c *UserController) Post() {
 // @router /:id [get]
 func (c *UserController) GetOne() {
 	idStr := c.Ctx.Input.Param(":id")
-	id, _ := strconv.Atoi(idStr)
-	v, err := models.GetUserById(id)
-	if err != nil {
-		c.Data["json"] = err.Error()
-		c.Ctx.Output.SetStatus(400)
+	id, err := strconv.Atoi(idStr)
+	if err== nil {
+		v, err := models.GetUserById(id)
+		if err != nil {
+			beego.Debug(c.Ctx.Input.IP(), "GetOne user id not found", err.Error())
+			c.Data["json"] = err.Error()
+			c.Ctx.Output.SetStatus(400)
+		} else {
+			c.Data["json"] = models.User{
+				Id: v.Id,
+				Nickname: v.Nickname,
+				Description: v.Description,
+				Avatar: v.Avatar,
+				}
+		}
 	} else {
-		c.Data["json"] = v
+		beego.Debug(c.Ctx.Input.IP(), "GetOne user `Atoi` error", err.Error())
+		c.Ctx.Output.SetStatus(400)
+		c.Data["json"] = err.Error()
 	}
 	c.ServeJSON()
 }
@@ -137,25 +150,39 @@ func (c *UserController) GetAll() {
 // @Description update the User
 // @Param	id		path 	string	true		"The id you want to update"
 // @Param	body		body 	models.User	true		"body for User content"
-// @Param	token		body	string			false		"admin/moder token"
+// @Param   Bearer-token        header      string          true    "Access token, Permission Level should be 2"
 // @Success 200 {object} models.User
 // @Failure 403 :id is not int
 // @router /:id [put]
 func (c *UserController) Put() {
-	// TODO: обновить защиту когда будет лвлинг пользователей
-	if c.Ctx.Output.IsOk() {
+	if c.CurrentUser.PermissionLevel != -1 {
 		idStr := c.Ctx.Input.Param(":id")
-		id, _ := strconv.Atoi(idStr)
-		v := models.User{Id: id}
-		if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
-			if err := models.UpdateUserById(&v); err == nil {
-				c.Data["json"] = "OK"
-			} else {
-				c.Data["json"] = err.Error()
-			}
-		} else {
+		id, err := strconv.Atoi(idStr)
+		if err != nil {
+			beego.Debug(c.Ctx.Input.IP(), "Put user `Atoi` error", err.Error())
+			c.Ctx.Output.SetStatus(400)
 			c.Data["json"] = err.Error()
+		} else if c.CurrentUser.UserId == id {
+			v := models.User{Id: id}
+			if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
+				v.Id = id
+				if err := models.UpdateUserById(&v); err == nil {
+					beego.Trace(c.Ctx.Input.IP(), "Put user OK")
+					c.Data["json"] = "OK"
+				} else {
+					beego.Debug(c.Ctx.Input.IP(), "Put user `UpdateUserById` error", err.Error())
+					c.Data["json"] = err.Error()
+					c.Ctx.Output.SetStatus(400)
+				}
+			} else {
+				beego.Debug(c.Ctx.Input.IP(), "Put user `Unmarshal` error", err.Error())
+				c.Data["json"] = err.Error()
+				c.Ctx.Output.SetStatus(400)
+			}
 		}
+	} else {
+		c.Ctx.Output.SetStatus(401)
+		c.Data["json"] = "Unauthorized"
 	}
 	c.ServeJSON()
 }

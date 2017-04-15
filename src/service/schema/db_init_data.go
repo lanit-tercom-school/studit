@@ -57,6 +57,22 @@ func main() {
 	}
 	fastCheckErr(o.Insert(&project3))
 
+	project4 := m.Project{
+		Id: 4,
+		Name: "TFS Mobile",
+		Description: "Студенческий проект TFS Mobile",
+		Logo: "/files/4.jpg",
+	}
+	fastCheckErr(o.Insert(&project4))
+
+	project5 := m.Project{
+		Id: 5,
+		Name: "Еще один проект",
+		Description: "Описаниеописаниеописание",
+		Logo: "/files/5.jpg",
+	}
+	fastCheckErr(o.Insert(&project5))
+
 	// add users
 	avatar_seed := auth.GenerateNewToken(6)
 	color_str := auth.GenerateRandomColor()
@@ -82,7 +98,7 @@ func main() {
 		Avatar: fmt.Sprintf("%s%s?colors=%s&colors=%s&size=%s", auth.AvatarTemplatePath, avatar_seed,
 			color_str, "FFFFFF", auth.AvatarTemplateSize),
 		Description: "Главный по молоткам",
-        PermissionLevel: 1,
+        	PermissionLevel: 1,
 	}
 	fastCheckErr(o.Insert(&user2))
 
@@ -96,9 +112,51 @@ func main() {
 		Avatar: fmt.Sprintf("%s%s?colors=%s&colors=%s&size=%s", auth.AvatarTemplatePath, avatar_seed,
 			color_str, "FFFFFF", auth.AvatarTemplateSize),
 		Description: "ЮЮЮ, ААА",
-        PermissionLevel: 0,
+        	PermissionLevel: 0,
 	}
 	fastCheckErr(o.Insert(&user3))
+
+	avatar_seed = auth.GenerateNewToken(6)
+	color_str = auth.GenerateRandomColor()
+	user4 := m.User{
+		Id: 4,
+		Nickname: "ZagadOchNayA",
+		Login: "zagadka@maaail.ru",
+		Password: auth.CustomStr("котикипёсики").ToSHA1(),
+		Avatar: fmt.Sprintf("%s%s?colors=%s&colors=%s&size=%s", auth.AvatarTemplatePath, avatar_seed,
+			color_str, "FFFFFF", auth.AvatarTemplateSize),
+		Description: "Легко потерять, невозможно забить",
+		PermissionLevel: 0,
+	}
+	fastCheckErr(o.Insert(&user4))
+
+	avatar_seed = auth.GenerateNewToken(6)
+	color_str = auth.GenerateRandomColor()
+	user5 := m.User{
+		Id: 5,
+		Nickname: "S1ayeR1",
+		Login: "slayer342@bbk.ru",
+		Password: auth.CustomStr("lala").ToSHA1(),
+		Avatar: fmt.Sprintf("%s%s?colors=%s&colors=%s&size=%s", auth.AvatarTemplatePath, avatar_seed,
+			color_str, "FFFFFF", auth.AvatarTemplateSize),
+		Description: "bjklknufu",
+		PermissionLevel: 0,
+	}
+	fastCheckErr(o.Insert(&user5))
+
+	avatar_seed = auth.GenerateNewToken(6)
+	color_str = auth.GenerateRandomColor()
+	user6 := m.User{
+		Id: 6,
+		Nickname: "NekoTyan",
+		Login: "petrovich82@maaail.ru",
+		Password: auth.CustomStr("pasuwaado").ToSHA1(),
+		Avatar: fmt.Sprintf("%s%s?colors=%s&colors=%s&size=%s", auth.AvatarTemplatePath, avatar_seed,
+			color_str, "FFFFFF", auth.AvatarTemplateSize),
+		Description: "^_^",
+		PermissionLevel: 0,
+	}
+	fastCheckErr(o.Insert(&user6))
 
 	// add tags
 
@@ -132,6 +190,24 @@ func main() {
 	}
 	fastCheckErr(o.Insert(&tag5))
 
+	tag6 := m.Tag{
+		Id: 105,
+		Name: "C#",
+	}
+	fastCheckErr(o.Insert(&tag6))
+
+	tag7 := m.Tag{
+		Id: 106,
+		Name: "Front-end",
+	}
+	fastCheckErr(o.Insert(&tag7))
+
+	tag8 := m.Tag{
+		Id: 107,
+		Name: "Back-end",
+	}
+	fastCheckErr(o.Insert(&tag8))
+
 	// add author permission
 
 	author1 := m.Author{
@@ -139,6 +215,36 @@ func main() {
 		UserId: &user1,
 	}
 	fastCheckErr(o.Insert(&author1))
+
+	author2 := m.Author{
+		Id: 2,
+		UserId: &user2,
+	}
+	fastCheckErr(o.Insert(&author2))
+
+	author3 := m.Author{
+		Id: 3,
+		UserId: &user3,
+	}
+	fastCheckErr(o.Insert(&author3))
+
+	author4 := m.Author{
+		Id: 4,
+		UserId: &user4,
+	}
+	fastCheckErr(o.Insert(&author4))
+
+	author5 := m.Author{
+		Id: 5,
+		UserId: &user5,
+	}
+	fastCheckErr(o.Insert(&author5))
+
+	author6 := m.Author{
+		Id: 6,
+		UserId: &user6,
+	}
+	fastCheckErr(o.Insert(&author6))
 
 	// connect projects and authors
 
@@ -251,6 +357,18 @@ func main() {
 	}
 	fastCheckErr(o.Insert(&contactType5))
 
+	contactType6 := m.ContactType{
+		Id: 6,
+		Type: "telegram",
+	}
+	fastCheckErr(o.Insert(&contactType6))
+
+	contactType7 := m.ContactType{
+		Id: 7,
+		Type: "viber",
+	}
+	fastCheckErr(o.Insert(&contactType7))
+
 	// add user contacts
 
 	user_contact1 := m.UserContact{
@@ -284,6 +402,90 @@ func main() {
 		ContactTypeId: &contactType2,
 	}
 	fastCheckErr(o.Insert(&user_contact4))
+
+	user_contact5 := m.UserContact{
+		Id: 5,
+		UserId: &user5,
+		Contact: "slayer17",
+		ContactTypeId: &contactType5,
+	}
+	fastCheckErr(o.Insert(&user_contact5))
+
+	user_contact6 := m.UserContact{
+		Id: 6,
+		UserId: &user4,
+		Contact: "zagad0chnaya",
+		ContactTypeId: &contactType6,
+	}
+	fastCheckErr(o.Insert(&user_contact6))
+
+	user_contact7 := m.UserContact{
+		Id: 7,
+		UserId: &user6,
+		Contact: "nekotyanmimimi",
+		ContactTypeId: &contactType5,
+	}
+	fastCheckErr(o.Insert(&user_contact7))
+
+	//add comments
+
+	comment1 := m.Comment{
+		Id:	1,
+		Text: "CommentCommentComment1",
+	}
+	fastCheckErr(o.Insert(&comment1))
+
+	comment2 := m.Comment{
+		Id:	2,
+		Text: "CommentCommentComment2",
+	}
+	fastCheckErr(o.Insert(&comment2))
+
+	comment3 := m.Comment{
+		Id:	3,
+		Text: "CommentCommentComment3",
+	}
+	fastCheckErr(o.Insert(&comment3))
+
+	comment4 := m.Comment{
+		Id:	4,
+		Text: "CommentCommentComment4",
+	}
+	fastCheckErr(o.Insert(&comment4))
+
+	// add user comments
+
+	usr_comment1 := m.UserComments{
+		Id:		1,
+		UserId:		&user1,
+		CommentId:	&comment1,
+		Date: 		time.Now(),
+	}
+	fastCheckErr(o.Insert(&usr_comment1))
+
+	usr_comment2 := m.UserComments{
+		Id:		2,
+		UserId:		&user1,
+		CommentId:	&comment2,
+		Date: 		time.Now(),
+	}
+	fastCheckErr(o.Insert(&usr_comment2))
+
+	usr_comment3 := m.UserComments{
+		Id:		3,
+		UserId:		&user2,
+		CommentId:	&comment3,
+		Date: 		time.Now(),
+	}
+	fastCheckErr(o.Insert(&usr_comment3))
+
+	usr_comment4 := m.UserComments{
+		Id:		4,
+		UserId:		&user3,
+		CommentId:	&comment4,
+		Date: 		time.Now(),
+	}
+	fastCheckErr(o.Insert(&usr_comment4))
 
 	// add news
 
@@ -330,6 +532,414 @@ func main() {
 		Image: "http://frank.jou.ufl.edu/wp-content/uploads/2015/05/ThinkstockPhotos-Website.jpg",
 	}
 	fastCheckErr(m.AddNews(&news2))
+
+	news3 := m.NewsJson{
+		Id: 3,
+		Created: time.Now(),
+		Edited: time.Now(),
+		Title: "LinkedIn официально отказалась выполнять требования российского законодательства",
+		Description: "Профессиональная социальная сеть LinkedIn официально отказалась выполнять требования " +
+			" Роскомнадзора и российского законодательства, сообщается на официальном сайте регулятора. В публикации " +
+			" говорится:\"Роскомнадзор получил письмо от вице-президента по международной публичной политике LinkedIn" +
+			" Corporation Пабло Л. Чавеса. В письме сообщается, что компания не готова устранить нарушения российского" +
+			" законодательства. Компания отказалась исполнить требование о локализации баз с персональными данными" +
+			" российских граждан на территории Российской Федерации, подтвердив таким образом свою незаинтересованность" +
+			" в работе на российском рынке.\" Технически, отказ от выполнения требований переводит блокировку" +
+			" LinkedIn в разряд «вечных» и является демаршем против политики российских властей и требований" +
+			" регулирующих органов. Социальная сеть LinkedIn была заблокирована Роскомнадзором еще в ноябре" +
+			" 2016 года. Также в российских версиях магазинов стало невозможно скачать приложение социальной" +
+			" сети. Фактически, LinkedIn окончательно «сжег мосты»: компания предпочла, чтобы ее ресурс остался" +
+			" заблокированным, чем выполнять требования Роскомнадзора и ФЗ-152. ",
+		Tags: []string{"Other", "World"},
+		Image: "https://image.freepik.com/free-vector/programmer-working-on-the-computer_23-2147505689.jpg",
+	}
+	fastCheckErr(m.AddNews(&news3))
+
+	news4 := m.NewsJson{
+		Id: 4,
+		Created: time.Now(),
+		Edited: time.Now(),
+		Title: "Искусственный интеллект DeepMind AlphaGo тайно продолжает сокрушать людей-игроков в онлайн-режиме",
+		Description: "Оказывается, что система искусственного интеллекта DeepMind AlphaGo, предназначенная для игры" +
+			" в древнюю китайскую игру Го, не “сошла со сцены” после того, как в прошлом году она победила лучшего" +
+			" в мире человека-игрока, шестикратного Чемпиона Мира Ли Седоля. Несколько месяцев назад на" +
+			" онлайн-платформе Tygem игры Го появился игрок с ником “Master”, который начал крушить всех" +
+			" подряд. “Master” дважды победил даже Ки Джи (Ke Jie), первого номера на Tygem, и выиграл в" +
+			" 50 играх из 51 игры, в которых он принимал участие. Да и эта одна игра не была выиграна из-за" +
+			" проблем с подключением к Интернету. В течение этих нескольких месяцев у многих людей возникли" +
+			" подозрения, что позади аккаунта Master-а стоит система искусственного интеллекта. Но что это за" +
+			" система и кто является ее разработчиками оставалось под покровом тайны до недавнего времени. И" +
+			" только на прошлой неделе Демис Хассабис (Demis Hassabis), один из основателей проекта DeepMind," +
+			" признался в своем твите, что за Master-ом скрывается очередная версия системы искусственного" +
+			" интеллекта AlphaGo.",
+		Tags: []string{"Other"},
+		Image: "http://frank.jou.ufl.edu/wp-content/uploads/2015/05/ThinkstockPhotos-Website.jpg",
+	}
+	fastCheckErr(m.AddNews(&news4))
+
+	// add tasks
+
+	task1 := m.Task{
+		Id: 		1,
+		Title: 		"Front-end",
+		Description:    "Разработка клиентской части",
+		NumberOfTask:   1,
+		Tags:           "Javascript",
+		Priority:       2,
+		ProjectId:      &project1,
+		ProjectAuthorId:&prj_aut_con1,
+		ProjectUserId:  &prj_usr_con1,
+	}
+	fastCheckErr(o.Insert(&task1))
+
+	task2 := m.Task{
+		Id: 		2,
+		Title: 		"Back-end",
+		Description:    "Разработка серверной части",
+		NumberOfTask:   1,
+		Tags:           "",
+		Priority:       2,
+		ProjectId:      &project1,
+		ProjectAuthorId:&prj_aut_con1,
+		ProjectUserId:  &prj_usr_con1,
+	}
+	fastCheckErr(o.Insert(&task2))
+
+	task3 := m.Task{
+		Id: 		3,
+		Title: 		"Логотип",
+		Description:    "Разработка логотипа",
+		NumberOfTask:   1,
+		Tags:           "Design",
+		Priority:       1,
+		ProjectId:      &project3,
+		ProjectAuthorId:&prj_aut_con1,
+		ProjectUserId:  &prj_usr_con6,
+	}
+	fastCheckErr(o.Insert(&task3))
+
+	//add courses
+
+	course1 := m.Course{
+		Id:		1,
+		Title:		"Курс 1",
+		Description:	"Описание курса",
+		Logo:		"/files/course1.jpg",
+		Rating:		4.8,
+	}
+	fastCheckErr(o.Insert(&course1))
+
+	course2 := m.Course{
+		Id:		2,
+		Title:		"Курс 2",
+		Description:	"Описание курса",
+		Logo:		"/files/course2.jpg",
+		Rating:		4.5,
+	}
+	fastCheckErr(o.Insert(&course2))
+
+	course3 := m.Course{
+		Id:		3,
+		Title:		"Курс 3",
+		Description:	"Описание курса",
+		Logo:		"/files/course3.jpg",
+		Rating:		4.6,
+	}
+	fastCheckErr(o.Insert(&course3))
+
+	course4 := m.Course{
+		Id:		4,
+		Title:		"Курс 4",
+		Description:	"Описание курса",
+		Logo:		"/files/course4.jpg",
+		Rating:		3.9,
+	}
+	fastCheckErr(o.Insert(&course4))
+
+	//add statistic
+
+	statistic1 := m.Statistic{
+		Id:       1,
+		Hours:    12,
+		CourseId: &course1,
+	}
+	fastCheckErr(o.Insert(&statistic1))
+
+	statistic2 := m.Statistic{
+		Id:       2,
+		Hours:    15,
+		CourseId: &course2,
+	}
+	fastCheckErr(o.Insert(&statistic2))
+
+	statistic3 := m.Statistic{
+		Id:       3,
+		Hours:    15,
+		CourseId: &course3,
+	}
+	fastCheckErr(o.Insert(&statistic3))
+
+	statistic4 := m.Statistic{
+		Id:       4,
+		Hours:    18,
+		CourseId: &course4,
+	}
+	fastCheckErr(o.Insert(&statistic4))
+
+	//add lessons
+
+	lesson1 := m.Lesson{
+		Id:          1,
+		Title:       "Урок1",
+		CourseId:    &course1,
+		Description: "Урок 1 курс 1",
+		Rating:      5,
+	}
+	fastCheckErr(o.Insert(&lesson1))
+
+	lesson2 := m.Lesson{
+		Id:          2,
+		Title:       "Урок2",
+		CourseId:    &course1,
+		Description: "Урок 2 курс 1",
+		Rating:      5,
+	}
+	fastCheckErr(o.Insert(&lesson2))
+
+	lesson3 := m.Lesson{
+		Id:          3,
+		Title:       "Урок3",
+		CourseId:    &course1,
+		Description: "Урок 3 курс 1",
+		Rating:      3,
+	}
+	fastCheckErr(o.Insert(&lesson3))
+
+	lesson4 := m.Lesson{
+		Id:          4,
+		Title:       "Урок1",
+		CourseId:    &course2,
+		Description: "Урок 1 курс 2",
+		Rating:      4,
+	}
+	fastCheckErr(o.Insert(&lesson4))
+
+	lesson5 := m.Lesson{
+		Id:          5,
+		Title:       "Урок1",
+		CourseId:    &course4,
+		Description: "Урок 1 курс 4",
+		Rating:      5,
+	}
+	fastCheckErr(o.Insert(&lesson5))
+
+	//add recommend courses
+
+	rec_course1 := m.RecomendCourses{
+		Id:       1,
+		CourseId: &course1,
+		Link:     "/link_to_course1/",
+	}
+	fastCheckErr(o.Insert(&rec_course1))
+
+	rec_course2 := m.RecomendCourses{
+		Id:       2,
+		CourseId: &course2,
+		Link:     "/link_to_course2/",
+	}
+	fastCheckErr(o.Insert(&rec_course2))
+
+	rec_course3 := m.RecomendCourses{
+		Id:       3,
+		CourseId: &course3,
+		Link:     "/link_to_course3/",
+	}
+	fastCheckErr(o.Insert(&rec_course3))
+
+	rec_course4 := m.RecomendCourses{
+		Id:       4,
+		CourseId: &course4,
+		Link:     "/link_to_course4/",
+	}
+	fastCheckErr(o.Insert(&rec_course4))
+
+	//add tests
+/*
+	test1 := m.Test{
+		Id: 		1,
+		Title:		"Тест 1 урок 1 курс 1",
+		LessonId:	&lesson1,
+	}
+	fastCheckErr(o.Insert(&test1))
+
+	test2 := m.Test{
+		Id: 		2,
+		Title:		"Тест 2 урок 1 курс 1",
+		LessonId:	&lesson2,
+	}
+	fastCheckErr(o.Insert(test2))
+
+	test3 := m.Test{
+		Id: 		3,
+		Title:		"Тест 1 урок 3 курс 1",
+		LessonId:	&lesson3,
+	}
+	fastCheckErr(o.Insert(&test3))
+
+	test4 := m.Test{
+		Id: 		4,
+		Title:		"Тест 1 урок 1 курс 4",
+		LessonId:	&lesson5,
+	}
+	fastCheckErr(o.Insert(&test4))
+
+	//add task for test
+
+	task_fortest1 := m.TaskForTest{
+		Id:		1,
+		Question:	"Вопрос 1 Тест 1 Урок 1 Курс 1",
+		TestId:		&test1,
+	}
+	fastCheckErr(o.Insert(&task_fortest1))
+
+	task_fortest2 := m.TaskForTest{
+		Id:		2,
+		Question:	"Вопрос 2 Тест 1 Урок 1 Курс 1",
+		TestId:		&test1,
+	}
+	fastCheckErr(o.Insert(&task_fortest2))
+
+	task_fortest3 := m.TaskForTest{
+		Id:		3,
+		Question:	"Вопрос 1 Тест 2 Урок 1 Курс 1",
+		TestId:		&test3,
+	}
+	fastCheckErr(o.Insert(&task_fortest3))
+
+	task_fortest4 := m.TaskForTest{
+		Id:		4,
+		Question:	"Вопрос 1 Тест 1 Урок 1 Курс 4",
+		TestId:		&test4,
+	}
+	fastCheckErr(o.Insert(&task_fortest4))
+
+	//add Practises
+*/
+	practise1 := m.Practise{
+		Id:		1,
+		LessonId: 	&lesson1,
+		Description: 	"Упражнение к уроку 1 Курс 1",
+	}
+	fastCheckErr(o.Insert(&practise1))
+
+	practise2 := m.Practise{
+		Id:		2,
+		LessonId: 	&lesson2,
+		Description: 	"Упражнение к уроку 1 Курс 1",
+	}
+	fastCheckErr(o.Insert(&practise2))
+
+	practise3 := m.Practise{
+		Id:		3,
+		LessonId: 	&lesson3,
+		Description: 	"Упражнение к уроку 1 Курс 2",
+	}
+	fastCheckErr(o.Insert(&practise3))
+
+	practise4 := m.Practise{
+		Id:		4,
+		LessonId: 	&lesson4,
+		Description: 	"Упражнение к уроку 1 Курс 4",
+	}
+	fastCheckErr(o.Insert(&practise4))
+
+	//add Videos
+
+	video1 := m.Video{
+		Id:		1,
+		LessonId:	&lesson1,
+		Link:		"/link_to_video1/",
+	}
+	fastCheckErr(o.Insert(&video1))
+
+	video2 := m.Video{
+		Id:		2,
+		LessonId:	&lesson2,
+		Link:		"/link_to_video2/",
+	}
+	fastCheckErr(o.Insert(&video2))
+
+	video3 := m.Video{
+		Id:		3,
+		LessonId:	&lesson3,
+		Link:		"/link_to_video3/",
+	}
+	fastCheckErr(o.Insert(&video3))
+
+	video4 := m.Video{
+		Id:		4,
+		LessonId:	&lesson4,
+		Link:		"/link_to_video4/",
+	}
+	fastCheckErr(o.Insert(&video4))
+
+	video5 := m.Video{
+		Id:		5,
+		LessonId:	&lesson5,
+		Link:		"/link_to_video5/",
+	}
+	fastCheckErr(o.Insert(&video5))
+
+	//add Variants
+/*
+	variant1 := m.Variant{
+		Id :	400,
+		Text:	"Вариант  ответа 1",
+		CorrectAnswer: false,
+		TaskForTestId: &task_fortest1,
+	}
+	fastCheckErr(o.Insert(&variant1))
+
+	variant2 := m.Variant{
+		Id :	401,
+		Text:	"Вариант  ответа 2",
+		CorrectAnswer: true,
+		TaskForTestId: &task_fortest1,
+	}
+	fastCheckErr(o.Insert(&variant2))
+
+	variant3 := m.Variant{
+		Id :	402,
+		Text:	"Вариант  ответа 1",
+		CorrectAnswer: true,
+		TaskForTestId: &task_fortest2,
+	}
+	fastCheckErr(o.Insert(&variant3))
+
+	variant4 := m.Variant{
+		Id :	403,
+		Text:	"Вариант  ответа 3",
+		CorrectAnswer: false,
+		TaskForTestId: &task_fortest2,
+	}
+	fastCheckErr(o.Insert(&variant4))
+
+	variant5 := m.Variant{
+		Id :	404,
+		Text:	"Вариант  ответа 1",
+		CorrectAnswer: false,
+		TaskForTestId: &task_fortest3,
+	}
+	fastCheckErr(o.Insert(&variant5))
+
+	variant6 := m.Variant{
+		Id :	405,
+		Text:	"Вариант  ответа 2",
+		CorrectAnswer: true,
+		TaskForTestId: &task_fortest3,
+	}
+	fastCheckErr(o.Insert(&variant6))
+*/
 
 	beego.Info("Initial data was successfully added to Database")
 }
