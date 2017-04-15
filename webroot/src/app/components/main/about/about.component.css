@@ -1,5 +1,6 @@
+@import url('https://fonts.googleapis.com/css?family=Jura');
 #cover {
-    background: var(--section-color);
+    background: var(--primary-color);
     background-size: cover;
     height: 93%;
     text-align: center;
@@ -12,7 +13,9 @@
 }
 
 h1, p{
-    color:black;
+    color: white;
+    font-family: 'Jura', sans-serif;
+    font-size: 5.5rem;
 }
 .container .reg
 {
