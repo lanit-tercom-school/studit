@@ -17,3 +17,14 @@
 {
     color: firebrick;
 }
+
+.lanit-nav-link
+{
+    text-decoration: none;
+    color: white;
+}
+
+.lanit-nav-link:hover
+{
+    color: azure;
+}
