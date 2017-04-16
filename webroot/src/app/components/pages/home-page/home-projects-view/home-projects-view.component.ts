@@ -24,31 +24,31 @@ export class HomeProjectsViewComponent implements OnInit {
     {
     "Id": 3,
     "Name": "Оригинальное название",
-    "Description": "Click-bait описание Bla bla bla bla bla bla bla Bla bla bla bla bla bla bla Bla bla bla bla bla bla bla Bla bla bla bla bla bla bla",
+    "Description": "Click-bait описание",
     "Logo": "/assets/project.jpg"
     },
     {
     "Id": 2,
     "Name": "Модный фрилансер",
-    "Description": "Какие же стрелочки вокруг ноубука! Bla bla bla bla bla bla bla Bla bla bla bla bla bla bla Bla bla bla bla bla bla bla Bla bla bla bla bla bla bla",
+    "Description": "Какие же стрелочки вокруг ноубука!",
     "Logo": "/assets/project.jpg"
     },
     {
       "Id": 2,
       "Name": "Модный фрилансер",
-      "Description": "Какие же стрелочки вокруг ноубука! Bla bla bla bla bla bla bla Bla bla bla bla bla bla bla Bla bla bla bla bla bla bla Bla bla bla bla bla bla bla",
+      "Description": "Какие же стрелочки вокруг ноубука!",
       "Logo": "/assets/project.jpg"
     },
     {
       "Id": 2,
       "Name": "Модный фрилансер",
-      "Description": "Какие же стрелочки вокруг ноубука! Bla bla bla bla bla bla bla Bla bla bla bla bla bla bla Bla bla bla bla bla bla bla Bla bla bla bla bla bla bla",
+      "Description": "Какие же стрелочки вокруг ноубука!",
       "Logo": "/assets/project.jpg"
     },
     {
     "Id": 3,
     "Name": "Оригинальное название",
-    "Description": "Click-bait описание Bla bla bla bla bla bla bla Bla bla bla bla bla bla bla Bla bla bla bla bla bla bla Bla bla bla bla bla bla bla",
+    "Description": "Click-bait описание",
     "Logo": "/assets/project.jpg"
     } 
     ]
