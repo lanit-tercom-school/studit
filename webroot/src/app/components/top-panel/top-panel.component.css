@@ -4,25 +4,27 @@
     font-weight: 500;
 }
 
-.navbar-brand
-{
-    margin-left: 10%;
-}
-
 .navbar-nav
 {
-    margin-left: 20%;
-    margin-right: 10%;
+    float: right;
+    margin-left:40%;
     width: 100%;
     justify-content: space-around;
 }
 
-#sign-in
-{
-    color: #1CB5DE;
-}
 
 #log-out
 {
     color: firebrick;
+}
+
+.lanit-nav-link
+{
+    text-decoration: none;
+    color: white;
+}
+
+.lanit-nav-link:hover
+{
+    color: azure;
 }
