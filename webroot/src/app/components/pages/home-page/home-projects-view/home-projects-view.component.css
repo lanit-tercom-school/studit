@@ -1,7 +1,6 @@
     .card
     {
-        margin-top:25px;
-        border-color: var(--primary-color);
+        margin-bottom:1.5em;
     }
     .card-text, .card-title
     {
@@ -14,5 +13,6 @@
     }
     a
     {
+        text-decoration: none;
         color: black;
     }

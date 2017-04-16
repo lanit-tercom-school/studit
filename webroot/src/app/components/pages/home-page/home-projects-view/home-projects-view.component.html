@@ -1,25 +1,20 @@
-<div class="project-list">
-    <div class="container">
-        <h1>
-            Список проектов
-        </h1>        
-          <div *ngFor="let Project of ProjectList" class="project-card">
-            <div class="card">
-              <a routerLink="/project/{{Project.Id}}" routerLinkActive="active">
-              <div class="row">
-                <div class="col-lg-2">
-                  <img class="card-img-top" height="70px" src="{{Project.Logo}}" alt="Card image cap">
-                </div>              
-                <div class="col-lg-2">
-                  <h4 class="card-title">{{Project.Name}}</h4>
-                </div>
-                <div class="col-lg-5 offset-lg-3">
-                  <p class="card-text">{{Project.Description}}</p>
-                </div>            
-                </div>
-              </a>
-            </div>
-          </div>        
-        <!--  <div><a class="nav-link" routerLink="/projects/tasks" routerLinkActive="active">Список задач</a> -->
+<div class="projects">
+  <div *ngFor="let Project of ProjectList" class="project-card">
+    <div class="card card-outline">
+      <a routerLink="/project/{{Project.Id}}" routerLinkActive="active">
+        <div class="row">
+          <div class="col-lg-2">
+            <img class="card-img-top" height="70px" src="{{Project.Logo}}" alt="Card image cap">
+          </div>
+          <div class="col-lg-2">
+            <h4 class="card-title">{{Project.Name}}</h4>
+          </div>
+          <div class="col-lg-5 offset-lg-3">
+            <p class="card-text">{{Project.Description}}</p>
+          </div>
+        </div>
+      </a>
     </div>
+  </div>
+  <!--  <div><a class="nav-link" routerLink="/projects/tasks" routerLinkActive="active">Список задач</a> -->
 </div>
