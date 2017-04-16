@@ -3,13 +3,13 @@
     <div class="card card-outline">
       <a routerLink="/project/{{Project.Id}}" routerLinkActive="active">
         <div class="row">
-          <div class="col-lg-2">
-            <img class="card-img-top" height="70px" src="{{Project.Logo}}" alt="Card image cap">
+          <div class="col-lg-3">
+            <img class="card-img" src="{{Project.Logo}}" alt="Card image cap">
           </div>
-          <div class="col-lg-2">
+          <div class="col-lg-5">
             <h4 class="card-title">{{Project.Name}}</h4>
           </div>
-          <div class="col-lg-5 offset-lg-3">
+          <div class="col-lg-4">
             <p class="card-text">{{Project.Description}}</p>
           </div>
         </div>
