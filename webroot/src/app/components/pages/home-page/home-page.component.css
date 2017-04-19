@@ -5,7 +5,7 @@
 
 .home-content
 {
-    margin: 3% auto;
+    margin: 3% 0%;
 }
 
 .home-card-header
@@ -55,4 +55,9 @@ li a:hover
     text-decoration: none;
     color:cadetblue;
     transition: color .3s;
+}
+
+.outlet
+{
+    padding: 0;
 }
