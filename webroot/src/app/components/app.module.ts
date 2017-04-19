@@ -52,7 +52,11 @@ import { ProjectTasksPageComponent } from './pages/project-tasks-page/project-ta
 import { ProjectTaskItemComponent } from './pages/project-tasks-page/project-task-list/project-task-item/project-task-item.component';
 import { ProjectTaskListComponent } from './pages/project-tasks-page/project-task-list/project-task-list.component';
 
+import { HomePageStudentComponent } from './pages/home-page-student/home-page-student.component'
+
 import { HomeProjectsViewComponent } from './pages/home-page/home-projects-view/home-projects-view.component';
+import { HomePageTeacherComponent } from './pages/home-page-teacher/home-page-teacher.component';
+
 
 @NgModule({
   imports: [
@@ -63,6 +67,7 @@ import { HomeProjectsViewComponent } from './pages/home-page/home-projects-view/
     AppProjectRouterProvider,
   ],
   declarations: [
+    HomePageStudentComponent,
     AppComponent,
     MainComponent,
     TopPanelComponent,
@@ -96,6 +101,7 @@ import { HomeProjectsViewComponent } from './pages/home-page/home-projects-view/
     ProjectTaskItemComponent,
     ProjectTaskListComponent,
     HomeProjectsViewComponent,
+    HomePageTeacherComponent,
   ],
   providers: [ApiService, AuthService, AuthManager],
   bootstrap: [AppComponent]

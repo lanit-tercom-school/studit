@@ -5,7 +5,8 @@ import { AuthManager } from './../managers/authmanager';
 import { MainComponent } from './main/main.component';
 import { ProjectListComponent } from './shared/project-list/project-list.component';
 import { NewsListComponent } from './shared/news-list/news-list.component';
-
+import { HomePageTeacherComponent } from './pages/home-page-teacher/home-page-teacher.component'
+import { HomePageStudentComponent } from './pages/home-page-student/home-page-student.component'
 import { StudentProjectPageComponent } from './pages/student-project-page/student-project-page.component';
 import { ProjectListPageComponent } from './pages/project-list-page/project-list-page.component';
 import { AuthorizationPageComponent } from './pages/authorization-page/authorization-page.component';
@@ -26,9 +27,24 @@ export const routes: Routes = [
   { path: 'main', component: MainComponent },
   { path: 'projects', component: ProjectListPageComponent },
   { path: 'auth', component: AuthorizationPageComponent, canActivate: [AuthManager] },
+  { path: 'home', redirectTo:'home-student', pathMatch:'full',},
   {
-    path: 'home',
-    component: HomePageComponent,
+    path: 'home-student',
+    component: HomePageStudentComponent,
+    canActivate: [AuthManager],
+    children: [{
+      path: '',
+      redirectTo: 'projects',
+      pathMatch: 'full',
+    },
+    {
+      path: 'projects',
+      component: HomeProjectsViewComponent,
+    }]
+  },
+  {
+    path: 'home-teacher',
+    component: HomePageTeacherComponent,
     canActivate: [AuthManager],
     children: [{
       path: '',
