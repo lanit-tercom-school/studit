@@ -8,7 +8,7 @@ import {TasksItem} from "./tasks-item/tasks-item";
   styleUrls: ['./tasks.component.css']
 })
 export class TasksComponent implements OnInit {
-  @Input() public TasksItemList:TasksItem[];
+  @Input() public TasksItemList;
   constructor() { }
 
   ngOnInit() {

@@ -1,11 +1,12 @@
-///<reference path="proj-news/proj-news-item/proj-news-item.ts"/>
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnChanges } from '@angular/core';
 import { ApiService } from './../../../services/api.service';
 import { MaterialsItem } from './materials/materials-item/materials-item';
 import { ActivatedRoute, Params } from '@angular/router';
 import { ProjectItem } from './../../shared/project-list/project-item/project-item';
 import { ProjectNewsItem } from './proj-news/proj-news-item/proj-news-item';
 import { TasksItem } from "./tasks/tasks-item/tasks-item";
+import { Http, Headers, RequestOptions, Response } from '@angular/http';
+
 
 @Component({
   selector: 'app-student-project-page',
@@ -15,9 +16,10 @@ import { TasksItem } from "./tasks/tasks-item/tasks-item";
 export class StudentProjectPageComponent implements OnInit {
 
   private project;
+  private tasks = [];
 
   constructor(private apiService: ApiService,
-    private route: ActivatedRoute) { }
+    private route: ActivatedRoute, private http: Http) { }
 
   ngOnInit() {
     this.route.params
@@ -25,6 +27,7 @@ export class StudentProjectPageComponent implements OnInit {
       this.project = this.apiService.getProjectById(+params['id'])
         .subscribe(res => this.project = res.json());
       });
+    this.getTaskItems();
   }
 
   getMaterialsItems(): MaterialsItem[] {
@@ -33,7 +36,11 @@ export class StudentProjectPageComponent implements OnInit {
   getProjectNewsItem(): ProjectNewsItem[] {
     return this.apiService.getProjectNewsItem(1);
   }
-  getTaskItem(): TasksItem[] {
-    return this.apiService.getTaskItem(1);
+  getTaskItems() {
+    this.http.get('https://api.github.com/repos/lanit-tercom-school/studit/issues')
+      .map((response: Response) => {
+        var res = response.json().slice(0, 4);
+        return res;
+      }).subscribe(res => this.tasks = res);
   }
 }
