@@ -18,10 +18,11 @@ type ProjectUserController struct {
 // URLMapping ...
 func (c *ProjectUserController) URLMapping() {
 	c.Mapping("Post", c.Post)
-	c.Mapping("GetOne", c.GetOne)
+	//c.Mapping("GetOne", c.GetOne)
 	c.Mapping("GetAll", c.GetAll)
-	c.Mapping("Put", c.Put)
-	c.Mapping("Delete", c.Delete)
+	c.Mapping("Get", c.Get)
+	//c.Mapping("Put", c.Put)
+	//c.Mapping("Delete", c.Delete)
 }
 
 // Post ...
@@ -31,6 +32,7 @@ func (c *ProjectUserController) URLMapping() {
 // @Success 201 {int} models.ProjectUser
 // @Failure 403 body is empty
 // @router / [post]
+
 func (c *ProjectUserController) Post() {
 	var v models.ProjectUser
 	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
@@ -46,24 +48,33 @@ func (c *ProjectUserController) Post() {
 	c.ServeJSON()
 }
 
-// GetOne ...
-// @Title Get One
-// @Description get ProjectUser by id
+// Get...
+// @Title Get
+// @Description get users related to the project
 // @Param	id		path 	string	true		"The key for staticblock"
-// @Success 200 {object} models.ProjectUser
+// @Success 200 {array} models.User.Id
 // @Failure 403 :id is empty
 // @router /:id [get]
-func (c *ProjectUserController) GetOne() {
+func (c *ProjectUserController) Get() {
 	idStr := c.Ctx.Input.Param(":id")
-	id, _ := strconv.Atoi(idStr)
-	v, err := models.GetProjectUserById(id)
+	beego.Trace(c.Ctx.Input.IP(), "Get project with id", idStr)
+	id, err := strconv.Atoi(idStr)
 	if err != nil {
+		beego.Debug(c.Ctx.Input.IP(), "Get `Atoi` error", err.Error())
+		c.Ctx.Output.SetStatus(400)
+		c.Data["json"] = err.Error()
+	}
+	users, err := models.GetUsersByProjectId(id)
+	if err != nil {
+		beego.Debug(c.Ctx.Input.IP(), "GetOne `GetUsersByProjectId` error", err.Error())
+		c.Ctx.Output.SetStatus(400)
 		c.Data["json"] = err.Error()
 	} else {
-		c.Data["json"] = v
+		c.Data["json"] = users
 	}
 	c.ServeJSON()
 }
+
 
 // GetAll ...
 // @Title Get All
@@ -136,6 +147,7 @@ func (c *ProjectUserController) GetAll() {
 // @Success 200 {object} models.ProjectUser
 // @Failure 403 :id is not int
 // @router /:id [put]
+
 func (c *ProjectUserController) Put() {
 	idStr := c.Ctx.Input.Param(":id")
 	id, _ := strconv.Atoi(idStr)
@@ -159,6 +171,7 @@ func (c *ProjectUserController) Put() {
 // @Success 200 {string} delete success!
 // @Failure 403 id is empty
 // @router /:id [delete]
+
 func (c *ProjectUserController) Delete() {
 	idStr := c.Ctx.Input.Param(":id")
 	id, _ := strconv.Atoi(idStr)

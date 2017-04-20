@@ -34,16 +34,25 @@ func AddProjectUser(m *ProjectUser) (id int64, err error) {
 	return
 }
 
-// GetProjectUserById retrieves ProjectUser by Id. Returns error if
-// Id doesn't exist
-func GetProjectUserById(id int) (v *ProjectUser, err error) {
+// GetUsersByProjectId retrieves array of User by IdProject. Returns error if
+// IdProject doesn't exist
+func GetUsersByProjectId(project_id int) (ml []interface{}, err error) {
 	o := orm.NewOrm()
-	v = &ProjectUser{Id: id}
-	if err = o.Read(v); err == nil {
-		return v, nil
+	var users []ProjectUser
+	fmt.Println("Start GetUsersByProjectId method")
+	_, err = o.QueryTable(new(ProjectUser)).
+		Filter("project_id", project_id).
+		RelatedSel().
+		All(&users)
+	if err != nil {
+		return nil, err
 	}
-	return nil, err
+	for _, x := range users {
+		ml = append(ml, x.UserId.Id)
+	}
+	return ml, nil
 }
+
 
 // GetAllProjectUser retrieves all ProjectUser matches certain condition. Returns empty list if
 // no records exist
