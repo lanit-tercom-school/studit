@@ -7,12 +7,13 @@ import {ApiService } from '../../../../services/api.service'
   styleUrls: ['./home-projects-view.component.css']
 })
 export class HomeProjectsViewComponent implements OnInit {
-  
+  private userId:string;
   private ProjectList:ProjectItem[];
   constructor(private api:ApiService) { }
 
   ngOnInit() {
-    this.api.getProjectItems().subscribe(res => { this.ProjectList = res });
+    this.userId=JSON.parse(localStorage.getItem("current_user")).id;
+    this.api.getProjectItemsByUserId(this.userId).subscribe(res => { this.ProjectList = res });
   }
 
 }

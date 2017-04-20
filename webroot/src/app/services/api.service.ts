@@ -84,6 +84,9 @@ export class ApiService {
   getProjectItems() {
     return this.http.get(environment.apiUrl + '/v1/project/').map((response: Response) => response.json());
   }
+    getProjectItemsByUserId(userId:string) {
+    return this.http.get(environment.apiUrl + '/v1/project/').map((response: Response) => response.json());
+  }
 
   getProjectById(id: number) {
     return this.http.get(environment.apiUrl + '/v1/project/' + id);
@@ -223,5 +226,17 @@ export class ApiService {
       return new RequestOptions({ headers: headers });
     }
   }
+  postProject(project,token:string)
+  {
+    var headers = new Headers();
+    headers.append('Content-Type','application/json'); 
+    headers.append('Accept','application/json')
+    headers.append('Bearer-token', token); 
+    const body=JSON.stringify(project);
+    console.log(token);
+    console.log(body);
+    console.log(headers);
+    return this.http.post(environment.apiUrl+'/v1/project', JSON.stringify(project), { headers: headers });
+}
 
 }

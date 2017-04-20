@@ -9,8 +9,12 @@
     <div class="row home-content">
         <div class="col col-7">
             <router-outlet></router-outlet>
+            
+            <div class="col col-4 new-project">
+                <button type="button" class="btn btn-large btn-block btn-info btn-project" (click)="makeProject()">Создать проект</button>
+            </div>            
         </div>
-
+        
         <div class='col col-5'>
             <div class="card card-outline mb-3 text-center">
                 <div class="h4 lead home-card-header">
