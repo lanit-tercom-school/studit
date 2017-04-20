@@ -117,13 +117,13 @@ func init() {
 				&controllers.ProjectController{},
 			),
 		),
-/*
+
 		beego.NSNamespace("/project_user",
 			beego.NSInclude(
 				&controllers.ProjectUserController{},
 			),
 		),
-
+/*
 		beego.NSNamespace("/contact_type",
 			beego.NSInclude(
 				&controllers.ContactTypeController{},
