@@ -47,9 +47,11 @@ h1, h2, h3, h4 {
   color: var(--primary-color);
 }
 
-.nav-con, .footer {
+nav, .footer {
   background-color: var(--primary-color);
 }
+
+
 
 .main-highlited{
   background-color: var(--section-color);
