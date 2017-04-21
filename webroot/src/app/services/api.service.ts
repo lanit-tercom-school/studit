@@ -231,10 +231,6 @@ export class ApiService {
     headers.append('Content-Type', 'application/json');
     headers.append('Accept', 'application/json')
     headers.append('Bearer-token', token);
-    const body = JSON.stringify(project);
-    console.log(token);
-    console.log(body);
-    console.log(headers);
     return this.http.post(environment.apiUrl + '/v1/project', JSON.stringify(project), { headers: headers });
   }
 
