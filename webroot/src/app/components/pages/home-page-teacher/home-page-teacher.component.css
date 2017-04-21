@@ -3,3 +3,66 @@
     margin-bottom: 1em;
     margin-left: 0em;
 }
+.container
+{
+    margin: 2% auto;
+}
+
+.home-content
+{
+    margin: 3% 0%;
+}
+
+.home-card-header
+{
+    background-color: whitesmoke;
+    padding: 0.5rem 0;
+    margin: 0;
+}
+
+.home-list
+{
+    padding: 0;
+    margin: 0;
+}
+
+.home-list li
+{
+    list-style-type: none;
+    padding: 3%;
+    text-align: left;
+}
+
+.home-list .show-full-list
+{
+    text-align: center;
+    color: darkslategrey;
+}
+
+a {
+  color: inherit;
+}
+
+.active{
+    color: darkgray;
+    pointer-events: none;
+    cursor: default;
+}
+
+li a
+{
+    text-decoration: none;
+    color:inherit;
+}
+
+li a:hover
+{
+    text-decoration: none;
+    color:cadetblue;
+    transition: color .3s;
+}
+
+.outlet
+{
+    padding: 0;
+}
