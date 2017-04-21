@@ -9,28 +9,6 @@ CREATE TABLE "project" (
   OIDS=FALSE
 );
 
-
-/*Отдельная сущность для авторов(организаторов), подчеркивающая статус Автора у пользователя*/
-CREATE TABLE "author" (
-	"id" serial NOT NULL,
-	"user_id" bigint NOT NULL,
-	CONSTRAINT author_pk PRIMARY KEY ("id")
-) WITH (
-  OIDS=FALSE
-);
-
-
-/*Связь автора(создателя) проекта с проектом*/
-CREATE TABLE "project_author" (
-  "id" serial NOT NULL,
-  "author_id" bigint NOT NULL,
-  "project_id" bigint NOT NULL,
-  CONSTRAINT project_author_pk PRIMARY KEY ("id")
-) WITH (
-  OIDS=FALSE
-);
-
-
 /*Пользователь*/
 CREATE TABLE "user" (
   "id" serial NOT NULL,
@@ -46,7 +24,7 @@ CREATE TABLE "user" (
 );
 
 
-/*Связь пользователя и проекта, на который пользователь записан*/
+/*Связь пользователя и проекта, в котором участвует пользователь*/
 CREATE TABLE "project_user" (
   "id" serial NOT NULL,
   "project_id" bigint NOT NULL,
@@ -54,6 +32,19 @@ CREATE TABLE "project_user" (
   "signed_date" TIMESTAMP WITH TIME ZONE NOT NULL,
   "progress" int NOT NULL,
   CONSTRAINT project_user_pk PRIMARY KEY ("id")
+) WITH (
+  OIDS=FALSE
+);
+
+/*Связь пользователя и проекта, на который пользователь записан*/
+CREATE TABLE project_sign_up (
+  "id" serial NOT NULL,
+  "project_id" bigint NOT NULL,
+  "user_id" bigint NOT NULL,
+
+  CONSTRAINT project_user_application_pk PRIMARY KEY ("id"),
+  CONSTRAINT project_user_application_fk0 FOREIGN KEY ("project_id") REFERENCES "project"("id"),
+  CONSTRAINT project_user_application_fk1 FOREIGN KEY ("user_id") REFERENCES "user"("id")
 ) WITH (
   OIDS=FALSE
 );
@@ -103,7 +94,6 @@ CREATE TABLE "task" (
 	"tags" varchar NOT NULL,
 	"priority" int NOT NULL,
 	"project_id" bigint NOT NULL,
-	"project_author_id" bigint NOT NULL,
 	"project_user_id" bigint NOT NULL,
 	CONSTRAINT task_pk PRIMARY KEY ("id")
 ) WITH (
@@ -228,14 +218,14 @@ CREATE TABLE "comment" (
   "text" TEXT NOT NULL,
   CONSTRAINT comment_pk PRIMARY KEY ("id")
 ) WITH (
-OIDS=FALSE
+  OIDS=FALSE
 );
 
 /*Курс*/
 CREATE TABLE "course" (
 	"id" serial NOT NULL,
 	"title" varchar(255) NOT NULL,
-	"discription" TEXT NOT NULL,
+	"description" TEXT NOT NULL,
 	"logo" varchar(1000) NOT NULL,
 	"rating" real NOT NULL,
 	CONSTRAINT course_pk PRIMARY KEY ("id")
@@ -286,17 +276,11 @@ ALTER TABLE "video" ADD CONSTRAINT "video_fk0" FOREIGN KEY ("lesson_id") REFEREN
 
 
 ALTER TABLE "task" ADD CONSTRAINT "task_fk0" FOREIGN KEY ("project_id") REFERENCES "project"("id");
-ALTER TABLE "task" ADD CONSTRAINT "task_fk1" FOREIGN KEY ("project_author_id") REFERENCES "project_author"("id");
 ALTER TABLE "task" ADD CONSTRAINT "task_fk2" FOREIGN KEY ("project_user_id") REFERENCES "project_user"("id");
 
 
 ALTER TABLE "tasks_tags_table" ADD CONSTRAINT "tasks_tags_table_fk0" FOREIGN KEY ("task_id") REFERENCES "task"("id");
 ALTER TABLE "tasks_tags_table" ADD CONSTRAINT "tasks_tags_table_fk1" FOREIGN KEY ("tag_id") REFERENCES "tag"("id");
-
-ALTER TABLE "author" ADD CONSTRAINT "author_fk0" FOREIGN KEY ("user_id") REFERENCES "user"("id");
-
-ALTER TABLE "project_author" ADD CONSTRAINT "project_author_fk0" FOREIGN KEY ("author_id") REFERENCES "author"("id");
-ALTER TABLE "project_author" ADD CONSTRAINT "project_author_fk1" FOREIGN KEY ("project_id") REFERENCES "project"("id");
 
 ALTER TABLE "lesson" ADD CONSTRAINT "lesson_fk0" FOREIGN KEY ("course_id") REFERENCES "course"("id");
 

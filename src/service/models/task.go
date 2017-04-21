@@ -17,7 +17,6 @@ type Task struct {
 	Tags            string         `orm:"column(tags)"`
 	Priority        int            `orm:"column(priority)"`
 	ProjectId       *Project       `orm:"column(project_id);rel(fk)"`
-	ProjectAuthorId *ProjectAuthor `orm:"column(project_author_id);rel(fk)"`
 	ProjectUserId   *ProjectUser   `orm:"column(project_user_id);rel(fk)"`
 }
 
