@@ -32,7 +32,7 @@ func main() {
 		beego.SetStaticPath("/swagger", "swagger")
 	}
 	os.Mkdir("logs", 0777)
-	beego.SetLogger("file", `{"filename":"logs/test.log"}`/*"\"logs/\ + time.Now().Format(\"2006-01-02 15_04") + ".log""*/)
+	beego.SetLogger("file", `{"filename":"logs/main.log"}`/*"\"logs/\ + time.Now().Format(\"2006-01-02 15_04") + ".log""*/)
 	beego.Info("")
 	beego.Run()
 }
