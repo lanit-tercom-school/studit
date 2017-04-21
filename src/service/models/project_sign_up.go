@@ -9,45 +9,60 @@ import (
 	"github.com/astaxie/beego/orm"
 )
 
-type ProjectAuthor struct {
-	Id        int      `orm:"column(id);pk;auto"`
-	AuthorId  *Author  `orm:"column(author_id);rel(fk)"`
-	ProjectId *Project `orm:"column(project_id);rel(fk)"`
+type ProjectSignUp struct {
+	Id          int      `orm:"column(id);pk;auto"`
+	UserId      *User    `orm:"column(user_id);rel(fk)"`
+	ProjectId   *Project `orm:"column(project_id);rel(fk)"`
 }
 
-func (t *ProjectAuthor) TableName() string {
-	return "project_author"
+func (t *ProjectSignUp) TableName() string {
+	return "project_sign_up"
 }
 
 func init() {
-	orm.RegisterModel(new(ProjectAuthor))
+	orm.RegisterModel(new(ProjectSignUp))
 }
 
-// AddProjectAuthor insert a new ProjectAuthor into database and returns
+// AddProjectAuthor insert a new ProjectSignUp into database and returns
 // last inserted Id on success.
-func AddProjectAuthor(m *ProjectAuthor) (id int64, err error) {
-	o := orm.NewOrm()
-	id, err = o.Insert(m)
+func AddApplicationFromUserForProject(m *ProjectSignUp) (id int64, err error) {
+	id, err = orm.NewOrm().Insert(m)
 	return
 }
 
-// GetProjectAuthorById retrieves ProjectAuthor by Id. Returns error if
+// GetProjectAuthorById retrieves ProjectSignUp by Id. Returns error if
 // Id doesn't exist
-func GetProjectAuthorById(id int) (v *ProjectAuthor, err error) {
+func GetProjectAuthorById(id int) (v *ProjectSignUp, err error) {
 	o := orm.NewOrm()
-	v = &ProjectAuthor{Id: id}
+	v = &ProjectSignUp{Id: id}
 	if err = o.Read(v); err == nil {
 		return v, nil
 	}
 	return nil, err
 }
 
-// GetAllProjectAuthor retrieves all ProjectAuthor matches certain condition. Returns empty list if
+func GetAllSignedUpOnProject(project_id int) (ml []interface{}, err error) {
+	o := orm.NewOrm()
+	var singed_up []ProjectSignUp
+	_, err = o.QueryTable(new(ProjectSignUp)).
+			Filter("ProjectId", project_id).
+			RelatedSel().
+			All(&singed_up)
+	if err != nil {
+		return nil, err
+	}
+	for _, x := range singed_up {
+		ml = append(ml, x.UserId.Id)
+	}
+	return ml, nil
+}
+
+// GetAllProjectAuthor retrieves all ProjectSignUp matches certain condition. Returns empty list if
 // no records exist
 func GetAllProjectAuthor(query map[string]string, fields []string, sortby []string, order []string,
 	offset int64, limit int64) (ml []interface{}, err error) {
 	o := orm.NewOrm()
-	qs := o.QueryTable(new(ProjectAuthor))
+	qs := o.QueryTable(new(ProjectSignUp))
 	// query k=v
 	for k, v := range query {
 		// rewrite dot-notation to Object__Attribute
@@ -93,7 +108,7 @@ func GetAllProjectAuthor(query map[string]string, fields []string, sortby []stri
 		}
 	}
 
-	var l []ProjectAuthor
+	var l []ProjectSignUp
 	qs = qs.OrderBy(sortFields...)
 	if _, err = qs.Limit(limit, offset).All(&l, fields...); err == nil {
 		if len(fields) == 0 {
@@ -116,11 +131,11 @@ func GetAllProjectAuthor(query map[string]string, fields []string, sortby []stri
 	return nil, err
 }
 
-// UpdateProjectAuthor updates ProjectAuthor by Id and returns error if
+// UpdateProjectAuthor updates ProjectSignUp by Id and returns error if
 // the record to be updated doesn't exist
-func UpdateProjectAuthorById(m *ProjectAuthor) (err error) {
+func UpdateProjectAuthorById(m *ProjectSignUp) (err error) {
 	o := orm.NewOrm()
-	v := ProjectAuthor{Id: m.Id}
+	v := ProjectSignUp{Id: m.Id}
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
 		var num int64
@@ -131,17 +146,22 @@ func UpdateProjectAuthorById(m *ProjectAuthor) (err error) {
 	return
 }
 
-// DeleteProjectAuthor deletes ProjectAuthor by Id and returns error if
+// DeleteProjectSignUp deletes ProjectSignUp by Project Id and returns error if
 // the record to be deleted doesn't exist
-func DeleteProjectAuthor(id int) (err error) {
+func DeleteProjectSignUp(user_id, project_id int) (err error) {
 	o := orm.NewOrm()
-	v := ProjectAuthor{Id: id}
+
+	_, err = o.QueryTable(new(ProjectSignUp)).
+			Filter("UserId", user_id).
+			Filter("ProjectId", project_id).
+			Delete()
+	/*v := ProjectSignUp{Id: id}
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
 		var num int64
-		if num, err = o.Delete(&ProjectAuthor{Id: id}); err == nil {
+		if num, err = o.Delete(&ProjectSignUp{Id: id}); err == nil {
 			fmt.Println("Number of records deleted in database:", num)
 		}
-	}
+	}*/
 	return
 }
