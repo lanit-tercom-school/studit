@@ -62,8 +62,7 @@ export class AuthManager implements CanActivate {
                     return true;
                 }
             }
-            else
-            {
+            else {
                 console.log('You must be logged in');
                 return false
             }

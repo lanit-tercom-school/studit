@@ -27,7 +27,7 @@ export const routes: Routes = [
   { path: 'main', component: MainComponent },
   { path: 'projects', component: ProjectListPageComponent },
   { path: 'auth', component: AuthorizationPageComponent, canActivate: [AuthManager] },
-  { path: 'home', redirectTo:'home-student', pathMatch:'full',},
+  { path: 'home', redirectTo: 'home-student', pathMatch: 'full', },
   {
     path: 'home-student',
     component: HomePageStudentComponent,
