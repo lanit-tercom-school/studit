@@ -1,29 +1,42 @@
 .navbar
 {
+    padding: 0;
+    padding-top: .2rem;
     font-size: 1.25rem;
     font-weight: 500;
-    background-color: #EEEEEE;
-}
-
-.navbar-brand
-{
-    margin-left: 10%;
 }
 
 .navbar-nav
 {
-    margin-left: 20%;
-    margin-right: 10%;
+    float: right;
+    margin-left:40%;
     width: 100%;
     justify-content: space-around;
 }
 
-#sign-in
-{
-    color: royalblue;
-}
 
 #log-out
 {
     color: firebrick;
+}
+
+.lanit-nav-link
+{
+    text-decoration: none;
+    color: white;
+}
+
+.lanit-nav-link:hover
+{
+    color: azure;
+}
+
+.puma
+{
+    fill: var(--logo-color);
+}
+
+.logo-text
+{
+    fill: var(--section-color);
 }

@@ -1,3 +1,13 @@
+:root
+{
+  --primary-color: #2A2E31;
+  --logo-color: #1CB5DE;
+  --dark-logo-color:#1796B8;
+  --section-color: #E7F4FB;
+  --accent-color: #D94949;
+  --dark-accent-color:#BF4040;
+}
+
 html,
 body {
     height:100%;
@@ -34,4 +44,53 @@ body {
 
 h1, h2, h3, h4 {
   font-family: "PT Sans Caption", sans-serif;
+  color: var(--primary-color);
+}
+
+nav, .footer {
+  background-color: var(--primary-color);
+}
+
+
+
+.main-highlited{
+  background-color: var(--section-color);
+}
+
+.btn-outline-danger{
+  border-color: var(--accent-color);
+  background-color: var(--accent-color);
+  color: var(--section-color);
+}
+
+.btn-outline-danger:hover{
+  border-color: var(--dark-accent-color);
+  color: var(--section-color);
+  background-color: var(--dark-accent-color);
+}
+
+.btn-outline-primary{
+  border-color: var(--logo-color);
+  color: var(--section-color);
+  background-color: var(--logo-color);
+}
+
+.btn-outline-primary:hover{
+  border-color: var(--dark-logo-color);
+  color: var(--section-color);
+  background-color: var(--dark-logo-color);
+}
+
+.btn-warning
+{
+  background-color: var(--accent-color);
+  border-color: var(--accent-color);  
+  color: var(--section-color);
+}
+
+.btn-warning:hover
+{
+  background-color: var(--dark-accent-color);
+  border-color: var(--dark-accent-color); 
+  color: var(--section-color); 
 }

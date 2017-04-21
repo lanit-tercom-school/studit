@@ -1,6 +1,6 @@
 :host {
-    background: whitesmoke;
     display: flex;
+    background-color: white;
 }
 
 .container{

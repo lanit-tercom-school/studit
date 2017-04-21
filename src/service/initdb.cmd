@@ -2,4 +2,4 @@
 
 set curpath=%cd%
 cd schema
-init.cmd > initdb.log & cd %curpath%\tests & go test > init_tests.log & cd %curpath%
+init.cmd > initdb.log && cd %curpath%\tests && cd %curpath% && echo "Initdb OK"
