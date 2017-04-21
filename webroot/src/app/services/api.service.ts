@@ -84,7 +84,7 @@ export class ApiService {
   getProjectItems() {
     return this.http.get(environment.apiUrl + '/v1/project/').map((response: Response) => response.json());
   }
-    getProjectItemsByUserId(userId:string) {
+  getProjectItemsByUserId(userId: string) {
     return this.http.get(environment.apiUrl + '/v1/project/').map((response: Response) => response.json());
   }
 
@@ -157,28 +157,28 @@ export class ApiService {
         "Data": "20.03.17",
         "Author": "Roman",
         "Addressee": "User1",
-        "Tags" : ["tag1", "tag2"],
+        "Tags": ["tag1", "tag2"],
         "Rating": "3"
 
       },
       {
-      "Number": "645",
-      "TaskName": "Name of Task",
-      "Data": "20.03.17",
-      "Author": "Konstantin",
-      "Addressee": "User2",
-      "Tags" :  ["tag1", "tag2"],
-      "Rating": "3"
+        "Number": "645",
+        "TaskName": "Name of Task",
+        "Data": "20.03.17",
+        "Author": "Konstantin",
+        "Addressee": "User2",
+        "Tags": ["tag1", "tag2"],
+        "Rating": "3"
       },
 
       {
-      "Number": "645",
-      "TaskName": "Name of Task",
-      "Data": "20.03.17",
-      "Author": "Sheldon",
-      "Addressee": "User3",
-      "Tags" :  ["some tag", "some tag 2"],
-      "Rating": "4"
+        "Number": "645",
+        "TaskName": "Name of Task",
+        "Data": "20.03.17",
+        "Author": "Sheldon",
+        "Addressee": "User3",
+        "Tags": ["some tag", "some tag 2"],
+        "Rating": "4"
       }
 
     ];
@@ -192,33 +192,33 @@ export class ApiService {
         "Data": "20.03.17",
         "Author": "Roman",
         "Addressee": "Me",
-        "Tags" : ["tag1", "tag2"],
+        "Tags": ["tag1", "tag2"],
         "Rating": "3"
 
       },
       {
-      "Number": "645",
-      "TaskName": "This is my task too",
-      "Data": "20.03.17",
-      "Author": "Konstantin",
-      "Addressee": "Me",
-      "Tags" :  ["tag1", "tag2"],
-      "Rating": "3"
+        "Number": "645",
+        "TaskName": "This is my task too",
+        "Data": "20.03.17",
+        "Author": "Konstantin",
+        "Addressee": "Me",
+        "Tags": ["tag1", "tag2"],
+        "Rating": "3"
       }
 
     ];
   }
 
   getNewsPage() {
-   return this.http.get(environment.apiUrl + '/v1/news/').map((response: Response) => response.json());
+    return this.http.get(environment.apiUrl + '/v1/news/').map((response: Response) => response.json());
   }
 
-  getNewsById(id_ : number) {
+  getNewsById(id_: number) {
     return this.http.get(environment.apiUrl + '/v1/news/' + id_)
       .map((response: Response) => response.json());
-     }
+  }
 
-    private jwt() {
+  private jwt() {
     // create authorization-page header with jwt token
     let currentUser = JSON.parse(localStorage.getItem('current_user'));
     if (currentUser && currentUser.token) {
@@ -226,17 +226,16 @@ export class ApiService {
       return new RequestOptions({ headers: headers });
     }
   }
-  postProject(project,token:string)
-  {
+  postProject(project, token: string) {
     var headers = new Headers();
-    headers.append('Content-Type','application/json'); 
-    headers.append('Accept','application/json')
-    headers.append('Bearer-token', token); 
-    const body=JSON.stringify(project);
+    headers.append('Content-Type', 'application/json');
+    headers.append('Accept', 'application/json')
+    headers.append('Bearer-token', token);
+    const body = JSON.stringify(project);
     console.log(token);
     console.log(body);
     console.log(headers);
-    return this.http.post(environment.apiUrl+'/v1/project', JSON.stringify(project), { headers: headers });
-}
+    return this.http.post(environment.apiUrl + '/v1/project', JSON.stringify(project), { headers: headers });
+  }
 
 }
