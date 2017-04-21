@@ -223,5 +223,37 @@ export class ApiService {
       return new RequestOptions({ headers: headers });
     }
   }
-
+ postProject(project, token: string) {
+    var headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Accept', 'application/json');
+    headers.append('Bearer-token', token);
+    return this.http.post(environment.apiUrl + '/v1/project', JSON.stringify(project), { headers: headers });
+  }
+  deleteProject(id: number, token: string) {
+    var headers = new Headers();
+    headers.append('Accept', 'application/json');
+    headers.append('Bearer-token', token);
+    return this.http.delete(environment.apiUrl + '/v1/project/' + id, { headers: headers });
+  }
+  getUsers() {
+    return this.http.get(environment.apiUrl + '/v1/user/id/').map((response: Response) => response.json());
+  }
+  getUserById(id: number) {
+    return this.http.get(environment.apiUrl + '/v1/user/id/' + id).map((response: Response) => response.json());
+  }
+  deleteUserById(id: number, token: string) {
+    var headers = new Headers();
+    headers.append('Accept', 'application/json');
+    headers.append('Bearer-token', token);
+    return this.http.delete(environment.apiUrl + '/v1/user/id/' + id, { headers: headers });
+  }
+  changeUserById(id: number, token: string,user)
+  {
+    var headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Accept', 'application/json');
+    headers.append('Bearer-token', token);
+    return this.http.put(environment.apiUrl+'/v1/user/id'+id,user,{headers:headers});
+  }
 }
