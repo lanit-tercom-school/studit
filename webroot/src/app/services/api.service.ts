@@ -233,5 +233,10 @@ export class ApiService {
     headers.append('Bearer-token', token);
     return this.http.post(environment.apiUrl + '/v1/project', JSON.stringify(project), { headers: headers });
   }
-
+  deleteProject(id: string, token: string) {
+    var headers = new Headers();
+    headers.append('Accept', 'application/json')
+    headers.append('Bearer-token', token);
+    return this.http.delete(environment.apiUrl+'/v1/project/'+id, { headers: headers });
+  }
 }
