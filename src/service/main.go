@@ -5,14 +5,11 @@ import (
 	"github.com/astaxie/beego/orm"
 	_ "github.com/lib/pq"
 	_ "service/routers"
-	"github.com/vetcher/jwt"
-	"time"
 	"github.com/astaxie/beego/plugins/cors"
 	"os"
 )
 
 func init() {
-	jwt.GlobalStorage = jwt.NewStorage(time.Hour)
 	postgresStrConfig := "postgres://postgres:postgres@localhost:5432/studit?sslmode=disable"
 	err := orm.RegisterDataBase("default", "postgres", postgresStrConfig)
 	if err != nil {

@@ -44,7 +44,8 @@ CREATE TABLE project_sign_up (
 
   CONSTRAINT project_user_application_pk PRIMARY KEY ("id"),
   CONSTRAINT project_user_application_fk0 FOREIGN KEY ("project_id") REFERENCES "project"("id"),
-  CONSTRAINT project_user_application_fk1 FOREIGN KEY ("user_id") REFERENCES "user"("id")
+  CONSTRAINT project_user_application_fk1 FOREIGN KEY ("user_id") REFERENCES "user"("id"),
+  CONSTRAINT unique_pair_of_columns_for_project_sign_up UNIQUE ("project_id", "user_id")
 ) WITH (
   OIDS=FALSE
 );
