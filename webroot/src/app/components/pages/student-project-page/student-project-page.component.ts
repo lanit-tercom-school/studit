@@ -42,15 +42,17 @@ export class StudentProjectPageComponent implements OnInit, DoCheck {
     }
   }
   ngDoCheck() {
-    this.unenrollButton = false;
-    this.enrollButton = true;
+
     if (this.subscribedUsers != null) {
       for (let a of this.subscribedUsers) {
         if (a === JSON.parse(localStorage.getItem('current_user')).id) {
           this.unenrollButton = true;
           this.enrollButton = false;
+          return;
         }
       }
+      this.unenrollButton = false;
+      this.enrollButton = true;
     }
   }
 
