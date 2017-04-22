@@ -2,11 +2,11 @@
   <div class="row" id="main-info">
     <div class="col-sm-3" id="img-btn">
       <img id="project-img" width="225px" height="225px" src="http://localhost:8081{{project.Logo}}" alt="Project image">
-      <div *ngIf="Authorized">
-        <div *ngIf="EnrollButton">
+      <div *ngIf="authorized">
+        <div *ngIf="enrollButton">
           <button type="button" class="btn btn-large btn-block btn-primary" (click)="enroll()">Записаться</button>
         </div>
-        <div *ngIf="UnenrollButton">
+        <div *ngIf="unenrollButton">
           <button type="button" class="btn btn-large btn-block btn-warning" (click)="unenroll()">Отписаться</button>
         </div>
       </div>

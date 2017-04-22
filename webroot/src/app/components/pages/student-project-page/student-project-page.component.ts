@@ -19,9 +19,9 @@ export class StudentProjectPageComponent implements OnInit, DoCheck {
   private projectId: number;
   private tasks = [];
   private subscribedUsers = [];
-  private Authorized: boolean;
-  private EnrollButton: boolean;
-  private UnenrollButton: boolean;
+  private authorized: boolean;
+  private enrollButton: boolean;
+  private unenrollButton: boolean;
   constructor(private apiService: ApiService,
     private route: ActivatedRoute, private http: Http) { }
 
@@ -35,20 +35,20 @@ export class StudentProjectPageComponent implements OnInit, DoCheck {
 
     this.getTaskItems();
     if (localStorage.getItem('current_user')) {
-      this.Authorized = true;
+      this.authorized = true;
     }
     else {
-      this.Authorized = false;
+      this.authorized = false;
     }
   }
   ngDoCheck() {
-    this.UnenrollButton = false;
-    this.EnrollButton = true;
+    this.unenrollButton = false;
+    this.enrollButton = true;
     if (this.subscribedUsers != null) {
       for (let a of this.subscribedUsers) {
         if (a === JSON.parse(localStorage.getItem('current_user')).id) {
-          this.UnenrollButton = true;
-          this.EnrollButton = false;
+          this.unenrollButton = true;
+          this.enrollButton = false;
         }
       }
     }
@@ -69,12 +69,12 @@ export class StudentProjectPageComponent implements OnInit, DoCheck {
   }
   enroll() {
     this.apiService.enrollToProject(this.projectId, JSON.parse(localStorage.getItem('current_user')).token).subscribe(res => { });
-    this.UnenrollButton = true;
-    this.EnrollButton = false;
+    this.unenrollButton = true;
+    this.enrollButton = false;
   }
   unenroll() {
     this.apiService.unenrollToProject(this.projectId, JSON.parse(localStorage.getItem('current_user')).token).subscribe(res => { });
-    this.UnenrollButton = false;
-    this.EnrollButton = true;
+    this.unenrollButton = false;
+    this.enrollButton = true;
   }
 }
