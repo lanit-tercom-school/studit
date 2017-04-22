@@ -227,16 +227,23 @@ export class ApiService {
     }
   }
   postProject(project, token: string) {
-    var headers = new Headers();
+    let headers = new Headers();
     headers.append('Content-Type', 'application/json');
     headers.append('Accept', 'application/json')
     headers.append('Bearer-token', token);
     return this.http.post(environment.apiUrl + '/v1/project', JSON.stringify(project), { headers: headers });
   }
   deleteProject(id: string, token: string) {
-    var headers = new Headers();
+    let headers = new Headers();
     headers.append('Accept', 'application/json')
     headers.append('Bearer-token', token);
-    return this.http.delete(environment.apiUrl+'/v1/project/'+id, { headers: headers });
+    return this.http.delete(environment.apiUrl + '/v1/project/' + id, { headers: headers });
+  }
+  enrollToProject(id: number, token: string) {
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Accept', 'text/html')
+    headers.append('Bearer-token', token);
+    return this.http.post(environment.apiUrl + '/v1/project_sign_up' + id, '', { headers: headers });
   }
 }
