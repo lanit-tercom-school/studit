@@ -30,16 +30,16 @@ func init() {
 // last inserted Id on success.
 func AddUserToProject(m *ProjectUser) (err error) {
 	o := orm.NewOrm()
-	var signedUpUser ProjectSignUp
+	var p ProjectSignUp
 	_, err = o.QueryTable(new(ProjectSignUp)).
 		Filter("user_id", m.UserId).
 		Filter("project_id", m.ProjectId).
 		RelatedSel().
-		All(&signedUpUser)
+		All(&p)
 	if err != nil {
 		return err
 	}
-	_, err = o.QueryTable(new(ProjectSignUp)).Filter("id", signedUpUser.Id).Delete()
+	_, err = o.QueryTable(new(ProjectSignUp)).Filter("id", p.Id).Delete()
 	if err != nil {
 		return err
 	}

@@ -31,9 +31,8 @@ CREATE TABLE "project_user" (
   "user_id" bigint NOT NULL UNIQUE,
   "signed_date" TIMESTAMP WITH TIME ZONE NOT NULL,
   "progress" int NOT NULL,
+  UNIQUE ("project_id", "user_id"),
   CONSTRAINT project_user_pk PRIMARY KEY ("id")
-  CONSTRAINT project_user_application_fk0 FOREIGN KEY ("project_id") REFERENCES "project"("id"),
-  CONSTRAINT project_user_application_fk1 FOREIGN KEY ("user_id") REFERENCES "user"("id")
 ) WITH (
   OIDS=FALSE
 );

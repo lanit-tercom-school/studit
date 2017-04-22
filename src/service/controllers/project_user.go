@@ -26,7 +26,7 @@ func (c *ProjectUserController) URLMapping() {
 
 // Post ...
 // @Title Post
-// @Description create ProjectUser
+// @Description Добавление пользователя к проекту
 // @Param       project_id     query     string   true           "ID проекта, на который надо записать пользователя"
 // @Param       user_id        query     string   true           "ID пользователя, которого надо записать"
 // @Param       Bearer-token   header   string   true           "Токен доступа администратора или куратора проекта"
@@ -34,6 +34,7 @@ func (c *ProjectUserController) URLMapping() {
 // @Failure 403 access denied
 // @router / [post]
 func (c *ProjectUserController) Post() {
+	// TODO: сделать проверку того, что куратор добавляет пользователя именно к своему проекту
 	if c.CurrentUser.PermissionLevel < 1 {
 		beego.Debug(c.Ctx.Input.IP(), "Access denied for `Post` new user to project")
 		c.Ctx.Output.SetStatus(403)
@@ -84,16 +85,15 @@ func (c *ProjectUserController) Post() {
 				}
 			}
 		}
-
 	}
 	c.ServeJSON()
 }
 
 // Get...
 // @Title Get
-// @Description get users related to the project
+// @Description Получение списка пользователей, подписанных на данный проект
 // @Param	id		path 	string	true		"ID проекта, список пользователей которого надо узнать"
-// @Success 200 {array} models.User.Id
+// @Success 200 {object} []int
 // @Failure 403 :id is empty
 // @router /:id [get]
 func (c *ProjectUserController) Get() {
@@ -206,8 +206,8 @@ func (c *ProjectUserController) Put() {
 
 // Delete ...
 // @Title Delete
-// @Description delete the ProjectUser
-// @Param       user_id        query    string   true           "The user's id you want to delete"
+// @Description Удаление пользователя из проекта
+// @Param       user_id        query    string   true           "ID пользователя, которого надо удалить"
 // @Param       project_id     query    string   true           "ID проекта, с которого надо удалить пользователя"
 // @Param       Bearer-token   header   string   true           "Токен доступа пользователя (куратора/админа)"
 // @Success 200 {string} delete success!
