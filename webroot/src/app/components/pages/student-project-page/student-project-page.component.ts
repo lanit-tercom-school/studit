@@ -50,6 +50,6 @@ export class StudentProjectPageComponent implements OnInit {
       }).subscribe(res => this.tasks = res);
   }
   enroll() {
-    
+    this.apiService.enrollToProject(1, JSON.parse(localStorage.getItem('current_user')).token).subscribe(res => { });
   }
 }
