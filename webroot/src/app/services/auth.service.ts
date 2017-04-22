@@ -18,7 +18,7 @@ export class AuthService {
 
         //headers.append('Content-Type', 'application/json');
 
-        return this.http.post(environment.apiUrl + '/v1/auth/login/', JSON.stringify(user)/*, { headers: headers }*/)
+        return this.http.post(environment.apiUrl + '/v1/auth/signin/', JSON.stringify(user)/*, { headers: headers }*/)
             .map((response: Response) => {
                 // successful login => getting jwt
                 let res = response.json();
