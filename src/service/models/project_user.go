@@ -28,18 +28,34 @@ func init() {
 
 // AddProjectUser insert a new ProjectUser into database and returns
 // last inserted Id on success.
+func AddUserToProject(m *ProjectUser) (err error) {
+	o := orm.NewOrm()
+	var signedUpUser ProjectSignUp
+	_, err = o.QueryTable(new(ProjectSignUp)).
+		Filter("user_id", m.UserId).
+		Filter("project_id", m.ProjectId).
+		RelatedSel().
+		All(&signedUpUser)
+	if err != nil {
+		return err
+	}
+	_, err = o.QueryTable(new(ProjectSignUp)).Filter("id", signedUpUser.Id).Delete()
+	if err != nil {
+		return err
+	}
+	_, err = o.Insert(m)
+	return
+}
+
 func AddProjectUser(m *ProjectUser) (id int64, err error) {
 	o := orm.NewOrm()
 	id, err = o.Insert(m)
 	return
 }
 
-// GetUsersByProjectId retrieves array of User by IdProject. Returns error if
-// IdProject doesn't exist
 func GetUsersByProjectId(project_id int) (ml []interface{}, err error) {
 	o := orm.NewOrm()
 	var users []ProjectUser
-	fmt.Println("Start GetUsersByProjectId method")
 	_, err = o.QueryTable(new(ProjectUser)).
 		Filter("project_id", project_id).
 		RelatedSel().
