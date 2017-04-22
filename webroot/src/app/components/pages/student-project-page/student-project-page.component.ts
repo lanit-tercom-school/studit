@@ -17,17 +17,23 @@ export class StudentProjectPageComponent implements OnInit {
 
   private project;
   private tasks = [];
-
+  private Authorized: boolean;
   constructor(private apiService: ApiService,
     private route: ActivatedRoute, private http: Http) { }
 
   ngOnInit() {
     this.route.params
       .subscribe(params => {
-      this.project = this.apiService.getProjectById(+params['id'])
-        .subscribe(res => this.project = res.json());
+        this.project = this.apiService.getProjectById(+params['id'])
+          .subscribe(res => this.project = res.json());
       });
     this.getTaskItems();
+    if (localStorage.getItem('current_user')) {
+      this.Authorized = true;
+    }
+    else {
+      this.Authorized = false;
+    }
   }
 
   getMaterialsItems(): MaterialsItem[] {
@@ -42,5 +48,8 @@ export class StudentProjectPageComponent implements OnInit {
         var res = response.json().slice(0, 4);
         return res;
       }).subscribe(res => this.tasks = res);
+  }
+  enroll() {
+    
   }
 }
