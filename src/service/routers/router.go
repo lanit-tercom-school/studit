@@ -81,6 +81,11 @@ func init() {
 				&controllers.NewsController{},
 			),
 		),
+		beego.NSNamespace("/project_sign_up",
+			beego.NSInclude(
+				&controllers.UserApplicationOnProjectController{},
+			),
+		),
 /*
 		beego.NSNamespace("/news_tags",
 			beego.NSInclude(
