@@ -207,17 +207,38 @@ func (c *ProjectUserController) Put() {
 // Delete ...
 // @Title Delete
 // @Description delete the ProjectUser
-// @Param	id		path 	string	true		"The id you want to delete"
+// @Param       user_id        query    string   true           "The user's id you want to delete"
+// @Param       project_id     query    string   true           "ID проекта, с которого надо удалить пользователя"
+// @Param       Bearer-token   header   string   true           "Токен доступа пользователя (куратора/админа)"
 // @Success 200 {string} delete success!
 // @Failure 403 id is empty
-// @router /:id [delete]
+// @router / [delete]
 func (c *ProjectUserController) Delete() {
-	idStr := c.Ctx.Input.Param(":id")
-	id, _ := strconv.Atoi(idStr)
-	if err := models.DeleteProjectUser(id); err == nil {
-		c.Data["json"] = "OK"
-	} else {
+	// TODO: сделать проверку, что куратор удаляет пользователей именно из своего проекта
+	user_id, err := c.GetInt("user_id")
+	if err != nil {
+		beego.Debug(c.Ctx.Input.IP(), "Not an int param. Should be int")
+		c.Ctx.Output.SetStatus(400)
 		c.Data["json"] = err.Error()
+	} else {
+		project_id, err := c.GetInt("project_id")
+		if err != nil {
+			beego.Debug(c.Ctx.Input.IP(), "Not an int param. Should be int")
+			c.Ctx.Output.SetStatus(400)
+			c.Data["json"] = err.Error()
+		} else {
+			if c.CurrentUser.PermissionLevel < 1 && c.CurrentUser.UserId != user_id {
+				beego.Debug(c.Ctx.Input.IP(), "Access denied for `Delete` user from project")
+				c.Ctx.Output.SetStatus(403)
+				c.Data["json"] = "Access denied"
+			} else {
+				if err := models.DeleteUserFromProject(user_id, project_id); err == nil {
+					c.Data["json"] = "OK"
+				} else {
+					c.Data["json"] = err.Error()
+				}
+			}
+		}
 	}
 	c.ServeJSON()
 }

@@ -161,15 +161,11 @@ func UpdateProjectUserById(m *ProjectUser) (err error) {
 
 // DeleteProjectUser deletes ProjectUser by Id and returns error if
 // the record to be deleted doesn't exist
-func DeleteProjectUser(id int) (err error) {
+func DeleteUserFromProject(user_id int, project_id int) (err error) {
 	o := orm.NewOrm()
-	v := ProjectUser{Id: id}
-	// ascertain id exists in the database
-	if err = o.Read(&v); err == nil {
-		var num int64
-		if num, err = o.Delete(&ProjectUser{Id: id}); err == nil {
-			fmt.Println("Number of records deleted in database:", num)
-		}
-	}
+	_, err = o.QueryTable(new(ProjectUser)).
+		Filter("UserId", user_id).
+		Filter("ProjectId", project_id).
+		Delete()
 	return
 }
