@@ -16,6 +16,7 @@ import { Http, Headers, RequestOptions, Response } from '@angular/http';
 export class StudentProjectPageComponent implements OnInit, DoCheck {
 
   private project;
+  private projectId: number;
   private tasks = [];
   private subscribedUsers = [];
   private Authorized: boolean;
@@ -27,6 +28,7 @@ export class StudentProjectPageComponent implements OnInit, DoCheck {
   ngOnInit() {
     this.route.params
       .subscribe(params => {
+        this.projectId = params['id'];
         this.apiService.getSubscribedUsersByProjectId(params['id']).subscribe(res => { this.subscribedUsers = res.json(); });
         this.project = this.apiService.getProjectById(+params['id']).subscribe(res => this.project = res.json());
       });
@@ -66,11 +68,11 @@ export class StudentProjectPageComponent implements OnInit, DoCheck {
       }).subscribe(res => this.tasks = res);
   }
   enroll() {
-    this.apiService.enrollToProject(1, JSON.parse(localStorage.getItem('current_user')).token).subscribe(res => { });
+    this.apiService.enrollToProject(this.projectId, JSON.parse(localStorage.getItem('current_user')).token).subscribe(res => { });
     location.reload();
   }
   unenroll() {
-    this.apiService.unenrollToProject(1, JSON.parse(localStorage.getItem('current_user')).token).subscribe(res => { });
+    this.apiService.unenrollToProject(this.projectId, JSON.parse(localStorage.getItem('current_user')).token).subscribe(res => { });
     location.reload();
   }
 }
