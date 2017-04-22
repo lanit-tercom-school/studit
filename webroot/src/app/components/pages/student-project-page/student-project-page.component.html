@@ -3,7 +3,12 @@
     <div class="col-sm-3" id="img-btn">
       <img id="project-img" width="225px" height="225px" src="http://localhost:8081{{project.Logo}}" alt="Project image">
       <div *ngIf="Authorized">
-        <button type="button" class="btn btn-large btn-block btn-primary" (click)="enroll()">Записаться</button>
+        <div *ngIf="EnrollButton">
+          <button type="button" class="btn btn-large btn-block btn-primary" (click)="enroll()">Записаться</button>
+        </div>
+        <div *ngIf="UnenrollButton">
+          <button type="button" class="btn btn-large btn-block btn-warning" (click)="unenroll()">Отписаться</button>
+        </div>
       </div>
     </div>
     <div class="col-sm-9">

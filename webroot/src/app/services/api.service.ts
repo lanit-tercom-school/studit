@@ -246,4 +246,14 @@ export class ApiService {
     headers.append('Bearer-token', token);
     return this.http.post(environment.apiUrl + '/v1/project_sign_up/' + id, JSON.stringify({}), { headers: headers });
   }
+  unenrollToProject(id: number, token: string) {
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Accept', 'application/json');
+    headers.append('Bearer-token', token);
+    return this.http.delete(environment.apiUrl + '/v1/project_sign_up/' + id, { headers: headers });
+  }
+  getSubscribedUsersByProjectId(id: number) {
+    return this.http.get(environment.apiUrl + '/v1/project_sign_up/' + id);
+  }
 }
