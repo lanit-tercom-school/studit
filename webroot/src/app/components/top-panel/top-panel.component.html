@@ -80,7 +80,7 @@
         <div *ngIf="currentUser">
           <li class="nav-item dropdown">
             <a class="lanit-nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-              <i class="fa fa-user-circle fa-lg" aria-hidden="true"></i> {{currentUser.login}}
+              <i class="fa fa-user-circle fa-lg" aria-hidden="true"></i> {{currentUser.login.split("@", 1)}}
             </a>
             <div class="dropdown-menu">
               <a class="dropdown-item" routerLink="/student/{{currentUser.id}}" routerLinkActive="active"><i class="fa fa-address-card fa-fw" aria-hidden="true"></i> Мой профиль</a>
