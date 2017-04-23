@@ -24,6 +24,7 @@ func init() {
 func fastCheckErr(_ int64, err error) {
 	if err != nil {
 		beego.Critical(err.Error())
+		panic(err)
 	}
 }
 
