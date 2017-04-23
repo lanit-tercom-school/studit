@@ -30,7 +30,7 @@ func (c *ProjectUserController) URLMapping() {
 // @Param       project_id     query     string   true           "ID проекта, на который надо записать пользователя"
 // @Param       user_id        query     string   true           "ID пользователя, которого надо записать"
 // @Param       Bearer-token   header   string   true           "Токен доступа администратора или куратора проекта"
-// @Success 201 {int} models.ProjectUser
+// @Success 201 {int} models.ProjectUser "Добавленное поле ProjectUser"
 // @Failure 403 access denied
 // @router / [post]
 func (c *ProjectUserController) Post() {
@@ -93,7 +93,7 @@ func (c *ProjectUserController) Post() {
 // @Title Get
 // @Description Получение списка пользователей, подписанных на данный проект
 // @Param	id		path 	string	true		"ID проекта, список пользователей которого надо узнать"
-// @Success 200 {object} []int
+// @Success 200 {object} []int "Список пользователей"
 // @Failure 403 :id is empty
 // @router /:id [get]
 func (c *ProjectUserController) Get() {
