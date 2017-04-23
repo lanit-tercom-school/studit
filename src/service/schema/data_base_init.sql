@@ -27,8 +27,8 @@ CREATE TABLE "user" (
 /*Связь пользователя и проекта, в котором участвует пользователь*/
 CREATE TABLE "project_user" (
   "id" serial NOT NULL,
-  "project_id" bigint NOT NULL UNIQUE,
-  "user_id" bigint NOT NULL UNIQUE,
+  "project_id" bigint NOT NULL,
+  "user_id" bigint NOT NULL,
   "signed_date" TIMESTAMP WITH TIME ZONE NOT NULL,
   "progress" int NOT NULL,
   UNIQUE ("project_id", "user_id"),
