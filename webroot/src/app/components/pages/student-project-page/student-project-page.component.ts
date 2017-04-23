@@ -29,7 +29,19 @@ export class StudentProjectPageComponent implements OnInit, DoCheck {
     this.route.params
       .subscribe(params => {
         this.projectId = params['id'];
-        this.apiService.getSubscribedUsersByProjectId(params['id']).subscribe(res => { this.subscribedUsers = res.json(); });
+        this.apiService.getSubscribedUsersByProjectId(params['id']).subscribe(res => {
+          this.subscribedUsers = res.json();
+          this.unenrollButton = false;
+          this.enrollButton = true;
+          if (this.subscribedUsers != null) {
+            for (let a of this.subscribedUsers) {
+              if (a === JSON.parse(localStorage.getItem('current_user')).id) {
+                this.unenrollButton = true;
+                this.enrollButton = false;
+              }
+            }
+          }
+        });
         this.project = this.apiService.getProjectById(+params['id']).subscribe(res => this.project = res.json());
       });
 
@@ -43,17 +55,6 @@ export class StudentProjectPageComponent implements OnInit, DoCheck {
   }
   ngDoCheck() {
 
-    if (this.subscribedUsers != null) {
-      for (let a of this.subscribedUsers) {
-        if (a === JSON.parse(localStorage.getItem('current_user')).id) {
-          this.unenrollButton = true;
-          this.enrollButton = false;
-          return;
-        }
-      }
-      this.unenrollButton = false;
-      this.enrollButton = true;
-    }
   }
 
   getMaterialsItems(): MaterialsItem[] {
