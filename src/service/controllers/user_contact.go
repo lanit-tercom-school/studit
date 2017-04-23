@@ -5,6 +5,7 @@ import (
 	"strconv"
 
 	"github.com/astaxie/beego"
+	"encoding/json"
 )
 
 // Доступ к контактам пользователей
@@ -20,7 +21,7 @@ func (c *UserContactController) URLMapping() {
 	//c.Mapping("Put", c.Put)
 	//c.Mapping("Delete", c.Delete)
 }
-/*
+
 // Post ...
 // @Title Post
 // @Description create UserContact
@@ -29,20 +30,28 @@ func (c *UserContactController) URLMapping() {
 // @Failure 403 body is empty
 // @router / [post]
 func (c *UserContactController) Post() {
-	var v models.UserContact
-	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
-		if _, err := models.AddUserContact(&v); err == nil {
-			c.Ctx.Output.SetStatus(201)
-			c.Data["json"] = v
+	if c.CurrentUser.UserId != -1 {
+		cUser := models.User{ Id: c.CurrentUser.UserId, }
+		v := models.UserContact{ UserId: &cUser, }
+		if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
+			if _, err := models.AddUserContact(&v); err == nil {
+				c.Ctx.Output.SetStatus(201)
+				c.Data["json"] = v
+			} else {
+				c.Ctx.Output.SetStatus(400)
+				c.Data["json"] = err.Error()
+			}
 		} else {
+			c.Ctx.Output.SetStatus(400)
 			c.Data["json"] = err.Error()
 		}
 	} else {
-		c.Data["json"] = err.Error()
+		c.Ctx.Output.SetStatus(401)
+		c.Data["json"] = "Unauthorized"
 	}
 	c.ServeJSON()
 }
-*/
+
 // TODO: refactor this
 // GetOne ...
 // @Title Get One
@@ -53,27 +62,29 @@ func (c *UserContactController) Post() {
 // @Failure 403 string Forbidden
 // @router /:id [get]
 func (c *UserContactController) GetOne() {
-	beego.Info("in getONE")
-	// TODO: обновить защиту когда будет лвлинг пользователей
-	if c.Ctx.Output.IsOk() {
+	if c.CurrentUser.PermissionLevel!=-1 {
 		idStr := c.Ctx.Input.Param(":id")
-		id, _ := strconv.Atoi(idStr)
-		v, err := models.GetUserContactById(id)
-		if err != nil {
-			c.Data["json"] = err.Error()
-		} else {
-			//sess := c.StartSession()
-			userId := 1
-			if userId != v.UserId.Id {
-				c.Data["json"] = "Forbidden (this contact is not yours) (dev)" // TODO: change to `Forbidden`
-				c.Ctx.Output.SetStatus(403)
+		id, err := strconv.Atoi(idStr)
+		if err ==nil {
+			v, err := models.GetUserContactById(id)
+			if err != nil {
+				c.Ctx.Output.SetStatus(400)
+				c.Data["json"] = err.Error()
 			} else {
-				// success
-				c.Data["json"] = v
+				userId := c.CurrentUser.UserId
+				if userId != v.UserId.Id {
+					c.Data["json"] = "Forbidden (this contact is not yours) (dev)" // TODO: change to `Forbidden`
+					c.Ctx.Output.SetStatus(403)
+				} else {
+					c.Ctx.Output.SetStatus(200)
+					c.Data["json"] = v
+				}
 			}
+		} else {
+			c.Ctx.Output.SetStatus(400)
+			c.Data["json"]=err.Error()
 		}
 	}
-	beego.Info("exit getONE")
 	c.ServeJSON()
 }
 

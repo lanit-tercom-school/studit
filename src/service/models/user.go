@@ -10,14 +10,14 @@ import (
 
 type User struct {
     Id                  int     `orm:"column(id);pk;auto"                   json:"id"`
-    Login               string  `orm:"column(login)"                        json:"login"`
+    Login               string  `orm:"column(login)"                        json:"login,omitempty"`
     Password            string  `orm:"column(password)"                     json:"-"`
     Nickname            string  `orm:"column(nickname)"                     json:"nickname"`
     Description         string  `orm:"column(description)"                  json:"description,omitempty"`
     Avatar              string  `orm:"column(avatar)"                       json:"avatar,omitempty"`
     // viewer - -1, registered user - 0, teacher - 1, admin 2, default is -1
     // Can't be higher than `auth.MaxPermissionLevel` !
-    PermissionLevel     int     `orm:"column(permission_level);default(0)"  json:"permission_level"`
+    PermissionLevel     int     `orm:"column(permission_level);default(0)"  json:"permission_level,omitempty"`
 }
 
 func (t *User) TableName() string {
@@ -131,9 +131,12 @@ func UpdateUserById(n *User) (err error) {
 		//fields filter
 		m := User{
 			Id: n.Id,
+			Login: v.Login,
+			Password: v.Password,
 			Nickname: n.Nickname,
 			Description: n.Description,
 			Avatar: n.Avatar,
+			PermissionLevel: v.PermissionLevel,
 		}
 		_, err = o.Update(&m)
 	}

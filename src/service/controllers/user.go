@@ -52,6 +52,7 @@ func (c *UserController) Post() {
 // @Title Get One
 // @Description get User by id
 // @Param	id		path 	string	true		"The key for staticblock"
+// @Param   Bearer-token        header      string          true    "Access token, Permission Level should be 2"
 // @Success 200 {object} models.User
 // @Failure 400 :id is empty string
 // @router /:id [get]
@@ -65,12 +66,22 @@ func (c *UserController) GetOne() {
 			c.Data["json"] = err.Error()
 			c.Ctx.Output.SetStatus(400)
 		} else {
-			c.Data["json"] = models.User{
-				Id: v.Id,
-				Nickname: v.Nickname,
-				Description: v.Description,
-				Avatar: v.Avatar,
+			if c.CurrentUser.UserId == v.Id || c.CurrentUser.PermissionLevel==2 {
+				c.Data["json"] = models.User{
+					Id:          v.Id,
+					Nickname:    v.Nickname,
+					Description: v.Description,
+					Avatar:      v.Avatar,
+					PermissionLevel: v.PermissionLevel,
 				}
+			} else {
+				c.Data["json"] = models.User{
+					Id:          v.Id,
+					Nickname:    v.Nickname,
+					Description: v.Description,
+					Avatar:      v.Avatar,
+				}
+			}
 		}
 	} else {
 		beego.Debug(c.Ctx.Input.IP(), "GetOne user `Atoi` error", err.Error())
@@ -179,6 +190,9 @@ func (c *UserController) Put() {
 				c.Data["json"] = err.Error()
 				c.Ctx.Output.SetStatus(400)
 			}
+		} else {
+			c.Ctx.Output.SetStatus(403)
+			c.Data["json"] = "Forbidden"
 		}
 	} else {
 		c.Ctx.Output.SetStatus(401)
