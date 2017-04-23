@@ -13,7 +13,7 @@ type LandingProjectsController struct {
 
 // URLMapping ...
 func (c *LandingProjectsController) URLMapping() {
-	c.Mapping("GetOne", c.GetAll)
+	c.Mapping("Get", c.GetAll)
 	c.Mapping("GetAll", c.GetAll)
 }
 func (c *LandingProjectsController) GetOne() {
@@ -24,8 +24,8 @@ func (c *LandingProjectsController) GetOne() {
 
 // GetAll ...
 // @Title Get All
-// @Description get Projects for Landing page
-// @Success 200 {object} models.Project Get best projects for main/landing page
+// @Description Получить проекты
+// @Success 200 {object} models.Project Удачный запрос
 // @Failure 400 Bad Request
 // @router / [get]
 func (c *LandingProjectsController) GetAll() {

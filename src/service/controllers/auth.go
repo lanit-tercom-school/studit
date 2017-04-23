@@ -272,6 +272,7 @@ func (c *AuthController) GetAll() {
 
 func (c *ResetPasswordController) URLMapping() {
 	c.Mapping("Get", c.Get)
+	c.Mapping("Put", c.Put)
 }
 
 // Запрос на сброс пароля
@@ -348,7 +349,7 @@ func (c *ResetPasswordController) Get() {
 	c.ResetPasswordRequest()
 }
 
-// Изменить текущий пароль пользователя
+// Изменить пароль пользователя
 type ChangePasswordController struct{
 	ControllerWithAuthorization
 }
