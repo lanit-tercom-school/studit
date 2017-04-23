@@ -14,6 +14,7 @@ import { RegistrationPageComponent } from './pages/registration-page/registratio
 import { ValidationPageComponent } from './pages/registration-page/validation-page/validation-page.component';
 import { AuthorPublicPageComponent } from './pages/author-public-page/author-public-page.component';
 import { StudentPublicPageComponent } from './pages/student-public-page/student-public-page.component';
+import { UserSettingsPageComponent } from './pages/user-settings-page/user-settings-page.component';
 
 import { MainNewsPageComponent } from './pages/main-news-page/main-news-page.component';
 import { ProjectTasksPageComponent } from './pages/project-tasks-page/project-tasks-page.component';
@@ -43,7 +44,9 @@ export const routes: Routes = [
   { path: 'registration', component: RegistrationPageComponent },
   { path: 'registration/validate', component: ValidationPageComponent, canActivate: [AuthManager] },
   { path: 'author/:id', component: AuthorPublicPageComponent },
+  { path: 'author/:id/settings', component: UserSettingsPageComponent },
   { path: 'student/:id', component: StudentPublicPageComponent },
+  { path: 'student/:id/settings', component: UserSettingsPageComponent },
   { path: 'news', component: MainNewsPageComponent },
   { path: 'news/:id', component: MainFullNewsPageComponent },
 ];

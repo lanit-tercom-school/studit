@@ -1,0 +1,52 @@
+.container
+{
+    margin: 1rem;
+    margin-left: 5rem;
+    margin-right: 5rem;
+}
+
+#user-avatar
+{
+    margin-top: 2rem;
+    width: 225px;
+    height: 225px;
+}
+
+#inputDescription
+{
+   max-width: 40%;
+   min-width: 40%;
+   max-height: 5rem;
+   min-height: 5rem;
+   text-align: left;
+}
+
+.btn-submit
+{
+  margin-top: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.btn-add
+{
+  border-radius: 30px;
+}
+.list-group
+{
+  width: 50%;
+}
+
+.form-inline
+{
+  margin-bottom: 0.5rem;
+}
+
+.block-form
+{
+  margin-bottom: 2.5rem;
+}
+.acc-label
+{
+  position: absolute;
+  left: 4.5rem;
+}
