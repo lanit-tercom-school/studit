@@ -10,8 +10,10 @@ import { ApiService } from '../../../services/api.service';
 export class AboutComponent implements OnInit {
   private user: UserInfo = { login: "", nickname: "", password: "" };
   private error: string;
-
-  constructor(private api: ApiService, private router: Router) { }
+  private currentUser;
+  constructor(private api: ApiService, private router: Router) {
+    this.currentUser = JSON.parse(localStorage.getItem('current_user'));
+    }
 
   ngOnInit() {
   }
