@@ -81,7 +81,7 @@ func init() {
 				&controllers.NewsController{},
 			),
 		),
-		beego.NSNamespace("/project_sign_up",
+		beego.NSNamespace("/project/enroll",
 			beego.NSInclude(
 				&controllers.UserApplicationOnProjectController{},
 			),
@@ -117,18 +117,18 @@ func init() {
 			),
 		),
 */
-		beego.NSNamespace("/project",
+		beego.NSNamespace("/project/id",
 			beego.NSInclude(
 				&controllers.ProjectController{},
 			),
 		),
-/*
-		beego.NSNamespace("/project_user",
+
+		beego.NSNamespace("/project/users",
 			beego.NSInclude(
 				&controllers.ProjectUserController{},
 			),
 		),
-
+/*
 		beego.NSNamespace("/contact_type",
 			beego.NSInclude(
 				&controllers.ContactTypeController{},
