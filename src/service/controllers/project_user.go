@@ -231,12 +231,13 @@ func (c *ProjectUserController) Delete() {
 				beego.Debug(c.Ctx.Input.IP(), "Access denied for `Delete` user from project")
 				c.Ctx.Output.SetStatus(403)
 				c.Data["json"] = "Access denied"
+			} else if err := models.DeleteUserFromProject(user_id, project_id); err == nil {
+				beego.Trace(c.Ctx.Input.IP(), "`Delete` user from project OK")
+				c.Data["json"] = "OK"
 			} else {
-				if err := models.DeleteUserFromProject(user_id, project_id); err == nil {
-					c.Data["json"] = "OK"
-				} else {
-					c.Data["json"] = err.Error()
-				}
+				beego.Debug(c.Ctx.Input.IP(), "Can't `Delete` user from project")
+				c.Ctx.Output.SetStatus(400)
+				c.Data["json"] = err.Error()
 			}
 		}
 	}

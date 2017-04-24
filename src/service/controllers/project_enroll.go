@@ -61,7 +61,7 @@ func (c *UserEnrollOnProjectController) Post() {
 				} else {
 					// записать пользователя
 					beego.Trace("Good user_id")
-					v := models.ProjectSignUp{
+					v := models.ProjectEnroll{
 						UserId: user,
 						ProjectId: project,
 					}
@@ -108,14 +108,14 @@ func (c *UserEnrollOnProjectController) GetOne() {
 
 // GetAll ...
 // @Title Get All
-// @Description get ProjectSignUp
+// @Description get ProjectEnroll
 // @Param	query	query	string	false	"Filter. e.g. col1:v1,col2:v2 ..."
 // @Param	fields	query	string	false	"Fields returned. e.g. col1,col2 ..."
 // @Param	sortby	query	string	false	"Sorted-by fields. e.g. col1,col2 ..."
 // @Param	order	query	string	false	"Order corresponding to each sortby field, if single value, apply to all sortby fields. e.g. desc,asc ..."
 // @Param	limit	query	string	false	"Limit the size of result set. Must be an integer"
 // @Param	offset	query	string	false	"Start position of result set. Must be an integer"
-// @Success 200 {object} models.ProjectSignUp
+// @Success 200 {object} models.ProjectEnroll
 // @Failure 403
 // @router / [get]
 
@@ -173,10 +173,10 @@ func (c *UserEnrollOnProjectController) GetAll() {
 
 // Put ...
 // @Title Put
-// @Description update the ProjectSignUp
+// @Description update the ProjectEnroll
 // @Param	id		path 	string	true		"The id you want to update"
-// @Param	body		body 	models.ProjectSignUp	true		"body for ProjectSignUp content"
-// @Success 200 {object} models.ProjectSignUp
+// @Param	body		body 	models.ProjectEnroll	true		"body for ProjectEnroll content"
+// @Success 200 {object} models.ProjectEnroll
 // @Failure 403 :id is not int
 // @router /:id [put]
 
@@ -184,7 +184,7 @@ func (c *UserEnrollOnProjectController) GetAll() {
 func (c *UserEnrollOnProjectController) Put() {
 	idStr := c.Ctx.Input.Param(":id")
 	id, _ := strconv.Atoi(idStr)
-	v := models.ProjectSignUp{Id: id}
+	v := models.ProjectEnroll{Id: id}
 	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
 		if err := models.UpdateProjectAuthorById(&v); err == nil {
 			c.Data["json"] = "OK"
@@ -218,8 +218,7 @@ func (c *UserEnrollOnProjectController) Delete() {
 			beego.Debug("Can't parse", err.Error())
 			c.Ctx.Output.SetStatus(400)
 			c.Data["json"] = err.Error()
-		}
-		if err := models.DeleteProjectSignUp(c.CurrentUser.UserId, id); err == nil {
+		} else if err := models.DeleteProjectSignUp(c.CurrentUser.UserId, id); err == nil {
 			beego.Trace("Success sign out from project")
 			c.Data["json"] = "OK"
 		} else {

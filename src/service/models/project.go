@@ -10,7 +10,7 @@ import (
 )
 
 type Project struct {
-	Id          int    `orm:"column(id);pk;auto"`
+	Id          int64  `orm:"column(id);pk;auto"`
 	Name        string `orm:"column(name)"`
 	Description string `orm:"column(description)"`
 	Logo        string `orm:"column(logo)"`
