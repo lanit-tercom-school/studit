@@ -10,12 +10,12 @@ import (
 )
 
 // Записаться и отписаться от проекта, получить список записанных
-type UserApplicationOnProjectController struct {
+type UserEnrollOnProjectController struct {
 	ControllerWithAuthorization
 }
 
 // URLMapping ...
-func (c *UserApplicationOnProjectController) URLMapping() {
+func (c *UserEnrollOnProjectController) URLMapping() {
 	c.Mapping("Post", c.Post)
 	c.Mapping("GetOne", c.GetOne)
 	c.Mapping("GetAll", c.GetAll)
@@ -29,11 +29,10 @@ func (c *UserApplicationOnProjectController) URLMapping() {
 // @Description Записать пользователя на проект
 // @Param   id              path    string  true    "ID проекта, на который нужно записаться"
 // @Param   Bearer-token    header  string  true    "Токен доступа любого зарегистрированного пользователя"
-// @Success 201 {int} models.ProjectSignUp
+// @Success 201 {int} "Created"
 // @Failure 403 body is empty
 // @router /:id [post]
-func (c *UserApplicationOnProjectController) Post() {
-	// TODO: добавить проверку, что бы пользователь не мог записаться несколько раз на один и тот же проект
+func (c *UserEnrollOnProjectController) Post() {
 	if c.CurrentUser.PermissionLevel == -1 {
 		beego.Debug(c.Ctx.Input.IP(), "Access denied for `Post` new application form")
 		c.Ctx.Output.SetStatus(403)
@@ -42,7 +41,7 @@ func (c *UserApplicationOnProjectController) Post() {
 		// получить id проекта, на который пользователь хочет записаться
 		project_id, err := c.GetInt(":id")
 		if err != nil {
-			beego.Debug(c.Ctx.Input.IP(), "Not an int param. Should be int")
+			beego.Debug(c.Ctx.Input.IP(), "Not an int param. Should be int", err.Error())
 			c.Ctx.Output.SetStatus(400)
 			c.Data["json"] = err.Error()
 		} else {
@@ -91,7 +90,7 @@ func (c *UserApplicationOnProjectController) Post() {
 // @Success 200 []{int} список из ID пользователей
 // @Failure 403 :id is empty
 // @router /:id [get]
-func (c *UserApplicationOnProjectController) GetOne() {
+func (c *UserEnrollOnProjectController) GetOne() {
 	beego.Trace("New GET for singed up users")
 	idStr := c.Ctx.Input.Param(":id")
 	id, _ := strconv.Atoi(idStr)
@@ -121,7 +120,7 @@ func (c *UserApplicationOnProjectController) GetOne() {
 // @router / [get]
 
 // wtf
-func (c *UserApplicationOnProjectController) GetAll() {
+func (c *UserEnrollOnProjectController) GetAll() {
 	var fields []string
 	var sortby []string
 	var order []string
@@ -182,7 +181,7 @@ func (c *UserApplicationOnProjectController) GetAll() {
 // @router /:id [put]
 
 // wtf
-func (c *UserApplicationOnProjectController) Put() {
+func (c *UserEnrollOnProjectController) Put() {
 	idStr := c.Ctx.Input.Param(":id")
 	id, _ := strconv.Atoi(idStr)
 	v := models.ProjectSignUp{Id: id}
@@ -206,7 +205,7 @@ func (c *UserApplicationOnProjectController) Put() {
 // @Success 200 {string} delete success!
 // @Failure 403 id is empty
 // @router /:id [delete]
-func (c *UserApplicationOnProjectController) Delete() {
+func (c *UserEnrollOnProjectController) Delete() {
 	beego.Trace("User want to sign out from project")
 	if c.CurrentUser.PermissionLevel == -1 {
 		beego.Debug(c.Ctx.Input.IP(), "Access denied for `Delete` project_sign_up")

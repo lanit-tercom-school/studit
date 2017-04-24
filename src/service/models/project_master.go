@@ -10,44 +10,52 @@ import (
 	"github.com/astaxie/beego/orm"
 )
 
-type ProjectUser struct {
+type ProjectMaster struct {
 	Id         int       `orm:"column(id);pk;auto"`
 	ProjectId  *Project  `orm:"column(project_id);rel(fk)"`
-	UserId     *User     `orm:"column(user_id);rel(fk)"`
+	MasterId   *User     `orm:"column(master_id);rel(fk)"`
 	SignedDate time.Time `orm:"column(signed_date);type(datetime)"`
-	Progress   int       `orm:"column(progress)"`
 }
 
-func (t *ProjectUser) TableName() string {
+func (t *ProjectMaster) TableName() string {
 	return "project_user"
 }
 
 func init() {
-	orm.RegisterModel(new(ProjectUser))
+	orm.RegisterModel(new(ProjectMaster))
 }
 
-// AddProjectUser insert a new ProjectUser into database and returns
+// AddProjectUser insert a new ProjectMaster into database and returns
 // last inserted Id on success.
-func AddUserToProject(m *ProjectUser) (err error) {
-	o := orm.NewOrm()
-	var p ProjectSignUp
-	_, err = o.QueryTable(new(ProjectSignUp)).
-		Filter("user_id", m.UserId).
-		Filter("project_id", m.ProjectId).
-		RelatedSel().
-		All(&p)
-	if err != nil {
-		return err
-	}
-	_, err = o.QueryTable(new(ProjectSignUp)).Filter("id", p.Id).Delete()
-	if err != nil {
-		return err
-	}
-	_, err = o.Insert(m)
+func AddMasterToProject(m *ProjectMaster) (err error) {
+	_, err = orm.NewOrm().Insert(m)
 	return
 }
 
-func AddProjectUser(m *ProjectUser) (id int64, err error) {
+func IsUserInArray(user_id int, users []*User) bool {
+	for _, x := range users {
+		if x.Id == user_id{
+			return true
+		}
+	}
+	return false
+}
+
+func GetMastersOfTheProject(project_id int) (masters []*User, err error) {
+	o := orm.NewOrm()
+	var connections []ProjectMaster
+	// выбираем всех пользователей, являющихся мастерами данного проекта
+	_, err = o.QueryTable(new(ProjectMaster)).
+			Filter("project_id", project_id).
+			RelatedSel().
+			All(&connections, "MasterId")
+	// возвращаем только мастеров
+	for _, x := range connections {
+		masters = append(masters, x.MasterId)
+	}
+}
+
+func AddProjectUser(m *ProjectMaster) (id int64, err error) {
 	o := orm.NewOrm()
 	id, err = o.Insert(m)
 	return
@@ -55,8 +63,8 @@ func AddProjectUser(m *ProjectUser) (id int64, err error) {
 
 func GetUsersByProjectId(project_id int) (ml []interface{}, err error) {
 	o := orm.NewOrm()
-	var users []ProjectUser
-	_, err = o.QueryTable(new(ProjectUser)).
+	var users []ProjectMaster
+	_, err = o.QueryTable(new(ProjectMaster)).
 		Filter("project_id", project_id).
 		RelatedSel().
 		All(&users)
@@ -70,12 +78,12 @@ func GetUsersByProjectId(project_id int) (ml []interface{}, err error) {
 }
 
 
-// GetAllProjectUser retrieves all ProjectUser matches certain condition. Returns empty list if
+// GetAllProjectUser retrieves all ProjectMaster matches certain condition. Returns empty list if
 // no records exist
 func GetAllProjectUser(query map[string]string, fields []string, sortby []string, order []string,
 	offset int64, limit int64) (ml []interface{}, err error) {
 	o := orm.NewOrm()
-	qs := o.QueryTable(new(ProjectUser))
+	qs := o.QueryTable(new(ProjectMaster))
 	// query k=v
 	for k, v := range query {
 		// rewrite dot-notation to Object__Attribute
@@ -121,7 +129,7 @@ func GetAllProjectUser(query map[string]string, fields []string, sortby []string
 		}
 	}
 
-	var l []ProjectUser
+	var l []ProjectMaster
 	qs = qs.OrderBy(sortFields...)
 	if _, err = qs.Limit(limit, offset).All(&l, fields...); err == nil {
 		if len(fields) == 0 {
@@ -144,11 +152,11 @@ func GetAllProjectUser(query map[string]string, fields []string, sortby []string
 	return nil, err
 }
 
-// UpdateProjectUser updates ProjectUser by Id and returns error if
+// UpdateProjectUser updates ProjectMaster by Id and returns error if
 // the record to be updated doesn't exist
-func UpdateProjectUserById(m *ProjectUser) (err error) {
+func UpdateProjectUserById(m *ProjectMaster) (err error) {
 	o := orm.NewOrm()
-	v := ProjectUser{Id: m.Id}
+	v := ProjectMaster{Id: m.Id}
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
 		var num int64
@@ -159,11 +167,11 @@ func UpdateProjectUserById(m *ProjectUser) (err error) {
 	return
 }
 
-// DeleteProjectUser deletes ProjectUser by Id and returns error if
+// DeleteProjectUser deletes ProjectMaster by Id and returns error if
 // the record to be deleted doesn't exist
 func DeleteUserFromProject(user_id int, project_id int) (err error) {
 	o := orm.NewOrm()
-	_, err = o.QueryTable(new(ProjectUser)).
+	_, err = o.QueryTable(new(ProjectMaster)).
 		Filter("UserId", user_id).
 		Filter("ProjectId", project_id).
 		Delete()
