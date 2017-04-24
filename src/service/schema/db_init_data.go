@@ -24,6 +24,7 @@ func init() {
 func fastCheckErr(_ int64, err error) {
 	if err != nil {
 		beego.Critical(err.Error())
+		panic(err)
 	}
 }
 
@@ -158,6 +159,20 @@ func main() {
 	}
 	fastCheckErr(o.Insert(&user6))
 
+	avatar_seed = auth.GenerateNewToken(6)
+	color_str = auth.GenerateRandomColor()
+	user7 := m.User{
+		Id: 7,
+		Nickname: "B",
+		Login: "b@b",
+		Password: auth.CustomStr("b").ToSHA1(),
+		Avatar: fmt.Sprintf("%s%s?colors=%s&colors=%s&size=%s", auth.AvatarTemplatePath, avatar_seed,
+			color_str, "FFFFFF", auth.AvatarTemplateSize),
+		Description: "BBB",
+		PermissionLevel: 0,
+	}
+	fastCheckErr(o.Insert(&user7))
+
 	// add tags
 
 	tag1 := m.Tag{
@@ -207,67 +222,6 @@ func main() {
 		Name: "Back-end",
 	}
 	fastCheckErr(o.Insert(&tag8))
-
-	// add author permission
-
-	author1 := m.Author{
-		Id: 1,
-		UserId: &user1,
-	}
-	fastCheckErr(o.Insert(&author1))
-
-	author2 := m.Author{
-		Id: 2,
-		UserId: &user2,
-	}
-	fastCheckErr(o.Insert(&author2))
-
-	author3 := m.Author{
-		Id: 3,
-		UserId: &user3,
-	}
-	fastCheckErr(o.Insert(&author3))
-
-	author4 := m.Author{
-		Id: 4,
-		UserId: &user4,
-	}
-	fastCheckErr(o.Insert(&author4))
-
-	author5 := m.Author{
-		Id: 5,
-		UserId: &user5,
-	}
-	fastCheckErr(o.Insert(&author5))
-
-	author6 := m.Author{
-		Id: 6,
-		UserId: &user6,
-	}
-	fastCheckErr(o.Insert(&author6))
-
-	// connect projects and authors
-
-	prj_aut_con1 := m.ProjectAuthor{
-		Id: 1,
-		AuthorId: &author1,
-		ProjectId: &project1,
-	}
-	fastCheckErr(o.Insert(&prj_aut_con1))
-
-	prj_aut_con2 := m.ProjectAuthor{
-		Id: 2,
-		AuthorId: &author1,
-		ProjectId: &project2,
-	}
-	fastCheckErr(o.Insert(&prj_aut_con2))
-
-	prj_aut_con3 := m.ProjectAuthor{
-		Id: 3,
-		AuthorId: &author1,
-		ProjectId: &project3,
-	}
-	fastCheckErr(o.Insert(&prj_aut_con3))
 
 	// connect projects and users
 
@@ -576,47 +530,6 @@ func main() {
 		Image: "http://frank.jou.ufl.edu/wp-content/uploads/2015/05/ThinkstockPhotos-Website.jpg",
 	}
 	fastCheckErr(m.AddNews(&news4))
-
-	// add tasks
-
-	task1 := m.Task{
-		Id: 		1,
-		Title: 		"Front-end",
-		Description:    "Разработка клиентской части",
-		NumberOfTask:   1,
-		Tags:           "Javascript",
-		Priority:       2,
-		ProjectId:      &project1,
-		ProjectAuthorId:&prj_aut_con1,
-		ProjectUserId:  &prj_usr_con1,
-	}
-	fastCheckErr(o.Insert(&task1))
-
-	task2 := m.Task{
-		Id: 		2,
-		Title: 		"Back-end",
-		Description:    "Разработка серверной части",
-		NumberOfTask:   1,
-		Tags:           "",
-		Priority:       2,
-		ProjectId:      &project1,
-		ProjectAuthorId:&prj_aut_con1,
-		ProjectUserId:  &prj_usr_con1,
-	}
-	fastCheckErr(o.Insert(&task2))
-
-	task3 := m.Task{
-		Id: 		3,
-		Title: 		"Логотип",
-		Description:    "Разработка логотипа",
-		NumberOfTask:   1,
-		Tags:           "Design",
-		Priority:       1,
-		ProjectId:      &project3,
-		ProjectAuthorId:&prj_aut_con1,
-		ProjectUserId:  &prj_usr_con6,
-	}
-	fastCheckErr(o.Insert(&task3))
 
 	//add courses
 

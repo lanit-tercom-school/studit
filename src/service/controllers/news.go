@@ -8,7 +8,7 @@ import (
 	"github.com/astaxie/beego"
 )
 
-// NewsController operations for News
+// Создание, изменение, удаление и просмотр новостей
 type NewsController struct {
 	ControllerWithAuthorization
 }
@@ -24,10 +24,10 @@ func (c *NewsController) URLMapping() {
 
 // Post ...
 // @Title Post
-// @Description create News
-// @Param   body                body        models.NewsJson true    "Body for News content, fields `id`, `created`, `edited` ignores"
-// @Param   Bearer-token        header      string          true    "Access token, Permission Level should be 2"
-// @Success 201 OK
+// @Description Создать новую новость
+// @Param   body                body        models.NewsJson true    "Тело запроса, см. пример, поля `id`, `created`, `edited` игнорируются"
+// @Param   Bearer-token        header      string          true    "Токен доступа администратора"
+// @Success 201 {int} ID созданой новости
 // @Failure 400 body is empty
 // @Failure 400 Forbidden
 // @router / [post]
@@ -60,9 +60,9 @@ func (c *NewsController) Post() {
 
 // GetOne ...
 // @Title Get One
-// @Description get News by id
-// @Param   id      path    string  true    "The key for static block"
-// @Success 200 {object} models.NewsJson    Description
+// @Description Получить подробную новость
+// @Param   id      path    string  true    "ID новости"
+// @Success 200 {object} models.NewsJson    Успешный запрос
 // @Failure 403 :id is empty
 // @router /:id [get]
 func (c *NewsController) GetOne() {
@@ -88,13 +88,13 @@ func (c *NewsController) GetOne() {
 
 // GetAll ...
 // @Title Get All
-// @Description Get bunch of news
-// @Param   sort_by     query   string  false   "Sorted-by fields. e.g. title, description, time"
+// @Description Получить список новостей
+// @Param   sort_by     query   string  false   "Поле, по которому сортировать новости, напр. title, description, time"
 // @Param   order       query   string  false   "Order corresponding to each sort_by field, if single value, apply to all sort_by fields. e.g. desc,asc ..., can be only `desc` or `asc`, default is asc"
-// @Param   tag         query   string  false   "Filter by one and only one tag. e.g. Other"
-// @Param   limit       query   string  false   "Limit the size of result set. Must be an integer"
-// @Param   offset      query   string  false   "Start position of result set. Must be an integer"
-// @Success 200 {object} []models.NewsJson  Description
+// @Param   tag         query   string  false   "Получить новость с тегом. Тег может быть только один."
+// @Param   limit       query   string  false   "Максимальное количество новостей. Должно быть числом. Не более 20"
+// @Param   offset      query   string  false   "Отступ от начала. Должно быть числом."
+// @Success 200 {object} []models.NewsJson  Успешный запрос
 // @Failure 400 Error
 // @router / [get]
 func (c *NewsController) GetAll() {
@@ -124,7 +124,7 @@ func (c *NewsController) GetAll() {
 	if v := c.GetString("order"); v != "" {
 		order = strings.Split(v, ",")
 	}
-	// tag: Other
+	// tags: Other
 	if v := c.GetString("tag"); v != "" {
 		tag = v
 	}
@@ -143,10 +143,10 @@ func (c *NewsController) GetAll() {
 
 // Put ...
 // @Title Put
-// @Description Update(edit) the News with id
-// @Param   id              path        string              true        "The id you want to update"
-// @Param   body            body        models.NewsJson     true        "Body for News content, id, created and edited fields ignores"
-// @Param   Bearer-token    header      string              true        "Access token, Permission Level should be 2"
+// @Description Изменить новость
+// @Param   id              path        string              true    "ID новости, которую нужно изменить"
+// @Param   body            body        models.NewsJson     true    "Тело запроса, см. пример, поля id, created and edited fields ignores"
+// @Param   Bearer-token    header      string              true    "Токен доступа администратора"
 // @Success 200 OK
 // @Failure 403 :id is not int
 // @Failure 403 Forbidden
@@ -185,9 +185,9 @@ func (c *NewsController) Put() {
 
 // Delete ...
 // @Title Delete
-// @Description Delete the News
-// @Param   id              path    string  true    "The id you want to delete"
-// @Param   Bearer-token    header  string  true    "Access token, Permission Level should be 2"
+// @Description Удалить новость
+// @Param   id              path    string  true    "ID новости, которую нужно удалить"
+// @Param   Bearer-token    header  string  true    "Токен доступа администратора"
 // @Success 200 OK
 // @Failure 403 id is empty
 // @Failure 403 Forbidden

@@ -1,20 +1,6 @@
-div
-{
-  background: whitesmoke;
-  width: 100%;
-  padding: 0.5rem 0.5rem;
-  margin: 1rem auto;
-  text-align: right;
-  border: 1px solid gainsboro;
-}
-.p1{
-  font-size: 14px;
-}
-p
-{
-  text-align: left;
-}
 li
 {
   list-style-type: none;
+  margin-bottom: 1rem;
+  word-break: break-all;
 }

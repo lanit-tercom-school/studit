@@ -8,10 +8,11 @@ import {Input} from "@angular/core";
   styleUrls: ['./tasks-item.component.css']
 })
 export class TasksItemComponent implements OnInit {
-  @Input() public TasksItem:TasksItem;
+  @Input() public TasksItem;
   constructor() { }
 
   ngOnInit() {
+  	this.TasksItem.body = this.TasksItem.body.slice(0, 100);
   }
 
 }

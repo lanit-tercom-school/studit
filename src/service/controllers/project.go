@@ -9,7 +9,7 @@ import (
 	"github.com/astaxie/beego"
 )
 
-// Операции с models.Project, для некоторых требуется авторизация
+// Создание, изменение, удаление и просмотр проектов
 type ProjectController struct {
 	ControllerWithAuthorization
 }
@@ -25,10 +25,10 @@ func (c *ProjectController) URLMapping() {
 
 // Post ...
 // @Title Post
-// @Description create Project
-// @Param	body		body 	models.Project	true		"body for Project content"
-// @Param	Bearer-token		header	string			    true		"Access token, Permission Level should be 1"
-// @Success 201 OK
+// @Description Создать новый проект
+// @Param   body            body    models.Project  true    "Тело запроса, см. пример"
+// @Param   Bearer-token    header  string          true    "Токен доступа, пользователь должен быть не ниже куратора"
+// @Success 201 "Created"
 // @Failure 403 body is empty
 // @router / [post]
 func (c *ProjectController) Post() {
@@ -60,9 +60,9 @@ func (c *ProjectController) Post() {
 
 // GetOne ...
 // @Title Get One
-// @Description get Project by id
-// @Param	id		path 	string	true		"The key for staticblock"
-// @Success 200 {object} models.Project	Get project with specified id
+// @Description Получить подробную информацию
+// @Param   id  path    string  true    "ID проекта, информацию о котором нужно получить"
+// @Success 200 {object} models.Project     Запрос прошел успешно
 // @Failure 400 :id is wrong
 // @router /:id [get]
 func (c *ProjectController) GetOne() {
@@ -154,11 +154,11 @@ func (c *ProjectController) GetAll() {
 
 // Put ...
 // @Title Put
-// @Description update the Project
-// @Param	id		path 	string	true		"The id you want to update"
-// @Param	body		body 	models.Project	true		"body for Project content"
-// @Param	Bearer-token		header	string			true		"Access token, Permission Level should be 2"
-// @Success 200 {object} models.Project Description
+// @Description Изменить/обновить проект
+// @Param   id              path    string          true    "ID проекта, который нужно обновить"
+// @Param   body            body    models.Project  true    "Тело запроса, см. пример"
+// @Param   Bearer-token    header  string          true    "Токен доступа администратора или создателя проекта"
+// @Success 200 "OK"
 // @Failure 403 :id is not int
 // @router /:id [put]
 func (c *ProjectController) Put() {
@@ -188,17 +188,19 @@ func (c *ProjectController) Put() {
 		}
 	} else {
 		beego.Debug(c.Ctx.Input.IP(), "Access denied for `Put`")
+		c.Data["json"] = "You can't do it"
 		c.Ctx.Output.SetStatus(400)
 	}
 	c.ServeJSON()
 }
 
+// TODO: удалится ли всё, что связано с проектом, если его удалить?
 // Delete ...
 // @Title Delete
 // @Description delete the Project
-// @Param	id		path 	string	true		"The id you want to delete"
-// @Param	Bearer-token		header	string			true		"Access token, Permission Level should be 2"
-// @Success 200 OK
+// @Param   id              path    string      true        "ID проекта, который нужно удалить"
+// @Param   Bearer-token    header  string      true        "Токен доступа администратора или автора проекта"
+// @Success 200 "OK"
 // @Failure 403 id is empty
 // @router /:id [delete]
 func (c *ProjectController) Delete() {
@@ -212,12 +214,16 @@ func (c *ProjectController) Delete() {
 			c.Data["json"] = err.Error()
 		}
 		if err := models.DeleteProject(id); err == nil {
+			beego.Trace(c.Ctx.Input.IP(), "Delete OK")
 			c.Data["json"] = "OK"
 		} else {
+			beego.Critical(c.Ctx.Input.IP(), "'DeleteProject' error", err.Error())
 			c.Data["json"] = err.Error()
+			c.Ctx.Output.SetStatus(500)
 		}
 	} else {
 		beego.Debug(c.Ctx.Input.IP(), "Access denied for `Delete`")
+		c.Data["json"] = "Access denied for `Delete`" // TODO: change this
 		c.Ctx.Output.SetStatus(400)
 	}
 	c.ServeJSON()

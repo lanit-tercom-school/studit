@@ -13,7 +13,7 @@ export class ApiService {
   }
 
   validate(key: string) {
-    return this.http.get(environment.apiUrl + '/v1/auth/register/?pass=' + key)
+    return this.http.get(environment.apiUrl + '/v1/auth/signup/?pass=' + key)
       .catch((error: any) => { return Observable.throw(error) });
   }
 
@@ -22,7 +22,7 @@ export class ApiService {
 
     headers.append('Content-Type', 'application/json');
 
-    return this.http.post(environment.apiUrl + '/v1/auth/register', JSON.stringify(user), { headers: headers })
+    return this.http.post(environment.apiUrl + '/v1/auth/signup', JSON.stringify(user), { headers: headers })
       .map((res: Response) => {
         if (res.json().code)
           localStorage.setItem('validation_code', res.json().code);
@@ -70,7 +70,7 @@ export class ApiService {
   }
 
   getMainPageProjects() {
-    return this.http.get(environment.apiUrl + '/v1/land/projects/')
+    return this.http.get(environment.apiUrl + '/v1/main/projects/')
       .map((response: Response) => {
         var res = response.json();
         res.forEach(element => {

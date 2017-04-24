@@ -128,7 +128,6 @@ func UpdateUserById(n *User) (err error) {
 	v := User{Id: n.Id}
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
-		var num int64
 		//fields filter
 		m := User{
 			Id: n.Id,
@@ -136,7 +135,7 @@ func UpdateUserById(n *User) (err error) {
 			Description: n.Description,
 			Avatar: n.Avatar,
 		}
-		num, err = o.Update(&m)
+		_, err = o.Update(&m)
 	}
 	return
 }
