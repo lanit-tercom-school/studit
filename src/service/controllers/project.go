@@ -59,7 +59,7 @@ func (c *ProjectController) Post() {
 					}
 				}
 			} else {
-				beego.Debug("Post project `AddNews` error", err.Error())
+				beego.Debug("Post project `AddProject` error", err.Error())
 				c.Data["json"] = err.Error()
 				c.Ctx.Output.SetStatus(500)
 
@@ -95,7 +95,7 @@ func (c *ProjectController) GetOne() {
 		c.Ctx.Output.SetStatus(400)
 		c.Data["json"] = err.Error() // TODO: change to "Wrong project id"
 	} else {
-		v, err := models.GetProjectById(id)
+		v, err := models.GetProjectById(int64(id))
 		if err != nil {
 			beego.Debug("GetOne `GetProjectById` error", err.Error())
 			c.Ctx.Output.SetStatus(400)
@@ -235,7 +235,7 @@ func (c *ProjectController) Delete() {
 			c.Ctx.Output.SetStatus(400)
 			c.Data["json"] = err.Error()
 		}
-		if err := models.DeleteProject(id); err == nil {
+		if err := models.DeleteProject(int64(id)); err == nil {
 			beego.Trace("Delete OK")
 			c.Data["json"] = "OK"
 		} else {

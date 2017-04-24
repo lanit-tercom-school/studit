@@ -40,7 +40,7 @@ func (c *ProjectUserController) Post() {
 		c.Ctx.Output.SetStatus(403)
 		c.Data["json"] = "Access denied"
 	} else {
-		project_id, err := c.GetInt("project_id")
+		project_id, err := c.GetInt64("project_id")
 		if err != nil {
 			beego.Debug(c.Ctx.Input.IP(), "Not an int param. Should be int")
 			c.Ctx.Output.SetStatus(400)

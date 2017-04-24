@@ -37,7 +37,7 @@ func (c *ProjectMasterController) Post() {
 		c.Data["json"] = "Forbidden"
 
 		// получить id проекта, на который нужно добавить мастера
-	} else if project_id, err := c.GetInt("project_id"); err != nil {
+	} else if project_id, err := c.GetInt64("project_id"); err != nil {
 		beego.Debug("Not an int param. Should be int", err.Error())
 		c.Ctx.Output.SetStatus(400)
 		c.Data["json"] = err.Error()
@@ -104,7 +104,7 @@ func (c *ProjectMasterController) GetOne() {
 		c.Ctx.Output.SetStatus(400)
 		c.Data["json"] = err.Error()
 
-	} else if v, err := models.GetMastersOfTheProject(id); err != nil {
+	} else if v, err := models.GetMastersOfTheProject(int64(id)); err != nil {
 		beego.Debug("GET masters of project error", err.Error())
 		c.Data["json"] = err.Error()
 		c.Ctx.Output.SetStatus(400)
@@ -118,12 +118,10 @@ func (c *ProjectMasterController) GetOne() {
 
 // GetAll ...
 // @Title Get All
-// @Description get ProjectSignUp
+// @Description Тестовый запрос для получения всех пар
 // @Success 200 {object} []models.ProjectMaster
 // @Failure 403
 // @router / [get]
-
-// wtf
 func (c *ProjectMasterController) GetAll() {
 	l, err := models.GetAllProjectMaster()
 	if err != nil {
@@ -188,7 +186,7 @@ func (c *ProjectMasterController) Delete() {
 		c.Ctx.Output.SetStatus(400)
 		c.Data["json"] = "You can't delete yourself"
 
-	} else if project_id, err := c.GetInt("user_id"); err != nil {
+	} else if project_id, err := c.GetInt64("project_id"); err != nil {
 		beego.Debug("Param `user_id` not int", err.Error())
 		c.Ctx.Output.SetStatus(400)
 		c.Data["json"] = err.Error()
@@ -202,6 +200,9 @@ func (c *ProjectMasterController) Delete() {
 		// Не мастера проекта и не админы не допускаются к дальнейшим действиям
 	} else if c.CurrentUser.PermissionLevel != 2 && !models.IsUserInArray(c.CurrentUser.UserId, masters) {
 		beego.Debug("Request from not master of this project")
+		beego.Trace(project_id)
+		beego.Trace(masters)
+		beego.Trace(c.CurrentUser.UserId)
 		c.Ctx.Output.SetStatus(400)
 		c.Data["json"] = "You are not a master of this project"
 

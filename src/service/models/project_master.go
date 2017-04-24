@@ -41,7 +41,7 @@ func IsUserInArray(user_id int, users []*User) bool {
 	return false
 }
 
-func GetMastersOfTheProject(project_id int) (masters []*User, err error) {
+func GetMastersOfTheProject(project_id int64) (masters []*User, err error) {
 	o := orm.NewOrm()
 	var connections []ProjectMaster
 	// выбираем всех пользователей, являющихся мастерами данного проекта
@@ -75,10 +75,10 @@ func GetAllProjectMaster() (ml []interface{}, err error) {
 
 // DeleteProjectUser deletes ProjectMaster by Id and returns error if
 // the record to be deleted doesn't exist
-func DeleteMasterFromProject(master_id int, project_id int) (err error) {
+func DeleteMasterFromProject(master_id int, project_id int64) (err error) {
 	o := orm.NewOrm()
 	_, err = o.QueryTable(new(ProjectMaster)).
-		Filter("UserId", master_id).
+		Filter("MasterId", master_id).
 		Filter("ProjectId", project_id).
 		Delete()
 	return
