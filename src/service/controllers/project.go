@@ -28,7 +28,7 @@ func (c *ProjectController) URLMapping() {
 // @Description Создать новый проект
 // @Param   body            body    models.Project  true    "Тело запроса, см. пример"
 // @Param   Bearer-token    header  string          true    "Токен доступа, пользователь должен быть не ниже куратора"
-// @Success 201 "Created"
+// @Success 201 {int} Created
 // @Failure 403 body is empty
 // @router / [post]
 func (c *ProjectController) Post() {
@@ -55,7 +55,7 @@ func (c *ProjectController) Post() {
 					} else {
 						beego.Trace("OK")
 						c.Ctx.Output.SetStatus(201)
-						c.Data["json"] = v
+						c.Data["json"] = id
 					}
 				}
 			} else {

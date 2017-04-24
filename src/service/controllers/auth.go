@@ -13,8 +13,8 @@ import (
 
 
 type CurrentClient struct {
-	UserId              int
-	PermissionLevel     int
+	UserId          int
+	PermissionLevel int
 }
 
 
@@ -23,10 +23,13 @@ type CurrentClient struct {
 // `token` не должен быть пустой строкой
 func newClient(token string) (client CurrentClient) {
 	client = CurrentClient{
-		UserId: -1,
+		UserId:          -1,
 		PermissionLevel: -1,
 	}
-	if err := jwtManager.Validate(token); err == nil {
+	if len(token) < 2 {
+		beego.Debug("Token too short")
+		return
+	} else if err := jwtManager.Validate(token); err == nil {
 		claims, _ := jwtManager.Decode(token) // err не нужна, т.к. проверяется во время .Validate()
 		userId, err := claims.Get("user_id")
 		userPermissionLevel, err1 := claims.Get("perm_lvl")
@@ -68,10 +71,10 @@ type ControllerWithAuthorization struct {
 // Уровень доступа хранится в `c.CurrentUser.PermissionLevel` и изменять его вне этой функции небезопасно
 // При условии PermissionLevel == -1 не гарантируется правильный Id
 func (c *ControllerWithAuthorization) Prepare() {
-	beego.Trace(c.Ctx.Input.IP(), "Start validation")
+	beego.Trace("Start validation")
 	clientToken := c.Ctx.Input.Header("Bearer-token")
 	if clientToken == "" {
-		beego.Debug(c.Ctx.Input.IP(), "Empty token")
+		beego.Debug("Empty token")
 		c.CurrentUser.PermissionLevel = -1
 		c.Data["json"] = "Empty token (dev)" // TODO: change to `Unauthorized`
 	} else {
@@ -98,16 +101,19 @@ func (c *AuthController) URLMapping() {
 
 func (c *AuthController) Login() {
 	var v auth.Usr
-	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
-
-		beego.Trace(c.Ctx.Input.IP(), v.Login, "Try to login")
+	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err != nil {
+		beego.Debug(c.Ctx.Input.IP(), "Login error (403):", err.Error())
+		c.Data["json"] = err.Error() // TODO: change to "Wrong request"
+		c.Ctx.Output.SetStatus(403)
+	} else {
+		beego.Trace(v.Login, "Try to login")
 		user, err := auth.TryToLogin(v.Login, v.Password)
 		if err != nil {
-			beego.Debug(c.Ctx.Input.IP(), "Login error (403):", err.Error())
+			beego.Debug("Login error (403):", err.Error())
 			c.Data["json"] = err.Error()
 			c.Ctx.Output.SetStatus(403)
 		} else {
-			beego.Trace(c.Ctx.Input.IP(), user.Login, "Success login")
+			beego.Trace(user.Login, "Success login")
 			// success, register new session
 			claim := jwt.NewClaim()
 			claim.Set("user_id", user.Id)
@@ -117,7 +123,7 @@ func (c *AuthController) Login() {
 
 			token, err := jwtManager.Encode(claim)
 			if err != nil {
-				beego.Debug(c.Ctx.Input.IP(), "Encode error (500):", err.Error())
+				beego.Debug("Encode error (500):", err.Error())
 				c.Data["json"] = err.Error()
 				c.Ctx.Output.SetStatus(500)
 			}
@@ -128,15 +134,10 @@ func (c *AuthController) Login() {
 				ExpiresIn: f.Format(time.UnixDate),
                 PermissionLevel: user.PermissionLevel,
 			}
-			beego.Trace(c.Ctx.Input.IP(), user.Login, "Sent token")
+			beego.Trace(user.Login, "Sent token")
 			c.Data["json"] = sessionResponse
 		}
-	} else {
-		beego.Debug(c.Ctx.Input.IP(), "Login error (403):", err.Error())
-		c.Data["json"] = err.Error() // TODO: change to "Wrong request"
-		c.Ctx.Output.SetStatus(403)
 	}
-
 	c.ServeJSON()
 }
 
@@ -146,17 +147,17 @@ type RegistrationController struct {
 }
 
 type RegistrationUserModel struct {
-	Login		string	`json:"login"`
-	Password	string	`json:"password"`
-	Nickname	string	`json:"nickname"`
+	Login    string    `json:"login"`
+	Password string    `json:"password"`
+	Nickname string    `json:"nickname"`
 }
 
 func (c *RegistrationController) Register() {
 	var temp_u RegistrationUserModel
 
-	beego.Trace(c.Ctx.Input.IP(), "Start Register")
+	beego.Trace("Start Register")
 	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &temp_u); err != nil {
-		beego.Debug(c.Ctx.Input.IP(), "Can't Unmarshal:", err.Error())
+		beego.Debug("Can't Unmarshal:", err.Error())
 		c.Data["json"] = err.Error() //TODO: change to "Invalid Form"
 		c.Ctx.Output.SetStatus(400)
 	} else { // TODO:
@@ -165,22 +166,22 @@ func (c *RegistrationController) Register() {
 			Password: temp_u.Password,
 			Nickname: temp_u.Nickname,
 		}
-		beego.Trace(c.Ctx.Input.IP(), "Correct Unmarshal")
+		beego.Trace("Correct Unmarshal")
 
 		if u.Login == "" || u.Password == "" || u.Nickname == "" {
-			beego.Debug(c.Ctx.Input.IP(), "login:", u.Login)
-			beego.Debug(c.Ctx.Input.IP(), "password:", u.Password)
-			beego.Debug(c.Ctx.Input.IP(), "nickname:", u.Nickname)
+			beego.Debug("login:", u.Login)
+			beego.Debug("password:", u.Password)
+			beego.Debug("nickname:", u.Nickname)
 			c.Data["json"] = "Wrong Login/Password/Nickname"
 			c.Ctx.Output.SetStatus(400)
 		} else {
-			beego.Trace(c.Ctx.Input.IP(), "Valid combo login & password & nickname")
+			beego.Trace("Valid combo login & password & nickname")
 
 			pass := auth.GenerateNewToken(15)
 			beego.Trace(pass)
 			err := auth.NewUser(pass, u)
 			if err != nil {
-				beego.Debug(c.Ctx.Input.IP(), "Register error:" + err.Error())
+				beego.Debug("Register error:" + err.Error())
 				c.Data["json"] = err.Error()
 				c.Ctx.Output.SetStatus(500)
 			} else {
@@ -188,7 +189,7 @@ func (c *RegistrationController) Register() {
 				c.Data["json"] = struct {
 					Code string `json:"code"`
 				}{Code: pass} // TODO:! CHANGE TO "OK" !
-				beego.Trace(c.Ctx.Input.IP(), "Register OK")
+				beego.Trace("Register OK")
 			}
 		}
 	}
@@ -200,15 +201,15 @@ func (c *RegistrationController) Activate() {
 	if pass != "" {
 		err := auth.ActivateUser(pass)
 		if err != nil {
-			beego.Debug(c.Ctx.Input.IP(), "Activation error: " + err.Error())
+			beego.Debug("Activation error: " + err.Error())
 			c.Data["json"] = err.Error()
 			c.Ctx.Output.SetStatus(400)
 		} else {
-			beego.Trace(c.Ctx.Input.IP(), "Activation OK")
+			beego.Trace("Activation OK")
 			c.Data["json"] = "Registred"
 		}
 	} else {
-		beego.Debug(c.Ctx.Input.IP(), "Empty pass")
+		beego.Debug("Empty pass")
 		c.Data["json"] = "Empty pass"
 		c.Ctx.Output.SetStatus(400)
 	}
@@ -285,14 +286,14 @@ func (c *ResetPasswordController) ResetPasswordRequest() {
 	u := models.User{
 		Login: login,
 	}
-	beego.Info(c.Ctx.Input.IP(), login, "want to reset password")
+	beego.Info(login, "want to reset password")
 	pass := auth.GenerateNewToken(6)
 	if err := auth.RequestToResetPassword(pass, u); err == nil {
 		// TODO: sent email with `pass` to reset password
-		beego.Info(c.Ctx.Input.IP(), "Pass for reset password was sent to", login)
+		beego.Info("Pass for reset password was sent to", login)
 		c.Data["json"] = pass // TODO:! CHANGE TO "OK" !
 	} else {
-		beego.Info(c.Ctx.Input.IP(), "Wrong resetRequest for", login, ":", err.Error())
+		beego.Info("Wrong resetRequest for", login, ":", err.Error())
 		c.Data["json"] = err.Error()
 		c.Ctx.Output.SetStatus(400)
 	}
@@ -301,26 +302,26 @@ func (c *ResetPasswordController) ResetPasswordRequest() {
 
 type ResetPasswordActionJson struct {
 	Login       string  `json:"login"`
-	Pass        string  `json:"pass"`  // random string from email
-	NewPassword	string  `json:"password"`
+	Pass        string  `json:"pass"` // random string from email
+	NewPassword string  `json:"password"`
 }
 
 func (c *ResetPasswordController) ResetPasswordAction() {
 	v := ResetPasswordActionJson{}
-	beego.Trace(c.Ctx.Input.IP(), "New password reset")
+	beego.Trace("New password reset")
 	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err != nil {
-		beego.Debug(c.Ctx.Input.IP(), "Reset error:", err.Error())
+		beego.Debug("Reset error:", err.Error())
 		c.Data["json"] = err.Error()
 		c.Ctx.Output.SetStatus(400)
 	} else {
-		beego.Trace(c.Ctx.Input.IP(), "Try to reset for", v.Login)
+		beego.Trace("Try to reset for", v.Login)
 		err := auth.ResetPassword(v.Login, v.Pass, v.NewPassword)
 		if err != nil {
 			beego.Debug(err.Error())
 			c.Data["json"] = err.Error()
 			c.Ctx.Output.SetStatus(400)
 		} else {
-			beego.Trace(c.Ctx.Input.IP(), "Password was reset for", v.Login)
+			beego.Trace("Password was reset for", v.Login)
 			c.Data["json"] = "OK"
 		}
 	}
@@ -355,8 +356,8 @@ type ChangePasswordController struct{
 }
 
 type ChangePasswordJson struct {
-	OldPassword     string  `json:"old"`
-	NewPassword     string  `json:"new"`
+	OldPassword string  `json:"old"`
+	NewPassword string  `json:"new"`
 }
 
 // URLMapping ...
@@ -366,9 +367,9 @@ func (c *ChangePasswordController) URLMapping() {
 
 func (c *ChangePasswordController) ChangePassword() {
 	v := ChangePasswordJson{}
-	beego.Trace(c.Ctx.Input.IP(), "New password change")
+	beego.Trace("New password change")
 	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err != nil {
-		beego.Debug(c.Ctx.Input.IP(), "Change error:", err.Error())
+		beego.Debug("Change error:", err.Error())
 		c.Data["json"] = err.Error()
 		c.Ctx.Output.SetStatus(400)
 	} else {
@@ -385,7 +386,7 @@ func (c *ChangePasswordController) ChangePassword() {
 				c.Data["json"] = err.Error()
 				c.Ctx.Output.SetStatus(500)
 			} else {
-				beego.Trace(c.Ctx.Input.IP(), "Password was changed")
+				beego.Trace("Password was changed")
 				c.Data["json"] = "OK"
 			}
 		}
@@ -401,7 +402,7 @@ func (c *ChangePasswordController) ChangePassword() {
 // @router / [put]
 func (c *ChangePasswordController) Put() {
 	if c.CurrentUser.PermissionLevel < 0 {
-		beego.Debug(c.Ctx.Input.IP(), "Unregistered user want to change password")
+		beego.Debug("Unregistered user want to change password")
 		c.Data["json"] = "Forbidden"
 		c.Ctx.Output.SetStatus(403)
 	} else {

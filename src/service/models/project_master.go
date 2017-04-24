@@ -24,8 +24,8 @@ func init() {
 // last inserted Id on success.
 func AddMasterToProject(user *User, project *Project) (err error) {
 	m := ProjectMaster{
-		MasterId: user,
-		ProjectId: project,
+		MasterId:   user,
+		ProjectId:  project,
 		SignedDate: time.Now(),
 	}
 	_, err = orm.NewOrm().Insert(&m)
