@@ -19,7 +19,7 @@ type ProjectUserController struct {
 func (c *ProjectUserController) URLMapping() {
 	c.Mapping("Post", c.Post)
 	c.Mapping("GetAll", c.GetAll)
-	c.Mapping("Get", c.Get)
+	c.Mapping("GetOne", c.GetOne)
 	c.Mapping("Put", c.Put)
 	c.Mapping("Delete", c.Delete)
 }
@@ -96,7 +96,7 @@ func (c *ProjectUserController) Post() {
 // @Success 200 {object} []int "Список пользователей"
 // @Failure 403 :id is empty
 // @router /:id [get]
-func (c *ProjectUserController) Get() {
+func (c *ProjectUserController) GetOne() {
 	idStr := c.Ctx.Input.Param(":id")
 	beego.Trace(c.Ctx.Input.IP(), "Get project with id", idStr)
 	id, err := strconv.Atoi(idStr)
