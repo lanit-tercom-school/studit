@@ -14,7 +14,7 @@ type ProjectUser struct {
 	Id         int       `orm:"column(id);pk;auto"`
 	ProjectId  *Project  `orm:"column(project_id);rel(fk)"`
 	UserId     *User     `orm:"column(user_id);rel(fk)"`
-	SignedDate time.Time `orm:"column(signed_date);type(date)"`
+	SignedDate time.Time `orm:"column(signed_date);type(datetime)"`
 	Progress   int       `orm:"column(progress)"`
 }
 
@@ -30,8 +30,8 @@ func init() {
 // last inserted Id on success.
 func AddUserToProject(m *ProjectUser) (err error) {
 	o := orm.NewOrm()
-	var p ProjectSignUp
-	_, err = o.QueryTable(new(ProjectSignUp)).
+	var p ProjectEnroll
+	_, err = o.QueryTable(new(ProjectEnroll)).
 		Filter("user_id", m.UserId).
 		Filter("project_id", m.ProjectId).
 		RelatedSel().
@@ -39,7 +39,7 @@ func AddUserToProject(m *ProjectUser) (err error) {
 	if err != nil {
 		return err
 	}
-	_, err = o.QueryTable(new(ProjectSignUp)).Filter("id", p.Id).Delete()
+	_, err = o.QueryTable(new(ProjectEnroll)).Filter("id", p.Id).Delete()
 	if err != nil {
 		return err
 	}

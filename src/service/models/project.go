@@ -10,7 +10,7 @@ import (
 )
 
 type Project struct {
-	Id          int    `orm:"column(id);pk;auto"`
+	Id          int64  `orm:"column(id);pk;auto"`
 	Name        string `orm:"column(name)"`
 	Description string `orm:"column(description)"`
 	Logo        string `orm:"column(logo)"`
@@ -34,7 +34,7 @@ func AddProject(m *Project) (id int64, err error) {
 
 // GetProjectById retrieves Project by Id. Returns error if
 // Id doesn't exist
-func GetProjectById(id int) (v *Project, err error) {
+func GetProjectById(id int64) (v *Project, err error) {
 	o := orm.NewOrm()
 	v = &Project{Id: id}
 	if err = o.Read(v); err == nil {
@@ -134,7 +134,7 @@ func UpdateProjectById(m *Project) (err error) {
 
 // DeleteProject deletes Project by Id and returns error if
 // the record to be deleted doesn't exist
-func DeleteProject(id int) (err error) {
+func DeleteProject(id int64) (err error) {
 	o := orm.NewOrm()
 	v := Project{Id: id}
 	// ascertain id exists in the database
