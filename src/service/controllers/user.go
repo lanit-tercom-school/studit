@@ -67,7 +67,7 @@ func (c *UserController) GetOne() {
 			c.Ctx.Output.SetStatus(400)
 		} else {
 			if c.CurrentUser.UserId == v.Id || c.CurrentUser.PermissionLevel==2 {
-				c.Data["json"] = models.User{
+				c.Data["json"] = models.UserInfo{
 					Id:          v.Id,
 					Nickname:    v.Nickname,
 					Description: v.Description,

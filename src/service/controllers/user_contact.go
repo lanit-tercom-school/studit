@@ -64,7 +64,7 @@ func (c *UserContactController) Post() {
 func (c *UserContactController) GetOne() {
 	if c.CurrentUser.PermissionLevel!=-1 {
 		idStr := c.Ctx.Input.Param(":id")
-		id, err := strconv.Atoi(idStr)
+		id, err := strconv.Atoi(idStr)//this ID is user`s id
 		if err ==nil {
 			v, err := models.GetUserContactById(id)
 			if err != nil {
@@ -72,12 +72,12 @@ func (c *UserContactController) GetOne() {
 				c.Data["json"] = err.Error()
 			} else {
 				userId := c.CurrentUser.UserId
-				if userId != v.UserId.Id {
-					c.Data["json"] = "Forbidden (this contact is not yours) (dev)" // TODO: change to `Forbidden`
-					c.Ctx.Output.SetStatus(403)
-				} else {
+				if userId == v.UserId.Id || c.CurrentUser.PermissionLevel == 2{
 					c.Ctx.Output.SetStatus(200)
 					c.Data["json"] = v
+				} else {
+					c.Data["json"] = "Forbidden" // TODO: change to `Forbidden`
+					c.Ctx.Output.SetStatus(403)
 				}
 			}
 		} else {
