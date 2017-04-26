@@ -22,6 +22,8 @@ import { HomeProjectsViewComponent } from './pages/home-page/home-projects-view/
 
 import { MainFullNewsPageComponent } from './pages/main-full-news-page/main-full-news-page.component';
 
+import { ErrorPageComponent } from './pages/error-page/error-page.component';
+
 export const routes: Routes = [
   { path: '', redirectTo: 'main', pathMatch: 'full' },
   { path: 'main', component: MainComponent },
@@ -49,6 +51,7 @@ export const routes: Routes = [
   { path: 'student/:id/settings', component: UserSettingsPageComponent },
   { path: 'news', component: MainNewsPageComponent },
   { path: 'news/:id', component: MainFullNewsPageComponent },
+  { path: '**', component: ErrorPageComponent },
 ];
 
 export const projectRoutes: Routes = [
