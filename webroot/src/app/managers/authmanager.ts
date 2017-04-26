@@ -10,7 +10,16 @@ export class AuthManager implements CanActivate {
     constructor(private router: Router) { }
 
     canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-        if (next.url[0].path == 'auth') {
+       if (next.url[0].path == 'main') {
+           if (window.localStorage.getItem('current_user')) {
+              console.log('You are already logged in. Main page is forbidden');
+              this.router.navigate(['/home']);
+              return false;
+           }
+           else
+              return true;
+       }
+       else  if (next.url[0].path == 'auth') {
             if (window.localStorage.getItem('current_user')) {
                 console.log('You are already logged in');
                 this.router.navigate(['/home']);
@@ -28,6 +37,15 @@ export class AuthManager implements CanActivate {
                 this.router.navigate(['/auth']);
                 return false;
             }
+        }
+        else if (next.url[0].path == 'registration') {
+             if (window.localStorage.getItem('current_user')) {
+                console.log('You are already logged in');
+                this.router.navigate(['/home']);
+                return false;
+             }
+             else
+                return true;
         }
         else if (next.url[0].path == 'registration' && next.url[1].path == 'validate') {
             if (window.localStorage.getItem('validation_code')) {
