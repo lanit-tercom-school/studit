@@ -55,6 +55,8 @@ import { ProjectTaskListComponent } from './pages/project-tasks-page/project-tas
 
 import { HomeProjectsViewComponent } from './pages/home-page/home-projects-view/home-projects-view.component';
 
+import { ErrorPageComponent } from './pages/error-page/error-page.component';
+
 @NgModule({
   imports: [
     BrowserModule,
@@ -98,6 +100,7 @@ import { HomeProjectsViewComponent } from './pages/home-page/home-projects-view/
     ProjectTaskItemComponent,
     ProjectTaskListComponent,
     HomeProjectsViewComponent,
+    ErrorPageComponent,
   ],
   providers: [ApiService, AuthService, AuthManager],
   bootstrap: [AppComponent]

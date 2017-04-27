@@ -34,7 +34,7 @@ export class AuthManager implements CanActivate {
             }
             else {
                 console.log('You must be logged in');
-                this.router.navigate(['/auth']);
+                this.router.navigate(['/error']);
                 return false;
             }
         }
