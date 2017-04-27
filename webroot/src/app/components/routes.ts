@@ -23,8 +23,8 @@ import { HomeProjectsViewComponent } from './pages/home-page/home-projects-view/
 import { MainFullNewsPageComponent } from './pages/main-full-news-page/main-full-news-page.component';
 
 export const routes: Routes = [
-  { path: '', redirectTo: 'main', pathMatch: 'full' },
-  { path: 'main', component: MainComponent },
+  { path: '', redirectTo: 'main', pathMatch: 'full', canActivate: [AuthManager] },
+  { path: 'main', component: MainComponent, canActivate: [AuthManager] },
   { path: 'projects', component: ProjectListPageComponent },
   { path: 'auth', component: AuthorizationPageComponent, canActivate: [AuthManager] },
   {
@@ -41,7 +41,7 @@ export const routes: Routes = [
       component: HomeProjectsViewComponent,
     }]
   },
-  { path: 'registration', component: RegistrationPageComponent },
+  { path: 'registration', component: RegistrationPageComponent, canActivate: [AuthManager]},
   { path: 'registration/validate', component: ValidationPageComponent, canActivate: [AuthManager] },
   { path: 'author/:id', component: AuthorPublicPageComponent },
   { path: 'author/:id/settings', component: UserSettingsPageComponent },
