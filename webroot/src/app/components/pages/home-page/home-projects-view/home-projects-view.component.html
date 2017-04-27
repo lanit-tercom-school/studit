@@ -1,4 +1,17 @@
-<h3>
-  My Projects (TODO)
-</h3>
-<p>col-7 grid</p>
+<div *ngFor="let Project of ProjectList" class="card card-outline">
+  <div class="row">
+    <div class="col-sm-4">
+      <img class="card-img" src="{{Project.Logo}}" alt="Card image cap">
+    </div>
+    <div class="col-sm-8 project-info">
+      <p class="lead">{{Project.Name}}</p>
+      <p>{{Project.Description}}</p>
+      <div class="read-more">
+        <a routerLink="/project/{{Project.Id}}" routerLinkActive="active">
+          <p>Подробнее <i class="fa fa-angle-double-right" aria-hidden="true"></i></p>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+<!--  <div><a class="nav-link" routerLink="/projects/tasks" routerLinkActive="active">Список задач</a> -->

@@ -1,17 +1,24 @@
 <div class="container">
-    <div class="row" id="main-info">
-        <div class="col-sm-3" id="img-btn">
-            <img id="project-img" width="225px" height="225px" src="http://localhost:8081{{project.Logo}}" alt="Project image">
-            <a href="#" class="btn btn-primary btn-lg">Записаться</a>
+  <div class="row" id="main-info">
+    <div class="col-sm-3" id="img-btn">
+      <img id="project-img" width="225px" height="225px" src="http://localhost:8081{{project.Logo}}" alt="Project image">
+      <div *ngIf="authorized">
+        <div *ngIf="enrollButton">
+          <button type="button" role="button" class="btn btn-large btn-block btn-primary" (click)="enroll()">Записаться</button>
         </div>
-        <div class="col-sm-9">
-            <h3>{{project.Name}}</h3>
-            <hr>
-            <p class="lead">{{project.Description}}</p>
-          <a href="#" class="btn btn-secondary">Facebook</a>
-          <a href="#" class="btn btn-secondary">Sth</a>
+        <div *ngIf="unenrollButton">
+          <button type="button" role="button" class="btn btn-large btn-block btn-warning" (click)="unenroll()">Отписаться</button>
         </div>
+      </div>
     </div>
+    <div class="col-sm-9">
+      <h3>{{project.Name}}</h3>
+      <hr>
+      <p class="lead">{{project.Description}}</p>
+      <a href="#" class="btn btn-secondary">Facebook</a>
+      <a href="#" class="btn btn-secondary">Sth</a>
+    </div>
+  </div>
   <div class="row">
     <div class="col-sm-3" id="materials">
       <app-materials [MaterialsList]=getMaterialsItems()></app-materials>
@@ -21,7 +28,7 @@
     </div>
     <div class="col-sm-3">
       <app-proj-news [ProjectNewsList]=getProjectNewsItem()>
-            <a href="#" class="btn btn-secondary">Author profile</a>) ></app-proj-news>
-        </div>
+        <a href="#" class="btn btn-secondary">Author profile</a>) ></app-proj-news>
     </div>
+  </div>
 </div>
