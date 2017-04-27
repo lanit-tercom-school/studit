@@ -59,6 +59,17 @@ export const routes: Routes = [
       component: HomeProjectsViewComponent,
     }]
   },
+  {
+    path: 'project/:id',
+    children: [{
+      path: '',
+      pathMatch: 'full',
+      component: StudentProjectPageComponent,
+    }, {
+      path: 'tasks',
+      component: ProjectTasksPageComponent,
+    }]
+  },
   { path: 'registration', component: RegistrationPageComponent, canActivate: [AuthManager]},
   { path: 'registration/validate', component: ValidationPageComponent, canActivate: [AuthManager] },
   { path: 'author/:id', component: AuthorPublicPageComponent },
@@ -70,19 +81,4 @@ export const routes: Routes = [
   { path: '**', component: ErrorPageComponent },
 ];
 
-export const projectRoutes: Routes = [
-  {
-    path: 'project/:id',
-    children: [{
-      path: '',
-      pathMatch: 'full',
-      component: StudentProjectPageComponent,
-    }, {
-      path: 'tasks',
-      component: ProjectTasksPageComponent,
-    }]
-  }
-];
-
 export const AppRouterProvider = RouterModule.forRoot(routes);
-export const AppProjectRouterProvider = RouterModule.forChild(projectRoutes);

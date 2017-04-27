@@ -38,17 +38,6 @@ export class AuthManager implements CanActivate {
                  return false;
              }
          }*/
-        else if (next.url[0].path == 'registration' && next.url[1].path == 'validate') {
-            if (window.localStorage.getItem('validation_code')) {
-                return true;
-            }
-            else {
-<<<<<<< HEAD
-                console.log('You must be logged in');
-                this.router.navigate(['/error']);
-                return false;
-            }
-        }
         else if (next.url[0].path == 'registration') {
              if (window.localStorage.getItem('current_user')) {
                 console.log('You are already logged in');
@@ -61,7 +50,8 @@ export class AuthManager implements CanActivate {
         else if (next.url[0].path == 'registration' && next.url[1].path == 'validate') {
             if (window.localStorage.getItem('validation_code')) {
                 return true;
-=======
+            }
+            else {
                 console.log('Restricted');
                 this.router.navigate(['/registration']);
                 return false;
@@ -75,7 +65,6 @@ export class AuthManager implements CanActivate {
                 else {
                     this.router.navigate(['home-teacher']);
                 }
->>>>>>> Enrolling
             }
             else {
                 console.log('You must be logged in');

@@ -22,7 +22,7 @@ export class ApiService {
 
     headers.append('Content-Type', 'application/json');
 
-    return this.http.post(environment.apiUrl + '/v1/auth/signup', JSON.stringify(user), { headers: headers })
+    return this.http.post(environment.apiUrl + '/v1/auth/signup/', JSON.stringify(user), { headers: headers })
       .map((res: Response) => {
         if (res.json().code)
           localStorage.setItem('validation_code', res.json().code);
@@ -82,14 +82,14 @@ export class ApiService {
   }
 
   getProjectItems() {
-    return this.http.get(environment.apiUrl + '/v1/project/').map((response: Response) => response.json());
+    return this.http.get(environment.apiUrl + '/v1/project/id/').map((response: Response) => response.json());
   }
   getProjectItemsByUserId(userId: string) {
-    return this.http.get(environment.apiUrl + '/v1/project/').map((response: Response) => response.json());
+    return this.http.get(environment.apiUrl + '/v1/project/id/').map((response: Response) => response.json());
   }
 
   getProjectById(id: number) {
-    return this.http.get(environment.apiUrl + '/v1/project/' + id);
+    return this.http.get(environment.apiUrl + '/v1/project/id/' + id);
   }
 
 
@@ -231,13 +231,13 @@ export class ApiService {
     headers.append('Content-Type', 'application/json');
     headers.append('Accept', 'application/json')
     headers.append('Bearer-token', token);
-    return this.http.post(environment.apiUrl + '/v1/project', JSON.stringify(project), { headers: headers });
+    return this.http.post(environment.apiUrl + '/v1/project/id/', JSON.stringify(project), { headers: headers });
   }
   deleteProject(id: string, token: string) {
     let headers = new Headers();
     headers.append('Accept', 'application/json')
     headers.append('Bearer-token', token);
-    return this.http.delete(environment.apiUrl + '/v1/project/' + id, { headers: headers });
+    return this.http.delete(environment.apiUrl + '/v1/project/id/' + id, { headers: headers });
   }
   enrollToProject(id: number, token: string) {
     let headers = new Headers();
@@ -275,6 +275,6 @@ export class ApiService {
     headers.append('Content-Type', 'application/json');
     headers.append('Accept', 'application/json');
     headers.append('Bearer-token', token);
-    return this.http.put(environment.apiUrl+'/v1/user/id'+id,user,{headers:headers});
+    return this.http.put(environment.apiUrl+'/v1/user/id/'+id,user,{headers:headers});
   }
 }
