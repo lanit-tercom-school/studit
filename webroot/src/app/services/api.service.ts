@@ -239,24 +239,56 @@ export class ApiService {
     headers.append('Bearer-token', token);
     return this.http.delete(environment.apiUrl + '/v1/project/id/' + id, { headers: headers });
   }
-  enrollToProject(id: number, token: string) {
+  enrollToProject(id: number, token: string) {//Отправить заявку на участие в проекте
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
     headers.append('Accept', 'application/json');
     headers.append('Bearer-token', token);
     return this.http.post(environment.apiUrl + '/v1/project/enroll/' + id, JSON.stringify({}), { headers: headers });
   }
-  unenrollToProject(id: number, token: string) {
+  unenrollToProject(id: number, token: string) {//Отменить заявку на участие в проекте
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
     headers.append('Accept', 'application/json');
     headers.append('Bearer-token', token);
     return this.http.delete(environment.apiUrl + '/v1/project/enroll/' + id, { headers: headers });
   }
-  getSubscribedUsersByProjectId(id: number) {
+  getEnrolledUsersByProjectId(id: number) {//Получить список пользователей оставивших заявку на проект
     return this.http.get(environment.apiUrl + '/v1/project/enroll/' + id);
   }
 
+  getProjectUsersbyProjectId(id: number) {//Получить список пользователей, участвующих в проекте
+    return this.http.get(environment.apiUrl + '/v1/project/users/' + id);
+  }
+  getProjectMastersById(id: number) {//Получить список кураторов проекта
+    return this.http.get(environment.apiUrl + '/project/masters/' + id);
+  }
+  postProjectMaster(project_id: number, user_id: number, token: string) {//Назначить куратора проекта по ид проекта
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Accept', 'application/json');
+    headers.append('Bearer-token', token);
+    return this.http.post(environment.apiUrl + '/v1/project/masters/?user_id=' + user_id + '&project_id=' + project_id, {}, { headers: headers });
+  }
+  deleteProjectMaster(project_id: number, user_id: number, token: string) {//Удалить куратора проекта 
+    let headers = new Headers();
+    headers.append('Accept', 'application/json');
+    headers.append('Bearer-token', token);
+    return this.http.delete(environment.apiUrl + '/v1/project/masters/?user_id=' + user_id + '&project_id=' + project_id, { headers: headers });
+  }
+  postUserToProject(user_id: number, project_id: number, token: string) {//Добавить пользователя в проект
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Accept', 'application/json');
+    headers.append('Bearer-token', token);
+    return this.http.post(environment.apiUrl + '/v1/project/users/?user_id=' + user_id + '&project_id=' + project_id, {}, { headers: headers });
+  }
+  deleteProjectUser(project_id: number, user_id: number, token: string) {//Удалить пользователя проекта
+    let headers = new Headers();
+    headers.append('Accept', 'application/json');
+    headers.append('Bearer-token', token);
+    return this.http.delete(environment.apiUrl + '/v1/project/users/?user_id=' + user_id + '&project_id=' + project_id, { headers: headers });
+  }
   getUsers() {
     return this.http.get(environment.apiUrl + '/v1/user/id/').map((response: Response) => response.json());
   }
@@ -269,12 +301,11 @@ export class ApiService {
     headers.append('Bearer-token', token);
     return this.http.delete(environment.apiUrl + '/v1/user/id/' + id, { headers: headers });
   }
-  changeUserById(id: number, token: string,user)
-  {
+  changeUserById(id: number, token: string, user) {
     var headers = new Headers();
     headers.append('Content-Type', 'application/json');
     headers.append('Accept', 'application/json');
     headers.append('Bearer-token', token);
-    return this.http.put(environment.apiUrl+'/v1/user/id/'+id,user,{headers:headers});
+    return this.http.put(environment.apiUrl + '/v1/user/id/' + id, user, { headers: headers });
   }
 }

@@ -29,7 +29,7 @@ export class StudentProjectPageComponent implements OnInit, DoCheck {
     this.route.params
       .subscribe(params => {
         this.projectId = params['id'];
-        this.apiService.getSubscribedUsersByProjectId(params['id']).subscribe(res => {
+        this.apiService.getEnrolledUsersByProjectId(params['id']).subscribe(res => {
           this.subscribedUsers = res.json();
           this.unenrollButton = false;
           this.enrollButton = true;
