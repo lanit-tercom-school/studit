@@ -8,46 +8,46 @@ import (
 )
 
 type news struct {
-	Id                  int         `orm:"column(id);pk;auto"`
-	Title               string      `orm:"column(title)"`
-	Description         string      `orm:"column(description)"`
-	DateOfCreation      time.Time   `orm:"column(date_of_creation);type(datetime)"`
-	LastEdit            time.Time   `orm:"column(last_edit);type(datetime)"`
-	Tags                string      `orm:"column(tags)"`
-	Image               string      `orm:"columt(image)"`
+	Id             int         `orm:"column(id);pk;auto"`
+	Title          string      `orm:"column(title)"`
+	Description    string      `orm:"column(description)"`
+	DateOfCreation time.Time   `orm:"column(date_of_creation);type(datetime)"`
+	LastEdit       time.Time   `orm:"column(last_edit);type(datetime)"`
+	Tags           string      `orm:"column(tags)"`
+	Image          string      `orm:"columt(image)"`
 }
 
 type NewsJson struct {
-	Id              int         `json:"id"`
-	Title           string      `json:"title"`
-	Description     string      `json:"description"`
-	Created         time.Time   `json:"created"`
-	Edited          time.Time   `json:"edited"`
-	Tags            []string    `json:"tags"`
-	Image           string      `json:"image"`
+	Id          int         `json:"id"`
+	Title       string      `json:"title"`
+	Description string      `json:"description"`
+	Created     time.Time   `json:"created"`
+	Edited      time.Time   `json:"edited"`
+	Tags        []string    `json:"tags"`
+	Image       string      `json:"image"`
 }
 
 func (t *news) translate() NewsJson {
 	return NewsJson{
-		Id: t.Id,
-		Title: t.Title,
+		Id:          t.Id,
+		Title:       t.Title,
 		Description: t.Description,
-		Created: t.DateOfCreation,
-		Edited: t.LastEdit,
-		Tags: strings.Split(t.Tags, ","),
-		Image: t.Image,
+		Created:     t.DateOfCreation,
+		Edited:      t.LastEdit,
+		Tags:        strings.Split(t.Tags, ","),
+		Image:       t.Image,
 	}
 }
 
 func (t *NewsJson) translate() news {
 	return news{
-		Id: t.Id,
-		Title: t.Title,
-		Description: t.Description,
+		Id:             t.Id,
+		Title:          t.Title,
+		Description:    t.Description,
 		DateOfCreation: t.Created,
-		LastEdit: t.Edited,
-		Tags: strings.Join(t.Tags, ","),
-		Image: t.Image,
+		LastEdit:       t.Edited,
+		Tags:           strings.Join(t.Tags, ","),
+		Image:          t.Image,
 	}
 }
 

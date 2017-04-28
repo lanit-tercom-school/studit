@@ -14,7 +14,7 @@ type ProjectUser struct {
 	Id         int       `orm:"column(id);pk;auto"`
 	ProjectId  *Project  `orm:"column(project_id);rel(fk)"`
 	UserId     *User     `orm:"column(user_id);rel(fk)"`
-	SignedDate time.Time `orm:"column(signed_date);type(date)"`
+	SignedDate time.Time `orm:"column(signed_date);type(datetime)"`
 	Progress   int       `orm:"column(progress)"`
 }
 
@@ -28,22 +28,47 @@ func init() {
 
 // AddProjectUser insert a new ProjectUser into database and returns
 // last inserted Id on success.
+func AddUserToProject(m *ProjectUser) (err error) {
+	o := orm.NewOrm()
+	var p ProjectEnroll
+	_, err = o.QueryTable(new(ProjectEnroll)).
+		Filter("user_id", m.UserId).
+		Filter("project_id", m.ProjectId).
+		RelatedSel().
+		All(&p)
+	if err != nil {
+		return err
+	}
+	_, err = o.QueryTable(new(ProjectEnroll)).Filter("id", p.Id).Delete()
+	if err != nil {
+		return err
+	}
+	_, err = o.Insert(m)
+	return
+}
+
 func AddProjectUser(m *ProjectUser) (id int64, err error) {
 	o := orm.NewOrm()
 	id, err = o.Insert(m)
 	return
 }
 
-// GetProjectUserById retrieves ProjectUser by Id. Returns error if
-// Id doesn't exist
-func GetProjectUserById(id int) (v *ProjectUser, err error) {
+func GetUsersByProjectId(project_id int) (ml []interface{}, err error) {
 	o := orm.NewOrm()
-	v = &ProjectUser{Id: id}
-	if err = o.Read(v); err == nil {
-		return v, nil
+	var users []ProjectUser
+	_, err = o.QueryTable(new(ProjectUser)).
+		Filter("project_id", project_id).
+		RelatedSel().
+		All(&users)
+	if err != nil {
+		return nil, err
 	}
-	return nil, err
+	for _, x := range users {
+		ml = append(ml, x.UserId.Id)
+	}
+	return ml, nil
 }
+
 
 // GetAllProjectUser retrieves all ProjectUser matches certain condition. Returns empty list if
 // no records exist
@@ -136,15 +161,11 @@ func UpdateProjectUserById(m *ProjectUser) (err error) {
 
 // DeleteProjectUser deletes ProjectUser by Id and returns error if
 // the record to be deleted doesn't exist
-func DeleteProjectUser(id int) (err error) {
+func DeleteUserFromProject(user_id int, project_id int) (err error) {
 	o := orm.NewOrm()
-	v := ProjectUser{Id: id}
-	// ascertain id exists in the database
-	if err = o.Read(&v); err == nil {
-		var num int64
-		if num, err = o.Delete(&ProjectUser{Id: id}); err == nil {
-			fmt.Println("Number of records deleted in database:", num)
-		}
-	}
+	_, err = o.QueryTable(new(ProjectUser)).
+		Filter("UserId", user_id).
+		Filter("ProjectId", project_id).
+		Delete()
 	return
 }

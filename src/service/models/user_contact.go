@@ -7,14 +7,41 @@ import (
 	"strings"
 
 	"github.com/astaxie/beego/orm"
-	"github.com/astaxie/beego"
+	//"github.com/astaxie/beego"
 )
 
 type UserContact struct {
-	Id            int          `orm:"column(id);pk;auto" json:"-"`
-	Contact       string       `orm:"column(contact)" json:"value"`
-	ContactTypeId *ContactType `orm:"column(contact_type_id);rel(fk)" json:"type"`
-	UserId        *User        `orm:"column(user_id);rel(fk)" json:"-"`
+	Id          int          `orm:"column(id);pk;auto" json:"id,omitempty"`
+	Contact     string       `orm:"column(contact)" json:"value"`
+	ContactType string `orm:"column(contact_type)" json:"contacttype"`
+	UserId      *User        `orm:"column(user_id);rel(fk)" json:"-"`
+}
+
+type UserContactInput struct {
+	Contact     	string	`json:"value"`
+	ContactType 	string	`json:"contacttype"`
+}
+
+func  ContactTranslate(t* UserContactInput) UserContact{
+	return UserContact{
+		Contact:     t.Contact,
+		ContactType: t.ContactType,
+	}
+}
+
+func IsValidContactType(category string) bool {
+	switch category {
+	case
+		"skype",
+		"telegram",
+		"vk.com",
+		"viber",
+		"phone",
+		"mobile phone",
+		"email":
+		return true
+	}
+	return false
 }
 
 func (t *UserContact) TableName() string {
@@ -139,23 +166,16 @@ func DeleteUserContact(id int) (err error) {
 	o := orm.NewOrm()
 	v := UserContact{Id: id}
 	// ascertain id exists in the database
-	if err = o.Read(&v); err == nil {
-		var num int64
-		if num, err = o.Delete(&UserContact{Id: id}); err == nil {
-			fmt.Println("Number of records deleted in database:", num)
-		}
+	if err := o.Read(&v); err==nil{
+		o.Delete(&v);
 	}
 	return
 }
 
 func GetAllUserContacts(userId int) (ml []interface{}, err error) {
-	if userId < 0 {
-		err = errors.New("Bad UserId")
-		return nil, err
-	}
 	o := orm.NewOrm()
 	var contacts []UserContact
-	num, err := o.QueryTable(new(UserContact)).Filter("UserId", userId).RelatedSel().All(&contacts)
+	_, err = o.QueryTable(new(UserContact)).Filter("UserId", User{Id: userId}).RelatedSel().All(&contacts)
 	if err != nil {
 		return ml, err
 	}
@@ -167,6 +187,5 @@ func GetAllUserContacts(userId int) (ml []interface{}, err error) {
 		}*/
 		ml = append(ml, v)
 	}
-	beego.Info(num)
 	return ml, nil
 }

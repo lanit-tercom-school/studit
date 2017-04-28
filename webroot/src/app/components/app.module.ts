@@ -31,6 +31,7 @@ import { MaterialsItemComponent } from './pages/student-project-page/materials/m
 import { AuthorizationPageComponent } from './pages/authorization-page/authorization-page.component';
 import { RegistrationPageComponent } from './pages/registration-page/registration-page.component';
 import { ValidationPageComponent } from './pages/registration-page/validation-page/validation-page.component';
+import { UserSettingsPageComponent } from './pages/user-settings-page/user-settings-page.component';;
 import { HomePageComponent } from './pages/home-page/home-page.component';
 import { ProjectListPageComponent } from './pages/project-list-page/project-list-page.component';
 
@@ -88,6 +89,7 @@ import { HomeProjectsViewComponent } from './pages/home-page/home-projects-view/
     ValidationPageComponent,
     AuthorPublicPageComponent,
     StudentPublicPageComponent,
+    UserSettingsPageComponent,
     MainNewsPageComponent,
     NewsListComponent,
     NewsItemComponent,

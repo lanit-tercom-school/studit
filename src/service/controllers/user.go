@@ -62,7 +62,7 @@ func (c *UserController) GetOne() {
 	if err== nil {
 		v, err := models.GetUserById(id)
 		if err != nil {
-			beego.Debug(c.Ctx.Input.IP(), "GetOne user id not found", err.Error())
+			beego.Debug("GetOne user id not found", err.Error())
 			c.Data["json"] = err.Error()
 			c.Ctx.Output.SetStatus(400)
 		} else {
@@ -84,7 +84,7 @@ func (c *UserController) GetOne() {
 			}
 		}
 	} else {
-		beego.Debug(c.Ctx.Input.IP(), "GetOne user `Atoi` error", err.Error())
+		beego.Debug("GetOne user `Atoi` error", err.Error())
 		c.Ctx.Output.SetStatus(400)
 		c.Data["json"] = err.Error()
 	}
@@ -170,7 +170,7 @@ func (c *UserController) Put() {
 		idStr := c.Ctx.Input.Param(":id")
 		id, err := strconv.Atoi(idStr)
 		if err != nil {
-			beego.Debug(c.Ctx.Input.IP(), "Put user `Atoi` error", err.Error())
+			beego.Debug("Put user `Atoi` error", err.Error())
 			c.Ctx.Output.SetStatus(400)
 			c.Data["json"] = err.Error()
 		} else if c.CurrentUser.UserId == id {
@@ -178,15 +178,15 @@ func (c *UserController) Put() {
 			if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
 				v.Id = id
 				if err := models.UpdateUserById(&v); err == nil {
-					beego.Trace(c.Ctx.Input.IP(), "Put user OK")
+					beego.Trace("Put user OK")
 					c.Data["json"] = "OK"
 				} else {
-					beego.Debug(c.Ctx.Input.IP(), "Put user `UpdateUserById` error", err.Error())
+					beego.Debug("Put user `UpdateUserById` error", err.Error())
 					c.Data["json"] = err.Error()
 					c.Ctx.Output.SetStatus(400)
 				}
 			} else {
-				beego.Debug(c.Ctx.Input.IP(), "Put user `Unmarshal` error", err.Error())
+				beego.Debug("Put user `Unmarshal` error", err.Error())
 				c.Data["json"] = err.Error()
 				c.Ctx.Output.SetStatus(400)
 			}
