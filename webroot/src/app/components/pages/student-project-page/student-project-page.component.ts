@@ -20,7 +20,7 @@ export class StudentProjectPageComponent implements OnInit, DoCheck {
   private tasks = [];
   private subscribedUsers = [];
   private authorized: boolean;
-  private enrollButtonStatus: number;
+  private enrollButtonStatus: number;//0 - enrolling,1 - you are in project, 2 - unenrolling
   constructor(private apiService: ApiService,
     private route: ActivatedRoute, private http: Http) { }
 
