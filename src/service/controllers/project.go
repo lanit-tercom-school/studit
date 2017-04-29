@@ -26,7 +26,7 @@ func (c *ProjectController) URLMapping() {
 // Post ...
 // @Title Post
 // @Description Создать новый проект
-// @Param   body            body    models.Project  true    "Тело запроса, см. пример"
+// @Param   body            body        models.ProjectJson     true    "Тело запроса, см. пример"
 // @Param   Bearer-token    header  string          true    "Токен доступа, пользователь должен быть не ниже куратора"
 // @Success 201 "Created"
 // @Failure 403 body is empty
@@ -35,7 +35,7 @@ func (c *ProjectController) Post() {
 	// TODO: добавить автора к проекту
 	beego.Trace(c.Ctx.Input.IP(), "Try to POST project")
 	if c.CurrentUser.PermissionLevel == 2 || c.CurrentUser.PermissionLevel == 1 {
-		var v models.Project
+		var v models.ProjectJson
 		if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
 			if id, err := models.AddProject(&v); err == nil {
 				beego.Trace(c.Ctx.Input.IP(), "Project with id", id, "created")
@@ -93,6 +93,7 @@ func (c *ProjectController) GetOne() {
 // @Param	fields	query	string	false	"Fields returned. e.g. col1,col2 ..."
 // @Param	sortby	query	string	false	"Sorted-by fields. e.g. col1,col2 ..."
 // @Param	order	query	string	false	"Order corresponding to each sortby field, if single value, apply to all sortby fields. e.g. desc,asc ..."
+// @Param       tag     query   string  false   "Получить проекты с тегом. Тег может быть только один."
 // @Param	limit	query	string	false	"Limit the size of result set. Must be an integer. Default 10"
 // @Param	offset	query	string	false	"Start position of result set. Must be an integer"
 // @Success 200 {object} []models.Project Get array of projects filtered with specified filters (wtf this description)
@@ -102,9 +103,11 @@ func (c *ProjectController) GetAll() {
 	var fields []string
 	var sortBy []string
 	var order []string
+	var tag string
 	var query = make(map[string]string)
 	var limit int64 = 10
 	var offset int64
+
 
 	// fields: col1,col2,entity.col3
 	if v := c.GetString("fields"); v != "" {
@@ -121,10 +124,17 @@ func (c *ProjectController) GetAll() {
 	// sortBy: col1,col2
 	if v := c.GetString("sortby"); v != "" {
 		sortBy = strings.Split(v, ",")
+	}else{
+		sortBy = []string{"Name"}
 	}
 	// order: desc,asc
 	if v := c.GetString("order"); v != "" {
 		order = strings.Split(v, ",")
+	}else{
+		order  = []string{"asc"}
+	}
+	if v := c.GetString("tag"); v!= ""{
+		tag = v
 	}
 	// query: k:v,k:v
 	if v := c.GetString("query"); v != "" {
@@ -141,7 +151,7 @@ func (c *ProjectController) GetAll() {
 	}
 
 	beego.Trace(c.Ctx.Input.IP(), "Select from table")
-	l, err := models.GetAllProject(query, fields, sortBy, order, offset, limit)
+	l, err := models.GetAllProject(query, fields, sortBy, order, offset, limit, tag)
 	if err != nil {
 		beego.Debug(c.Ctx.Input.IP(), "News GetAll `GetAllProject` error", err.Error())
 		c.Ctx.Output.SetStatus(400)
