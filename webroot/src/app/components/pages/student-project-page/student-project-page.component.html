@@ -4,13 +4,13 @@
       <img id="project-img" width="225px" height="225px" src="http://localhost:8081{{project.Logo}}" alt="Project image">
       <div *ngIf="authorized">
         <div *ngIf="enrollButtonStatus==0">
-          <button type="button" role="button" class="btn btn-large btn-block btn-primary" (click)="enroll()">Записаться</button>
+          <button type="button" role="button" class="btn btn-large btn-block btn-primary" (click)="enroll()">Подать заявку</button>
         </div>
         <div *ngIf="enrollButtonStatus==2">
-          <button type="button" role="button" class="btn btn-large btn-block btn-warning" (click)="unenroll()">Отписаться</button>
+          <button type="button" role="button" class="btn btn-large btn-block btn-warning" (click)="unenroll()">Отменить заявку</button>
         </div>
         <div *ngIf="enrollButtonStatus==1">
-          <h5>Вы являетесь членом проекта</h5>
+          <h5>Вы участвуете в проекте</h5>
         </div>
       </div>
     </div>
