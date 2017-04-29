@@ -253,11 +253,11 @@ export class ApiService {
     headers.append('Bearer-token', token);
     return this.http.delete(environment.apiUrl + '/v1/project/enroll/' + id, { headers: headers });
   }
-  getEnrolledUsersByProjectId(id: number) {//Получить список пользователей оставивших заявку на проект
+  getEnrolledUsersToProject(id: number) {//Получить список пользователей оставивших заявку на проект
     return this.http.get(environment.apiUrl + '/v1/project/enroll/' + id);
   }
 
-  getProjectUsersbyProjectId(id: number) {//Получить список пользователей, участвующих в проекте
+  getProjectUsers(id: number) {//Получить список пользователей, участвующих в проекте
     return this.http.get(environment.apiUrl + '/v1/project/users/' + id);
   }
   getProjectMastersById(id: number) {//Получить список кураторов проекта

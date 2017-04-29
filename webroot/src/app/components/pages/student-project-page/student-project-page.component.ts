@@ -20,24 +20,33 @@ export class StudentProjectPageComponent implements OnInit, DoCheck {
   private tasks = [];
   private subscribedUsers = [];
   private authorized: boolean;
-  private enrollButton: boolean;
-  private unenrollButton: boolean;
+  private enrollButtonStatus: number;
   constructor(private apiService: ApiService,
     private route: ActivatedRoute, private http: Http) { }
 
   ngOnInit() {
+    this.enrollButtonStatus = 0;
     this.route.params
       .subscribe(params => {
         this.projectId = params['id'];
-        this.apiService.getEnrolledUsersByProjectId(params['id']).subscribe(res => {
+        this.apiService.getProjectUsers(params['id']).subscribe(res => {
           this.subscribedUsers = res.json();
-          this.unenrollButton = false;
-          this.enrollButton = true;
           if (this.subscribedUsers != null) {
             for (let a of this.subscribedUsers) {
               if (a === JSON.parse(localStorage.getItem('current_user')).id) {
-                this.unenrollButton = true;
-                this.enrollButton = false;
+                this.enrollButtonStatus = 1;
+                break;
+              }
+            }
+          }
+        });
+        this.apiService.getEnrolledUsersToProject(params['id']).subscribe(res => {
+          this.subscribedUsers = res.json();
+          if (this.subscribedUsers != null) {
+            for (let a of this.subscribedUsers) {
+              if (a === JSON.parse(localStorage.getItem('current_user')).id) {
+                this.enrollButtonStatus = 2;
+                break;
               }
             }
           }
@@ -66,18 +75,16 @@ export class StudentProjectPageComponent implements OnInit, DoCheck {
   getTaskItems() {
     this.http.get('https://api.github.com/repos/lanit-tercom-school/studit/issues')
       .map((response: Response) => {
-        var res = response.json().slice(0, 4);
+        let res = response.json().slice(0, 4);
         return res;
       }).subscribe(res => this.tasks = res);
   }
   enroll() {
     this.apiService.enrollToProject(this.projectId, JSON.parse(localStorage.getItem('current_user')).token).subscribe(res => { });
-    this.unenrollButton = true;
-    this.enrollButton = false;
+    this.enrollButtonStatus = 2;
   }
   unenroll() {
     this.apiService.unenrollToProject(this.projectId, JSON.parse(localStorage.getItem('current_user')).token).subscribe(res => { });
-    this.unenrollButton = false;
-    this.enrollButton = true;
+    this.enrollButtonStatus = 0;
   }
 }
