@@ -64,7 +64,6 @@ func AddProject(m *ProjectJson) (id int64, err error) {
 	v := m.translate()
 	v.Id = 0 // for auto inc
 	v.DateOfCreation = time.Now()
-	//v.LastEdit = time.Now()
 	o := orm.NewOrm()
 	id, err = o.Insert(&v)
 	return
@@ -132,30 +131,6 @@ func GetAllProject(query map[string]string, fields []string, sortBy []string, or
 		}
 	}
 
-	//var l []Project
-	//qs = qs.OrderBy(sortFields...)
-	//if _, err = qs.Limit(limit, offset).All(&l, fields...); err == nil {
-	//	if tag == "" {
-	//		fmt.Println("tag == \"\"")
-	//		for _, v := range l {
-	//			ml = append(ml, v)
-	//		}
-	//	} else {
-	//		// trim unused fields
-	//		for _, v := range l {
-	//			m := make(map[string]interface{})
-	//			val := reflect.ValueOf(v)
-	//			for _, fname := range fields {
-	//				m[fname] = val.FieldByName(fname).Interface()
-	//			}
-	//			var str = strings.Split(val.FieldByName("Tags").String(),",")
-	//			if TagInArrayOfStrings(tag, str){
-	//				ml = append(ml, m)
-	//			}
-	//		}
-	//	}
-	//	return ml, nil
-	//}
 	var l []Project
 	qs = qs.OrderBy(sortFields...)
 	if _, err = qs.Limit(limit, offset).All(&l); err == nil {
@@ -179,15 +154,15 @@ func GetAllProject(query map[string]string, fields []string, sortBy []string, or
 
 // UpdateProject updates Project by Id and returns error if
 // the record to be updated doesn't exist
-func UpdateProjectById(m *Project) (err error) {
+func UpdateProjectById(m *ProjectJson) (err error) {
+	proj, err := GetProjectById(m.Id)
+	t := m.translate()
+	t.DateOfCreation = proj.DateOfCreation
 	o := orm.NewOrm()
 	v := Project{Id: m.Id}
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
-		var num int64
-		if num, err = o.Update(m); err == nil {
-			fmt.Println("Number of records updated in database:", num)
-		}
+		_, err = o.Update(&t)
 	}
 	return
 }

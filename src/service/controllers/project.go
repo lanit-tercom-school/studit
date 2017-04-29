@@ -7,6 +7,7 @@ import (
 	"strconv"
 	"strings"
 	"github.com/astaxie/beego"
+	"fmt"
 )
 
 // Создание, изменение, удаление и просмотр проектов
@@ -176,12 +177,14 @@ func (c *ProjectController) Put() {
 	if c.CurrentUser.PermissionLevel == 2 || c.CurrentUser.PermissionLevel == 1 {
 		idStr := c.Ctx.Input.Param(":id")
 		id, err := strconv.Atoi(idStr)
+		fmt.Println(idStr)
+		fmt.Println("Hello")
 		if err != nil {
 			beego.Debug(c.Ctx.Input.IP(), "Put `Atoi` error", err.Error())
 			c.Ctx.Output.SetStatus(400)
 			c.Data["json"] = err.Error()
 		}
-		v := models.Project{Id: id}
+		v := models.ProjectJson{Id: id}
 		if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
 			if err := models.UpdateProjectById(&v); err == nil {
 				beego.Trace(c.Ctx.Input.IP(), "Put project OK")

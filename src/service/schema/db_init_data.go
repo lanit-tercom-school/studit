@@ -40,7 +40,7 @@ func main() {
 		Description: "Разработка образовательного портала для Lanit-Tercom School",
 		DateOfCreation: time.Now(),
 		Logo: "/files/1.jpg",
-		Tags: "Tag",
+		Tags: "studit, summerschool",
 	}
 	fastCheckErr(o.Insert(&project1))
 
@@ -50,7 +50,7 @@ func main() {
 		Description: "Какие же стрелочки вокруг ноубука!",
 		DateOfCreation: time.Now(),
 		Logo: "/files/2.jpg",
-		Tags: "Tag",
+		Tags: "freelance",
 	}
 	fastCheckErr(o.Insert(&project2))
 
@@ -60,7 +60,7 @@ func main() {
 		Description: "Click-bait описание",
 		DateOfCreation: time.Now(),
 		Logo: "/files/3.jpg",
-		Tags: "Tag",
+		Tags: "creative",
 	}
 	fastCheckErr(o.Insert(&project3))
 
@@ -70,7 +70,7 @@ func main() {
 		Description: "Студенческий проект TFS Mobile",
 		DateOfCreation: time.Now(),
 		Logo: "/files/4.jpg",
-		Tags: "Tag",
+		Tags: "TFSMobile, summerschool",
 	}
 	fastCheckErr(o.Insert(&project4))
 
@@ -80,7 +80,7 @@ func main() {
 		Description: "Описаниеописаниеописание",
 		DateOfCreation: time.Now(),
 		Logo: "/files/5.jpg",
-		Tags: "Tag",
+		Tags: "project",
 	}
 	fastCheckErr(o.Insert(&project5))
 
