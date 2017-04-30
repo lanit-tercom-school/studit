@@ -8,11 +8,10 @@ export class DataService {
   private enrollingProjects;
   private userId: number;
   constructor(private api: ApiService) { }
-  load_data() {
+  loadEnrollingAndUserProjects() {
     this.projects = new Array<number>();
     this.enrollingProjects = new Array<number>();
     this.userId = JSON.parse(localStorage.getItem('current_user')).id;
-    console.log('Data loading...');
     this.api.getProjectItems().subscribe(res => {
       this.projectItems = res;
       for (let i = 0; i < this.projectItems.length; i++) {

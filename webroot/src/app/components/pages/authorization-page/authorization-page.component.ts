@@ -32,7 +32,7 @@ export class AuthorizationPageComponent implements OnInit {
         if (this.ReturnUrl == '/registration') {
           this.ReturnUrl = '/home';
         }
-        this.data.load_data();
+        this.data.loadEnrollingAndUserProjects();
         this.router.navigate([this.ReturnUrl]);
       },
       error => {
