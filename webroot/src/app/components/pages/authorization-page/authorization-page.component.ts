@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from './../../../services/auth.service';
+import { DataService } from './../../../services/data.service';
 import { Router } from '@angular/router';
 import { User } from './user';
 import { NgModule } from '@angular/core';
@@ -14,13 +15,13 @@ export class AuthorizationPageComponent implements OnInit {
 
   private localUser: User = { Login: "", Password: "" };
   private error: any;
-  private ReturnUrl:string
+  private ReturnUrl: string
 
-  constructor(private auth: AuthService, private router: Router) { }
+  constructor(private auth: AuthService, private router: Router, private data: DataService) { }
 
   ngOnInit() {
     this.auth.unauthentificatenow();
-    this.ReturnUrl = this.router.routerState.snapshot.root.queryParams['ReturnUrl']||'/home';
+    this.ReturnUrl = this.router.routerState.snapshot.root.queryParams['ReturnUrl'] || '/home';
     console.log("You will be redirected to", this.ReturnUrl);
 
   }
@@ -28,10 +29,10 @@ export class AuthorizationPageComponent implements OnInit {
   login() {
     this.auth.authenticatenow(this.localUser).subscribe(
       data => {
-        if(this.ReturnUrl=='/registration')
-        {
+        if (this.ReturnUrl == '/registration') {
           this.ReturnUrl = '/home';
         }
+        this.data.load_data();
         this.router.navigate([this.ReturnUrl]);
       },
       error => {
