@@ -35,22 +35,20 @@ func (c *UserContactController) Post() {
 		cUser := models.User{ Id: c.CurrentUser.UserId, }
 		v := []models.UserContactInput{}
 		if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
-			for _,element := range v{
+			ContId := []int64{}// Artem skazal aray
+			for _,element := range v {
 				if models.IsValidContactType(element.ContactType) {
-					in :=models.ContactTranslate(&element)
+					in := models.ContactTranslate(&element)
 					in.UserId = &cUser
-					if _, err := models.AddUserContact(&in); err == nil {
+					if id, err := models.AddUserContact(&in); err == nil {
 						c.Ctx.Output.SetStatus(201)
-						c.Data["json"] = "Ok"
+						ContId = append(ContId, id)
+						c.Data["json"] = ContId
 					} else {
 						c.Ctx.Output.SetStatus(400)
 						c.Data["json"] = err.Error() + "Fail at adding one of contacts"
 						break
 					}
-				} else {
-					c.Ctx.Output.SetStatus(400)
-					c.Data["json"] = "Invalid contact Type"
-					break
 				}
 			}
 		} else {
@@ -98,8 +96,8 @@ func (c *UserContactController) GetAll() {
 					c.Data["json"] = "Forbidden"
 				}
 			} else {
-				c.Ctx.Output.SetStatus(404)
-				c.Data["json"] = "Not Found"
+				c.Ctx.Output.SetStatus(400)
+				c.Data["json"] = "User Not Found"
 			}
 		}
 	} else {
@@ -148,7 +146,7 @@ func (c *UserContactController) Delete() {
 		if err == nil {
 			v, err := models.GetUserContactById(id)
 			if err != nil {
-				c.Ctx.Output.SetStatus(404)
+				c.Ctx.Output.SetStatus(400)
 				c.Data["json"] = err.Error()
 			} else {
 				if v.UserId.Id == c.CurrentUser.UserId {
