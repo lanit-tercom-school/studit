@@ -203,7 +203,7 @@ func (c *ProjectController) Put() {
 			c.Ctx.Output.SetStatus(400)
 			c.Data["json"] = err.Error()
 		}
-		v := models.Project{Id: int64(id)}
+		v := models.ProjectJson{Id: int64(id)}
 		if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
 			if err := models.UpdateProjectById(&v); err == nil {
 				beego.Trace("Put project OK")

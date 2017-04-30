@@ -24,10 +24,11 @@ func init() {
 
 // AddProjectUser insert a new ProjectMaster into database and returns
 // last inserted Id on success.
-func AddMasterToProject(user *User, project *Project) (err error) {
+func AddMasterToProject(user *User, project *ProjectJson) (err error) {
+	temp := project.translate()
 	m := ProjectMaster{
 		MasterId:   user,
-		ProjectId:  project,
+		ProjectId:  &temp,
 		SignedDate: time.Now(),
 	}
 	_, err = orm.NewOrm().Insert(&m)

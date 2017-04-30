@@ -9,6 +9,7 @@ import (
 	"time"
 )
 
+// Модель для базы данных
 type Project struct {
 	Id          int64  `orm:"column(id);pk;auto"`
 	Name        string `orm:"column(name)"`
@@ -18,15 +19,17 @@ type Project struct {
 	Tags        string `orm:"column(tags)"`
 }
 
+// Модель для общения с клиентами
 type ProjectJson struct {
-	Id              int         `json:"id,omitempty"` //
+	Id              int64       `json:"id,omitempty"` //
 	Name            string      `json:"name"`
 	Description     string      `json:"description"`
-	DateOfCreation  time.Time   `json:"date_of_creation"`
+	DateOfCreation  time.Time   `json:"created"`
 	Logo            string      `json:"logo"`
 	Tags            []string    `json:"tags"`
 }
 
+// Обязательный превод от одной модели в другую
 func (t *Project) translate()  ProjectJson{
 	return ProjectJson{
 		Id: t.Id,
@@ -71,13 +74,15 @@ func AddProject(m *ProjectJson) (id int64, err error) {
 
 // GetProjectById retrieves Project by Id. Returns error if
 // Id doesn't exist
-func GetProjectById(id int64) (v *Project, err error) {
+func GetProjectById(id int64) (*ProjectJson, error) {
 	o := orm.NewOrm()
-	v = &Project{Id: id}
-	if err = o.Read(v); err == nil {
-		return v, nil
+	temp := &Project{Id: id}
+	if err := o.Read(temp); err == nil {
+		v := temp.translate()
+		return &v, nil
+	} else {
+		return nil, err
 	}
-	return nil, err
 }
 
 // GetAllProject retrieves all Project matches certain condition. Returns empty list if

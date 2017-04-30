@@ -15,8 +15,8 @@ type UserAndToken struct{
 }
 
 type Usr struct {
-    Login string
-    Password string
+    Login string    `json:"login"`
+    Password string `json:"password"`
 }
 
 const MaxPermissionLevel int = 2
