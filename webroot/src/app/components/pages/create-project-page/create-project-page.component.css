@@ -1,0 +1,46 @@
+.container
+{
+  //  margin-bottom: 2rem auto;
+}
+
+h1{
+  margin: 2rem auto;
+}
+
+#project-avatar
+{
+    margin-top: 2rem;
+    width: 225px;
+    height: 225px;
+}
+
+#inputProjDescription
+{
+   max-width: 40%;
+   min-width: 40%;
+   max-height: 8rem;
+   min-height: 8rem;
+   text-align: left;
+}
+
+.btn-submit
+{
+  margin-top: 0.75rem;
+  margin-bottom: 3rem;
+}
+
+.form-inline
+{
+  margin-bottom: 0.5rem;
+}
+
+.block-form
+{
+  margin-top:  2rem;
+  margin-bottom: 2.5rem;
+}
+.acc-label
+{
+  position: absolute;
+  left: 4.5rem;
+}

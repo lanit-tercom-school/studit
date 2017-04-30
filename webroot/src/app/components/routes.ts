@@ -20,7 +20,7 @@ import { UserSettingsPageComponent } from './pages/user-settings-page/user-setti
 import { MainNewsPageComponent } from './pages/main-news-page/main-news-page.component';
 import { ProjectTasksPageComponent } from './pages/project-tasks-page/project-tasks-page.component';
 import { HomeProjectsViewComponent } from './pages/home-page/home-projects-view/home-projects-view.component';
-
+import { CreateProjectPageComponent } from './pages/create-project-page/create-project-page.component';
 import { MainFullNewsPageComponent } from './pages/main-full-news-page/main-full-news-page.component';
 
 import { ErrorPageComponent } from './pages/error-page/error-page.component';
@@ -73,6 +73,7 @@ export const routes: Routes = [
   { path: 'registration', component: RegistrationPageComponent, canActivate: [AuthManager]},
   { path: 'registration/validate', component: ValidationPageComponent, canActivate: [AuthManager] },
   { path: 'author/:id', component: AuthorPublicPageComponent },
+  { path: 'author/:id/createproject', component: CreateProjectPageComponent },
   { path: 'author/:id/settings', component: UserSettingsPageComponent },
   { path: 'student/:id', component: StudentPublicPageComponent },
   { path: 'student/:id/settings', component: UserSettingsPageComponent },

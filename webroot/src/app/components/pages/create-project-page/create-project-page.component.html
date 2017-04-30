@@ -1,0 +1,31 @@
+<div class="container">
+  <h1 align="center">Создание проекта</h1>
+  <hr>
+  <div class ="row">
+  <form>
+    <div class="col-sm-12 col-md-5 col-lg-3 offset-lg-2" align = "center">
+        <img id = "project-avatar"
+         src="http://www.abisglobal.net/wp-content/uploads/2013/03/Services-Integrated-Communication-Services-Converged-Communication.jpg"
+         alt="Project photo">
+        <br>
+        <button  role="button" class="btn btn-secondary btn-submit">Изменить...</button>
+    </div>
+      <div class = "col-sm-12 col-md-5 col-lg-7" align = "left">
+        <form class = "block-form">
+          <div class="form-inline">
+            <label class="col-sm-2 col-md-3 col-lg-2 col-form-label">Название проекта</label>
+            <input class="form-control"
+            placeholder ="" [(ngModel)]="createdProject.name" name = "projName" required>
+          </div>
+        <form class="form-inline">
+           <label class="col-sm-2 col-md-3 col-lg-2 col-form-label" for="inputDescription">Описание проекта</label>
+           <textarea class=" form-control" id = "inputProjDescription" placeholder =""
+           [(ngModel)]="createdProject.description" name = "projDescription" required></textarea>
+         </form>
+        <button  role="button" class="btn btn-primary btn-submit" type="submit"
+         (click)="makeProject()">Создать</button>
+       </form>
+   </div>
+</form>
+</div>
+</div>

@@ -34,6 +34,7 @@ import { ValidationPageComponent } from './pages/registration-page/validation-pa
 import { UserSettingsPageComponent } from './pages/user-settings-page/user-settings-page.component';;
 import { HomePageComponent } from './pages/home-page/home-page.component';
 import { ProjectListPageComponent } from './pages/project-list-page/project-list-page.component';
+import { CreateProjectPageComponent } from './pages/create-project-page/create-project-page.component';
 
 import { FooterComponent } from "./footer/footer.component";
 import { TasksItemComponent } from "./pages/student-project-page/tasks/tasks-item/tasks-item.component";
@@ -103,6 +104,7 @@ import { ErrorPageComponent } from './pages/error-page/error-page.component';
     ProjectTasksPageComponent,
     ProjectTaskItemComponent,
     ProjectTaskListComponent,
+    CreateProjectPageComponent,
     HomeProjectsViewComponent,
     ErrorPageComponent,
     HomePageTeacherComponent,
