@@ -20,6 +20,8 @@ func init() {
 	orm.RegisterModel(new(ProjectMaster))
 }
 
+
+
 // AddProjectUser insert a new ProjectMaster into database and returns
 // last inserted Id on success.
 func AddMasterToProject(user *User, project *Project) (err error) {
@@ -32,6 +34,7 @@ func AddMasterToProject(user *User, project *Project) (err error) {
 	return
 }
 
+// Проверяет, содержится ли в списке пользователей пользователь с указанным ID
 func IsUserInArray(user_id int, users []*User) bool {
 	for _, x := range users {
 		if x.Id == user_id{
