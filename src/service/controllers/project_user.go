@@ -19,7 +19,7 @@ type ProjectUserController struct {
 func (c *ProjectUserController) URLMapping() {
 	c.Mapping("Post", c.Post)
 	c.Mapping("GetAll", c.GetAll)
-	c.Mapping("Get", c.Get)
+	c.Mapping("GetOne", c.GetOne)
 	c.Mapping("Put", c.Put)
 	c.Mapping("Delete", c.Delete)
 }
@@ -40,7 +40,7 @@ func (c *ProjectUserController) Post() {
 		c.Ctx.Output.SetStatus(403)
 		c.Data["json"] = "Access denied"
 	} else {
-		project_id, err := c.GetInt("project_id")
+		project_id, err := c.GetInt64("project_id")
 		if err != nil {
 			beego.Debug(c.Ctx.Input.IP(), "Not an int param. Should be int")
 			c.Ctx.Output.SetStatus(400)
@@ -96,7 +96,7 @@ func (c *ProjectUserController) Post() {
 // @Success 200 {object} []int "Список пользователей"
 // @Failure 403 :id is empty
 // @router /:id [get]
-func (c *ProjectUserController) Get() {
+func (c *ProjectUserController) GetOne() {
 	idStr := c.Ctx.Input.Param(":id")
 	beego.Trace(c.Ctx.Input.IP(), "Get project with id", idStr)
 	id, err := strconv.Atoi(idStr)
@@ -231,12 +231,13 @@ func (c *ProjectUserController) Delete() {
 				beego.Debug(c.Ctx.Input.IP(), "Access denied for `Delete` user from project")
 				c.Ctx.Output.SetStatus(403)
 				c.Data["json"] = "Access denied"
+			} else if err := models.DeleteUserFromProject(user_id, project_id); err == nil {
+				beego.Trace(c.Ctx.Input.IP(), "`Delete` user from project OK")
+				c.Data["json"] = "OK"
 			} else {
-				if err := models.DeleteUserFromProject(user_id, project_id); err == nil {
-					c.Data["json"] = "OK"
-				} else {
-					c.Data["json"] = err.Error()
-				}
+				beego.Debug(c.Ctx.Input.IP(), "Can't `Delete` user from project")
+				c.Ctx.Output.SetStatus(400)
+				c.Data["json"] = err.Error()
 			}
 		}
 	}

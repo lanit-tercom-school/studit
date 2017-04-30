@@ -83,7 +83,12 @@ func init() {
 		),
 		beego.NSNamespace("/project/enroll",
 			beego.NSInclude(
-				&controllers.UserApplicationOnProjectController{},
+				&controllers.UserEnrollOnProjectController{},
+			),
+		),
+		beego.NSNamespace("/project/masters",
+			beego.NSInclude(
+				&controllers.ProjectMasterController{},
 			),
 		),
 /*

@@ -32,26 +32,26 @@ func (c *NewsController) URLMapping() {
 // @Failure 400 Forbidden
 // @router / [post]
 func (c *NewsController) Post() {
-	beego.Trace(c.Ctx.Input.IP(), "Try to POST news")
+	beego.Trace("Try to POST news")
 	if c.CurrentUser.PermissionLevel == 2 {
 		var v models.NewsJson
 		if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
 			if id, err := models.AddNews(&v); err == nil {
-				beego.Trace(c.Ctx.Input.IP(), "News with id", id, "created")
+				beego.Trace("News with id", id, "created")
 				c.Ctx.Output.SetStatus(201)
 				c.Data["json"] = id
 			} else {
-				beego.Debug(c.Ctx.Input.IP(), "Post news `AddNews` error", err.Error())
+				beego.Debug("Post news `AddNews` error", err.Error())
 				c.Data["json"] = err.Error()
 				c.Ctx.Output.SetStatus(500)
 			}
 		} else {
-			beego.Debug(c.Ctx.Input.IP(), "Post news `Unmarshal` error", err.Error())
+			beego.Debug("Post news `Unmarshal` error", err.Error())
 			c.Data["json"] = err.Error()
 			c.Ctx.Output.SetStatus(400)
 		}
 	} else {
-        beego.Debug(c.Ctx.Input.IP(), "Access denied for `Post`")
+        beego.Debug("Access denied for `Post`")
 		c.Ctx.Output.SetStatus(403)
         c.Data["json"] = "Forbidden"
 	}
@@ -67,20 +67,20 @@ func (c *NewsController) Post() {
 // @router /:id [get]
 func (c *NewsController) GetOne() {
 	idStr := c.Ctx.Input.Param(":id")
-	beego.Trace(c.Ctx.Input.IP(), "Get news with id", idStr)
+	beego.Trace("Get news with id", idStr)
 	id, err := strconv.Atoi(idStr)
 	if err != nil {
-		beego.Debug(c.Ctx.Input.IP(), "GetOne `Atoi` error", err.Error())
+		beego.Debug("GetOne `Atoi` error", err.Error())
 		c.Ctx.Output.SetStatus(400)
 		c.Data["json"] = err.Error()
 	}
 	v, err := models.GetNewsById(id)
 	if err != nil {
-		beego.Debug(c.Ctx.Input.IP(), "GetOne `GetNewsById` error", err.Error())
+		beego.Debug("GetOne `GetNewsById` error", err.Error())
 		c.Ctx.Output.SetStatus(400)
 		c.Data["json"] = err.Error()
 	} else {
-		beego.Trace(c.Ctx.Input.IP(), "GetOne OK")
+		beego.Trace("GetOne OK")
 		c.Data["json"] = v
 	}
 	c.ServeJSON()
@@ -103,7 +103,7 @@ func (c *NewsController) GetAll() {
 	var limit int64 = 10
 	var offset int64
 	var tag string
-	beego.Trace(c.Ctx.Input.IP(), "Parce request params for News")
+	beego.Trace("Parce request params for News")
 	// limit: 10 (default is 10)
 	if v, err := c.GetInt64("limit"); err == nil {
 		if limit > 20 {
@@ -129,10 +129,10 @@ func (c *NewsController) GetAll() {
 		tag = v
 	}
 
-	beego.Trace(c.Ctx.Input.IP(), "Select from table")
+	beego.Trace("Select from table")
 	l, err := models.GetAllNews(sortBy, order, offset, limit, tag)
 	if err != nil {
-		beego.Debug(c.Ctx.Input.IP(), "News GetAll `GetAllNews` error", err.Error())
+		beego.Debug("News GetAll `GetAllNews` error", err.Error())
 		c.Ctx.Output.SetStatus(400)
 		c.Data["json"] = err.Error()
 	} else {
@@ -156,27 +156,27 @@ func (c *NewsController) Put() {
 		idStr := c.Ctx.Input.Param(":id")
 		id, err := strconv.Atoi(idStr)
 		if err != nil {
-			beego.Debug(c.Ctx.Input.IP(), "Put `Atoi` error", err.Error())
+			beego.Debug("Put `Atoi` error", err.Error())
 			c.Ctx.Output.SetStatus(400)
 			c.Data["json"] = err.Error()
 		}
 		v := models.NewsJson{Id: id}
 		if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
 			if err := models.UpdateNewsById(&v); err == nil {
-				beego.Trace(c.Ctx.Input.IP(), "Put news OK")
+				beego.Trace("Put news OK")
 				c.Data["json"] = "OK"
 			} else {
-				beego.Debug(c.Ctx.Input.IP(), "Put news `UpdateNewsById` error", err.Error())
+				beego.Debug("Put news `UpdateNewsById` error", err.Error())
 				c.Data["json"] = err.Error()
 				c.Ctx.Output.SetStatus(400)
 			}
 		} else {
-			beego.Debug(c.Ctx.Input.IP(), "Put news `Unmarshal` error", err.Error())
+			beego.Debug("Put news `Unmarshal` error", err.Error())
 			c.Data["json"] = err.Error()
 			c.Ctx.Output.SetStatus(400)
 		}
 	} else {
-        beego.Debug(c.Ctx.Input.IP(), "Access denied for `Put`")
+        beego.Debug("Access denied for `Put`")
 		c.Ctx.Output.SetStatus(400)
         c.Data["json"] = "Forbidden"
 	}
@@ -197,20 +197,20 @@ func (c *NewsController) Delete() {
 		idStr := c.Ctx.Input.Param(":id")
 		id, err := strconv.Atoi(idStr)
 		if err != nil {
-			beego.Debug(c.Ctx.Input.IP(), "Delete `Atoi` error", err.Error())
+			beego.Debug("Delete `Atoi` error", err.Error())
 			c.Ctx.Output.SetStatus(400)
 			c.Data["json"] = err.Error()
 		}
 		if err := models.DeleteNews(id); err == nil {
-			beego.Trace(c.Ctx.Input.IP(), "Delete news OK")
+			beego.Trace("Delete news OK")
 			c.Data["json"] = "OK"
 		} else {
-			beego.Debug(c.Ctx.Input.IP(), "Delete news `DeleteNews` error", err.Error())
+			beego.Debug("Delete news `DeleteNews` error", err.Error())
 			c.Data["json"] = err.Error()
 			c.Ctx.Output.SetStatus(400)
 		}
 	} else {
-        beego.Debug(c.Ctx.Input.IP(), "Access denied for `Delete`")
+        beego.Debug("Access denied for `Delete`")
 		c.Ctx.Output.SetStatus(400)
         c.Data["json"] = "Forbidden"
 	}
