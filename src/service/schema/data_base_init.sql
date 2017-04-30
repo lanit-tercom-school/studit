@@ -3,7 +3,9 @@ CREATE TABLE "project" (
 	"id" serial NOT NULL,
 	"name" varchar(100) NOT NULL,
 	"description" TEXT NOT NULL,
+	"date_of_creation" TIMESTAMP WITH TIME ZONE NOT NULL,
 	"logo" varchar(1000) NOT NULL,
+	"tags" varchar(1000) NOT NULL,
 	CONSTRAINT project_pk PRIMARY KEY ("id")
 ) WITH (
   OIDS=FALSE
@@ -31,6 +33,7 @@ CREATE TABLE "project_user" (
   "user_id" bigint NOT NULL,
   "signed_date" TIMESTAMP WITH TIME ZONE NOT NULL,
   "progress" int NOT NULL,
+  UNIQUE ("project_id", "user_id"),
   CONSTRAINT project_user_pk PRIMARY KEY ("id")
 ) WITH (
   OIDS=FALSE
@@ -44,7 +47,8 @@ CREATE TABLE project_sign_up (
 
   CONSTRAINT project_user_application_pk PRIMARY KEY ("id"),
   CONSTRAINT project_user_application_fk0 FOREIGN KEY ("project_id") REFERENCES "project"("id"),
-  CONSTRAINT project_user_application_fk1 FOREIGN KEY ("user_id") REFERENCES "user"("id")
+  CONSTRAINT project_user_application_fk1 FOREIGN KEY ("user_id") REFERENCES "user"("id"),
+  CONSTRAINT unique_pair_of_columns_for_project_sign_up UNIQUE ("project_id", "user_id")
 ) WITH (
   OIDS=FALSE
 );

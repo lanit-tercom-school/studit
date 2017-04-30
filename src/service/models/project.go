@@ -3,18 +3,52 @@ package models
 import (
 	"errors"
 	"fmt"
-	"reflect"
+	//"reflect"
 	"strings"
-
 	"github.com/astaxie/beego/orm"
+	"time"
 )
 
 type Project struct {
 	Id          int    `orm:"column(id);pk;auto"`
 	Name        string `orm:"column(name)"`
 	Description string `orm:"column(description)"`
+	DateOfCreation time.Time   `orm:"column(date_of_creation);type(datetime)"`
 	Logo        string `orm:"column(logo)"`
+	Tags        string `orm:"column(tags)"`
 }
+
+type ProjectJson struct {
+	Id              int         `json:"id,omitempty"` //
+	Name            string      `json:"name"`
+	Description     string      `json:"description"`
+	DateOfCreation  time.Time   `json:"date_of_creation"`
+	Logo            string      `json:"logo"`
+	Tags            []string    `json:"tags"`
+}
+
+func (t *Project) translate()  ProjectJson{
+	return ProjectJson{
+		Id: t.Id,
+		Name: t.Name,
+		Description: t.Description,
+		DateOfCreation: t.DateOfCreation,
+		Logo: t.Logo,
+		Tags: strings.Split(t.Tags, ","),
+	}
+}
+
+func (t *ProjectJson) translate()  Project{
+	return Project{
+		Id: t.Id,
+		Name: t.Name,
+		Description: t.Description,
+		DateOfCreation: t.DateOfCreation,
+		Logo: t.Logo,
+		Tags: strings.Join(t.Tags, ","),
+	}
+}
+
 
 func (t *Project) TableName() string {
 	return "project"
@@ -26,9 +60,12 @@ func init() {
 
 // AddProject insert a new Project into database and returns
 // last inserted Id on success.
-func AddProject(m *Project) (id int64, err error) {
+func AddProject(m *ProjectJson) (id int64, err error) {
+	v := m.translate()
+	v.Id = 0 // for auto inc
+	v.DateOfCreation = time.Now()
 	o := orm.NewOrm()
-	id, err = o.Insert(m)
+	id, err = o.Insert(&v)
 	return
 }
 
@@ -46,7 +83,7 @@ func GetProjectById(id int) (v *Project, err error) {
 // GetAllProject retrieves all Project matches certain condition. Returns empty list if
 // no records exist
 func GetAllProject(query map[string]string, fields []string, sortBy []string, order []string,
-	offset int64, limit int64) (ml []interface{}, err error) {
+	offset int64, limit int64, tag string) (ml []interface{}, err error) {
 	o := orm.NewOrm()
 	qs := o.QueryTable(new(Project))
 	// query k=v
@@ -96,38 +133,36 @@ func GetAllProject(query map[string]string, fields []string, sortBy []string, or
 
 	var l []Project
 	qs = qs.OrderBy(sortFields...)
-	if _, err = qs.Limit(limit, offset).All(&l, fields...); err == nil {
-		if len(fields) == 0 {
+	if _, err = qs.Limit(limit, offset).All(&l); err == nil {
+		if tag == "" {
 			for _, v := range l {
-				ml = append(ml, v)
+				ml = append(ml, v.translate())
 			}
+			return ml, nil
 		} else {
-			// trim unused fields
 			for _, v := range l {
-				m := make(map[string]interface{})
-				val := reflect.ValueOf(v)
-				for _, fname := range fields {
-					m[fname] = val.FieldByName(fname).Interface()
+				r := v.translate()
+				if TagInArrayOfStrings(tag, r.Tags) {
+					ml = append(ml, r)
 				}
-				ml = append(ml, m)
 			}
+			return ml, nil
 		}
-		return ml, nil
 	}
 	return nil, err
 }
 
 // UpdateProject updates Project by Id and returns error if
 // the record to be updated doesn't exist
-func UpdateProjectById(m *Project) (err error) {
+func UpdateProjectById(m *ProjectJson) (err error) {
+	proj, err := GetProjectById(m.Id)
+	t := m.translate()
+	t.DateOfCreation = proj.DateOfCreation
 	o := orm.NewOrm()
 	v := Project{Id: m.Id}
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
-		var num int64
-		if num, err = o.Update(m); err == nil {
-			fmt.Println("Number of records updated in database:", num)
-		}
+		_, err = o.Update(&t)
 	}
 	return
 }
@@ -152,5 +187,5 @@ func DeleteProject(id int) (err error) {
 // ([], [], [], [], 0, 3)
 func GetLandingProjects() (ml []interface{}, err error) {
 	var query = make(map[string]string)
-	return GetAllProject(query, []string{}, []string{}, []string{}, 0, 3)
+	return GetAllProject(query, []string{}, []string{}, []string{}, 0, 3, "")
 }
