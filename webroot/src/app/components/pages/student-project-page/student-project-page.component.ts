@@ -30,7 +30,6 @@ export class StudentProjectPageComponent implements OnInit, DoCheck {
       .subscribe(params => {
         this.projectId = params['id'];
         this.project = this.apiService.getProjectById(+params['id']).subscribe(res => this.project = res.json());
-        console.log(this.data.getProjectsOfUser().indexOf(+this.projectId));
         if (this.data.getProjectsOfUser().indexOf(+this.projectId) !== -1) {
           this.enrollButtonStatus = 1;
         }
@@ -70,9 +69,11 @@ export class StudentProjectPageComponent implements OnInit, DoCheck {
   enroll() {
     this.apiService.enrollToProject(this.projectId, JSON.parse(localStorage.getItem('current_user')).token).subscribe(res => { });
     this.enrollButtonStatus = 2;
+    this.data.load_data();
   }
   unenroll() {
     this.apiService.unenrollToProject(this.projectId, JSON.parse(localStorage.getItem('current_user')).token).subscribe(res => { });
     this.enrollButtonStatus = 0;
+    this.data.load_data();
   }
 }
