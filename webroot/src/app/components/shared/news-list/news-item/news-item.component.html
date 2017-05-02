@@ -3,5 +3,10 @@
 		<p class="newscard-text">{{ NewsItem.edited| date: 'short'}}</p>
 		<h4 class="newscard-title">{{ NewsItem.title}}</h4>
 		<p class="newscard-text">{{NewsItem.description.split(".", 1)}}...</p>
+		<p>Теги:
+			<span *ngFor="let tag of NewsItem.tags; let i = index">
+			<a href = "#" class = "blacktag">{{tag}}</a>
+			<span *ngIf="i!=NewsItem.tags.length-1">,</span>
+ </span></p>
 		<a [routerLink]="['/news',  NewsItem.id]">Читать далее</a>
 </div>

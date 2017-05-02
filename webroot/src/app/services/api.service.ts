@@ -13,7 +13,7 @@ export class ApiService {
   }
 
   validate(key: string) {
-    return this.http.get(environment.apiUrl + '/v1/auth/register/?pass=' + key)
+    return this.http.get(environment.apiUrl + '/v1/auth/signup/?pass=' + key)
       .catch((error: any) => { return Observable.throw(error) });
   }
 
@@ -22,7 +22,7 @@ export class ApiService {
 
     headers.append('Content-Type', 'application/json');
 
-    return this.http.post(environment.apiUrl + '/v1/auth/register', JSON.stringify(user), { headers: headers })
+    return this.http.post(environment.apiUrl + '/v1/auth/signup/', JSON.stringify(user), { headers: headers })
       .map((res: Response) => {
         if (res.json().code)
           localStorage.setItem('validation_code', res.json().code);
@@ -70,7 +70,7 @@ export class ApiService {
   }
 
   getMainPageProjects() {
-    return this.http.get(environment.apiUrl + '/v1/land/projects/')
+    return this.http.get(environment.apiUrl + '/v1/main/projects/')
       .map((response: Response) => {
         var res = response.json();
         res.forEach(element => {
@@ -82,11 +82,14 @@ export class ApiService {
   }
 
   getProjectItems() {
-    return this.http.get(environment.apiUrl + '/v1/project/').map((response: Response) => response.json());
+    return this.http.get(environment.apiUrl + '/v1/project/id/').map((response: Response) => response.json());
+  }
+  getProjectItemsByUserId(userId: string) {
+    return this.http.get(environment.apiUrl + '/v1/project/id/').map((response: Response) => response.json());
   }
 
   getProjectById(id: number) {
-    return this.http.get(environment.apiUrl + '/v1/project/' + id);
+    return this.http.get(environment.apiUrl + '/v1/project/id/' + id);
   }
 
 
@@ -154,28 +157,28 @@ export class ApiService {
         "Data": "20.03.17",
         "Author": "Roman",
         "Addressee": "User1",
-        "Tags" : ["tag1", "tag2"],
+        "Tags": ["tag1", "tag2"],
         "Rating": "3"
 
       },
       {
-      "Number": "645",
-      "TaskName": "Name of Task",
-      "Data": "20.03.17",
-      "Author": "Konstantin",
-      "Addressee": "User2",
-      "Tags" :  ["tag1", "tag2"],
-      "Rating": "3"
+        "Number": "645",
+        "TaskName": "Name of Task",
+        "Data": "20.03.17",
+        "Author": "Konstantin",
+        "Addressee": "User2",
+        "Tags": ["tag1", "tag2"],
+        "Rating": "3"
       },
 
       {
-      "Number": "645",
-      "TaskName": "Name of Task",
-      "Data": "20.03.17",
-      "Author": "Sheldon",
-      "Addressee": "User3",
-      "Tags" :  ["some tag", "some tag 2"],
-      "Rating": "4"
+        "Number": "645",
+        "TaskName": "Name of Task",
+        "Data": "20.03.17",
+        "Author": "Sheldon",
+        "Addressee": "User3",
+        "Tags": ["some tag", "some tag 2"],
+        "Rating": "4"
       }
 
     ];
@@ -189,33 +192,33 @@ export class ApiService {
         "Data": "20.03.17",
         "Author": "Roman",
         "Addressee": "Me",
-        "Tags" : ["tag1", "tag2"],
+        "Tags": ["tag1", "tag2"],
         "Rating": "3"
 
       },
       {
-      "Number": "645",
-      "TaskName": "This is my task too",
-      "Data": "20.03.17",
-      "Author": "Konstantin",
-      "Addressee": "Me",
-      "Tags" :  ["tag1", "tag2"],
-      "Rating": "3"
+        "Number": "645",
+        "TaskName": "This is my task too",
+        "Data": "20.03.17",
+        "Author": "Konstantin",
+        "Addressee": "Me",
+        "Tags": ["tag1", "tag2"],
+        "Rating": "3"
       }
 
     ];
   }
 
   getNewsPage() {
-   return this.http.get(environment.apiUrl + '/v1/news/').map((response: Response) => response.json());
+    return this.http.get(environment.apiUrl + '/v1/news/').map((response: Response) => response.json());
   }
 
-  getNewsById(id_ : number) {
+  getNewsById(id_: number) {
     return this.http.get(environment.apiUrl + '/v1/news/' + id_)
       .map((response: Response) => response.json());
-     }
+  }
 
-    private jwt() {
+  private jwt() {
     // create authorization-page header with jwt token
     let currentUser = JSON.parse(localStorage.getItem('current_user'));
     if (currentUser && currentUser.token) {
@@ -223,5 +226,86 @@ export class ApiService {
       return new RequestOptions({ headers: headers });
     }
   }
+  postProject(project, token: string) {
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Accept', 'application/json')
+    headers.append('Bearer-token', token);
+    return this.http.post(environment.apiUrl + '/v1/project/id/', JSON.stringify(project), { headers: headers });
+  }
+  deleteProject(id: string, token: string) {
+    let headers = new Headers();
+    headers.append('Accept', 'application/json')
+    headers.append('Bearer-token', token);
+    return this.http.delete(environment.apiUrl + '/v1/project/id/' + id, { headers: headers });
+  }
+  enrollToProject(id: number, token: string) {//Отправить заявку на участие в проекте
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Accept', 'application/json');
+    headers.append('Bearer-token', token);
+    return this.http.post(environment.apiUrl + '/v1/project/enroll/' + id, JSON.stringify({}), { headers: headers });
+  }
+  unenrollToProject(id: number, token: string) {//Отменить заявку на участие в проекте
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Accept', 'application/json');
+    headers.append('Bearer-token', token);
+    return this.http.delete(environment.apiUrl + '/v1/project/enroll/' + id, { headers: headers });
+  }
+  getEnrolledUsersToProject(id: number) {//Получить список пользователей оставивших заявку на проект
+    return this.http.get(environment.apiUrl + '/v1/project/enroll/' + id);
+  }
 
+  getProjectUsers(id: number) {//Получить список пользователей, участвующих в проекте
+    return this.http.get(environment.apiUrl + '/v1/project/users/' + id);
+  }
+  getProjectMastersById(id: number) {//Получить список кураторов проекта
+    return this.http.get(environment.apiUrl + '/project/masters/' + id);
+  }
+  postProjectMaster(project_id: number, user_id: number, token: string) {//Назначить куратора проекта по ид проекта
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Accept', 'application/json');
+    headers.append('Bearer-token', token);
+    return this.http.post(environment.apiUrl + '/v1/project/masters/?user_id=' + user_id + '&project_id=' + project_id, {}, { headers: headers });
+  }
+  deleteProjectMaster(project_id: number, user_id: number, token: string) {//Удалить куратора проекта 
+    let headers = new Headers();
+    headers.append('Accept', 'application/json');
+    headers.append('Bearer-token', token);
+    return this.http.delete(environment.apiUrl + '/v1/project/masters/?user_id=' + user_id + '&project_id=' + project_id, { headers: headers });
+  }
+  postUserToProject(user_id: number, project_id: number, token: string) {//Добавить пользователя в проект
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Accept', 'application/json');
+    headers.append('Bearer-token', token);
+    return this.http.post(environment.apiUrl + '/v1/project/users/?user_id=' + user_id + '&project_id=' + project_id, {}, { headers: headers });
+  }
+  deleteProjectUser(project_id: number, user_id: number, token: string) {//Удалить пользователя проекта
+    let headers = new Headers();
+    headers.append('Accept', 'application/json');
+    headers.append('Bearer-token', token);
+    return this.http.delete(environment.apiUrl + '/v1/project/users/?user_id=' + user_id + '&project_id=' + project_id, { headers: headers });
+  }
+  getUsers() {
+    return this.http.get(environment.apiUrl + '/v1/user/id/').map((response: Response) => response.json());
+  }
+  getUserById(id: number) {
+    return this.http.get(environment.apiUrl + '/v1/user/id/' + id).map((response: Response) => response.json());
+  }
+  deleteUserById(id: number, token: string) {
+    var headers = new Headers();
+    headers.append('Accept', 'application/json');
+    headers.append('Bearer-token', token);
+    return this.http.delete(environment.apiUrl + '/v1/user/id/' + id, { headers: headers });
+  }
+  changeUserById(id: number, token: string, user) {
+    var headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Accept', 'application/json');
+    headers.append('Bearer-token', token);
+    return this.http.put(environment.apiUrl + '/v1/user/id/' + id, user, { headers: headers });
+  }
 }

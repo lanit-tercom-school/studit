@@ -47,7 +47,7 @@ h1, h2, h3, h4 {
   color: var(--primary-color);
 }
 
-nav, .footer {
+nav.navbar, .footer {
   background-color: var(--primary-color);
 }
 

@@ -24,6 +24,7 @@ func init() {
 func fastCheckErr(_ int64, err error) {
 	if err != nil {
 		beego.Critical(err.Error())
+		panic(err)
 	}
 }
 
@@ -37,7 +38,9 @@ func main() {
 		Id: 1,
 		Name: "Образовательный портал Studit",
 		Description: "Разработка образовательного портала для Lanit-Tercom School",
+		DateOfCreation: time.Now(),
 		Logo: "/files/1.jpg",
+		Tags: "studit, summerschool",
 	}
 	fastCheckErr(o.Insert(&project1))
 
@@ -45,7 +48,9 @@ func main() {
 		Id: 2,
 		Name: "Модный фрилансер",
 		Description: "Какие же стрелочки вокруг ноубука!",
+		DateOfCreation: time.Now(),
 		Logo: "/files/2.jpg",
+		Tags: "freelance",
 	}
 	fastCheckErr(o.Insert(&project2))
 
@@ -53,7 +58,9 @@ func main() {
 		Id: 3,
 		Name: "Оригинальное название",
 		Description: "Click-bait описание",
+		DateOfCreation: time.Now(),
 		Logo: "/files/3.jpg",
+		Tags: "creative",
 	}
 	fastCheckErr(o.Insert(&project3))
 
@@ -61,7 +68,9 @@ func main() {
 		Id: 4,
 		Name: "TFS Mobile",
 		Description: "Студенческий проект TFS Mobile",
+		DateOfCreation: time.Now(),
 		Logo: "/files/4.jpg",
+		Tags: "TFSMobile, summerschool",
 	}
 	fastCheckErr(o.Insert(&project4))
 
@@ -69,7 +78,9 @@ func main() {
 		Id: 5,
 		Name: "Еще один проект",
 		Description: "Описаниеописаниеописание",
+		DateOfCreation: time.Now(),
 		Logo: "/files/5.jpg",
+		Tags: "project",
 	}
 	fastCheckErr(o.Insert(&project5))
 
