@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { ProjectItem } from '../shared/project-list/project-item/project-item';
+import { ProjectItem } from './../../models/project-item';
 import { ApiService } from './../../services/api.service';
 
 @Component({

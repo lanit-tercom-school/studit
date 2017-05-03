@@ -70,10 +70,10 @@ export const routes: Routes = [
       component: ProjectTasksPageComponent,
     }]
   },
+  { path: 'home-teacher/projects/createproject', component: CreateProjectPageComponent },
   { path: 'registration', component: RegistrationPageComponent, canActivate: [AuthManager]},
   { path: 'registration/validate', component: ValidationPageComponent, canActivate: [AuthManager] },
   { path: 'author/:id', component: AuthorPublicPageComponent },
-  { path: 'author/:id/createproject', component: CreateProjectPageComponent },
   { path: 'author/:id/settings', component: UserSettingsPageComponent },
   { path: 'student/:id', component: StudentPublicPageComponent },
   { path: 'student/:id/settings', component: UserSettingsPageComponent },
