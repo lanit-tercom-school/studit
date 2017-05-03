@@ -1,4 +1,5 @@
 <div class="container">
+  <div *ngIf ="!isCreated">
   <h1 align="center">Создание проекта</h1>
   <hr>
   <div class ="row">
@@ -28,4 +29,8 @@
    </div>
 </form>
 </div>
+</div>
+<span *ngIf ="isCreated">
+  <h2 align="center">Проект успешно создан!</h2>
+</span>
 </div>

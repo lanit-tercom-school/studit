@@ -5,6 +5,7 @@ import { environment } from '../../environments/environment';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/observable/throw';
+import 'rxjs/add/operator/toPromise'; //
 
 @Injectable()
 export class ApiService {
@@ -226,12 +227,15 @@ export class ApiService {
       return new RequestOptions({ headers: headers });
     }
   }
-  postProject(project, token: string) {
+  postProject(project, token: string) : Promise<any>{
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
     headers.append('Accept', 'application/json')
     headers.append('Bearer-token', token);
-    return this.http.post(environment.apiUrl + '/v1/project/id/', JSON.stringify(project), { headers: headers });
+    return this.http.post(environment.apiUrl + '/v1/project/id/', JSON.stringify(project), { headers: headers })
+    .toPromise()
+    .then(res => res.json().data);
+
   }
   deleteProject(id: string, token: string) {
     let headers = new Headers();
@@ -270,7 +274,7 @@ export class ApiService {
     headers.append('Bearer-token', token);
     return this.http.post(environment.apiUrl + '/v1/project/masters/?user_id=' + user_id + '&project_id=' + project_id, {}, { headers: headers });
   }
-  deleteProjectMaster(project_id: number, user_id: number, token: string) {//Удалить куратора проекта 
+  deleteProjectMaster(project_id: number, user_id: number, token: string) {//Удалить куратора проекта
     let headers = new Headers();
     headers.append('Accept', 'application/json');
     headers.append('Bearer-token', token);
