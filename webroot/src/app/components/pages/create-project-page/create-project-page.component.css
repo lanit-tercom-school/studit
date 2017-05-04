@@ -1,9 +1,5 @@
-.container
+h1
 {
-  //  margin-bottom: 2rem auto;
-}
-
-h1{
   margin: 2rem auto;
 }
 
@@ -16,11 +12,9 @@ h1{
 
 #inputProjDescription
 {
-   max-width: 40%;
-   min-width: 40%;
+
    max-height: 8rem;
    min-height: 8rem;
-   text-align: left;
 }
 
 .btn-submit
@@ -29,9 +23,9 @@ h1{
   margin-bottom: 3rem;
 }
 
-.form-inline
+.form-line
 {
-  margin-bottom: 0.5rem;
+  margin-bottom: 1rem;
 }
 
 .block-form
@@ -39,8 +33,14 @@ h1{
   margin-top:  2rem;
   margin-bottom: 2.5rem;
 }
-.acc-label
-{
-  position: absolute;
-  left: 4.5rem;
+
+#create-message {
+   text-align: center;
+   width: 100%;
+   margin-top: 10%;
+   margin-bottom: 33%;
+}
+
+a{
+  font-size: 18px;
 }

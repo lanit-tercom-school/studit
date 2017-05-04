@@ -6,7 +6,7 @@ import 'rxjs/add/operator/toPromise';
 import { Observable } from 'rxjs';
 import { ProjectItem } from '../../../models/project-item';
 
-//import { Http, Response } from '@angular/http';
+import { Http, Response } from '@angular/http';
 
 @Component({
   selector: 'create-project-page',
@@ -24,10 +24,11 @@ export class CreateProjectPageComponent implements OnInit {
 
     makeProject(){
       this.api.postProject(this.createdProject, JSON.parse(localStorage.getItem('current_user')).token)
-      .then(() => {
+      .then(()  => {
       console.log('Project was added');
       this.isCreated = true;
       //this.router.navigate(['/home']);
-      });
+      })
+     .catch(error => console.log(error));
     }
 }
