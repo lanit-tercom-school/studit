@@ -52,6 +52,7 @@ func init() {
 	orm.RegisterModel(new(UserContact))
 }
 
+
 // AddUserContact insert a new UserContact into database and returns
 // last inserted Id on success.
 func AddUserContact(m *UserContact) (id int64, err error) {

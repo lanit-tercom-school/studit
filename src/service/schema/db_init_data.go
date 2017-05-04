@@ -329,7 +329,7 @@ func main() {
 		Id: 1,
 		UserId: &user1,
 		Contact: "a@a",
-		ContactType: "skype",
+		Type: "skype",
 	}
 	fastCheckErr(o.Insert(&user_contact1))
 
@@ -337,7 +337,7 @@ func main() {
 		Id: 2,
 		UserId: &user2,
 		Contact: "moder@moder.moder",
-		ContactType: "email",
+		Type: "email",
 	}
 	fastCheckErr(o.Insert(&user_contact2))
 
@@ -345,7 +345,7 @@ func main() {
 		Id: 3,
 		UserId: &user3,
 		Contact: "egorka2003@maaail.ru",
-		ContactType: "email",
+		Type: "email",
 	}
 	fastCheckErr(o.Insert(&user_contact3))
 
@@ -353,7 +353,7 @@ func main() {
 		Id: 4,
 		UserId: &user1,
 		Contact: "+7-123-456-78-90",
-		ContactType: "mobile phone",
+		Type: "mobile phone",
 	}
 	fastCheckErr(o.Insert(&user_contact4))
 
@@ -361,7 +361,7 @@ func main() {
 		Id: 5,
 		UserId: &user5,
 		Contact: "slayer17",
-		ContactType: "vk.com",
+		Type: "vk.com",
 	}
 	fastCheckErr(o.Insert(&user_contact5))
 
@@ -369,7 +369,7 @@ func main() {
 		Id: 6,
 		UserId: &user4,
 		Contact: "zagad0chnaya",
-		ContactType: "telegram",
+		Type: "telegram",
 	}
 	fastCheckErr(o.Insert(&user_contact6))
 
@@ -377,7 +377,7 @@ func main() {
 		Id: 7,
 		UserId: &user6,
 		Contact: "nekotyanmimimi",
-		ContactType: "viber",
+		Type: "viber",
 	}
 	fastCheckErr(o.Insert(&user_contact7))
 

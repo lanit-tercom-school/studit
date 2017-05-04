@@ -35,22 +35,22 @@ func (c *UserContactController) Post() {
 		cUser := models.User{ Id: c.CurrentUser.UserId, }
 		v := []models.UserContactInput{}
 		if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
-			ContId := []int64{}// Artem skazal aray
+			ContId := []string{}// Artem skazal aray
 			for _,element := range v {
 				if models.IsValidContactType(element.Type) {
 					in := models.ContactTranslate(&element)
 					in.UserId = &cUser
-					if id, err := models.AddUserContact(&in); err == nil {
+					if _, err := models.AddUserContact(&in); err == nil {
 						c.Ctx.Output.SetStatus(201)
-						ContId = append(ContId, id)
-						c.Data["json"] = ContId
+						ContId = append(ContId, element.Type+": "+element.Contact+" was added.")
 					} else {
-						c.Ctx.Output.SetStatus(400)
-						c.Data["json"] = err.Error() + "Fail at adding one of contacts"
-						break
+						ContId=append(ContId,  "Fail to add " +element.Type+": "+element.Contact)
 					}
+				} else {
+					ContId = append(ContId, "Fail to add "+element.Type+": "+element.Contact)
 				}
 			}
+			c.Data["json"] = ContId
 		} else {
 			c.Ctx.Output.SetStatus(400)
 			c.Data["json"] = err.Error()

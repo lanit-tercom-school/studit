@@ -1,6 +1,6 @@
 @echo off
 
-set postgres64=C:\Program Files\PostgreSQL\9.6\pg96\bin
+set postgres64=C:\Program Files\PostgreSQL\9.6\bin
 set postgres32=C:\Program Files (x86)\PostgreSQL\9.6\bin
 
 IF EXIST "%postgres64%" set path=%path%;%postgres64%
