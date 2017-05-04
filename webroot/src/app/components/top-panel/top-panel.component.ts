@@ -14,8 +14,8 @@ export class TopPanelComponent implements OnInit, DoCheck {
   private currentUser;
   url:string;
   constructor(private auth: AuthService, private router:Router) {
-   
-    
+
+
    }
 
   ngOnInit() {
@@ -24,7 +24,7 @@ export class TopPanelComponent implements OnInit, DoCheck {
   ngDoCheck() {
     this.currentUser = JSON.parse(localStorage.getItem('current_user'));
     this.url=this.router.routerState.snapshot.url;
-    
+
   }
 
   logout() {
