@@ -25,8 +25,8 @@ func (c *UserContactController) URLMapping() {
 // Post ...
 // @Title Post
 // @Description create UserContact
-// @Param	body		body 	[]models.UserContactInput	true		"body for UserContact content"
-// @Param   Bearer-token        header      string          true    "Access token, Permission Level should be 2"
+// @Param	body		body 	[]models.UserContactInput	true		"Тело запроса, должен быть массив, то что в примере в []"
+// @Param   Bearer-token        header      string          true    "Токен"
 // @Success 201 {int} models.UserContact
 // @Failure 403 body is empty
 // @router / [post]
@@ -37,7 +37,7 @@ func (c *UserContactController) Post() {
 		if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
 			ContId := []int64{}// Artem skazal aray
 			for _,element := range v {
-				if models.IsValidContactType(element.ContactType) {
+				if models.IsValidContactType(element.Type) {
 					in := models.ContactTranslate(&element)
 					in.UserId = &cUser
 					if id, err := models.AddUserContact(&in); err == nil {
@@ -67,8 +67,8 @@ func (c *UserContactController) GetOne() {}
 // GetAll ...
 // @Title Get One
 // @Description get UserContact
-// @Param	id		path 	string	true		"Contact id"
-// @Param   Bearer-token        header      string          true    "Access token, Permission Level should be 2"
+// @Param	id		path 	string	true		"АйДи пользователя, чьи контакты нужно получить"
+// @Param   Bearer-token        header      string          true    "Токен"
 // @Success 200 {object} models.UserContact
 // @Failure 403 Forbidden
 // @router /:id [get]
@@ -134,8 +134,8 @@ func (c *UserContactController) Put() {
 // Delete ...
 // @Title Delete
 // @Description delete the UserContact
-// @Param	id		path 	string	true		"Contact ID to DELETE
-// @Param   Bearer-token        header      string          true    "Access token, Permission Level should be 2"
+// @Param	id		path 	string	true		"АйДи контакта, который требуется удалить"
+// @Param   Bearer-token        header      string          true    "Токен"
 // @Success 200 {string} delete success!
 // @Failure 403 id is empty
 // @router /:id [delete]

@@ -13,19 +13,19 @@ import (
 type UserContact struct {
 	Id          int          `orm:"column(id);pk;auto" json:"id,omitempty"`
 	Contact     string       `orm:"column(contact)" json:"value"`
-	ContactType string `orm:"column(contact_type)" json:"contacttype"`
+	Type string `orm:"column(contact_type)" json:"type"`
 	UserId      *User        `orm:"column(user_id);rel(fk)" json:"-"`
 }
 
 type UserContactInput struct {
 	Contact     	string	`json:"value"`
-	ContactType 	string	`json:"contacttype"`
+	Type 	string	`json:"type"`
 }
 
 func  ContactTranslate(t* UserContactInput) UserContact{
 	return UserContact{
 		Contact:     t.Contact,
-		ContactType: t.ContactType,
+		Type: t.Type,
 	}
 }
 
