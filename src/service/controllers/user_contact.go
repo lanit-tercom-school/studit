@@ -177,7 +177,7 @@ func (c *UserContactController) Delete() {
 				}
 			}
 		} else {
-			beego.Debug("Delete user contacl `Atoi` error", err.Error())
+			beego.Debug("Delete user contact `Atoi` error", err.Error())
 			c.Ctx.Output.SetStatus(400)
 			c.Data["json"] = err.Error()
 		}
