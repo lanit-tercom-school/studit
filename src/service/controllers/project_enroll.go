@@ -35,6 +35,7 @@ func (c *UserEnrollOnProjectController) Post() {
 		beego.Debug(c.Ctx.Input.IP(), "Access denied for `Post` new application form")
 		c.Ctx.Output.SetStatus(403)
 		c.Data["json"] = "Forbidden"
+
 	} else {
 		// получить id проекта, на который пользователь хочет записаться
 		project_id, err := c.GetInt64(":id")
@@ -42,6 +43,7 @@ func (c *UserEnrollOnProjectController) Post() {
 			beego.Debug(c.Ctx.Input.IP(), "Not an int param. Should be int", err.Error())
 			c.Ctx.Output.SetStatus(400)
 			c.Data["json"] = err.Error()
+
 		} else {
 			// проект, на который записывается пользователь
 			project, err := models.GetProjectById(project_id)
@@ -49,6 +51,7 @@ func (c *UserEnrollOnProjectController) Post() {
 				beego.Debug("Wrong project id", err.Error())
 				c.Data["json"] = err.Error()
 				c.Ctx.Output.SetStatus(400)
+
 			} else {
 				// пользователь, который записывается
 				user, err := models.GetUserById(c.CurrentUser.UserId)
@@ -56,19 +59,16 @@ func (c *UserEnrollOnProjectController) Post() {
 					beego.Critical("Corrupted claims", err.Error())
 					c.Ctx.Output.SetStatus(500)
 					c.Data["json"] = err.Error()
+
 				} else {
 					// записать пользователя
 					beego.Trace("Good user_id")
-					v := models.ProjectEnroll{
-						UserId: user,
-						ProjectId: project,
-					}
-
-					_, err := models.AddApplicationFromUserForProject(&v)
+					_, err := models.AddApplicationFromUserForProject(user, project)
 					if err != nil {
 						beego.Critical("Corrupted claims", err.Error())
 						c.Ctx.Output.SetStatus(500)
 						c.Data["json"] = err.Error()
+
 					} else {
 						beego.Trace("New successfull sign up on project")
 						c.Ctx.Output.SetStatus(201)

@@ -40,7 +40,7 @@ import { TasksItemComponent } from "./pages/student-project-page/tasks/tasks-ite
 import { ProjNewsItemComponent } from "./pages/student-project-page/proj-news/proj-news-item/proj-news-item.component";
 
 
-import { AppRouterProvider, AppProjectRouterProvider } from './routes';
+import { AppRouterProvider } from './routes';
 import { AuthManager } from './../managers/authmanager';
 
 import { AuthorPublicPageComponent } from './pages/author-public-page/author-public-page.component';
@@ -53,7 +53,13 @@ import { ProjectTasksPageComponent } from './pages/project-tasks-page/project-ta
 import { ProjectTaskItemComponent } from './pages/project-tasks-page/project-task-list/project-task-item/project-task-item.component';
 import { ProjectTaskListComponent } from './pages/project-tasks-page/project-task-list/project-task-list.component';
 
+import { HomePageStudentComponent } from './pages/home-page-student/home-page-student.component'
+
 import { HomeProjectsViewComponent } from './pages/home-page/home-projects-view/home-projects-view.component';
+import { HomePageTeacherComponent } from './pages/home-page-teacher/home-page-teacher.component';
+
+
+import { ErrorPageComponent } from './pages/error-page/error-page.component';
 
 @NgModule({
   imports: [
@@ -61,9 +67,9 @@ import { HomeProjectsViewComponent } from './pages/home-page/home-projects-view/
     FormsModule,
     HttpModule,
     AppRouterProvider,
-    AppProjectRouterProvider,
   ],
   declarations: [
+    HomePageStudentComponent,
     AppComponent,
     MainComponent,
     TopPanelComponent,
@@ -98,6 +104,8 @@ import { HomeProjectsViewComponent } from './pages/home-page/home-projects-view/
     ProjectTaskItemComponent,
     ProjectTaskListComponent,
     HomeProjectsViewComponent,
+    ErrorPageComponent,
+    HomePageTeacherComponent,
   ],
   providers: [ApiService, AuthService, AuthManager],
   bootstrap: [AppComponent]

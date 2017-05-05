@@ -6,8 +6,10 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./enrolment.component.css']
 })
 export class EnrolmentComponent implements OnInit {
-
-  constructor() { }
+  private currentUser;
+  constructor() {
+  this.currentUser = JSON.parse(localStorage.getItem('current_user'));
+   }
 
   ngOnInit() {
   }

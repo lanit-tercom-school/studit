@@ -3,7 +3,9 @@ CREATE TABLE "project" (
 	"id" serial NOT NULL,
 	"name" varchar(100) NOT NULL,
 	"description" TEXT NOT NULL,
+	"date_of_creation" TIMESTAMP WITH TIME ZONE NOT NULL,
 	"logo" varchar(1000) NOT NULL,
+	"tags" varchar(1000) NOT NULL,
 	CONSTRAINT project_pk PRIMARY KEY ("id")
 ) WITH (
   OIDS=FALSE

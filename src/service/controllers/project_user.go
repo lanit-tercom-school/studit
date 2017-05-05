@@ -7,7 +7,6 @@ import (
 	"strconv"
 	"strings"
 	"github.com/astaxie/beego"
-	"time"
 )
 
 // ProjectUserController operations for ProjectUser
@@ -65,13 +64,8 @@ func (c *ProjectUserController) Post() {
 						c.Data["json"] = err.Error()
 					} else {
 						beego.Trace("Good user_id and project_id")
-						v := models.ProjectUser{
-							UserId: user,
-							ProjectId: project,
-							SignedDate: time.Now(),
-						}
 
-						err := models.AddUserToProject(&v)
+						err := models.AddUserToProject(user, project)
 						if err != nil {
 							beego.Debug(c.Ctx.Input.IP(), "`AddUserToProject` method error", err.Error())
 							c.Ctx.Output.SetStatus(500)
