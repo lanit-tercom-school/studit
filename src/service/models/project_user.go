@@ -26,6 +26,7 @@ func init() {
 	orm.RegisterModel(new(ProjectUser))
 }
 
+
 // AddProjectUser insert a new ProjectUser into database and returns
 // last inserted Id on success.
 func AddUserToProject(m *ProjectUser) (err error) {

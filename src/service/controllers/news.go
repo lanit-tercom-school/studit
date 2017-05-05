@@ -176,9 +176,9 @@ func (c *NewsController) Put() {
 			c.Ctx.Output.SetStatus(400)
 		}
 	} else {
-        beego.Debug("Access denied for `Put`")
+		beego.Debug("Access denied for `Put`")
 		c.Ctx.Output.SetStatus(400)
-        c.Data["json"] = "Forbidden"
+		c.Data["json"] = "Forbidden"
 	}
 	c.ServeJSON()
 }

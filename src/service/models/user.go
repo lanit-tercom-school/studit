@@ -21,11 +21,12 @@ type User struct {
 }
 
 type UserInfo struct {
-	Id              int                	`json:"id"`
-	Nickname        string                `json:"nickname"`
-	Description     string                `json:"description"`
-	Avatar          string                `json:"avatar"`
-	PermissionLevel int               	 `json:"permission_level"`
+	Id              int                     `json:"id"`
+	Nickname        string                	`json:"nickname"`
+	Description     string                	`json:"description"`
+	Avatar          string                	`json:"avatar"`
+	PermissionLevel int               	`json:"permission_level"`
+	Contact         []interface{}         	`json:"contacts"`
 }
 
 func (t *User) TableName() string {

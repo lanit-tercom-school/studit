@@ -66,20 +66,27 @@ func (c *UserController) GetOne() {
 			c.Data["json"] = err.Error()
 			c.Ctx.Output.SetStatus(400)
 		} else {
-			if c.CurrentUser.UserId == v.Id || c.CurrentUser.PermissionLevel==2 {
-				c.Data["json"] = models.UserInfo{
-					Id:          v.Id,
-					Nickname:    v.Nickname,
-					Description: v.Description,
-					Avatar:      v.Avatar,
-					PermissionLevel: v.PermissionLevel,
-				}
+			if contact, err := models.GetAllUserContacts(id); err != nil {
+				beego.Critical("GetOne user Contacts GetAllUserContact error ", err.Error())
+				c.Data["json"] = err.Error()
+				c.Ctx.Output.SetStatus(500)
 			} else {
-				c.Data["json"] = models.User{
-					Id:          v.Id,
-					Nickname:    v.Nickname,
-					Description: v.Description,
-					Avatar:      v.Avatar,
+				if c.CurrentUser.UserId == v.Id || c.CurrentUser.PermissionLevel == 2 {
+					c.Data["json"] = models.UserInfo{
+						Id:              v.Id,
+						Nickname:        v.Nickname,
+						Description:     v.Description,
+						Avatar:          v.Avatar,
+						PermissionLevel: v.PermissionLevel,
+						Contact: contact,
+					}
+				} else {
+					c.Data["json"] = models.User{
+						Id:          v.Id,
+						Nickname:    v.Nickname,
+						Description: v.Description,
+						Avatar:      v.Avatar,
+					}
 				}
 			}
 		}
@@ -191,10 +198,12 @@ func (c *UserController) Put() {
 				c.Ctx.Output.SetStatus(400)
 			}
 		} else {
+			beego.Debug("Access denied for user `Put`")
 			c.Ctx.Output.SetStatus(403)
 			c.Data["json"] = "Forbidden"
 		}
 	} else {
+		beego.Debug("Access denied for user `Put`")
 		c.Ctx.Output.SetStatus(401)
 		c.Data["json"] = "Unauthorized"
 	}

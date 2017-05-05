@@ -6,6 +6,7 @@ import (
 
 	//"github.com/astaxie/beego"
 	"encoding/json"
+	"github.com/astaxie/beego"
 )
 
 // Доступ к контактам пользователей
@@ -51,11 +52,14 @@ func (c *UserContactController) Post() {
 				}
 			}
 			c.Data["json"] = ContId
+			beego.Trace("Post user contact OK")
 		} else {
+			beego.Debug("Unmarshal error for user contact `Post`")
 			c.Ctx.Output.SetStatus(400)
 			c.Data["json"] = err.Error()
 		}
 	} else {
+		beego.Debug("Access denied for user contact `Post`")
 		c.Ctx.Output.SetStatus(401)
 		c.Data["json"] = "Unauthorized"
 	}
@@ -77,6 +81,7 @@ func (c *UserContactController) GetAll() {
 		idStr := c.Ctx.Input.Param(":id")
 		id, err := strconv.Atoi(idStr)
 		if err != nil {
+			beego.Debug("GetAll user contacl `Atoi` error", err.Error())
 			c.Ctx.Output.SetStatus(400)
 			c.Data["json"] = err.Error()
 		} else {
@@ -85,22 +90,27 @@ func (c *UserContactController) GetAll() {
 				if c.CurrentUser.UserId == id || c.CurrentUser.PermissionLevel == 2 {
 					v, err := models.GetAllUserContacts(id)
 					if err != nil {
+						beego.Debug("Error in GetAllUserContacts in user contact `GetAll`")
 						c.Ctx.Output.SetStatus(400)
 						c.Data["json"] = err.Error()
 					} else {
+						beego.Trace("GetAll user contact OK")
 						c.Ctx.Output.SetStatus(200)
 						c.Data["json"] = v
 					}
 				} else {
+					beego.Debug("Access denied for user contact `GetAll`")
 					c.Ctx.Output.SetStatus(403)
 					c.Data["json"] = "Forbidden"
 				}
 			} else {
+				beego.Debug("User does not exist user contact `GetAll`")
 				c.Ctx.Output.SetStatus(400)
 				c.Data["json"] = "User Not Found"
 			}
 		}
 	} else {
+		beego.Debug("Access denied for user contact `GetAll`")
 		c.Ctx.Output.SetStatus(401)
 		c.Data["json"] = "Unauthorized"
 	}
@@ -146,27 +156,33 @@ func (c *UserContactController) Delete() {
 		if err == nil {
 			v, err := models.GetUserContactById(id)
 			if err != nil {
+				beego.Debug("Delet user contact `GetUserNyId` error")
 				c.Ctx.Output.SetStatus(400)
 				c.Data["json"] = err.Error()
 			} else {
 				if v.UserId.Id == c.CurrentUser.UserId {
 					if err := models.DeleteUserContact(v.Id); err == nil {
+						beego.Trace("Delete user contact OK")
 						c.Ctx.Output.SetStatus(200)
 						c.Data["json"] = "OK"
 					} else {
+						beego.Debug("Delete user contact error", err.Error())
 						c.Ctx.Output.SetStatus(400)
 						c.Data["json"] = err.Error()
 					}
 				} else {
+					beego.Debug("Access denied for user contact `Delete`")
 					c.Ctx.Output.SetStatus(403)
 					c.Data["json"] = "Forbidden"
 				}
 			}
 		} else {
+			beego.Debug("Delete user contacl `Atoi` error", err.Error())
 			c.Ctx.Output.SetStatus(400)
 			c.Data["json"] = err.Error()
 		}
 	} else {
+		beego.Debug("Unathorized user in  user contact `Delete`")
 		c.Ctx.Output.SetStatus(401)
 		c.Data["json"] = "Unauthorized"
 	}
