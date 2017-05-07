@@ -16,37 +16,11 @@ type UserController struct {
 
 // URLMapping ...
 func (c *UserController) URLMapping() {
-	//c.Mapping("Post", c.Post)
 	c.Mapping("GetOne", c.GetOne)
 	c.Mapping("GetAll", c.GetAll)
 	c.Mapping("Put", c.Put)
 	c.Mapping("Delete", c.Delete)
 }
-/*
-// Post ...
-// @Title Post
-// @Description create User
-// @Param	body		body 	models.User	true		"body for User content"
-// @Param	token		body	string			false		"admin/moder token"
-// @Success 201 {int} models.User
-// @Failure 403 body is empty
-// @router / [post]
-func (c *UserController) Post() {
-	if c.Ctx.Output.IsOk() {
-		var v models.User
-		if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
-			if _, err := models.AddUser(&v); err == nil {
-				c.Ctx.Output.SetStatus(201)
-				c.Data["json"] = v
-			} else {
-				c.Data["json"] = err.Error()
-			}
-		} else {
-			c.Data["json"] = err.Error()
-		}
-	}
-	c.ServeJSON()
-}*/
 
 // GetOne ...
 // @Title Get One
@@ -63,7 +37,7 @@ func (c *UserController) GetOne() {
 		if err != nil {
 			beego.Debug("GetOne user id not found", err.Error())
 			c.Data["json"] = err.Error()
-			c.Ctx.Output.SetStatus(400)
+			c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
 		} else {
 			c.Data["json"] = models.User{
 				Id: v.Id,
@@ -74,7 +48,7 @@ func (c *UserController) GetOne() {
 		}
 	} else {
 		beego.Debug("GetOne user `Atoi` error", err.Error())
-		c.Ctx.Output.SetStatus(400)
+		c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
 		c.Data["json"] = err.Error()
 	}
 	c.ServeJSON()
@@ -137,10 +111,9 @@ func (c *UserController) GetAll() {
 	l, err := models.GetAllUser(query, fields, sortby, order, offset, limit)
 	if err != nil {
 		c.Data["json"] = err.Error()
-		c.Ctx.Output.SetStatus(400)
+		c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
 	} else {
 		c.Data["json"] = l
-		c.Ctx.Output.SetStatus(200)
 	}
 	c.ServeJSON()
 }
@@ -160,7 +133,7 @@ func (c *UserController) Put() {
 		id, err := strconv.Atoi(idStr)
 		if err != nil {
 			beego.Debug("Put user `Atoi` error", err.Error())
-			c.Ctx.Output.SetStatus(400)
+			c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
 			c.Data["json"] = err.Error()
 		} else if c.CurrentUser.UserId == id {
 			v := models.User{Id: id}
@@ -168,21 +141,21 @@ func (c *UserController) Put() {
 				v.Id = id
 				if err := models.UpdateUserById(&v); err == nil {
 					beego.Trace("Put user OK")
-					c.Data["json"] = "OK"
+					c.Data["json"] = HTTP_OK_STR
 				} else {
 					beego.Debug("Put user `UpdateUserById` error", err.Error())
 					c.Data["json"] = err.Error()
-					c.Ctx.Output.SetStatus(400)
+					c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
 				}
 			} else {
 				beego.Debug("Put user `Unmarshal` error", err.Error())
 				c.Data["json"] = err.Error()
-				c.Ctx.Output.SetStatus(400)
+				c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
 			}
 		}
 	} else {
-		c.Ctx.Output.SetStatus(401)
-		c.Data["json"] = "Unauthorized"
+		c.Ctx.Output.SetStatus(HTTP_FORBIDDEN)
+		c.Data["json"] = HTTP_FORBIDDEN_STR
 	}
 	c.ServeJSON()
 }

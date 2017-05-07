@@ -42,38 +42,38 @@ func (c *ProjectController) Post() {
 				user, err := models.GetUserById(c.CurrentUser.UserId)
 				if err != nil {
 					beego.Critical(c.Ctx.Input.IP(), "Claims corrupted", err.Error())
-					c.Ctx.Output.SetStatus(500)
+					c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
 					c.Data["json"] = err.Error()
 
 				} else {
 					err := models.AddMasterToProject(user, &v)
 					if err != nil {
 						beego.Critical(c.Ctx.Input.IP(), "Can't add creator to project", err.Error())
-						c.Ctx.Output.SetStatus(500)
+						c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
 						c.Data["json"] = err.Error()
 
 					} else {
 						beego.Trace("OK")
-						c.Ctx.Output.SetStatus(201)
+						c.Ctx.Output.SetStatus(HTTP_CREATED)
 						c.Data["json"] = id
 					}
 				}
 			} else {
 				beego.Debug("Post project `AddProject` error", err.Error())
 				c.Data["json"] = err.Error()
-				c.Ctx.Output.SetStatus(500)
+				c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
 
 			}
 		} else {
 			beego.Debug("Post project `Unmarshal` error", err.Error())
 			c.Data["json"] = err.Error()
-			c.Ctx.Output.SetStatus(400)
+			c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
 
 		}
 	} else {
 		beego.Debug("Access denied for `Post`")
-		c.Ctx.Output.SetStatus(400)
-		c.Data["json"] = "Forbbiden"
+		c.Ctx.Output.SetStatus(HTTP_FORBIDDEN)
+		c.Data["json"] = HTTP_FORBIDDEN_STR
 
 	}
 	c.ServeJSON()
@@ -92,13 +92,13 @@ func (c *ProjectController) GetOne() {
 	id, err := strconv.Atoi(idStr)
 	if err != nil {
 		beego.Debug("GetOne `Atoi` error", err.Error())
-		c.Ctx.Output.SetStatus(400)
+		c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
 		c.Data["json"] = err.Error() // TODO: change to "Wrong project id"
 	} else {
 		v, err := models.GetProjectById(int64(id))
 		if err != nil {
 			beego.Debug("GetOne `GetProjectById` error", err.Error())
-			c.Ctx.Output.SetStatus(400)
+			c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
 			c.Data["json"] = err.Error()
 		} else {
 			beego.Trace("GetOne OK")
@@ -176,7 +176,7 @@ func (c *ProjectController) GetAll() {
 	l, err := models.GetAllProject(query, fields, sortBy, order, offset, limit, tag)
 	if err != nil {
 		beego.Debug(c.Ctx.Input.IP(), "News GetAll `GetAllProject` error", err.Error())
-		c.Ctx.Output.SetStatus(400)
+		c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
 		c.Data["json"] = err.Error()
 	} else {
 		c.Data["json"] = l
@@ -200,28 +200,28 @@ func (c *ProjectController) Put() {
 		id, err := strconv.Atoi(idStr)
 		if err != nil {
 			beego.Debug("Put `Atoi` error", err.Error())
-			c.Ctx.Output.SetStatus(400)
+			c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
 			c.Data["json"] = err.Error()
 		}
 		v := models.ProjectJson{Id: int64(id)}
 		if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
 			if err := models.UpdateProjectById(&v); err == nil {
 				beego.Trace("Put project OK")
-				c.Data["json"] = "OK"
+				c.Data["json"] = HTTP_OK_STR
 			} else {
 				beego.Debug("Put news `UpdateProjectById` error", err.Error())
 				c.Data["json"] = err.Error()
-				c.Ctx.Output.SetStatus(400)
+				c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
 			}
 		} else {
 			beego.Debug("Put project `Unmarshal` error", err.Error())
 			c.Data["json"] = err.Error()
-			c.Ctx.Output.SetStatus(400)
+			c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
 		}
 	} else {
 		beego.Debug("Access denied for `Put`")
-		c.Data["json"] = "You can't do it"
-		c.Ctx.Output.SetStatus(400)
+		c.Data["json"] = HTTP_FORBIDDEN_STR
+		c.Ctx.Output.SetStatus(HTTP_FORBIDDEN)
 	}
 	c.ServeJSON()
 }
@@ -242,7 +242,7 @@ func (c *ProjectController) Delete() {
 		id, err := strconv.Atoi(idStr)
 		if err != nil {
 			beego.Debug("Delete 'Atoi' error", err.Error())
-			c.Ctx.Output.SetStatus(400)
+			c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
 			c.Data["json"] = err.Error()
 		}
 		if err := models.DeleteProject(int64(id)); err == nil {
@@ -251,7 +251,7 @@ func (c *ProjectController) Delete() {
 		} else {
 			beego.Critical(c.Ctx.Input.IP(), "'DeleteProject' error", err.Error())
 			c.Data["json"] = err.Error()
-			c.Ctx.Output.SetStatus(500)
+			c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
 		}
 	} else {
 		beego.Debug("Access denied for `Delete`")
