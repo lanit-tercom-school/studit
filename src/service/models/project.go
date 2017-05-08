@@ -17,6 +17,7 @@ type Project struct {
 	DateOfCreation time.Time   `orm:"column(date_of_creation);type(datetime)"`
 	Logo        string `orm:"column(logo)"`
 	Tags        string `orm:"column(tags)"`
+	Status 	    string `orm:"column(status)"`
 }
 
 // Модель для общения с клиентами
@@ -27,6 +28,7 @@ type ProjectJson struct {
 	DateOfCreation  time.Time   `json:"created"`
 	Logo            string      `json:"logo"`
 	Tags            []string    `json:"tags"`
+	Status          string      `json:"status"`
 }
 
 // Обязательный превод от одной модели в другую
@@ -38,6 +40,7 @@ func (t *Project) translate()  ProjectJson{
 		DateOfCreation: t.DateOfCreation,
 		Logo: t.Logo,
 		Tags: strings.Split(t.Tags, ","),
+		Status: t.Status,
 	}
 }
 
@@ -49,6 +52,7 @@ func (t *ProjectJson) translate()  Project{
 		DateOfCreation: t.DateOfCreation,
 		Logo: t.Logo,
 		Tags: strings.Join(t.Tags, ","),
+		Status: t.Status,
 	}
 }
 
@@ -85,10 +89,10 @@ func GetProjectById(id int64) (*ProjectJson, error) {
 	}
 }
 
-// GetAllProject retrieves all Project matches certain condition. Returns empty list if
+// GetAllProjects retrieves all Project matches certain condition. Returns empty list if
 // no records exist
-func GetAllProject(query map[string]string, fields []string, sortBy []string, order []string,
-	offset int64, limit int64, tag string) (ml []interface{}, err error) {
+func GetAllProjects(query map[string]string, fields []string, sortBy []string, order []string,
+	offset int64, limit int64, tag string, user int64, master int64, status string) (ml []ProjectJson, err error) {
 	o := orm.NewOrm()
 	qs := o.QueryTable(new(Project))
 	// query k=v
@@ -137,24 +141,83 @@ func GetAllProject(query map[string]string, fields []string, sortBy []string, or
 	}
 
 	var l []Project
+	//delete next line
 	qs = qs.OrderBy(sortFields...)
 	if _, err = qs.Limit(limit, offset).All(&l); err == nil {
-		if tag == "" {
-			for _, v := range l {
-				ml = append(ml, v.translate())
-			}
-			return ml, nil
-		} else {
-			for _, v := range l {
-				r := v.translate()
-				if TagInArrayOfStrings(tag, r.Tags) {
-					ml = append(ml, r)
-				}
-			}
-			return ml, nil
+		for _, v := range l {
+			ml = append(ml, v.translate())
 		}
+		if tag != "" {
+			ml = FilterByTag(ml, tag)
+		}
+		if user != 0 {
+			ml = FilterByUser(ml, user)
+		}
+		if master != 0 {
+			ml = FilterByMaster(ml, master)
+		}
+		if status != "" {
+			ml = FilterByStatus(ml, status)
+		}
+		return ml, nil
 	}
 	return nil, err
+}
+
+func FilterByTag(arr []ProjectJson, tag string)(ml []ProjectJson) {
+	for _, v := range arr {
+		if TagInArrayOfStrings(tag, v.Tags) {
+			ml = append(ml, v)
+		}
+	}
+	return ml
+}
+
+func FilterByStatus(arr []ProjectJson, status string)(ml []ProjectJson) {
+	for _, v := range arr {
+		if v.Status == status {
+			ml = append(ml, v)
+		}
+	}
+	return ml
+}
+
+func FilterByUser(arr []ProjectJson, user int64)(ml []ProjectJson) {
+	o := orm.NewOrm()
+	qs := o.QueryTable(new(ProjectUser))
+	var l []ProjectUser
+	qs.All(&l)
+	set := make(map[int64]bool)
+	for _, v := range l {
+		if(int(user) == (v.UserId).Id){
+			set[(v.ProjectId).Id] = true
+		}
+	}
+	for _, v := range arr {
+		if (set[v.Id]) {
+			ml = append(ml, v)
+		}
+	}
+	return ml
+}
+
+func FilterByMaster(arr []ProjectJson, master int64)(ml []ProjectJson) {
+	o := orm.NewOrm()
+	qs := o.QueryTable(new(ProjectMaster))
+	var l []ProjectMaster
+	qs.All(&l)
+	set := make(map[int64]bool)
+	for _, v := range l {
+		if(int(master) == (v.MasterId).Id){
+			set[(v.ProjectId).Id] = true
+		}
+	}
+	for _, v := range arr {
+		if (set[v.Id]) {
+			ml = append(ml, v)
+		}
+	}
+	return ml
 }
 
 // UpdateProject updates Project by Id and returns error if
@@ -188,9 +251,9 @@ func DeleteProject(id int64) (err error) {
 }
 
 // Return 3 Projects for landing page. Returns empty list if no Projects exists
-// This is overloaded method for GetAllProject with parameters
+// This is overloaded method for GetAllProjects with parameters
 // ([], [], [], [], 0, 3)
-func GetLandingProjects() (ml []interface{}, err error) {
+func GetLandingProjects() (ml []ProjectJson, err error) {
 	var query = make(map[string]string)
-	return GetAllProject(query, []string{}, []string{}, []string{}, 0, 3, "")
+	return GetAllProjects(query, []string{}, []string{}, []string{}, 0, 3, "", 0, 0, "")
 }

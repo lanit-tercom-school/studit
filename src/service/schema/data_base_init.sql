@@ -1,3 +1,6 @@
+
+CREATE TYPE state AS ENUM ('завершен', 'еще не начат');
+
 /*Проект*/
 CREATE TABLE "project" (
 	"id" serial NOT NULL,
@@ -6,6 +9,7 @@ CREATE TABLE "project" (
 	"date_of_creation" TIMESTAMP WITH TIME ZONE NOT NULL,
 	"logo" varchar(1000) NOT NULL,
 	"tags" varchar(1000) NOT NULL,
+	"status" state NOT NULL,
 	CONSTRAINT project_pk PRIMARY KEY ("id")
 ) WITH (
   OIDS=FALSE
