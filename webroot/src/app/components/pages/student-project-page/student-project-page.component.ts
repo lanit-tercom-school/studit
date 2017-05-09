@@ -1,5 +1,6 @@
 import { Component, OnInit, OnChanges, DoCheck } from '@angular/core';
 import { ApiService } from './../../../services/api.service';
+import { DataService } from './../../../services/data.service';
 import { MaterialsItem } from './materials/materials-item/materials-item';
 import { ActivatedRoute, Params } from '@angular/router';
 import { ProjectItem } from './../../shared/project-list/project-item/project-item';
@@ -16,42 +17,28 @@ import { Http, Headers, RequestOptions, Response } from '@angular/http';
 export class StudentProjectPageComponent implements OnInit, DoCheck {
 
   private project;
-  private projectId: number;
+  private projectId;
   private tasks = [];
   private subscribedUsers = [];
   private authorized: boolean;
   private enrollButtonStatus: number;//0 - enrolling,1 - you are in project, 2 - unenrolling
-  constructor(private apiService: ApiService,
-    private route: ActivatedRoute, private http: Http) { }
+  constructor(private apiService: ApiService, private route: ActivatedRoute, private http: Http, private data: DataService) { }
 
   ngOnInit() {
-    this.enrollButtonStatus = 0;
+    this.enrollButtonStatus = 3;
     this.route.params
       .subscribe(params => {
         this.projectId = params['id'];
-        this.apiService.getProjectUsers(params['id']).subscribe(res => {
-          this.subscribedUsers = res.json();
-          if (this.subscribedUsers != null) {
-            for (let a of this.subscribedUsers) {
-              if (a === JSON.parse(localStorage.getItem('current_user')).id) {
-                this.enrollButtonStatus = 1;
-                break;
-              }
-            }
-          }
-        });
-        this.apiService.getEnrolledUsersToProject(params['id']).subscribe(res => {
-          this.subscribedUsers = res.json();
-          if (this.subscribedUsers != null) {
-            for (let a of this.subscribedUsers) {
-              if (a === JSON.parse(localStorage.getItem('current_user')).id) {
-                this.enrollButtonStatus = 2;
-                break;
-              }
-            }
-          }
-        });
         this.project = this.apiService.getProjectById(+params['id']).subscribe(res => this.project = res.json());
+        if (this.data.getProjectsOfUser().indexOf(+this.projectId) !== -1) {
+          this.enrollButtonStatus = 1;
+        }
+        else if (this.data.getEnrollingProjectsOfUser().indexOf(+this.projectId) !== -1) {
+          this.enrollButtonStatus = 2;
+        }
+        else {
+          this.enrollButtonStatus = 0;
+        }
       });
 
     this.getTaskItems();
@@ -82,9 +69,11 @@ export class StudentProjectPageComponent implements OnInit, DoCheck {
   enroll() {
     this.apiService.enrollToProject(this.projectId, JSON.parse(localStorage.getItem('current_user')).token).subscribe(res => { });
     this.enrollButtonStatus = 2;
+    this.data.loadEnrollingAndUserProjects();
   }
   unenroll() {
     this.apiService.unenrollToProject(this.projectId, JSON.parse(localStorage.getItem('current_user')).token).subscribe(res => { });
     this.enrollButtonStatus = 0;
+    this.data.loadEnrollingAndUserProjects();
   }
 }

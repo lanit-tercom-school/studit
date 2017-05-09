@@ -104,14 +104,14 @@ func (c *AuthController) Login() {
 	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err != nil {
 		beego.Debug(c.Ctx.Input.IP(), "Login error (403):", err.Error())
 		c.Data["json"] = err.Error() // TODO: change to "Wrong request"
-		c.Ctx.Output.SetStatus(403)
+		c.Ctx.Output.SetStatus(HTTP_FORBIDDEN)
 	} else {
 		beego.Trace(v.Login, "Try to login")
 		user, err := auth.TryToLogin(v.Login, v.Password)
 		if err != nil {
 			beego.Debug("Login error (403):", err.Error())
 			c.Data["json"] = err.Error()
-			c.Ctx.Output.SetStatus(403)
+			c.Ctx.Output.SetStatus(HTTP_FORBIDDEN)
 		} else {
 			beego.Trace(user.Login, "Success login")
 			// success, register new session
@@ -125,7 +125,7 @@ func (c *AuthController) Login() {
 			if err != nil {
 				beego.Debug("Encode error (500):", err.Error())
 				c.Data["json"] = err.Error()
-				c.Ctx.Output.SetStatus(500)
+				c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
 			}
 
 			sessionResponse := auth.UserAndToken{
@@ -159,7 +159,7 @@ func (c *RegistrationController) Register() {
 	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &temp_u); err != nil {
 		beego.Debug("Can't Unmarshal:", err.Error())
 		c.Data["json"] = err.Error() //TODO: change to "Invalid Form"
-		c.Ctx.Output.SetStatus(400)
+		c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
 	} else { // TODO:
 		u := models.User{
 			Login: temp_u.Login,
@@ -173,7 +173,7 @@ func (c *RegistrationController) Register() {
 			beego.Debug("password:", u.Password)
 			beego.Debug("nickname:", u.Nickname)
 			c.Data["json"] = "Wrong Login/Password/Nickname"
-			c.Ctx.Output.SetStatus(400)
+			c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
 		} else {
 			beego.Trace("Valid combo login & password & nickname")
 
@@ -183,7 +183,7 @@ func (c *RegistrationController) Register() {
 			if err != nil {
 				beego.Debug("Register error:" + err.Error())
 				c.Data["json"] = err.Error()
-				c.Ctx.Output.SetStatus(500)
+				c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
 			} else {
 				// TODO: sent email with `pass`
 				c.Data["json"] = struct {

@@ -33,46 +33,46 @@ func (c *UserEnrollOnProjectController) URLMapping() {
 func (c *UserEnrollOnProjectController) Post() {
 	if c.CurrentUser.PermissionLevel == -1 {
 		beego.Debug(c.Ctx.Input.IP(), "Access denied for `Post` new application form")
-		c.Ctx.Output.SetStatus(403)
-		c.Data["json"] = "Forbidden"
+		c.Ctx.Output.SetStatus(HTTP_FORBIDDEN)
+		c.Data["json"] = HTTP_FORBIDDEN_STR
+
 	} else {
 		// получить id проекта, на который пользователь хочет записаться
 		project_id, err := c.GetInt64(":id")
 		if err != nil {
 			beego.Debug(c.Ctx.Input.IP(), "Not an int param. Should be int", err.Error())
-			c.Ctx.Output.SetStatus(400)
+			c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
 			c.Data["json"] = err.Error()
+
 		} else {
 			// проект, на который записывается пользователь
 			project, err := models.GetProjectById(project_id)
 			if err != nil {
 				beego.Debug("Wrong project id", err.Error())
 				c.Data["json"] = err.Error()
-				c.Ctx.Output.SetStatus(400)
+				c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
+
 			} else {
 				// пользователь, который записывается
 				user, err := models.GetUserById(c.CurrentUser.UserId)
 				if err != nil {
 					beego.Critical("Corrupted claims", err.Error())
-					c.Ctx.Output.SetStatus(500)
+					c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
 					c.Data["json"] = err.Error()
+
 				} else {
 					// записать пользователя
 					beego.Trace("Good user_id")
-					v := models.ProjectEnroll{
-						UserId: user,
-						ProjectId: project,
-					}
-
-					_, err := models.AddApplicationFromUserForProject(&v)
+					_, err := models.AddApplicationFromUserForProject(user, project)
 					if err != nil {
 						beego.Critical("Corrupted claims", err.Error())
-						c.Ctx.Output.SetStatus(500)
+						c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
 						c.Data["json"] = err.Error()
+
 					} else {
 						beego.Trace("New successfull sign up on project")
-						c.Ctx.Output.SetStatus(201)
-						c.Data["json"] = "Created"
+						c.Ctx.Output.SetStatus(HTTP_CREATED)
+						c.Data["json"] = HTTP_CREATED_STR
 					}
 				}
 			}
@@ -91,12 +91,17 @@ func (c *UserEnrollOnProjectController) Post() {
 func (c *UserEnrollOnProjectController) GetOne() {
 	beego.Trace("New GET for singed up users")
 	idStr := c.Ctx.Input.Param(":id")
-	id, _ := strconv.Atoi(idStr)
+	id, err := strconv.Atoi(idStr)
+	if err != nil {
+		beego.Debug("Can't parse", idStr, err.Error())
+		c.Data["json"] = err.Error()
+		c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
+	}
 	v, err := models.GetAllSignedUpOnProject(id)
 	if err != nil {
 		beego.Debug("GET list of signed up users error", err.Error())
 		c.Data["json"] = err.Error()
-		c.Ctx.Output.SetStatus(500)
+		c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
 	} else {
 		beego.Trace("Success GET")
 		c.Data["json"] = v
@@ -114,6 +119,7 @@ func (c *UserEnrollOnProjectController) GetAll() {
 	l, err := models.GetAllProjectAuthor(make(map[string]string), []string{}, []string{}, []string{}, 0, 100)
 	if err != nil {
 		c.Data["json"] = err.Error()
+		c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
 	} else {
 		c.Data["json"] = l
 	}
@@ -136,12 +142,14 @@ func (c *UserEnrollOnProjectController) Put() {
 	v := models.ProjectEnroll{Id: id}
 	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
 		if err := models.UpdateProjectAuthorById(&v); err == nil {
-			c.Data["json"] = "OK"
+			c.Data["json"] = HTTP_OK_STR
 		} else {
 			c.Data["json"] = err.Error()
+			c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
 		}
 	} else {
 		c.Data["json"] = err.Error()
+		c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
 	}
 	c.ServeJSON()
 }
@@ -158,21 +166,24 @@ func (c *UserEnrollOnProjectController) Delete() {
 	beego.Trace("User want to sign out from project")
 	if c.CurrentUser.PermissionLevel == -1 {
 		beego.Debug(c.Ctx.Input.IP(), "Access denied for `Delete` project_sign_up")
-		c.Ctx.Output.SetStatus(403)
-		c.Data["json"] = "Forbidden"
+		c.Ctx.Output.SetStatus(HTTP_FORBIDDEN)
+		c.Data["json"] = HTTP_FORBIDDEN_STR
+
 	} else {
 		idStr := c.Ctx.Input.Param(":id")
 		id, err := strconv.Atoi(idStr)
 		if err != nil {
 			beego.Debug("Can't parse", err.Error())
-			c.Ctx.Output.SetStatus(400)
+			c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
 			c.Data["json"] = err.Error()
+
 		} else if err := models.DeleteProjectSignUp(c.CurrentUser.UserId, id); err == nil {
 			beego.Trace("Success sign out from project")
-			c.Data["json"] = "OK"
+			c.Data["json"] = HTTP_OK_STR
+
 		} else {
 			beego.Debug("Can't delete from ProjectSingUp", err.Error())
-			c.Ctx.Output.SetStatus(400)
+			c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
 			c.Data["json"] = err.Error()
 		}
 	}
