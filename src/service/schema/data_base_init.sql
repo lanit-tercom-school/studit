@@ -1,5 +1,5 @@
 
-CREATE TYPE state AS ENUM ('завершен', 'еще не начат');
+CREATE TYPE state AS ENUM ('еще не начат', 'начат', 'завершен');
 
 /*Проект*/
 CREATE TABLE "project" (

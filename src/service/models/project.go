@@ -91,7 +91,7 @@ func GetProjectById(id int64) (*ProjectJson, error) {
 
 // GetAllProjects retrieves all Project matches certain condition. Returns empty list if
 // no records exist
-func GetAllProjects(query map[string]string, fields []string, sortBy []string, order []string,
+func GetAllProjects(query map[string]string, sortBy []string, order []string,
 	offset int64, limit int64, tag string, user int64, master int64, status string) (ml []ProjectJson, err error) {
 	o := orm.NewOrm()
 	qs := o.QueryTable(new(Project))
@@ -141,83 +141,92 @@ func GetAllProjects(query map[string]string, fields []string, sortBy []string, o
 	}
 
 	var l []Project
-	//delete next line
 	qs = qs.OrderBy(sortFields...)
 	if _, err = qs.Limit(limit, offset).All(&l); err == nil {
 		for _, v := range l {
 			ml = append(ml, v.translate())
 		}
 		if tag != "" {
-			ml = FilterByTag(ml, tag)
+			FilterByTag(&ml, tag)
 		}
 		if user != 0 {
-			ml = FilterByUser(ml, user)
+			FilterByUser(&ml, user)
 		}
 		if master != 0 {
-			ml = FilterByMaster(ml, master)
+			FilterByMaster(&ml, master)
 		}
 		if status != "" {
-			ml = FilterByStatus(ml, status)
+			FilterByStatus(&ml, status)
 		}
 		return ml, nil
 	}
 	return nil, err
 }
 
-func FilterByTag(arr []ProjectJson, tag string)(ml []ProjectJson) {
-	for _, v := range arr {
-		if TagInArrayOfStrings(tag, v.Tags) {
-			ml = append(ml, v)
+func FilterByTag(ml *[]ProjectJson, tag string){
+	for i := 0; i < len(*ml);{
+		if( !TagInArrayOfStrings(tag, (*ml)[i].Tags)) {
+			(*ml)[i] = (*ml)[len(*ml)-1]
+			(*ml)= (*ml)[:len(*ml)-1]
+			continue
 		}
+
+		i++
 	}
-	return ml
 }
 
-func FilterByStatus(arr []ProjectJson, status string)(ml []ProjectJson) {
-	for _, v := range arr {
-		if v.Status == status {
-			ml = append(ml, v)
+func FilterByStatus(ml *[]ProjectJson, status string) {
+	for i := 0; i < len(*ml);{
+		if((*ml)[i].Status != status){
+			(*ml)[i] = (*ml)[len(*ml)-1]
+			(*ml)= (*ml)[:len(*ml)-1]
+			continue
 		}
+		i++
 	}
-	return ml
 }
 
-func FilterByUser(arr []ProjectJson, user int64)(ml []ProjectJson) {
+func FilterByUser(ml *[]ProjectJson, user int64){
 	o := orm.NewOrm()
 	qs := o.QueryTable(new(ProjectUser))
 	var l []ProjectUser
 	qs.All(&l)
-	set := make(map[int64]bool)
+	userProjects := make(map[int64]bool)
 	for _, v := range l {
 		if(int(user) == (v.UserId).Id){
-			set[(v.ProjectId).Id] = true
+			userProjects[(v.ProjectId).Id] = true
 		}
 	}
-	for _, v := range arr {
-		if (set[v.Id]) {
-			ml = append(ml, v)
+	for i := 0; i < len(*ml);{
+		if(!userProjects[(*ml)[i].Id]){
+			(*ml)[i] = (*ml)[len(*ml)-1]
+			(*ml)= (*ml)[:len(*ml)-1]
+			continue
 		}
+		i++
 	}
-	return ml
 }
 
-func FilterByMaster(arr []ProjectJson, master int64)(ml []ProjectJson) {
+func FilterByMaster(ml * []ProjectJson, master int64){
 	o := orm.NewOrm()
 	qs := o.QueryTable(new(ProjectMaster))
 	var l []ProjectMaster
 	qs.All(&l)
-	set := make(map[int64]bool)
+	createdProjects := make(map[int64]bool)
 	for _, v := range l {
 		if(int(master) == (v.MasterId).Id){
-			set[(v.ProjectId).Id] = true
+			createdProjects[(v.ProjectId).Id] = true
 		}
 	}
-	for _, v := range arr {
-		if (set[v.Id]) {
-			ml = append(ml, v)
+
+	for i := 0; i < len(*ml);{
+		if(!createdProjects[(*ml)[i].Id]){
+			(*ml)[i] = (*ml)[len(*ml)-1]
+			(*ml)= (*ml)[:len(*ml)-1]
+			continue
 		}
+		i++
 	}
-	return ml
 }
 
 // UpdateProject updates Project by Id and returns error if
@@ -255,5 +264,5 @@ func DeleteProject(id int64) (err error) {
 // ([], [], [], [], 0, 3)
 func GetLandingProjects() (ml []ProjectJson, err error) {
 	var query = make(map[string]string)
-	return GetAllProjects(query, []string{}, []string{}, []string{}, 0, 3, "", 0, 0, "")
+	return GetAllProjects(query, []string{}, []string{}, 0, 3, "", 0, 0, "")
 }

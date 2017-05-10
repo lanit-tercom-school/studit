@@ -52,7 +52,7 @@ func main() {
 		DateOfCreation: time.Now(),
 		Logo: "/files/2.jpg",
 		Tags: "freelance",
-		Status: "еще не начат",
+		Status: "начат",
 	}
 	fastCheckErr(o.Insert(&project2))
 
@@ -63,7 +63,7 @@ func main() {
 		DateOfCreation: time.Now(),
 		Logo: "/files/3.jpg",
 		Tags: "creative",
-		Status: "еще не начат",
+		Status: "начат",
 	}
 	fastCheckErr(o.Insert(&project3))
 
@@ -85,7 +85,7 @@ func main() {
 		DateOfCreation: time.Now(),
 		Logo: "/files/5.jpg",
 		Tags: "project",
-		Status: "еще не начат",
+		Status: "завершен",
 	}
 	fastCheckErr(o.Insert(&project5))
 

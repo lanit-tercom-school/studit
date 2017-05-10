@@ -112,7 +112,6 @@ func (c *ProjectController) GetOne() {
 // @Title Get All
 // @Description get Project
 // @Param	query	query	string	false	"Filter. e.g. col1:v1,col2:v2 ..."
-// @Param	fields	query	string	false	"Fields returned. e.g. col1,col2 ..."
 // @Param	sortby	query	string	false	"Sorted-by fields. e.g. col1,col2 ..."
 // @Param	order	query	string	false	"Order corresponding to each sortby field, if single value, apply to all sortby fields. e.g. desc,asc ..."
 // @Param       user    query   string  false   "Получить проекты, в которых участвует пользователь с заданным ID."
@@ -125,7 +124,6 @@ func (c *ProjectController) GetOne() {
 // @Failure 403
 // @router / [get]
 func (c *ProjectController) GetAll() {
-	var fields []string
 	var sortBy []string
 	var order []string
 	var tag string
@@ -137,10 +135,6 @@ func (c *ProjectController) GetAll() {
 	var status string
 
 
-	// fields: col1,col2,entity.col3
-	if v := c.GetString("fields"); v != "" {
-		fields = strings.Split(v, ",")
-	}
 	// limit: 10 (default is 10)
 	if v, err := c.GetInt64("limit"); err == nil {
 		limit = v
@@ -189,7 +183,7 @@ func (c *ProjectController) GetAll() {
 		}
 	}
 	beego.Trace(c.Ctx.Input.IP(), "Select from table")
-	l, err := models.GetAllProjects(query, fields, sortBy, order, offset, limit, tag, user, master, status)
+	l, err := models.GetAllProjects(query, sortBy, order, offset, limit, tag, user, master, status)
 	if err != nil {
 		beego.Debug(c.Ctx.Input.IP(), "News GetAll `GetAllProjects` error", err.Error())
 		c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
@@ -202,7 +196,7 @@ func (c *ProjectController) GetAll() {
 
 
 func correctStatus(status string) bool{
-	if(status == "еще не начат" || status == "завершен"){
+	if(status == "еще не начат" || status == "завершен" || status == "начат"){
 		return true
 	}
 	return false
