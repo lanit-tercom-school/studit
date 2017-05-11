@@ -270,7 +270,7 @@ export class ApiService {
     headers.append('Bearer-token', token);
     return this.http.post(environment.apiUrl + '/v1/project/masters/?user_id=' + user_id + '&project_id=' + project_id, {}, { headers: headers });
   }
-  deleteProjectMaster(project_id: number, user_id: number, token: string) {//Удалить куратора проекта 
+  deleteProjectMaster(project_id: number, user_id: number, token: string) {//Удалить куратора проекта
     let headers = new Headers();
     headers.append('Accept', 'application/json');
     headers.append('Bearer-token', token);
@@ -308,4 +308,12 @@ export class ApiService {
     headers.append('Bearer-token', token);
     return this.http.put(environment.apiUrl + '/v1/user/id/' + id, user, { headers: headers });
   }
+  changePasswordForUser(token: string, passwords)
+  {
+      var headers = new Headers();
+      headers.append('Content-Type', 'application/json');
+      headers.append('Accept', 'application/json');
+      headers.append('Bearer-token', token);
+      return this.http.put(environment.apiUrl + '/v1/auth/change-password/', passwords, { headers: headers });
+    }
 }

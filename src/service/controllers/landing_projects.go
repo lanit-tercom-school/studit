@@ -8,23 +8,17 @@ import (
 
 // Контроллер для главной/landing страниц
 type LandingProjectsController struct {
-	beego.Controller
+	ControllerWithAuthorization
 }
 
 // URLMapping ...
 func (c *LandingProjectsController) URLMapping() {
 	c.Mapping("Get", c.GetAll)
-	c.Mapping("GetAll", c.GetAll)
-}
-func (c *LandingProjectsController) GetOne() {
-	c.Data["json"] = "Not Found"
-	c.Ctx.ResponseWriter.WriteHeader(404)
-	c.ServeJSON()
 }
 
-// GetAll ...
-// @Title Get All
-// @Description Получить проекты
+// Get ...
+// @Title Get
+// @Description Получить проекты для главной страницы
 // @Success 200 {object} models.Project Удачный запрос
 // @Failure 400 Bad Request
 // @router / [get]

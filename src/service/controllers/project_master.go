@@ -33,41 +33,41 @@ func (c *ProjectMasterController) URLMapping() {
 func (c *ProjectMasterController) Post() {
 	if c.CurrentUser.PermissionLevel == -1 {
 		beego.Debug("Access denied for `Post` new master for project")
-		c.Ctx.Output.SetStatus(403)
-		c.Data["json"] = "Forbidden"
+		c.Ctx.Output.SetStatus(HTTP_FORBIDDEN)
+		c.Data["json"] = HTTP_FORBIDDEN_STR
 
 		// получить id проекта, на который нужно добавить мастера
 	} else if project_id, err := c.GetInt64("project_id"); err != nil {
 		beego.Debug("Not an int param. Should be int", err.Error())
-		c.Ctx.Output.SetStatus(400)
+		c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
 		c.Data["json"] = err.Error()
 
 		// Получаем список мастеров проекта
 	} else if masters_of_this_project, err := models.GetMastersOfTheProject(project_id); err != nil {
 		beego.Debug("Wrong project id", err.Error())
-		c.Ctx.Output.SetStatus(400)
+		c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
 		c.Data["json"] = err.Error()
 
 	} else if c.CurrentUser.PermissionLevel != 2 && !models.IsUserInArray(c.CurrentUser.UserId, masters_of_this_project) {
 		beego.Debug("Request from not master of this project")
-		c.Ctx.Output.SetStatus(400)
+		c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
 		c.Data["json"] = "You are not a master of this project"
 
 		// проект, на который записывается пользователь
 	} else if project, err := models.GetProjectById(project_id); err != nil {
 		beego.Debug("Wrong project id", err.Error())
 		c.Data["json"] = err.Error()
-		c.Ctx.Output.SetStatus(400)
+		c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
 
 		// пользователь, которого назначают мастером
 	} else if user_id, err := c.GetInt("user_id"); err != nil {
 		beego.Debug("Not an int param. Should be int", err.Error())
-		c.Ctx.Output.SetStatus(400)
+		c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
 		c.Data["json"] = err.Error()
 
 	} else if user, err := models.GetUserById(user_id); err != nil {
 		beego.Debug("Wrong user id", err.Error())
-		c.Ctx.Output.SetStatus(400)
+		c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
 		c.Data["json"] = err.Error()
 
 	} else {
@@ -76,13 +76,13 @@ func (c *ProjectMasterController) Post() {
 		err := models.AddMasterToProject(user, project)
 		if err != nil {
 			beego.Critical("Can't add master", err.Error())
-			c.Ctx.Output.SetStatus(500)
+			c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
 			c.Data["json"] = err.Error()
 
 		} else {
 			beego.Trace("Welcome, master")
-			c.Ctx.Output.SetStatus(201)
-			c.Data["json"] = "Created"
+			c.Ctx.Output.SetStatus(HTTP_CREATED)
+			c.Data["json"] = HTTP_CREATED_STR
 		}
 	}
 	c.ServeJSON()
@@ -101,13 +101,13 @@ func (c *ProjectMasterController) GetOne() {
 	id, err := strconv.Atoi(idStr)
 	if err != nil {
 		beego.Debug("Not an int param. Should be int", err.Error())
-		c.Ctx.Output.SetStatus(400)
+		c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
 		c.Data["json"] = err.Error()
 
 	} else if v, err := models.GetMastersOfTheProject(int64(id)); err != nil {
 		beego.Debug("GET masters of project error", err.Error())
 		c.Data["json"] = err.Error()
-		c.Ctx.Output.SetStatus(400)
+		c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
 
 	} else {
 		beego.Trace("Success GET")
@@ -172,29 +172,29 @@ func (c *ProjectMasterController) Delete() {
 	beego.Trace("User want to rank down master")
 	if c.CurrentUser.PermissionLevel == -1 {
 		beego.Debug("Access denied for `Delete` master from project")
-		c.Ctx.Output.SetStatus(403)
+		c.Ctx.Output.SetStatus(HTTP_FORBIDDEN)
 		c.Data["json"] = "Forbidden"
 
 	} else if user_id, err := c.GetInt("user_id"); err != nil {
 		beego.Debug("Param `user_id` not int", err.Error())
-		c.Ctx.Output.SetStatus(400)
+		c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
 		c.Data["json"] = err.Error()
 
 		// Нельзя удалить самого себя
 	} else if c.CurrentUser.UserId == user_id {
 		beego.Debug(user_id, "want to delete himself")
-		c.Ctx.Output.SetStatus(400)
+		c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
 		c.Data["json"] = "You can't delete yourself"
 
 	} else if project_id, err := c.GetInt64("project_id"); err != nil {
 		beego.Debug("Param `user_id` not int", err.Error())
-		c.Ctx.Output.SetStatus(400)
+		c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
 		c.Data["json"] = err.Error()
 
 		// Получаем список мастеров
 	} else if masters, err := models.GetMastersOfTheProject(project_id); err != nil {
 		beego.Debug("Wrong `project_id`", err.Error())
-		c.Ctx.Output.SetStatus(400)
+		c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
 		c.Data["json"] = err.Error()
 
 		// Не мастера проекта и не админы не допускаются к дальнейшим действиям
@@ -203,18 +203,18 @@ func (c *ProjectMasterController) Delete() {
 		beego.Trace(project_id)
 		beego.Trace(masters)
 		beego.Trace(c.CurrentUser.UserId)
-		c.Ctx.Output.SetStatus(400)
+		c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
 		c.Data["json"] = "You are not a master of this project"
 
 		// Само удаление мастера с проекта
 	} else if err := models.DeleteMasterFromProject(user_id, project_id); err != nil {
 		beego.Debug("Can't delete from ProjectSingUp", err.Error())
-		c.Ctx.Output.SetStatus(400)
+		c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
 		c.Data["json"] = err.Error()
 
 	} else {
 		beego.Trace("Success `Delete` master from project")
-		c.Data["json"] = "OK"
+		c.Data["json"] = HTTP_OK_STR
 	}
 	c.ServeJSON()
 }

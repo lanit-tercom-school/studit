@@ -38,21 +38,21 @@ func (c *NewsController) Post() {
 		if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
 			if id, err := models.AddNews(&v); err == nil {
 				beego.Trace("News with id", id, "created")
-				c.Ctx.Output.SetStatus(201)
+				c.Ctx.Output.SetStatus(HTTP_CREATED)
 				c.Data["json"] = id
 			} else {
 				beego.Debug("Post news `AddNews` error", err.Error())
 				c.Data["json"] = err.Error()
-				c.Ctx.Output.SetStatus(500)
+				c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
 			}
 		} else {
 			beego.Debug("Post news `Unmarshal` error", err.Error())
 			c.Data["json"] = err.Error()
-			c.Ctx.Output.SetStatus(400)
+			c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
 		}
 	} else {
         beego.Debug("Access denied for `Post`")
-		c.Ctx.Output.SetStatus(403)
+		c.Ctx.Output.SetStatus(HTTP_FORBIDDEN)
         c.Data["json"] = "Forbidden"
 	}
 	c.ServeJSON()
@@ -71,13 +71,13 @@ func (c *NewsController) GetOne() {
 	id, err := strconv.Atoi(idStr)
 	if err != nil {
 		beego.Debug("GetOne `Atoi` error", err.Error())
-		c.Ctx.Output.SetStatus(400)
+		c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
 		c.Data["json"] = err.Error()
 	}
 	v, err := models.GetNewsById(id)
 	if err != nil {
 		beego.Debug("GetOne `GetNewsById` error", err.Error())
-		c.Ctx.Output.SetStatus(400)
+		c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
 		c.Data["json"] = err.Error()
 	} else {
 		beego.Trace("GetOne OK")
@@ -133,7 +133,7 @@ func (c *NewsController) GetAll() {
 	l, err := models.GetAllNews(sortBy, order, offset, limit, tag)
 	if err != nil {
 		beego.Debug("News GetAll `GetAllNews` error", err.Error())
-		c.Ctx.Output.SetStatus(400)
+		c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
 		c.Data["json"] = err.Error()
 	} else {
 		c.Data["json"] = l
@@ -157,28 +157,28 @@ func (c *NewsController) Put() {
 		id, err := strconv.Atoi(idStr)
 		if err != nil {
 			beego.Debug("Put `Atoi` error", err.Error())
-			c.Ctx.Output.SetStatus(400)
+			c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
 			c.Data["json"] = err.Error()
 		}
 		v := models.NewsJson{Id: id}
 		if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
 			if err := models.UpdateNewsById(&v); err == nil {
 				beego.Trace("Put news OK")
-				c.Data["json"] = "OK"
+				c.Data["json"] = HTTP_OK_STR
 			} else {
 				beego.Debug("Put news `UpdateNewsById` error", err.Error())
 				c.Data["json"] = err.Error()
-				c.Ctx.Output.SetStatus(400)
+				c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
 			}
 		} else {
 			beego.Debug("Put news `Unmarshal` error", err.Error())
 			c.Data["json"] = err.Error()
-			c.Ctx.Output.SetStatus(400)
+			c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
 		}
 	} else {
-		beego.Debug("Access denied for `Put`")
-		c.Ctx.Output.SetStatus(400)
-		c.Data["json"] = "Forbidden"
+        beego.Debug("Access denied for `Put`")
+		c.Ctx.Output.SetStatus(HTTP_FORBIDDEN)
+        c.Data["json"] = HTTP_FORBIDDEN_STR
 	}
 	c.ServeJSON()
 }
@@ -198,21 +198,21 @@ func (c *NewsController) Delete() {
 		id, err := strconv.Atoi(idStr)
 		if err != nil {
 			beego.Debug("Delete `Atoi` error", err.Error())
-			c.Ctx.Output.SetStatus(400)
+			c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
 			c.Data["json"] = err.Error()
 		}
 		if err := models.DeleteNews(id); err == nil {
 			beego.Trace("Delete news OK")
-			c.Data["json"] = "OK"
+			c.Data["json"] = HTTP_OK_STR
 		} else {
 			beego.Debug("Delete news `DeleteNews` error", err.Error())
 			c.Data["json"] = err.Error()
-			c.Ctx.Output.SetStatus(400)
+			c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
 		}
 	} else {
         beego.Debug("Access denied for `Delete`")
-		c.Ctx.Output.SetStatus(400)
-        c.Data["json"] = "Forbidden"
+		c.Ctx.Output.SetStatus(HTTP_FORBIDDEN)
+        c.Data["json"] = HTTP_FORBIDDEN_STR
 	}
 	c.ServeJSON()
 }

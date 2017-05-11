@@ -18,7 +18,7 @@ import { NewsItemComponent } from './shared/news-list/news-item/news-item.compon
 import { AboutComponent } from './main/about/about.component';
 import { EnrolmentComponent } from './main/enrolment/enrolment.component';
 import { FeaturesComponent } from './main/features/features.component';
-
+import { DataService } from '.././services/data.service';
 import { ApiService } from '.././services/api.service';
 import { AuthService } from '.././services/auth.service';
 import { PartnersComponent } from './main/partners/partners.component';
@@ -107,7 +107,7 @@ import { ErrorPageComponent } from './pages/error-page/error-page.component';
     ErrorPageComponent,
     HomePageTeacherComponent,
   ],
-  providers: [ApiService, AuthService, AuthManager],
+  providers: [ApiService, AuthService, AuthManager, DataService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

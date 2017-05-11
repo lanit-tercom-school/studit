@@ -42,38 +42,38 @@ func (c *ProjectController) Post() {
 				user, err := models.GetUserById(c.CurrentUser.UserId)
 				if err != nil {
 					beego.Critical(c.Ctx.Input.IP(), "Claims corrupted", err.Error())
-					c.Ctx.Output.SetStatus(500)
+					c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
 					c.Data["json"] = err.Error()
 
 				} else {
 					err := models.AddMasterToProject(user, &v)
 					if err != nil {
 						beego.Critical(c.Ctx.Input.IP(), "Can't add creator to project", err.Error())
-						c.Ctx.Output.SetStatus(500)
+						c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
 						c.Data["json"] = err.Error()
 
 					} else {
 						beego.Trace("OK")
-						c.Ctx.Output.SetStatus(201)
+						c.Ctx.Output.SetStatus(HTTP_CREATED)
 						c.Data["json"] = id
 					}
 				}
 			} else {
 				beego.Debug("Post project `AddProject` error", err.Error())
 				c.Data["json"] = err.Error()
-				c.Ctx.Output.SetStatus(500)
+				c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
 
 			}
 		} else {
 			beego.Debug("Post project `Unmarshal` error", err.Error())
 			c.Data["json"] = err.Error()
-			c.Ctx.Output.SetStatus(400)
+			c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
 
 		}
 	} else {
 		beego.Debug("Access denied for `Post`")
-		c.Ctx.Output.SetStatus(400)
-		c.Data["json"] = "Forbbiden"
+		c.Ctx.Output.SetStatus(HTTP_FORBIDDEN)
+		c.Data["json"] = HTTP_FORBIDDEN_STR
 
 	}
 	c.ServeJSON()
@@ -92,13 +92,13 @@ func (c *ProjectController) GetOne() {
 	id, err := strconv.Atoi(idStr)
 	if err != nil {
 		beego.Debug("GetOne `Atoi` error", err.Error())
-		c.Ctx.Output.SetStatus(400)
+		c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
 		c.Data["json"] = err.Error() // TODO: change to "Wrong project id"
 	} else {
 		v, err := models.GetProjectById(int64(id))
 		if err != nil {
 			beego.Debug("GetOne `GetProjectById` error", err.Error())
-			c.Ctx.Output.SetStatus(400)
+			c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
 			c.Data["json"] = err.Error()
 		} else {
 			beego.Trace("GetOne OK")
@@ -112,29 +112,29 @@ func (c *ProjectController) GetOne() {
 // @Title Get All
 // @Description get Project
 // @Param	query	query	string	false	"Filter. e.g. col1:v1,col2:v2 ..."
-// @Param	fields	query	string	false	"Fields returned. e.g. col1,col2 ..."
 // @Param	sortby	query	string	false	"Sorted-by fields. e.g. col1,col2 ..."
 // @Param	order	query	string	false	"Order corresponding to each sortby field, if single value, apply to all sortby fields. e.g. desc,asc ..."
+// @Param       user    query   string  false   "Получить проекты, в которых участвует пользователь с заданным ID."
+// @Param       master  query   string  false   "Получить проекты, автором которых является пользователь с заданным ID."
 // @Param       tag     query   string  false   "Получить проекты с тегом. Тег может быть только один."
+// @Param       status  query   string  false   "Получить проекты с заданным статусом ('завершен'/'еще не начат')"
 // @Param	limit	query	string	false	"Limit the size of result set. Must be an integer. Default 10"
 // @Param	offset	query	string	false	"Start position of result set. Must be an integer"
 // @Success 200 {object} []models.Project Get array of projects filtered with specified filters (wtf this description)
 // @Failure 403
 // @router / [get]
 func (c *ProjectController) GetAll() {
-	var fields []string
 	var sortBy []string
 	var order []string
 	var tag string
 	var query = make(map[string]string)
 	var limit int64 = 10
 	var offset int64
+	var user   int64
+	var master int64
+	var status string
 
 
-	// fields: col1,col2,entity.col3
-	if v := c.GetString("fields"); v != "" {
-		fields = strings.Split(v, ",")
-	}
 	// limit: 10 (default is 10)
 	if v, err := c.GetInt64("limit"); err == nil {
 		limit = v
@@ -142,6 +142,12 @@ func (c *ProjectController) GetAll() {
 	// offset: 0 (default is 0)
 	if v, err := c.GetInt64("offset"); err == nil {
 		offset = v
+	}
+	if v, err := c.GetInt64("user"); err == nil {
+		user = v
+	}
+	if v, err := c.GetInt64("master"); err == nil {
+		master = v
 	}
 	// sortBy: col1,col2
 	if v := c.GetString("sortby"); v != "" {
@@ -158,6 +164,11 @@ func (c *ProjectController) GetAll() {
 	if v := c.GetString("tag"); v!= ""{
 		tag = v
 	}
+	if v := c.GetString("status"); v!= "" {
+		if(correctStatus(v)){
+			status = v
+		}
+	}
 	// query: k:v,k:v
 	if v := c.GetString("query"); v != "" {
 		for _, cond := range strings.Split(v, ",") {
@@ -171,17 +182,24 @@ func (c *ProjectController) GetAll() {
 			query[k] = v
 		}
 	}
-
 	beego.Trace(c.Ctx.Input.IP(), "Select from table")
-	l, err := models.GetAllProject(query, fields, sortBy, order, offset, limit, tag)
+	l, err := models.GetAllProjects(query, sortBy, order, offset, limit, tag, user, master, status)
 	if err != nil {
-		beego.Debug(c.Ctx.Input.IP(), "News GetAll `GetAllProject` error", err.Error())
-		c.Ctx.Output.SetStatus(400)
+		beego.Debug(c.Ctx.Input.IP(), "News GetAll `GetAllProjects` error", err.Error())
+		c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
 		c.Data["json"] = err.Error()
 	} else {
 		c.Data["json"] = l
 	}
 	c.ServeJSON()
+}
+
+
+func correctStatus(status string) bool{
+	if(status == "еще не начат" || status == "завершен" || status == "начат"){
+		return true
+	}
+	return false
 }
 
 // Put ...
@@ -200,28 +218,28 @@ func (c *ProjectController) Put() {
 		id, err := strconv.Atoi(idStr)
 		if err != nil {
 			beego.Debug("Put `Atoi` error", err.Error())
-			c.Ctx.Output.SetStatus(400)
+			c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
 			c.Data["json"] = err.Error()
 		}
 		v := models.ProjectJson{Id: int64(id)}
 		if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
 			if err := models.UpdateProjectById(&v); err == nil {
 				beego.Trace("Put project OK")
-				c.Data["json"] = "OK"
+				c.Data["json"] = HTTP_OK_STR
 			} else {
 				beego.Debug("Put news `UpdateProjectById` error", err.Error())
 				c.Data["json"] = err.Error()
-				c.Ctx.Output.SetStatus(400)
+				c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
 			}
 		} else {
 			beego.Debug("Put project `Unmarshal` error", err.Error())
 			c.Data["json"] = err.Error()
-			c.Ctx.Output.SetStatus(400)
+			c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
 		}
 	} else {
 		beego.Debug("Access denied for `Put`")
-		c.Data["json"] = "You can't do it"
-		c.Ctx.Output.SetStatus(400)
+		c.Data["json"] = HTTP_FORBIDDEN_STR
+		c.Ctx.Output.SetStatus(HTTP_FORBIDDEN)
 	}
 	c.ServeJSON()
 }
@@ -242,7 +260,7 @@ func (c *ProjectController) Delete() {
 		id, err := strconv.Atoi(idStr)
 		if err != nil {
 			beego.Debug("Delete 'Atoi' error", err.Error())
-			c.Ctx.Output.SetStatus(400)
+			c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
 			c.Data["json"] = err.Error()
 		}
 		if err := models.DeleteProject(int64(id)); err == nil {
@@ -251,7 +269,7 @@ func (c *ProjectController) Delete() {
 		} else {
 			beego.Critical(c.Ctx.Input.IP(), "'DeleteProject' error", err.Error())
 			c.Data["json"] = err.Error()
-			c.Ctx.Output.SetStatus(500)
+			c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
 		}
 	} else {
 		beego.Debug("Access denied for `Delete`")

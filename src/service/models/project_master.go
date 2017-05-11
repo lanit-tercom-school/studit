@@ -20,8 +20,6 @@ func init() {
 	orm.RegisterModel(new(ProjectMaster))
 }
 
-
-
 // AddProjectUser insert a new ProjectMaster into database and returns
 // last inserted Id on success.
 func AddMasterToProject(user *User, project *ProjectJson) (err error) {

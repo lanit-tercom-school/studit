@@ -41,6 +41,7 @@ func main() {
 		DateOfCreation: time.Now(),
 		Logo: "/files/1.jpg",
 		Tags: "studit, summerschool",
+		Status: "еще не начат",
 	}
 	fastCheckErr(o.Insert(&project1))
 
@@ -51,6 +52,7 @@ func main() {
 		DateOfCreation: time.Now(),
 		Logo: "/files/2.jpg",
 		Tags: "freelance",
+		Status: "начат",
 	}
 	fastCheckErr(o.Insert(&project2))
 
@@ -61,6 +63,7 @@ func main() {
 		DateOfCreation: time.Now(),
 		Logo: "/files/3.jpg",
 		Tags: "creative",
+		Status: "начат",
 	}
 	fastCheckErr(o.Insert(&project3))
 
@@ -71,6 +74,7 @@ func main() {
 		DateOfCreation: time.Now(),
 		Logo: "/files/4.jpg",
 		Tags: "TFSMobile, summerschool",
+		Status: "еще не начат",
 	}
 	fastCheckErr(o.Insert(&project4))
 
@@ -81,6 +85,7 @@ func main() {
 		DateOfCreation: time.Now(),
 		Logo: "/files/5.jpg",
 		Tags: "project",
+		Status: "завершен",
 	}
 	fastCheckErr(o.Insert(&project5))
 
@@ -232,6 +237,53 @@ func main() {
 		Name: "Back-end",
 	}
 	fastCheckErr(o.Insert(&tag8))
+
+	//connect pojects and masters
+	prj_mas_con1 := m.ProjectMaster{
+		Id: 1,
+		ProjectId: &project2,
+		MasterId : &user1,
+		SignedDate: time.Now(),
+	}
+	fastCheckErr(o.Insert(&prj_mas_con1))
+
+	prj_mas_con2 := m.ProjectMaster{
+		Id: 2,
+		ProjectId: &project5,
+		MasterId : &user2,
+		SignedDate: time.Now(),
+	}
+	fastCheckErr(o.Insert(&prj_mas_con2))
+
+	prj_mas_con3 := m.ProjectMaster{
+		Id: 3,
+		ProjectId: &project4,
+		MasterId : &user3,
+		SignedDate: time.Now(),
+	}
+	fastCheckErr(o.Insert(&prj_mas_con3))
+
+	prj_mas_con4 := m.ProjectMaster{
+		Id: 4,
+		ProjectId: &project1,
+		MasterId : &user4,
+		SignedDate: time.Now(),
+	}
+	fastCheckErr(o.Insert(&prj_mas_con4))
+
+	prj_mas_con5 := m.ProjectMaster{
+		Id: 5,
+		ProjectId: &project3,
+		MasterId : &user5,
+		SignedDate: time.Now(),
+	}
+	fastCheckErr(o.Insert(&prj_mas_con5))
+
+
+
+
+
+	//fastCheckErr(o.Insert(&prj_mas_con2))
 
 	// connect projects and users
 

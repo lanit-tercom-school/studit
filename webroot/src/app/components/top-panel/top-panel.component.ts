@@ -1,7 +1,8 @@
 import { Component, OnInit, DoCheck } from '@angular/core';
 import { AuthService } from './../../services/auth.service';
+import { DataService } from './../../services/data.service';
 import { User } from './../pages/authorization-page/user';
-import {Router} from '@angular/router';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -12,19 +13,19 @@ import {Router} from '@angular/router';
 export class TopPanelComponent implements OnInit, DoCheck {
 
   private currentUser;
-  url:string;
-  constructor(private auth: AuthService, private router:Router) {
-   
-    
-   }
+  url: string;
+  constructor(private auth: AuthService, private router: Router, private data: DataService) { }
 
   ngOnInit() {
+    if (localStorage.getItem('current_user')) {
+      this.data.loadEnrollingAndUserProjects();
+    }
   }
 
   ngDoCheck() {
     this.currentUser = JSON.parse(localStorage.getItem('current_user'));
-    this.url=this.router.routerState.snapshot.url;
-    
+    this.url = this.router.routerState.snapshot.url;
+
   }
 
   logout() {
