@@ -29,6 +29,8 @@ export class StudentProjectPageComponent implements OnInit, DoCheck {
     this.route.params
       .subscribe(params => {
         this.projectId = params['id'];
+        console.log(this.projectId);
+        console.log(this.data.getProjectsOfUser());
         this.project = this.apiService.getProjectById(+params['id']).subscribe(res => this.project = res.json());
         if (this.data.getProjectsOfUser().indexOf(+this.projectId) !== -1) {
           this.enrollButtonStatus = 1;

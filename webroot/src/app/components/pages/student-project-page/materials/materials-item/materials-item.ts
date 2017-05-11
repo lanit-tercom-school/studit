@@ -1,4 +1,4 @@
 export interface MaterialsItem {
-  Description: string;
-  Link: string;
+  description: string;
+  link: string;
 }
