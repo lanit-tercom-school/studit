@@ -39,12 +39,29 @@ func (c *UserController) GetOne() {
 			c.Data["json"] = err.Error()
 			c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
 		} else {
-			c.Data["json"] = models.User{
-				Id: v.Id,
-				Nickname: v.Nickname,
-				Description: v.Description,
-				Avatar: v.Avatar,
+			if contact, err := models.GetAllUserContacts(id); err != nil {
+				beego.Critical("GetOne user Contacts GetAllUserContact error ", err.Error())
+				c.Data["json"] = err.Error()
+				c.Ctx.Output.SetStatus(500)
+			} else {
+				if c.CurrentUser.UserId == v.Id || c.CurrentUser.PermissionLevel == 2 {
+					c.Data["json"] = models.UserInfo{
+						Id:              v.Id,
+						Nickname:        v.Nickname,
+						Description:     v.Description,
+						Avatar:          v.Avatar,
+						PermissionLevel: v.PermissionLevel,
+						Contact: contact,
+					}
+				} else {
+					c.Data["json"] = models.User{
+						Id:          v.Id,
+						Nickname:    v.Nickname,
+						Description: v.Description,
+						Avatar:      v.Avatar,
+					}
 				}
+			}
 		}
 	} else {
 		beego.Debug("GetOne user `Atoi` error", err.Error())
@@ -53,7 +70,6 @@ func (c *UserController) GetOne() {
 	}
 	c.ServeJSON()
 }
-
 // GetAll ...
 // @Title Get All
 // @Description get User
