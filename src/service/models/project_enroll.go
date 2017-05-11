@@ -23,6 +23,20 @@ func init() {
 	orm.RegisterModel(new(ProjectEnroll))
 }
 
+// GetProjectEnrollIdByUserId returns an array of projects
+//where user enrolls
+func GetProjectEnrollIdByUserId(userId int) (projectid []int64, err error){
+	o := orm.NewOrm()
+	var projects []ProjectEnroll
+	_, err = o.QueryTable(new(ProjectEnroll)).Filter("UserId", User{Id: userId}).RelatedSel().All(&projects)
+	if err != nil {
+		return projectid, err
+	}
+	for _, v := range projects {
+		projectid = append(projectid, v.ProjectId.Id)
+	}
+	return projectid, nil
+}
 // AddProjectAuthor insert a new ProjectEnroll into database and returns
 // last inserted Id on success.
 func AddApplicationFromUserForProject(u *User, p *ProjectJson) (id int64, err error) {

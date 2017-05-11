@@ -26,6 +26,20 @@ func init() {
 	orm.RegisterModel(new(ProjectUser))
 }
 
+// GetProjectUserIdByUserId returns an array of projects
+//where user exists
+func GetProjectUserIdByUserId (userId int) (projectid []int64, err error){
+	o := orm.NewOrm()
+	var projects []ProjectUser
+	_, err = o.QueryTable(new(ProjectUser)).Filter("UserId", User{Id: userId}).RelatedSel().All(&projects)
+	if err != nil {
+		return projectid, err
+	}
+	for _, v := range projects {
+		projectid = append(projectid, v.ProjectId.Id)
+	}
+	return projectid, nil
+}
 
 // AddProjectUser insert a new ProjectUser into database and returns
 // last inserted Id on success.

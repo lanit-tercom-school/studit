@@ -20,6 +20,21 @@ func init() {
 	orm.RegisterModel(new(ProjectMaster))
 }
 
+//GetProjectMasterIdByUserId return array of projects
+//where user is master
+func GetProjectMasterIdByUserId (userId int) (projectid []int64, err error){
+	o := orm.NewOrm()
+	var projects []ProjectMaster
+	_, err = o.QueryTable(new(ProjectMaster)).Filter("MasterId", User{Id: userId}).RelatedSel().All(&projects)
+	if err != nil {
+		return projectid, err
+	}
+	for _, v := range projects {
+		projectid = append(projectid, v.ProjectId.Id)
+	}
+	return projectid, nil
+}
+
 // AddProjectUser insert a new ProjectMaster into database and returns
 // last inserted Id on success.
 func AddMasterToProject(user *User, project *ProjectJson) (err error) {
