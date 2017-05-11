@@ -36,7 +36,7 @@ export class ApiService {
     return this.http.get(environment.apiUrl + '/v1/user/id/' + student_id)
   }
 
-  getPublicauthorInfoById(author_id: number) {
+  getPublicAuthorInfoById(author_id: number) {
     return {
       "id": 1,
       "firstName": "Anton",
@@ -149,7 +149,7 @@ export class ApiService {
     ];
   }
 
-  getProjectAlltaskItem(id: number) {
+  getProjectAllTaskItem(id: number) {
     return [
       {
         "number": "645",
