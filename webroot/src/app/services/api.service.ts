@@ -36,7 +36,7 @@ export class ApiService {
     return this.http.get(environment.apiUrl + '/v1/user/id/' + student_id)
   }
 
-  getPublicAuthorInfoById(author_id: number) {
+  getPublicauthorInfoById(author_id: number) {
     return {
       "id": 1,
       "firstName": "Anton",
@@ -48,13 +48,13 @@ export class ApiService {
         {
           "Id": 1,
           "Name": "StudIT",
-          "Description": "Разработки сайта летней школы и студенческих проектов Ланит-Терком",
+          "description": "Разработки сайта летней школы и студенческих проектов Ланит-Терком",
           "Picture": "project.jpg"
         },
         {
           "Id": 2,
           "Name": "TFS Mobile",
-          "Description": "Разработка кроссплатфроменного мобильного клиента для Team Foundation Server",
+          "description": "Разработка кроссплатфроменного мобильного клиента для Team Foundation Server",
           "Picture": "project.jpg"
         }
       ],
@@ -62,7 +62,7 @@ export class ApiService {
         {
           "Id": 5,
           "Name": "Name here",
-          "Description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin iaculis purus at congue aliquam.",
+          "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin iaculis purus at congue aliquam.",
           "Picture": "project.jpg"
         }
       ],
@@ -96,16 +96,16 @@ export class ApiService {
   getMaterialsItems(id: number) {
     return [
       {
-        "Description": "Resource one",
-        "Link": "#"
+        "description": "Resource one",
+        "link": "#"
       },
       {
-        "Description": "Resource two",
-        "Link": "#"
+        "description": "Resource two",
+        "link": "#"
       },
       {
-        "Description": "Resource three",
-        "Link": "#"
+        "description": "Resource three",
+        "link": "#"
       }
     ];
   }
@@ -113,97 +113,97 @@ export class ApiService {
   getProjectNewsItem(id: number) {
     return [
       {
-        "Description": "News 1",
-        "Links": "#",
-        "Main": "Topic 1",
-        "Data": "20.07.16 22:10"
+        "description": "News 1",
+        "links": "#",
+        "main": "Topic 1",
+        "data": "20.07.16 22:10"
 
       },
       {
-        "Description": "News 2",
-        "Links": "#",
-        "Main": "Topic 2",
-        "Data": "19.07.16 16:02"
+        "description": "News 2",
+        "links": "#",
+        "main": "Topic 2",
+        "data": "19.07.16 16:02"
 
       }
     ];
   }
 
 
-  getTaskItem(id: number) {
+  gettaskItem(id: number) {
     return [
       {
-        "Task": "Complete this exercise...",
-        "Open": "More details",
-        "Data": "20.03.17",
-        "Number": "1"
+        "task": "Complete this exercise...",
+        "open": "More details",
+        "data": "20.03.17",
+        "number": "1"
       },
       {
-        "Task": "Change this sentence...",
-        "Open": "More details",
-        "Data": "28.03.17",
-        "Number": "2"
+        "task": "Change this sentence...",
+        "open": "More details",
+        "data": "28.03.17",
+        "number": "2"
 
       }
 
     ];
   }
 
-  getProjectAllTaskItem(id: number) {
+  getProjectAlltaskItem(id: number) {
     return [
       {
-        "Number": "645",
-        "TaskName": "Complete this exercise...",
-        "Data": "20.03.17",
-        "Author": "Roman",
-        "Addressee": "User1",
-        "Tags": ["tag1", "tag2"],
-        "Rating": "3"
+        "number": "645",
+        "taskName": "Complete this exercise...",
+        "data": "20.03.17",
+        "author": "Roman",
+        "addressee": "User1",
+        "tags": ["tag1", "tag2"],
+        "rating": "3"
 
       },
       {
-        "Number": "645",
-        "TaskName": "Name of Task",
-        "Data": "20.03.17",
-        "Author": "Konstantin",
-        "Addressee": "User2",
-        "Tags": ["tag1", "tag2"],
-        "Rating": "3"
+        "number": "645",
+        "taskName": "Name of task",
+        "data": "20.03.17",
+        "author": "Konstantin",
+        "addressee": "User2",
+        "tags": ["tag1", "tag2"],
+        "rating": "3"
       },
 
       {
-        "Number": "645",
-        "TaskName": "Name of Task",
-        "Data": "20.03.17",
-        "Author": "Sheldon",
-        "Addressee": "User3",
-        "Tags": ["some tag", "some tag 2"],
-        "Rating": "4"
+        "number": "645",
+        "taskName": "Name of task",
+        "data": "20.03.17",
+        "author": "Sheldon",
+        "addressee": "User3",
+        "tags": ["some tag", "some tag 2"],
+        "rating": "4"
       }
 
     ];
   }
 
-  getProjectStudentTaskItem(id: number) {
+  getProjectStudenttaskItem(id: number) {
     return [
       {
-        "Number": "645",
-        "TaskName": "This is my task",
-        "Data": "20.03.17",
-        "Author": "Roman",
-        "Addressee": "Me",
-        "Tags": ["tag1", "tag2"],
-        "Rating": "3"
+        "number": "645",
+        "taskName": "This is my task",
+        "data": "20.03.17",
+        "author": "Roman",
+        "addressee": "Me",
+        "tags": ["tag1", "tag2"],
+        "rating": "3"
 
       },
       {
-        "Number": "645",
-        "TaskName": "This is my task too",
-        "Data": "20.03.17",
-        "Author": "Konstantin",
-        "Addressee": "Me",
-        "Tags": ["tag1", "tag2"],
-        "Rating": "3"
+        "number": "645",
+        "taskName": "This is my task too",
+        "data": "20.03.17",
+        "author": "Konstantin",
+        "addressee": "Me",
+        "tags": ["tag1", "tag2"],
+        "rating": "3"
       }
 
     ];
@@ -222,7 +222,7 @@ export class ApiService {
     // create authorization-page header with jwt token
     let currentUser = JSON.parse(localStorage.getItem('current_user'));
     if (currentUser && currentUser.token) {
-      let headers = new Headers({ 'Authorization': 'Bearer ' + currentUser.token });
+      let headers = new Headers({ 'authorization': 'Bearer ' + currentUser.token });
       return new RequestOptions({ headers: headers });
     }
   }
