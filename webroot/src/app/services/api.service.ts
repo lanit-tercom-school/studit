@@ -153,17 +153,16 @@ export class ApiService {
     return [
       {
         "number": "645",
-        "taskName": "Complete this exercise...",
+        "taskname": "Complete this exercise...",
         "data": "20.03.17",
         "author": "Roman",
         "addressee": "User1",
         "tags": ["tag1", "tag2"],
         "rating": "3"
-
       },
       {
         "number": "645",
-        "taskName": "Name of task",
+        "taskname": "Name of task",
         "data": "20.03.17",
         "author": "Konstantin",
         "addressee": "User2",
@@ -173,7 +172,7 @@ export class ApiService {
 
       {
         "number": "645",
-        "taskName": "Name of task",
+        "taskname": "Name of task",
         "data": "20.03.17",
         "author": "Sheldon",
         "addressee": "User3",
@@ -184,11 +183,11 @@ export class ApiService {
     ];
   }
 
-  getProjectStudenttaskItem(id: number) {
+  getProjectStudentTaskItem(id: number) {
     return [
       {
         "number": "645",
-        "taskName": "This is my task",
+        "taskname": "This is my task",
         "data": "20.03.17",
         "author": "Roman",
         "addressee": "Me",
@@ -198,7 +197,7 @@ export class ApiService {
       },
       {
         "number": "645",
-        "taskName": "This is my task too",
+        "taskname": "This is my task too",
         "data": "20.03.17",
         "author": "Konstantin",
         "addressee": "Me",
