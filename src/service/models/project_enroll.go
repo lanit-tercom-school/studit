@@ -31,7 +31,7 @@ func AddApplicationFromUserForProject(u *User, p *ProjectJson) (id int64, err er
 		UserId: u,
 		ProjectId: &temp,
 	}
-	id, err = orm.NewOrm().Insert(m)
+	id, err = orm.NewOrm().Insert(&m)
 	return
 }
 

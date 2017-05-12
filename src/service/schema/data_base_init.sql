@@ -59,7 +59,7 @@ OIDS=FALSE
 );
 
 /*Связь пользователя и проекта, на который пользователь записан*/
-CREATE TABLE project_enroll (
+CREATE TABLE "project_enroll" (
   "id" serial NOT NULL,
   "project_id" bigint NOT NULL,
   "user_id" bigint NOT NULL,

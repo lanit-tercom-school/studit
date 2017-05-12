@@ -49,7 +49,7 @@ func AddUserToProject(u *User, y *ProjectJson) (err error) {
 	if err != nil {
 		return err
 	}
-	_, err = o.Insert(m)
+	_, err = o.Insert(&m)
 	return
 }
 
