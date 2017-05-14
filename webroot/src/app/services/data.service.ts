@@ -3,7 +3,7 @@ import { ApiService } from './api.service'
 
 @Injectable()
 export class DataService {
-  //Events and boolean that show what is loaded
+  //Events and boolean that show what is loaded.
   public projectsUploaded: EventEmitter<any>;
   private _projectsUploaded: boolean;
   public usersprojectUploaded: EventEmitter<any>;
@@ -18,40 +18,46 @@ export class DataService {
   private userId: number;
   //Constructor.
   constructor(private api: ApiService) { }
-  //Load data function.
-  loadEnrollingAndUserProjects() {
-    this.projects = new Array<number>();
-    this.enrolledUsersProject = new Array<number>();
-    this.userId = JSON.parse(localStorage.getItem('current_user')).id;
-    this.api.getProjectItems().subscribe(res => {
-      console.log(res);
-      this.projects = res;
-      for (let i = 0; i < this.projects.length; i++) {
-        this.api.getEnrolledUsersToProject(this.projects[i].id).subscribe(res => {
-          if (res.json() != null) {
-            for (let a of res.json()) {
-              if (a === this.userId) {
-                this.enrolledUsersProject.push(this.projects[i].id);
-                break;
-              }
-            }
-          }
-        });
-        this.api.getProjectUsers(this.projects[i].id).subscribe(res => {
-          if (res.json() != null) {
-            for (let a of res.json()) {
-              if (a === this.userId) {
-                this.projects.push(this.projects[i].id);
-                break;
-              }
-            }
-          }
-        });
-      }
-    });
+  //Load data functions.
+  loadAll() {
+    this.loadProjects();
+    if (localStorage.getItem('current_user')) {
+      this.loadUsersProjects();
+    }
   }
+  //Load projects =)
   loadProjects() {
-    this.api.postProject
+    this.api.getProjectItems().subscribe(res => {
+      if (res != null) {
+        this.projects = res;
+        this.projectsUploaded.emit();
+        this._projectsUploaded = true;
+      }
+    })
+  }
+  //load information about user`s projects
+  loadUsersProjects() {
+    if (localStorage.getItem('current_user')) {
+      this.usersProjects = new Array<number>();
+      this.api.getProjectsOfUser(this.userId).subscribe(res => {
+        for (let i = 0; i < res.json().length; i++) {
+          this.usersProjects.push(res.json()[i].id);
+        }
+        this._usesprojectUploaded = true;
+        this.usersprojectUploaded.emit();
+      });
+    }
+    else {
+      console.log('Error in data.service: can not load usersProject without auth');
+    }
+  }
+  loadEnrolledUsersProject() {
+    if (localStorage.getItem('current_user')) {
+
+    }
+    else {
+      console.log('Error in data.service: can not load enrolledUsersProject without auth');
+    }
   }
   getProjectsOfUser() {
     return this.projects;

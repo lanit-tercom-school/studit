@@ -307,12 +307,14 @@ export class ApiService {
     headers.append('Bearer-token', token);
     return this.http.put(environment.apiUrl + '/v1/user/id/' + id, user, { headers: headers });
   }
-  changePasswordForUser(token: string, passwords)
-  {
-      var headers = new Headers();
-      headers.append('Content-Type', 'application/json');
-      headers.append('Accept', 'application/json');
-      headers.append('Bearer-token', token);
-      return this.http.put(environment.apiUrl + '/v1/auth/change-password/', passwords, { headers: headers });
-    }
+  changePasswordForUser(token: string, passwords) {
+    var headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Accept', 'application/json');
+    headers.append('Bearer-token', token);
+    return this.http.put(environment.apiUrl + '/v1/auth/change-password/', passwords, { headers: headers });
+  }
+  getProjectsOfUser(id: number) {
+    return this.http.get(environment.apiUrl + '/v1/project/id/?user=' + id);
+  }
 }
