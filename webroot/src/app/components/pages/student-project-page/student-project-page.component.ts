@@ -16,7 +16,7 @@ import { Http, Headers, RequestOptions, Response } from '@angular/http';
 })
 export class StudentProjectPageComponent implements OnInit, DoCheck {
 
-  private project;
+  private project
   private projectId;
   private tasks = [];
   private subscribedUsers = [];
@@ -25,21 +25,28 @@ export class StudentProjectPageComponent implements OnInit, DoCheck {
   constructor(private apiService: ApiService, private route: ActivatedRoute, private http: Http, private data: DataService) { }
 
   ngOnInit() {
+    this.project = {
+      'name': '',
+      'logo': '',
+      'description': ''
+    };
     this.enrollButtonStatus = 3;
     this.route.params
       .subscribe(params => {
         this.projectId = params['id'];
-        console.log(this.projectId);
-        console.log(this.data.getProjectsOfUser());
-        this.project = this.apiService.getProjectById(+params['id']).subscribe(res => this.project = res.json());
-        if (this.data.getProjectsOfUser().indexOf(+this.projectId) !== -1) {
-          this.enrollButtonStatus = 1;
+        if (this.data.isProjectsUploaded()) {
+          this.project = this.data.getProjectById(+this.projectId);
+        } else {
+          this.data.projectsUploaded.subscribe(res => {
+            this.project = this.data.getProjectById(+this.projectId);
+          });
         }
-        else if (this.data.getEnrollingProjectsOfUser().indexOf(+this.projectId) !== -1) {
-          this.enrollButtonStatus = 2;
-        }
-        else {
-          this.enrollButtonStatus = 0;
+        if (this.data.isUsersProjectsUploaded()) {
+          this.choseButtonStatus();
+        } else {
+          this.data.usersProjectsUploaded.subscribe(res => {
+            this.choseButtonStatus();
+          })
         }
       });
 
@@ -71,11 +78,22 @@ export class StudentProjectPageComponent implements OnInit, DoCheck {
   enroll() {
     this.apiService.enrollToProject(this.projectId, JSON.parse(localStorage.getItem('current_user')).token).subscribe(res => { });
     this.enrollButtonStatus = 2;
-    this.data.loadEnrollingAndUserProjects();
+
   }
   unenroll() {
     this.apiService.unenrollToProject(this.projectId, JSON.parse(localStorage.getItem('current_user')).token).subscribe(res => { });
     this.enrollButtonStatus = 0;
-    this.data.loadEnrollingAndUserProjects();
+
+  }
+  choseButtonStatus() {
+    if (this.data.getUsersProjects().indexOf(+this.projectId) !== -1) {
+      this.enrollButtonStatus = 1;
+    }
+    else if (this.data.getUsersProjects().indexOf(+this.projectId) !== -1) {
+      this.enrollButtonStatus = 2;
+    }
+    else {
+      this.enrollButtonStatus = 0;
+    }
   }
 }
