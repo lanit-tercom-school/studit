@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-
+import { DataService } from '../../../services/data.service'
 import { ProjectItem } from '../../shared/project-list/project-item/project-item';
 import { ApiService } from './../../../services/api.service';
 
@@ -12,9 +12,15 @@ export class ProjectListPageComponent implements OnInit {
 
   private ProjectList;
 
-  constructor(private apiService: ApiService) { }
+  constructor(private apiService: ApiService, private data: DataService) { }
 
   ngOnInit() {
-    this.apiService.getProjectItems().subscribe(res => { this.ProjectList = res });
+    if (this.data.isProjectsUploaded()) {
+      this.ProjectList = this.data.getProjects();
+    } else {
+      this.data.projectsUploaded.subscribe(res => {
+        this.ProjectList = this.data.getProjects();
+      });
+    }
   }
 }
