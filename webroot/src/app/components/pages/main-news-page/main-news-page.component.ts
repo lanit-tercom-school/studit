@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NewsItem } from 'models/news-item';
+import { DataService } from '../../../services/data.service'
 import { ApiService } from './../../../services/api.service';
 
 @Component({
@@ -10,13 +11,20 @@ import { ApiService } from './../../../services/api.service';
 export class MainNewsPageComponent implements OnInit {
 
   private news;
-  constructor(private apiService: ApiService) { }
+  constructor(private apiService: ApiService, private data: DataService) { }
 
   ngOnInit() {
-  this.getNewsList();
+    this.getNewsList();
   }
 
-  getNewsList(){
-    this.apiService.getNewsPage().subscribe(res => this.news = res);
+  getNewsList() {
+    //this.apiService.getNewsPage().subscribe(res => this.news = res);
+    if (this.data.isNewsUploaded()) {
+      this.news = this.data.getNews();
+    } else {
+      this.data.newsUploaded.subscribe(res => {
+        this.news = this.data.getNews();
+      });
+    }
   }
 }

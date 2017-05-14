@@ -28,7 +28,7 @@ export class DataService {
   isErolledUsersProjectUploaded() {
     if (this._enrolledUsersProjectUploaded) { return true; } else { return false; }
   }
-  isNews() {
+  isNewsUploaded() {
     if (this._newsUploaded) { return true; } else { return false; }
   }
   // Constructor.
@@ -37,6 +37,7 @@ export class DataService {
   loadAll() {
     console.log('Data.service ->loadAll');
     this.loadProjects();
+    this.loadNews();
     if (localStorage.getItem('current_user')) {
       this.userId = JSON.parse(localStorage.getItem('current_user')).id;
       this.loadUsersProjects();
@@ -75,6 +76,13 @@ export class DataService {
       console.log('Error in data.service: can not load enrolledUsersProject without auth');
     }
   }
+  loadNews() {
+    this.api.getNewsPage().subscribe(res => {
+      this.news = res;
+      this._newsUploaded = true;
+      this.newsUploaded.emit();
+    });
+  }
   getUsersProjects() {
     return this.usersProjects;
   }
@@ -83,6 +91,9 @@ export class DataService {
   }
   getProjects() {
     return this.projects;
+  }
+  getNews(){
+    return this.news;
   }
   getProjectById(id: number) {
     if (this._projectsUploaded) {
