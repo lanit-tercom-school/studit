@@ -32,7 +32,6 @@ export class StudentProjectPageComponent implements OnInit, DoCheck {
   constructor(private apiService: ApiService, private route: ActivatedRoute, private http: Http, private data: DataService) { }
 
   ngOnInit() {
-    this.enrollButtonStatus = 3;
     this.route.params
       .subscribe(params => {
         this.projectId = params['id'];
@@ -48,14 +47,14 @@ export class StudentProjectPageComponent implements OnInit, DoCheck {
         } else {
           this.data.usersProjectsUploaded.subscribe(res => {
             this.choseButtonStatus();
-          })
+
+          });
         }
       });
 
     this.getTaskItems();
   }
   ngDoCheck() {
-
   }
 
   getMaterialsItems(): MaterialsItem[] {
@@ -84,11 +83,9 @@ export class StudentProjectPageComponent implements OnInit, DoCheck {
   choseButtonStatus() {
     if (this.data.getUsersProjects().indexOf(+this.projectId) !== -1) {
       this.enrollButtonStatus = 1;
-    }
-    else if (this.data.getUsersProjects().indexOf(+this.projectId) !== -1) {
+    } else if (this.data.getUsersProjects().indexOf(+this.projectId) !== -1) {
       this.enrollButtonStatus = 2;
-    }
-    else {
+    } else {
       this.enrollButtonStatus = 0;
     }
   }
