@@ -23,6 +23,7 @@ export class DataService {
     this.loadProjects();
     if (localStorage.getItem('current_user')) {
       this.loadUsersProjects();
+      this.loadEnrolledUsersProject();
     }
   }
   //Load projects =)
@@ -59,10 +60,10 @@ export class DataService {
       console.log('Error in data.service: can not load enrolledUsersProject without auth');
     }
   }
-  getProjectsOfUser() {
-    return this.projects;
+  getUsersProjects() {
+    return this.usersProjects;
   }
-  getEnrollingProjectsOfUser() {
+  getEnrolledUsersProject() {
     return this.enrolledUsersProject;
   }
 }
