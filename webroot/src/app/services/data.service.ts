@@ -11,11 +11,11 @@ export class DataService {
   private userId: number;
   // Events and boolean that show what is loaded.
   public projectsUploaded: EventEmitter<any> = new EventEmitter();
-  private _projectsUploaded: boolean;
+  private _projectsUploaded = false;
   public usersProjectsUploaded: EventEmitter<any> = new EventEmitter();
-  private _usesProjectsUploaded: boolean;
+  private _usesProjectsUploaded = false;
   public newsUploaded: EventEmitter<any> = new EventEmitter();
-  private _newsUploaded: boolean;
+  private _newsUploaded = false;
   public enrolledUsersProjectUploaded: EventEmitter<any> = new EventEmitter();
   private _enrolledUsersProjectUploaded: boolean;
   // Functions for testing is data uploaded?
@@ -35,6 +35,7 @@ export class DataService {
   constructor(private api: ApiService) { }
   // Load data functions.
   loadAll() {
+    console.log('Data.service ->loadAll');
     this.loadProjects();
     if (localStorage.getItem('current_user')) {
       this.userId = JSON.parse(localStorage.getItem('current_user')).id;
@@ -47,8 +48,8 @@ export class DataService {
     this.api.getProjectItems().subscribe(res => {
       if (res != null) {
         this.projects = res;
-        this.projectsUploaded.emit();
         this._projectsUploaded = true;
+        this.projectsUploaded.emit();
       }
     });
   }

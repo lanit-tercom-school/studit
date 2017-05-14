@@ -32,7 +32,6 @@ export class StudentProjectPageComponent implements OnInit, DoCheck {
   constructor(private apiService: ApiService, private route: ActivatedRoute, private http: Http, private data: DataService) { }
 
   ngOnInit() {
-    console.log(this.project.logo);
     this.enrollButtonStatus = 3;
     this.route.params
       .subscribe(params => {
