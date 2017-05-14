@@ -73,12 +73,12 @@ export class StudentProjectPageComponent implements OnInit, DoCheck {
   enroll() {
     this.apiService.enrollToProject(this.projectId, JSON.parse(localStorage.getItem('current_user')).token).subscribe(res => { });
     this.enrollButtonStatus = 2;
-
+    this.data.loadEnrolledUsersProject();
   }
   unenroll() {
     this.apiService.unenrollToProject(this.projectId, JSON.parse(localStorage.getItem('current_user')).token).subscribe(res => { });
     this.enrollButtonStatus = 0;
-
+    this.data.loadEnrolledUsersProject();
   }
   choseButtonStatus() {
     if (this.data.getUsersProjects().indexOf(+this.projectId) !== -1) {
