@@ -44,7 +44,7 @@ export class DataService {
       this.loadEnrolledUsersProject();
     }
   }
-  // Load projects =)
+  // Load from server functions
   loadProjects() {
     this.api.getProjectItems().subscribe(res => {
       if (res != null) {
@@ -54,7 +54,7 @@ export class DataService {
       }
     });
   }
-  // load information about user`s projects
+  
   loadUsersProjects() {
     if (localStorage.getItem('current_user')) {
       this.usersProjects = new Array<number>();
@@ -83,6 +83,7 @@ export class DataService {
       this.newsUploaded.emit();
     });
   }
+  //Get-functions
   getUsersProjects() {
     return this.usersProjects;
   }
