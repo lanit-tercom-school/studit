@@ -5,7 +5,7 @@ import { MaterialsItem } from './materials/materials-item/materials-item';
 import { ActivatedRoute, Params } from '@angular/router';
 import { ProjectItem } from './../../shared/project-list/project-item/project-item';
 import { ProjectNewsItem } from './proj-news/proj-news-item/proj-news-item';
-import { TasksItem } from "./tasks/tasks-item/tasks-item";
+import { TasksItem } from './tasks/tasks-item/tasks-item';
 import { Http, Headers, RequestOptions, Response } from '@angular/http';
 
 
@@ -15,21 +15,24 @@ import { Http, Headers, RequestOptions, Response } from '@angular/http';
   styleUrls: ['./student-project-page.component.css']
 })
 export class StudentProjectPageComponent implements OnInit, DoCheck {
-
-  private project
+  private project = {
+    'id': 0,
+    'name': '',
+    'description': '',
+    'created': '0',
+    'logo': '',
+    'tags': [
+      ''
+    ],
+    'status': ''
+  };
   private projectId;
   private tasks = [];
-  private subscribedUsers = [];
-  private authorized: boolean;
   private enrollButtonStatus: number;//0 - enrolling,1 - you are in project, 2 - unenrolling
   constructor(private apiService: ApiService, private route: ActivatedRoute, private http: Http, private data: DataService) { }
 
   ngOnInit() {
-    this.project = {
-      'name': '',
-      'logo': '',
-      'description': ''
-    };
+    console.log(this.project.logo);
     this.enrollButtonStatus = 3;
     this.route.params
       .subscribe(params => {
@@ -51,12 +54,6 @@ export class StudentProjectPageComponent implements OnInit, DoCheck {
       });
 
     this.getTaskItems();
-    if (localStorage.getItem('current_user')) {
-      this.authorized = true;
-    }
-    else {
-      this.authorized = false;
-    }
   }
   ngDoCheck() {
 
