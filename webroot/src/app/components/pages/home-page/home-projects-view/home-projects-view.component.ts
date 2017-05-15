@@ -21,43 +21,33 @@ export class HomeProjectsViewComponent implements OnInit {
       this.allProjects = this.data.getProjects();
       if (this.data.isUsersProjectsUploaded()) {
         this.userProjects = this.data.getUsersProjects();
-        for (let i = 0; i < this.userProjects.length; i++) {
-          for (let j = 0; j < this.allProjects.length; j++) {
-            if (this.allProjects[j].id === this.userProjects[i]) { this.ProjectList.push(this.allProjects[j]); }
-          }
-        }
+        this.choseProjects();
       } else {
         this.data.usersProjectsUploaded.subscribe(res => {
           this.userProjects = this.data.getUsersProjects();
-          for (let i = 0; i < this.userProjects.length; i++) {
-            for (let j = 0; j < this.allProjects.length; j++) {
-              if (this.allProjects[j].id === this.userProjects[i]) { this.ProjectList.push(this.allProjects[j]); }
-            }
-          }
+          this.choseProjects();
         });
       }
-    } else {
+    } else  {
       this.data.projectsUploaded.subscribe(res => {
         this.allProjects = this.data.getProjects();
         if (this.data.isUsersProjectsUploaded()) {
           this.userProjects = this.data.getUsersProjects();
-          for (let i = 0; i < this.userProjects.length; i++) {
-            for (let j = 0; j < this.allProjects.length; j++) {
-              if (this.allProjects[j].id === this.userProjects[i]) { this.ProjectList.push(this.allProjects[j]); }
-            }
-          }
+          this.choseProjects();
         } else {
           this.data.usersProjectsUploaded.subscribe(res => {
             this.userProjects = this.data.getUsersProjects();
-            for (let i = 0; i < this.userProjects.length; i++) {
-              for (let j = 0; j < this.allProjects.length; j++) {
-                if (this.allProjects[j].id === this.userProjects[i]) { this.ProjectList.push(this.allProjects[j]); }
-              }
-            }
+            this.choseProjects();
           });
         }
       });
     }
   }
-
+  choseProjects() {
+    for (let i = 0; i < this.userProjects.length; i++) {
+      for (let j = 0; j < this.allProjects.length; j++) {
+        if (this.allProjects[j].id === this.userProjects[i]) { this.ProjectList.push(this.allProjects[j]); }
+      }
+    }
+  }
 }

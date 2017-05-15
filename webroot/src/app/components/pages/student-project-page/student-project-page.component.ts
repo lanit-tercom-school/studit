@@ -27,11 +27,13 @@ export class StudentProjectPageComponent implements OnInit, DoCheck {
     'status': ''
   };
   private projectId;
+  private authorized = false;
   private tasks = [];
   private enrollButtonStatus: number;//0 - enrolling,1 - you are in project, 2 - unenrolling
   constructor(private apiService: ApiService, private route: ActivatedRoute, private http: Http, private data: DataService) { }
 
   ngOnInit() {
+    if (localStorage.getItem('current_user')) { this.authorized = true; }
     this.route.params
       .subscribe(params => {
         this.projectId = params['id'];

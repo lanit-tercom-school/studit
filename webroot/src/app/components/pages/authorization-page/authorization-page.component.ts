@@ -29,8 +29,8 @@ export class AuthorizationPageComponent implements OnInit {
   login() {
     this.auth.authenticatenow(this.localUser).subscribe(
       data => {
-         this.data.loadAll();
-        if (this.ReturnUrl == '/registration') {
+        this.data.loadAll();
+        if (this.ReturnUrl === '/registration') {
           this.ReturnUrl = '/home';
         }
         this.router.navigate([this.ReturnUrl]);
