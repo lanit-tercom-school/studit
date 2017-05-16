@@ -16,10 +16,10 @@ export class ProjectListPageComponent implements OnInit {
 
   ngOnInit() {
     if (this.data.isProjectsUploaded()) {
-      this.ProjectList = this.data.getProjects();
+      this.ProjectList = this.data.Projects;
     } else {
-      this.data.projectsUploaded.subscribe(res => {
-        this.ProjectList = this.data.getProjects();
+      this.data.ProjectsUploaded.subscribe(res => {
+        this.ProjectList = this.data.Projects;
       });
     }
   }

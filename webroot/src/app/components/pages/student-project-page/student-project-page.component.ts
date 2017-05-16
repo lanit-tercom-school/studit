@@ -1,4 +1,4 @@
-import { Component, OnInit, OnChanges, DoCheck } from '@angular/core';
+import { Component, OnInit, OnChanges, DoCheck, OnDestroy } from '@angular/core';
 import { ApiService } from './../../../services/api.service';
 import { DataService } from './../../../services/data.service';
 import { MaterialsItem } from './materials/materials-item/materials-item';
@@ -14,7 +14,7 @@ import { Http, Headers, RequestOptions, Response } from '@angular/http';
   templateUrl: './student-project-page.component.html',
   styleUrls: ['./student-project-page.component.css']
 })
-export class StudentProjectPageComponent implements OnInit, DoCheck {
+export class StudentProjectPageComponent implements OnInit, OnDestroy {
   private project = {
     'id': 0,
     'name': '',
@@ -40,14 +40,14 @@ export class StudentProjectPageComponent implements OnInit, DoCheck {
         if (this.data.isProjectsUploaded()) {
           this.project = this.data.getProjectById(+this.projectId);
         } else {
-          this.data.projectsUploaded.subscribe(res => {
+          this.data.ProjectsUploaded.subscribe(res => {
             this.project = this.data.getProjectById(+this.projectId);
           });
         }
         if (this.data.isUsersProjectsUploaded()) {
           this.choseButtonStatus();
         } else {
-          this.data.usersProjectsUploaded.subscribe(res => {
+          this.data.UsersProjectsUploaded.subscribe(res => {
             this.choseButtonStatus();
 
           });
@@ -56,7 +56,9 @@ export class StudentProjectPageComponent implements OnInit, DoCheck {
 
     this.getTaskItems();
   }
-  ngDoCheck() {
+  ngOnDestroy() {
+    this.data.ProjectsUploaded.unsubscribe();
+    this.data.UsersProjectsUploaded.unsubscribe();
   }
 
   getMaterialsItems(): MaterialsItem[] {
@@ -83,9 +85,9 @@ export class StudentProjectPageComponent implements OnInit, DoCheck {
     this.data.loadEnrolledUsersProject();
   }
   choseButtonStatus() {
-    if (this.data.getUsersProjects().indexOf(+this.projectId) !== -1) {
+    if (this.data.UsersProjects.indexOf(+this.projectId) !== -1) {
       this.enrollButtonStatus = 1;
-    } else if (this.data.getUsersProjects().indexOf(+this.projectId) !== -1) {
+    } else if (this.data.UsersProjects.indexOf(+this.projectId) !== -1) {
       this.enrollButtonStatus = 2;
     } else {
       this.enrollButtonStatus = 0;
