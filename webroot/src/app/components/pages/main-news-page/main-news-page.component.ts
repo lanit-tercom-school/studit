@@ -8,7 +8,7 @@ import { ApiService } from './../../../services/api.service';
   templateUrl: './main-news-page.component.html',
   styleUrls: ['./main-news-page.component.css']
 })
-export class MainNewsPageComponent implements OnInit, OnDestroy {
+export class MainNewsPageComponent implements OnInit {
 
   private news;
   constructor(private apiService: ApiService, private data: DataService) { }
@@ -19,15 +19,7 @@ export class MainNewsPageComponent implements OnInit, OnDestroy {
 
   getNewsList() {
     //this.apiService.getNewsPage().subscribe(res => this.news = res);
-    if (this.data.isNewsUploaded()) {
-      this.news = this.data.News;
-    } else {
-      this.data.NewsUploaded.subscribe(res => {
-        this.news = this.data.News;
-      });
-    }
+    this.news = this.data.News;
   }
-  ngOnDestroy() {
-    this.data.NewsUploaded.unsubscribe();
-  }
+
 }
