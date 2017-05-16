@@ -1,7 +1,8 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NewsItem } from 'models/news-item';
 import { DataService } from '../../../services/data.service'
 import { ApiService } from './../../../services/api.service';
+import { Observable } from "rxjs/Observable";
 
 @Component({
   selector: 'app-main-news-page',
@@ -10,7 +11,7 @@ import { ApiService } from './../../../services/api.service';
 })
 export class MainNewsPageComponent implements OnInit {
 
-  private news;
+  news: Observable<NewsItem[]>;
   constructor(private apiService: ApiService, private data: DataService) { }
 
   ngOnInit() {

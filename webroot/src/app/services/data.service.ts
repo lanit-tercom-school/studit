@@ -1,11 +1,13 @@
 import { Injectable, EventEmitter } from '@angular/core';
 import { ApiService } from './api.service';
+import { Observable } from "rxjs/Observable";
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { NewsItem } from "models/news-item";
 
 @Injectable()
 export class DataService {
   // Data
   public Projects;
-  public News;
   public UsersProjects;
   public EnrolledUsersProject;
   public UserId: number;
@@ -14,6 +16,14 @@ export class DataService {
   public UsersProjectsUploaded: EventEmitter<any> = new EventEmitter();
   public NewsUploaded: EventEmitter<any> = new EventEmitter();
   public EnrolledUsersProjectUploaded: EventEmitter<any> = new EventEmitter();
+
+  private news: BehaviorSubject<NewsItem[]> = <BehaviorSubject<NewsItem[]>>new BehaviorSubject([]);
+  private dataStore: {
+    news: NewsItem[];
+  } =  { news: [] };
+  public get News(){
+    return this.news.asObservable();
+  }
 
   private projectsUploaded = false;
   private usesProjectsUploaded = false;
@@ -79,7 +89,8 @@ export class DataService {
   }
   loadNews() {
     this.api.getNewsPage().subscribe(res => {
-      this.News = res;
+      this.dataStore.news = res;
+      this.news.next(Object.assign({}, this.dataStore).news);
       this.newsUploaded = true;
       this.NewsUploaded.emit();
     });
