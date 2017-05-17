@@ -1,4 +1,4 @@
-<div *ngFor="let Project of ProjectList" class="card card-outline">
+<div *ngFor="let Project of ProjectList | async" class="card card-outline">
   <div class="row">
     <div class="col-sm-4">
       <img class="card-img" src="{{Project.logo}}" alt="Card image cap">

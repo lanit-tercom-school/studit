@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Observable } from "rxjs/Observable";
 import { ProjectItem } from '../../../shared/project-list/project-item/project-item'
 import { ApiService } from '../../../../services/api.service'
 import { DataService } from '../../../../services/data.service'
@@ -9,15 +10,13 @@ import { DataService } from '../../../../services/data.service'
 })
 export class HomeProjectsViewComponent implements OnInit, OnDestroy {
   private userId: string;
-  private ProjectList: ProjectItem[];
+  private ProjectList: Observable<ProjectItem[]>;
   private allProjects;
   private userProjects;
   constructor(private api: ApiService, private data: DataService) { }
 
   ngOnInit() {
-    this.ProjectList = new Array<any>();
-    this.userId = JSON.parse(localStorage.getItem('current_user')).id;
-  
+    this.ProjectList = this.data.UserProjects;
   }
   ngOnDestroy() {
     

@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { DataService } from '../../../services/data.service'
-import { ProjectItem } from '../../shared/project-list/project-item/project-item';
 import { ApiService } from './../../../services/api.service';
+import { Observable } from "rxjs/Observable";
+import { ProjectItem } from '../../shared/project-list/project-item/project-item'
 
 @Component({
   selector: 'app-project-list-page',
@@ -10,7 +11,7 @@ import { ApiService } from './../../../services/api.service';
 })
 export class ProjectListPageComponent implements OnInit {
 
-  private ProjectList;
+  private ProjectList: Observable<ProjectItem[]>;
 
   constructor(private apiService: ApiService, private data: DataService) { }
 
