@@ -37,28 +37,12 @@ export class StudentProjectPageComponent implements OnInit, OnDestroy {
     this.route.params
       .subscribe(params => {
         this.projectId = params['id'];
-        if (this.data.isProjectsUploaded()) {
-          this.project = this.data.getProjectById(+this.projectId);
-        } else {
-          this.data.ProjectsUploaded.subscribe(res => {
-            this.project = this.data.getProjectById(+this.projectId);
-          });
-        }
-        if (this.data.isUsersProjectsUploaded()) {
-          this.choseButtonStatus();
-        } else {
-          this.data.UsersProjectsUploaded.subscribe(res => {
-            this.choseButtonStatus();
-
-          });
-        }
       });
 
     this.getTaskItems();
   }
   ngOnDestroy() {
-    this.data.ProjectsUploaded.unsubscribe();
-    this.data.UsersProjectsUploaded.unsubscribe();
+    
   }
 
   getMaterialsItems(): MaterialsItem[] {
@@ -85,12 +69,6 @@ export class StudentProjectPageComponent implements OnInit, OnDestroy {
     this.data.loadEnrolledUsersProject();
   }
   choseButtonStatus() {
-    if (this.data.UsersProjects.indexOf(+this.projectId) !== -1) {
-      this.enrollButtonStatus = 1;
-    } else if (this.data.UsersProjects.indexOf(+this.projectId) !== -1) {
-      this.enrollButtonStatus = 2;
-    } else {
-      this.enrollButtonStatus = 0;
-    }
+    
   }
 }

@@ -15,12 +15,6 @@ export class ProjectListPageComponent implements OnInit {
   constructor(private apiService: ApiService, private data: DataService) { }
 
   ngOnInit() {
-    if (this.data.isProjectsUploaded()) {
-      this.ProjectList = this.data.Projects;
-    } else {
-      this.data.ProjectsUploaded.subscribe(res => {
-        this.ProjectList = this.data.Projects;
-      });
-    }
+    this.ProjectList=this.data.Projects;
   }
 }

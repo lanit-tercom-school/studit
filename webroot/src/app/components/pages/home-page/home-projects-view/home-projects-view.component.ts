@@ -17,41 +17,11 @@ export class HomeProjectsViewComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.ProjectList = new Array<any>();
     this.userId = JSON.parse(localStorage.getItem('current_user')).id;
-    if (this.data.isProjectsUploaded()) {
-      this.allProjects = this.data.Projects;
-      if (this.data.isUsersProjectsUploaded()) {
-        this.userProjects = this.data.UsersProjects;
-        this.choseProjects();
-      } else {
-        this.data.UsersProjectsUploaded.subscribe(res => {
-          this.userProjects = this.data.UsersProjects;
-          this.choseProjects();
-        });
-      }
-    } else {
-      this.data.ProjectsUploaded.subscribe(res => {
-        this.allProjects = this.data.Projects;
-        if (this.data.isUsersProjectsUploaded()) {
-          this.userProjects = this.data.UsersProjects;
-          this.choseProjects();
-        } else {
-          this.data.UsersProjectsUploaded.subscribe(res => {
-            this.userProjects = this.data.UsersProjects;
-            this.choseProjects();
-          });
-        }
-      });
-    }
+  
   }
   ngOnDestroy() {
-    //this.data.UsersProjectsUploaded.unsubscribe();
-    //this.data.ProjectsUploaded.unsubscribe();
+    
   }
   choseProjects() {
-    for (let i = 0; i < this.userProjects.length; i++) {
-      for (let j = 0; j < this.allProjects.length; j++) {
-        if (this.allProjects[j].id === this.userProjects[i]) { this.ProjectList.push(this.allProjects[j]); }
-      }
-    }
   }
 }
