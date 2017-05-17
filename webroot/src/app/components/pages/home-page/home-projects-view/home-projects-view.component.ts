@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Observable } from "rxjs/Observable";
-import { ProjectItem } from '../../../shared/project-list/project-item/project-item'
+import { ProjectItem } from '../../../../models/project-item'
 import { ApiService } from '../../../../services/api.service'
 import { DataService } from '../../../../services/data.service'
 @Component({

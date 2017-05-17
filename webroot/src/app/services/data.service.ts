@@ -3,7 +3,7 @@ import { ApiService } from './api.service';
 import { Observable } from "rxjs/Observable";
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { NewsItem } from "models/news-item";
-import { ProjectItem } from '../components/shared/project-list/project-item/project-item';
+import { ProjectItem } from '../models/project-item';
 
 @Injectable()
 export class DataService {

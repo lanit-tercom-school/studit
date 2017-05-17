@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ProjectItem } from './project-item'
+import { ProjectItem } from '../../../../models/project-item'
 
 @Component({
   host: {'class': 'card'},
