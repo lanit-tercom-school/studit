@@ -37,12 +37,13 @@ export class StudentProjectPageComponent implements OnInit, OnDestroy {
     this.route.params
       .subscribe(params => {
         this.projectId = params['id'];
+        this.choseButtonStatus();
       });
 
     this.getTaskItems();
   }
   ngOnDestroy() {
-    
+
   }
 
   getMaterialsItems(): MaterialsItem[] {
@@ -69,6 +70,12 @@ export class StudentProjectPageComponent implements OnInit, OnDestroy {
     this.data.loadEnrolledUsersProject();
   }
   choseButtonStatus() {
-    
+    this.data.UserProjects.subscribe(res => {
+      for (let i=0; i<res.length;i++) {
+        if (res[i].id===+this.projectId){
+          this.enrollButtonStatus=1;
+        }
+      }
+    })
   }
 }
