@@ -10,7 +10,7 @@ import { HomePageStudentComponent } from './pages/home-page-student/home-page-st
 import { StudentProjectPageComponent } from './pages/student-project-page/student-project-page.component';
 import { ProjectListPageComponent } from './pages/project-list-page/project-list-page.component';
 import { AuthorizationPageComponent } from './pages/authorization-page/authorization-page.component';
-import { HomePageComponent } from './pages/home-page/home-page.component';
+
 import { RegistrationPageComponent } from './pages/registration-page/registration-page.component';
 import { ValidationPageComponent } from './pages/registration-page/validation-page/validation-page.component';
 import { AuthorPublicPageComponent } from './pages/author-public-page/author-public-page.component';
@@ -19,7 +19,7 @@ import { UserSettingsPageComponent } from './pages/user-settings-page/user-setti
 
 import { MainNewsPageComponent } from './pages/main-news-page/main-news-page.component';
 import { ProjectTasksPageComponent } from './pages/project-tasks-page/project-tasks-page.component';
-import { HomeProjectsViewComponent } from './pages/home-page/home-projects-view/home-projects-view.component';
+import { HomeProjectsViewComponent } from './pages/home-projects-view/home-projects-view.component';
 
 import { MainFullNewsPageComponent } from './pages/main-full-news-page/main-full-news-page.component';
 

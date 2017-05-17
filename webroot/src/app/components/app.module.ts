@@ -55,7 +55,7 @@ import { ProjectTaskListComponent } from './pages/project-tasks-page/project-tas
 
 import { HomePageStudentComponent } from './pages/home-page-student/home-page-student.component'
 
-import { HomeProjectsViewComponent } from './pages/home-page/home-projects-view/home-projects-view.component';
+import { HomeProjectsViewComponent } from './pages/home-projects-view/home-projects-view.component';
 import { HomePageTeacherComponent } from './pages/home-page-teacher/home-page-teacher.component';
 
 

@@ -1,8 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Observable } from "rxjs/Observable";
-import { ProjectItem } from '../../../../models/project-item'
-import { ApiService } from '../../../../services/api.service'
-import { DataService } from '../../../../services/data.service'
+import { ProjectItem } from '../../../models/project-item'
+import { ApiService } from '../../../services/api.service'
+import { DataService } from '../../../services/data.service'
 @Component({
   selector: 'app-home-projects-view',
   templateUrl: './home-projects-view.component.html',
