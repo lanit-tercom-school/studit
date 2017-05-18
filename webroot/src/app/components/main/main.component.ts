@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { Observable } from "rxjs/Observable";
 
-import { ProjectItem } from '../shared/project-list/project-item/project-item';
-import { ApiService } from './../../services/api.service';
+import { DataService } from "services/data.service";
+import { ProjectItem } from 'models/project-item';
+import { ApiService } from 'services/api.service';
+
 
 @Component({
   selector: 'app-main',
@@ -10,10 +13,10 @@ import { ApiService } from './../../services/api.service';
 })
 export class MainComponent implements OnInit {
 
-  private projects;
+  private projects: Observable<ProjectItem[]>;
   private partners;
 
-  constructor(private apiService: ApiService) {
+  constructor(private apiService: ApiService, private data:DataService) {
   }
 
   ngOnInit() {
@@ -33,7 +36,7 @@ export class MainComponent implements OnInit {
   }
 
   getMainProjectList(){
-    this.apiService.getMainPageProjects().subscribe(res => this.projects = res);
+    this.projects=this.data.ProjectsForMainPage;
   }
 
 
