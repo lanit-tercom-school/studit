@@ -87,21 +87,29 @@ func (c *UserContactController) GetAll() {
 		} else {
 			//TODO add PROJECT_MASTER
 			if _,err = models.GetUserById(id); err==nil {
-				if c.CurrentUser.UserId == id || c.CurrentUser.PermissionLevel == 2 {
-					v, err := models.GetAllUserContacts(id)
-					if err != nil {
-						beego.Debug("Error in GetAllUserContacts in user contact `GetAll`")
-						c.Ctx.Output.SetStatus(400)
-						c.Data["json"] = err.Error()
+				ismaster, err :=models.IsProjectMasterForUserById(id, c.CurrentUser.UserId)
+				if err==nil {
+					if c.CurrentUser.UserId == id || c.CurrentUser.PermissionLevel == 2 || ismaster {
+
+						v, err := models.GetAllUserContacts(id)
+						if err != nil {
+							beego.Debug("Error in GetAllUserContacts in user contact `GetAll`")
+							c.Ctx.Output.SetStatus(400)
+							c.Data["json"] = err.Error()
+						} else {
+							beego.Trace("GetAll user contact OK")
+							c.Ctx.Output.SetStatus(200)
+							c.Data["json"] = v
+						}
 					} else {
-						beego.Trace("GetAll user contact OK")
-						c.Ctx.Output.SetStatus(200)
-						c.Data["json"] = v
+						beego.Debug("Access denied for user contact `GetAll`")
+						c.Ctx.Output.SetStatus(403)
+						c.Data["json"] = "Forbidden"
 					}
 				} else {
-					beego.Debug("Access denied for user contact `GetAll`")
-					c.Ctx.Output.SetStatus(403)
-					c.Data["json"] = "Forbidden"
+					beego.Debug("Error in IsProjectMasterForUserById in user contact `GetAll`")
+					c.Ctx.Output.SetStatus(500)
+					c.Data["json"] = err.Error()
 				}
 			} else {
 				beego.Debug("User does not exist user contact `GetAll`")

@@ -35,6 +35,31 @@ func GetProjectMasterIdByUserId (userId int) (projectid []int64, err error){
 	return projectid, nil
 }
 
+//IsProjectMasterUserByIdIsProjectMasterUserById returns true
+//if master is master of userproject
+func IsProjectMasterForUserById(userId int,masterId int)(masterOfUser bool, err error){
+	userProjects, err :=GetProjectUserIdByUserId(userId)
+	if err != nil{
+		return false, err
+	}
+	masterProjects, err :=GetProjectMasterIdByUserId(masterId)
+	if err != nil{
+		return false, err
+	}
+	//finding intersection
+	target := make(map[int64]bool)
+	for _, v := range masterProjects {
+		target[v] = true
+	}
+	for _, v := range userProjects {
+		if target[v] {
+			return true, nil
+		}
+	}
+
+	return false, nil
+}
+
 // AddProjectUser insert a new ProjectMaster into database and returns
 // last inserted Id on success.
 func AddMasterToProject(user *User, project *ProjectJson) (err error) {
