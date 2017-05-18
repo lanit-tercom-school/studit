@@ -1,6 +1,6 @@
 import { Component, OnInit, DoCheck } from '@angular/core';
 import { AuthService } from './../../services/auth.service';
-import { User } from './../pages/authorization-page/user';
+import { User } from 'models/user';
 import { Router } from '@angular/router';
 
 

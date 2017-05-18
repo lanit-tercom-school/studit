@@ -4,7 +4,7 @@ import { DataService } from './../../../services/data.service';
 import { MaterialsItem } from 'models/materials-item';
 import { ActivatedRoute, Params } from '@angular/router';
 import { ProjectItem } from './../../../models/project-item';
-import { ProjectNewsItem } from './proj-news/proj-news-item/proj-news-item';
+import { ProjectNewsItem } from 'models/proj-news-item';
 import { TasksItem } from 'models/tasks-item';
 import { Http, Headers, RequestOptions, Response } from '@angular/http';
 

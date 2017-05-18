@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {Input} from "@angular/core";
-import {ProjectNewsItem} from "./proj-news-item/proj-news-item";
+import {ProjectNewsItem} from "models/proj-news-item";
 
 @Component({
   selector: 'app-proj-news',
