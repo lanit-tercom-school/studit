@@ -1,6 +1,6 @@
 export interface TasksItem {
-  Task: string;
-  Data: string;
-  Open: string;
-  Number:string;
+  task: string;
+  data: string;
+  open: string;
+  number:string;
 }

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from './../../../services/auth.service';
 import { DataService } from './../../../services/data.service';
 import { Router } from '@angular/router';
-import { User } from './user';
+import { User } from 'models/user';
 import { NgModule } from '@angular/core';
 
 @Component({
@@ -13,7 +13,7 @@ import { NgModule } from '@angular/core';
 })
 export class AuthorizationPageComponent implements OnInit {
 
-  private localUser: User = { Login: "", Password: "" };
+  private localUser: User = { login: "", password: "" };
   private error: any;
   private ReturnUrl: string
 
@@ -23,7 +23,6 @@ export class AuthorizationPageComponent implements OnInit {
     this.auth.unauthentificatenow();
     this.ReturnUrl = this.router.routerState.snapshot.root.queryParams['ReturnUrl'] || '/home';
     console.log("You will be redirected to", this.ReturnUrl);
-
   }
 
   login() {

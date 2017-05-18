@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { User } from './../components/pages/authorization-page/user';
+import { User } from 'models/user';
 import { Http, Headers, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import { environment } from '../../environments/environment';
@@ -13,26 +13,18 @@ export class AuthService {
     constructor(private http: Http) { }
 
     authenticatenow(user: User) {
-
-        //var headers = new Headers();
-
-        //headers.append('Content-Type', 'application/json');
-
-        return this.http.post(environment.apiUrl + '/v1/auth/signin/', JSON.stringify(user)/*, { headers: headers }*/)
+        return this.http.post(environment.apiUrl + '/v1/auth/signin/', JSON.stringify(user))
             .map((response: Response) => {
                 // successful login => getting jwt
                 let res = response.json();
                 if (res && res.token) {
                     // save data for keeping user logged in
-                    res.login = user.Login;
+                    res.login = user.login;
                     localStorage.setItem('current_user', JSON.stringify(res));
                 }
             });
     }
-
     unauthentificatenow() {
         localStorage.removeItem("current_user");
     }
-
-
 }

@@ -6,5 +6,4 @@ export interface ProjectTaskItem {
   addressee: string;
   tags: string[];
   rating: string;
-
 }

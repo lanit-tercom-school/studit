@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../../../services/api.service';
 import { Router } from '@angular/router';
-import { UserInfo } from '../../../models/user-info';
+import { UserInfo } from 'models/user-info';
 
 @Component({
   selector: 'app-registration-page',

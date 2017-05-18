@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ProjectItem } from '../../../models/project-item';
+import { Observable } from "rxjs/Observable";
 
 @Component({
   selector: 'app-project-list',
@@ -8,7 +9,7 @@ import { ProjectItem } from '../../../models/project-item';
 })
 export class ProjectListComponent implements OnInit {
 
-  @Input() public ProjectList: ProjectItem[];
+  @Input() public ProjectList: Observable<ProjectItem[]>;
 
   constructor() { }
 

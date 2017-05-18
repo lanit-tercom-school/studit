@@ -11,15 +11,14 @@ import { DataService } from '../../../services/data.service'
 export class HomeProjectsViewComponent implements OnInit, OnDestroy {
   private userId: string;
   private ProjectList: Observable<ProjectItem[]>;
-  private allProjects;
-  private userProjects;
+
   constructor(private api: ApiService, private data: DataService) { }
 
   ngOnInit() {
     this.ProjectList = this.data.UserProjects;
   }
   ngOnDestroy() {
-    
+
   }
   choseProjects() {
   }
