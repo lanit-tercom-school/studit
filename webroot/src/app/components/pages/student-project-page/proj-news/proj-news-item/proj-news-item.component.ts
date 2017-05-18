@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ProjectNewsItem} from "./proj-news-item";
+import { ProjectNewsItem} from "models/proj-news-item";
 import {Input} from "@angular/core";
 
 @Component({
