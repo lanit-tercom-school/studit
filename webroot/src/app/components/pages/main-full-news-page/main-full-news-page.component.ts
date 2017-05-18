@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { NewsItem } from 'models/news-item';
-import { ApiService } from './../../../services/api.service';
 import { Router, ActivatedRoute, Params  } from '@angular/router';
+
+import { NewsItem } from 'models/news-item';
+import { ApiService } from 'services/api.service';
+
 @Component({
   selector: 'app-main-full-news-page',
   templateUrl: './main-full-news-page.component.html',

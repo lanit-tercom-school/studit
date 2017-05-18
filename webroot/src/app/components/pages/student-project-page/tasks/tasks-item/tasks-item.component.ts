@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+
 import {TasksItem} from "models/tasks-item";
-import {Input} from "@angular/core";
 
 @Component({
   selector: 'app-tasks-item',

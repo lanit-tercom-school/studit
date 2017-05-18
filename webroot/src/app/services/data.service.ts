@@ -1,9 +1,10 @@
 import { Injectable, EventEmitter } from '@angular/core';
-import { ApiService } from './api.service';
 import { Observable } from "rxjs/Observable";
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+
+import { ApiService } from 'services/api.service';
 import { NewsItem } from "models/news-item";
-import { ProjectItem } from '../models/project-item';
+import { ProjectItem } from 'models/project-item';
 
 @Injectable()
 export class DataService {

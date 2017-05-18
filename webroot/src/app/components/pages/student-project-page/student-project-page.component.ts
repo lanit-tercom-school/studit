@@ -1,12 +1,13 @@
 import { Component, OnInit, OnChanges, DoCheck, OnDestroy } from '@angular/core';
-import { ApiService } from './../../../services/api.service';
-import { DataService } from './../../../services/data.service';
-import { MaterialsItem } from 'models/materials-item';
 import { ActivatedRoute, Params } from '@angular/router';
-import { ProjectItem } from './../../../models/project-item';
+import { Http, Headers, RequestOptions, Response } from '@angular/http';
+
+import { ApiService } from 'services/api.service';
+import { DataService } from 'services/data.service';
+import { MaterialsItem } from 'models/materials-item';
+import { ProjectItem } from 'models/project-item';
 import { ProjectNewsItem } from 'models/proj-news-item';
 import { TasksItem } from 'models/tasks-item';
-import { Http, Headers, RequestOptions, Response } from '@angular/http';
 
 
 @Component({

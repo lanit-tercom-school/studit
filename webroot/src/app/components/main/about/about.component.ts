@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { UserInfo } from '../../../models/user-info';
-import { ApiService } from '../../../services/api.service';
+
+import { UserInfo } from 'models/user-info';
+import { ApiService } from 'services/api.service';
+
 @Component({
   selector: 'app-about',
   templateUrl: './about.component.html',
@@ -13,7 +15,7 @@ export class AboutComponent implements OnInit {
   private currentUser;
   constructor(private api: ApiService, private router: Router) {
     this.currentUser = JSON.parse(localStorage.getItem('current_user'));
-    }
+  }
 
   ngOnInit() {
   }

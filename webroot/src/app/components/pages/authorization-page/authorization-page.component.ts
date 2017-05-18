@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import { AuthService } from './../../../services/auth.service';
-import { DataService } from './../../../services/data.service';
+import { Component, OnInit, NgModule } from '@angular/core';
 import { Router } from '@angular/router';
+
+import { AuthService } from 'services/auth.service';
+import { DataService } from 'services/data.service';
 import { User } from 'models/user';
-import { NgModule } from '@angular/core';
+
 
 @Component({
   selector: 'app-authorization-page',

@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import {Input} from "@angular/core";
-import {ProjectTaskItem} from "models/project-task-item";
+import { Component, OnInit, Input } from '@angular/core';
+
+import { ProjectTaskItem } from 'models/project-task-item';
 
 @Component({
   selector: 'app-project-task-list',
@@ -8,7 +8,7 @@ import {ProjectTaskItem} from "models/project-task-item";
   styleUrls: ['./project-task-list.component.css']
 })
 export class ProjectTaskListComponent implements OnInit {
-  @Input() public ProjectTaskItemList:ProjectTaskItem[];
+  @Input() public ProjectTaskItemList: ProjectTaskItem[];
   constructor() { }
 
   ngOnInit() {

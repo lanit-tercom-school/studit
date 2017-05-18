@@ -1,7 +1,6 @@
 import { Routes, RouterModule } from '@angular/router';
 
-import { AuthManager } from './../managers/authmanager';
-
+import { AuthManager } from 'managers/authmanager';
 import { MainComponent } from './main/main.component';
 import { ProjectListComponent } from './shared/project-list/project-list.component';
 import { NewsListComponent } from './shared/news-list/news-list.component';
