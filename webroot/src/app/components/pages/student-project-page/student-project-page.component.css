@@ -17,6 +17,17 @@
     margin-bottom: 1rem;
 }
 
+#project-name
+{
+  margin-bottom: 1rem;
+}
+.blacktag{
+  font-style: italic;
+  color: black;
+}
+.blacktag:hover{
+  text-decoration: underline;
+}
 .container
 {
     margin-bottom: 3rem;
