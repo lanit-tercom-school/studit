@@ -1,13 +1,13 @@
-<div *ngFor="let Project of ProjectList" class="card card-outline">
+<div *ngFor="let Project of ProjectList | async" class="card card-outline">
   <div class="row">
     <div class="col-sm-4">
-      <img class="card-img" src="{{Project.Logo}}" alt="Card image cap">
+      <img class="card-img" src="{{Project.logo}}" alt="Card image cap">
     </div>
     <div class="col-sm-8 project-info">
-      <p class="lead">{{Project.Name}}</p>
-      <p>{{Project.Description}}</p>
+      <p class="lead">{{Project.name}}</p>
+      <p>{{Project.description}}</p>
       <div class="read-more">
-        <a routerLink="/project/{{Project.Id}}" routerLinkActive="active">
+        <a routerLink="/project/{{Project.id}}" routerLinkActive="active">
           <p>Подробнее <i class="fa fa-angle-double-right" aria-hidden="true"></i></p>
         </a>
       </div>

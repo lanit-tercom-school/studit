@@ -3,18 +3,59 @@ package models
 import (
 	"errors"
 	"fmt"
-	"reflect"
+	//"reflect"
 	"strings"
-
 	"github.com/astaxie/beego/orm"
+	"time"
 )
 
+// Модель для базы данных
 type Project struct {
 	Id          int64  `orm:"column(id);pk;auto"`
 	Name        string `orm:"column(name)"`
 	Description string `orm:"column(description)"`
+	DateOfCreation time.Time   `orm:"column(date_of_creation);type(datetime)"`
 	Logo        string `orm:"column(logo)"`
+	Tags        string `orm:"column(tags)"`
+	Status 	    string `orm:"column(status)"`
 }
+
+// Модель для общения с клиентами
+type ProjectJson struct {
+	Id              int64       `json:"id,omitempty"` //
+	Name            string      `json:"name"`
+	Description     string      `json:"description"`
+	DateOfCreation  time.Time   `json:"created"`
+	Logo            string      `json:"logo"`
+	Tags            []string    `json:"tags"`
+	Status          string      `json:"status"`
+}
+
+// Обязательный превод от одной модели в другую
+func (t *Project) translate()  ProjectJson{
+	return ProjectJson{
+		Id: t.Id,
+		Name: t.Name,
+		Description: t.Description,
+		DateOfCreation: t.DateOfCreation,
+		Logo: t.Logo,
+		Tags: strings.Split(t.Tags, ","),
+		Status: t.Status,
+	}
+}
+
+func (t *ProjectJson) translate()  Project{
+	return Project{
+		Id: t.Id,
+		Name: t.Name,
+		Description: t.Description,
+		DateOfCreation: t.DateOfCreation,
+		Logo: t.Logo,
+		Tags: strings.Join(t.Tags, ","),
+		Status: t.Status,
+	}
+}
+
 
 func (t *Project) TableName() string {
 	return "project"
@@ -26,27 +67,32 @@ func init() {
 
 // AddProject insert a new Project into database and returns
 // last inserted Id on success.
-func AddProject(m *Project) (id int64, err error) {
+func AddProject(m *ProjectJson) (id int64, err error) {
+	v := m.translate()
+	v.Id = 0 // for auto inc
+	v.DateOfCreation = time.Now()
 	o := orm.NewOrm()
-	id, err = o.Insert(m)
+	id, err = o.Insert(&v)
 	return
 }
 
 // GetProjectById retrieves Project by Id. Returns error if
 // Id doesn't exist
-func GetProjectById(id int64) (v *Project, err error) {
+func GetProjectById(id int64) (*ProjectJson, error) {
 	o := orm.NewOrm()
-	v = &Project{Id: id}
-	if err = o.Read(v); err == nil {
-		return v, nil
+	temp := &Project{Id: id}
+	if err := o.Read(temp); err == nil {
+		v := temp.translate()
+		return &v, nil
+	} else {
+		return nil, err
 	}
-	return nil, err
 }
 
-// GetAllProject retrieves all Project matches certain condition. Returns empty list if
+// GetAllProjects retrieves all Project matches certain condition. Returns empty list if
 // no records exist
-func GetAllProject(query map[string]string, fields []string, sortBy []string, order []string,
-	offset int64, limit int64) (ml []interface{}, err error) {
+func GetAllProjects(query map[string]string, sortBy []string, order []string,
+	offset int64, limit int64, tag string, user int64, master int64, status string) (ml []ProjectJson, err error) {
 	o := orm.NewOrm()
 	qs := o.QueryTable(new(Project))
 	// query k=v
@@ -96,38 +142,104 @@ func GetAllProject(query map[string]string, fields []string, sortBy []string, or
 
 	var l []Project
 	qs = qs.OrderBy(sortFields...)
-	if _, err = qs.Limit(limit, offset).All(&l, fields...); err == nil {
-		if len(fields) == 0 {
-			for _, v := range l {
-				ml = append(ml, v)
-			}
-		} else {
-			// trim unused fields
-			for _, v := range l {
-				m := make(map[string]interface{})
-				val := reflect.ValueOf(v)
-				for _, fname := range fields {
-					m[fname] = val.FieldByName(fname).Interface()
-				}
-				ml = append(ml, m)
-			}
+	if _, err = qs.Limit(limit, offset).All(&l); err == nil {
+		for _, v := range l {
+			ml = append(ml, v.translate())
+		}
+		if tag != "" {
+			FilterByTag(&ml, tag)
+		}
+		if user != 0 {
+			FilterByUser(&ml, user)
+		}
+		if master != 0 {
+			FilterByMaster(&ml, master)
+		}
+		if status != "" {
+			FilterByStatus(&ml, status)
 		}
 		return ml, nil
 	}
 	return nil, err
 }
 
+func FilterByTag(ml *[]ProjectJson, tag string){
+	for i := 0; i < len(*ml);{
+		if( !TagInArrayOfStrings(tag, (*ml)[i].Tags)) {
+			(*ml)[i] = (*ml)[len(*ml)-1]
+			(*ml)= (*ml)[:len(*ml)-1]
+			continue
+		}
+
+		i++
+	}
+}
+
+func FilterByStatus(ml *[]ProjectJson, status string) {
+	for i := 0; i < len(*ml);{
+		if((*ml)[i].Status != status){
+			(*ml)[i] = (*ml)[len(*ml)-1]
+			(*ml)= (*ml)[:len(*ml)-1]
+			continue
+		}
+		i++
+	}
+}
+
+func FilterByUser(ml *[]ProjectJson, user int64){
+	o := orm.NewOrm()
+	qs := o.QueryTable(new(ProjectUser))
+	var l []ProjectUser
+	qs.All(&l)
+	userProjects := make(map[int64]bool)
+	for _, v := range l {
+		if(int(user) == (v.UserId).Id){
+			userProjects[(v.ProjectId).Id] = true
+		}
+	}
+	for i := 0; i < len(*ml);{
+		if(!userProjects[(*ml)[i].Id]){
+			(*ml)[i] = (*ml)[len(*ml)-1]
+			(*ml)= (*ml)[:len(*ml)-1]
+			continue
+		}
+		i++
+	}
+}
+
+func FilterByMaster(ml * []ProjectJson, master int64){
+	o := orm.NewOrm()
+	qs := o.QueryTable(new(ProjectMaster))
+	var l []ProjectMaster
+	qs.All(&l)
+	createdProjects := make(map[int64]bool)
+	for _, v := range l {
+		if(int(master) == (v.MasterId).Id){
+			createdProjects[(v.ProjectId).Id] = true
+		}
+	}
+
+	for i := 0; i < len(*ml);{
+		if(!createdProjects[(*ml)[i].Id]){
+			(*ml)[i] = (*ml)[len(*ml)-1]
+			(*ml)= (*ml)[:len(*ml)-1]
+			continue
+		}
+		i++
+	}
+}
+
 // UpdateProject updates Project by Id and returns error if
 // the record to be updated doesn't exist
-func UpdateProjectById(m *Project) (err error) {
+func UpdateProjectById(m *ProjectJson) (err error) {
+	proj, err := GetProjectById(m.Id)
+	t := m.translate()
+	t.DateOfCreation = proj.DateOfCreation
 	o := orm.NewOrm()
 	v := Project{Id: m.Id}
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
-		var num int64
-		if num, err = o.Update(m); err == nil {
-			fmt.Println("Number of records updated in database:", num)
-		}
+		_, err = o.Update(&t)
 	}
 	return
 }
@@ -148,9 +260,9 @@ func DeleteProject(id int64) (err error) {
 }
 
 // Return 3 Projects for landing page. Returns empty list if no Projects exists
-// This is overloaded method for GetAllProject with parameters
+// This is overloaded method for GetAllProjects with parameters
 // ([], [], [], [], 0, 3)
-func GetLandingProjects() (ml []interface{}, err error) {
+func GetLandingProjects() (ml []ProjectJson, err error) {
 	var query = make(map[string]string)
-	return GetAllProject(query, []string{}, []string{}, []string{}, 0, 3)
+	return GetAllProjects(query, []string{}, []string{}, 0, 3, "", 0, 0, "")
 }

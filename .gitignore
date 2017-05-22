@@ -261,3 +261,5 @@ src/service/swagger/*
 src/github.com/*
 src/golang.org/*
 src/service/routers/commentsRouter_*
+run_front.cmd
+run_back.cmd

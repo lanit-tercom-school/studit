@@ -1,9 +1,15 @@
+
+CREATE TYPE state AS ENUM ('еще не начат', 'начат', 'завершен');
+
 /*Проект*/
 CREATE TABLE "project" (
 	"id" serial NOT NULL,
 	"name" varchar(100) NOT NULL,
 	"description" TEXT NOT NULL,
+	"date_of_creation" TIMESTAMP WITH TIME ZONE NOT NULL,
 	"logo" varchar(1000) NOT NULL,
+	"tags" varchar(1000) NOT NULL,
+	"status" state NOT NULL,
 	CONSTRAINT project_pk PRIMARY KEY ("id")
 ) WITH (
   OIDS=FALSE
@@ -53,7 +59,7 @@ OIDS=FALSE
 );
 
 /*Связь пользователя и проекта, на который пользователь записан*/
-CREATE TABLE project_enroll (
+CREATE TABLE "project_enroll" (
   "id" serial NOT NULL,
   "project_id" bigint NOT NULL,
   "user_id" bigint NOT NULL,

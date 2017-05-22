@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+
 import { NewsItem } from 'models/news-item';
 
 @Component({

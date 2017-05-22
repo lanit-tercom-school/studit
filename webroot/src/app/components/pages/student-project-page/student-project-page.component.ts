@@ -1,11 +1,12 @@
-import { Component, OnInit, OnChanges, DoCheck } from '@angular/core';
-import { ApiService } from './../../../services/api.service';
-import { MaterialsItem } from './materials/materials-item/materials-item';
+import { Component, OnInit, OnChanges, DoCheck, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
-import { ProjectItem } from './../../../models/project-item';
-import { ProjectNewsItem } from './proj-news/proj-news-item/proj-news-item';
-import { TasksItem } from "./tasks/tasks-item/tasks-item";
 import { Http, Headers, RequestOptions, Response } from '@angular/http';
+import { ApiService } from 'services/api.service';
+import { DataService } from 'services/data.service';
+import { MaterialsItem } from 'models/materials-item';
+import { ProjectItem } from 'models/project-item';
+import { ProjectNewsItem } from 'models/proj-news-item';
+import { TasksItem } from 'models/tasks-item';
 
 
 @Component({
@@ -13,56 +14,35 @@ import { Http, Headers, RequestOptions, Response } from '@angular/http';
   templateUrl: './student-project-page.component.html',
   styleUrls: ['./student-project-page.component.css']
 })
-export class StudentProjectPageComponent implements OnInit, DoCheck {
-
-  private project;
-  private projectId: number;
+export class StudentProjectPageComponent implements OnInit, OnDestroy {
+  private project = {
+    'id': 0,
+    'name': '',
+    'description': '',
+    'created': '0',
+    'logo': '',
+    'tags': [
+      ''
+    ],
+    'status': ''
+  };
+  private projectId;
+  private authorized = false;
   private tasks = [];
-  private subscribedUsers = [];
-  private authorized: boolean;
   private enrollButtonStatus: number;//0 - enrolling,1 - you are in project, 2 - unenrolling
-  constructor(private apiService: ApiService,
-    private route: ActivatedRoute, private http: Http) { }
+  constructor(private apiService: ApiService, private route: ActivatedRoute, private http: Http, private data: DataService) { }
 
   ngOnInit() {
-    this.enrollButtonStatus = 0;
+    if (localStorage.getItem('current_user')) { this.authorized = true; }
     this.route.params
       .subscribe(params => {
         this.projectId = params['id'];
-        this.apiService.getProjectUsers(params['id']).subscribe(res => {
-          this.subscribedUsers = res.json();
-          if (this.subscribedUsers != null) {
-            for (let a of this.subscribedUsers) {
-              if (a === JSON.parse(localStorage.getItem('current_user')).id) {
-                this.enrollButtonStatus = 1;
-                break;
-              }
-            }
-          }
-        });
-        this.apiService.getEnrolledUsersToProject(params['id']).subscribe(res => {
-          this.subscribedUsers = res.json();
-          if (this.subscribedUsers != null) {
-            for (let a of this.subscribedUsers) {
-              if (a === JSON.parse(localStorage.getItem('current_user')).id) {
-                this.enrollButtonStatus = 2;
-                break;
-              }
-            }
-          }
-        });
-        this.project = this.apiService.getProjectById(+params['id']).subscribe(res => this.project = res.json());
+        this.choseButtonStatus();
       });
 
     this.getTaskItems();
-    if (localStorage.getItem('current_user')) {
-      this.authorized = true;
-    }
-    else {
-      this.authorized = false;
-    }
   }
-  ngDoCheck() {
+  ngOnDestroy() {
 
   }
 
@@ -82,9 +62,20 @@ export class StudentProjectPageComponent implements OnInit, DoCheck {
   enroll() {
     this.apiService.enrollToProject(this.projectId, JSON.parse(localStorage.getItem('current_user')).token).subscribe(res => { });
     this.enrollButtonStatus = 2;
+    this.data.loadEnrolledUsersProject();
   }
   unenroll() {
     this.apiService.unenrollToProject(this.projectId, JSON.parse(localStorage.getItem('current_user')).token).subscribe(res => { });
     this.enrollButtonStatus = 0;
+    this.data.loadEnrolledUsersProject();
+  }
+  choseButtonStatus() {
+    this.data.UserProjects.subscribe(res => {
+      for (let i=0; i<res.length;i++) {
+        if (res[i].id===+this.projectId){
+          this.enrollButtonStatus=1;
+        }
+      }
+    })
   }
 }

@@ -25,8 +25,13 @@ func init() {
 
 // AddProjectAuthor insert a new ProjectEnroll into database and returns
 // last inserted Id on success.
-func AddApplicationFromUserForProject(m *ProjectEnroll) (id int64, err error) {
-	id, err = orm.NewOrm().Insert(m)
+func AddApplicationFromUserForProject(u *User, p *ProjectJson) (id int64, err error) {
+	temp := p.translate()
+	m := ProjectEnroll{
+		UserId: u,
+		ProjectId: &temp,
+	}
+	id, err = orm.NewOrm().Insert(&m)
 	return
 }
 

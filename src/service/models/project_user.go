@@ -28,7 +28,13 @@ func init() {
 
 // AddProjectUser insert a new ProjectUser into database and returns
 // last inserted Id on success.
-func AddUserToProject(m *ProjectUser) (err error) {
+func AddUserToProject(u *User, y *ProjectJson) (err error) {
+	temp := y.translate()
+	m := ProjectUser{
+		ProjectId: &temp,
+		UserId: u,
+		SignedDate: time.Now(),
+	}
 	o := orm.NewOrm()
 	var p ProjectEnroll
 	_, err = o.QueryTable(new(ProjectEnroll)).
@@ -43,7 +49,7 @@ func AddUserToProject(m *ProjectUser) (err error) {
 	if err != nil {
 		return err
 	}
-	_, err = o.Insert(m)
+	_, err = o.Insert(&m)
 	return
 }
 
