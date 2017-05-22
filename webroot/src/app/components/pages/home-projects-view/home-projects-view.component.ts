@@ -1,19 +1,27 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Observable } from "rxjs/Observable";
+
 import { ProjectItem } from 'models/project-item';
-import {ApiService } from 'services/api.service';
+import { ApiService } from 'services/api.service';
+import { DataService } from 'services/data.service';
+
 @Component({
   selector: 'app-home-projects-view',
   templateUrl: './home-projects-view.component.html',
   styleUrls: ['./home-projects-view.component.css']
 })
-export class HomeProjectsViewComponent implements OnInit {
-  private userId:string;
-  private ProjectList:ProjectItem[];
-  constructor(private api:ApiService) { }
+export class HomeProjectsViewComponent implements OnInit, OnDestroy {
+  private userId: string;
+  private ProjectList: Observable<ProjectItem[]>;
+
+  constructor(private api: ApiService, private data: DataService) { }
 
   ngOnInit() {
-    this.userId=JSON.parse(localStorage.getItem("current_user")).id;
-    this.api.getProjectItemsByUserId(this.userId).subscribe(res => { this.ProjectList = res });
+    this.ProjectList = this.data.UserProjects;
   }
+  ngOnDestroy() {
 
+  }
+  choseProjects() {
+  }
 }
