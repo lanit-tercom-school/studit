@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ApiService } from "../../../services/api.service";
-import 'rxjs/add/operator/toPromise';
-
 
 @Component({
   selector: 'create-project-page',
@@ -22,16 +20,14 @@ export class CreateProjectPageComponent implements OnInit {
 
     makeProject(){
       this.api.postProject(this.createdProject, JSON.parse(localStorage.getItem('current_user')).token)
-      .then(()  => {
+      .subscribe(()  => {
       console.log('Project was added');
       this.isCreated = true;
       //this.router.navigate(['/home']);
-      })
-     .catch(error => console.log(error));
+      });
     }
 
-    addLogo()
-    {
+    addLogo(){
     var promptValue = prompt('Укажите адрес картинки.', '');
     if (promptValue != null && promptValue != '')
       this.createdProject.logo = promptValue;

@@ -9,8 +9,8 @@
          src={{createdProject.logo}}
          alt="Project photo">
         <br>
-        <button  role="button" type = "image"
-        (click)="addLogo()" [(ngModel)]="createdProject.logo" name = "projLogo"
+        <button  role="button"
+        (click)="addLogo()"  name = "projectLogo"
         class="btn btn-secondary btn-submit">Изменить...</button>
     </div>
       <div class = "col-sm-12 col-md-5 col-lg-5" align = "left">
@@ -18,7 +18,7 @@
           <div class ="form-line">
             <label class="col-form-label">Название проекта:</label>
             <input class="form-control"
-            placeholder ="" [(ngModel)]="createdProject.name" name = "projName" required>
+            placeholder ="" [(ngModel)]="createdProject.name" name = "projectName" required>
           </div>
         <div class ="form-line">
            <label class="col-form-label" for="inputDescription">Описание проекта:</label>

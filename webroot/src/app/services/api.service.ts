@@ -4,7 +4,6 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/observable/throw';
-import 'rxjs/add/operator/toPromise'; //
 
 import { environment } from '../../environments/environment';
 
@@ -227,20 +226,14 @@ export class ApiService {
       return new RequestOptions({ headers: headers });
     }
   }
-  postProject(project, token: string) : Promise<any> {
+  postProject(project, token: string) {
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
     headers.append('Accept', 'application/json')
     headers.append('Bearer-token', token);
-    return this.http.post(environment.apiUrl + '/v1/project/id/', JSON.stringify(project), { headers: headers })
-    .toPromise()
-    .then(this.extractData);
-
+    console.log(environment.apiUrl + '/v1/project/id/', JSON.stringify(project));
+    return this.http.post(environment.apiUrl + '/v1/project/id/', JSON.stringify(project), { headers: headers });
   }
-  private extractData(res: Response) {
-       let body = res.json();
-       return body || {};
-   }
 
   deleteProject(id: string, token: string) {
     let headers = new Headers();
