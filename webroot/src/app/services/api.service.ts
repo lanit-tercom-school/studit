@@ -114,16 +114,16 @@ export class ApiService {
   getProjectNewsItem(id: number) {
     return [
       {
-        "description": "News 1",
+        "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean porttitor dapibus magna",
         "links": "#",
-        "main": "Topic 1",
+        "main": "Lorem ipsum dolor sit amet",
         "data": "20.07.16 22:10"
 
       },
       {
-        "description": "News 2",
+        "description": "Nullam cursus ornare quam, vitae tincidunt neque ullamcorper in.",
         "links": "#",
-        "main": "Topic 2",
+        "main": "Fusce odio lorem",
         "data": "19.07.16 16:02"
 
       }

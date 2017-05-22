@@ -1,9 +1,6 @@
 div
 {
-    //background: whitesmoke;
-    //width: 90%;
     margin: 1rem 0.5rem;
-
 }
 
 p{
@@ -11,10 +8,13 @@ p{
   margin-right: 1rem;
 }
 
-a{
+a
+{
+   color: black;
    word-break: break-all;
    margin-right: 1rem;
 }
+
 li
 {
     list-style-type: none;
