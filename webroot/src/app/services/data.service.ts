@@ -5,6 +5,7 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { ApiService } from 'services/api.service';
 import { NewsItem } from "models/news-item";
 import { ProjectItem } from 'models/project-item';
+import { environment } from '../../environments/environment'
 
 @Injectable()
 export class DataService {
@@ -14,7 +15,6 @@ export class DataService {
   private userProjects: BehaviorSubject<ProjectItem[]> = <BehaviorSubject<ProjectItem[]>>new BehaviorSubject([]);
   private userEnrolledProjects: BehaviorSubject<ProjectItem[]> = <BehaviorSubject<ProjectItem[]>>new BehaviorSubject([]);
   private projectsForMainPage: BehaviorSubject<ProjectItem[]> = <BehaviorSubject<ProjectItem[]>>new BehaviorSubject([]);
-
   private dataStore: {
     news: NewsItem[];
     projects: ProjectItem[];
@@ -56,6 +56,7 @@ export class DataService {
     this.api.getProjectItems().subscribe(res => {
       if (res != null) {
         this.dataStore.projects = res;
+        this.dataStore.projects.forEach(a => { a.logo = this.addApiUrl(a.logo); })
         this.projects.next(Object.assign({}, this.dataStore).projects);
       }
     });
@@ -63,8 +64,9 @@ export class DataService {
 
   loadProjectsForMainPage() {
     this.api.getMainPageProjects().subscribe(res => {
-      this.dataStore.projectsForMainPage=res;
-      this.projectsForMainPage.next(Object.assign({},this.dataStore).projectsForMainPage);
+      this.dataStore.projectsForMainPage = res;
+      this.dataStore.projectsForMainPage.forEach(a => { a.logo = this.addApiUrl(a.logo); })
+      this.projectsForMainPage.next(Object.assign({}, this.dataStore).projectsForMainPage);
     })
   }
 
@@ -73,6 +75,7 @@ export class DataService {
       this.api.getProjectsOfUser(this.UserId).subscribe(res => {
         if (res != null) {
           this.dataStore.userProjects = res;
+          this.dataStore.userProjects.forEach(a => { a.logo = this.addApiUrl(a.logo); })
           this.userProjects.next(Object.assign({}, this.dataStore).userProjects);
         }
 
@@ -96,6 +99,5 @@ export class DataService {
       this.news.next(Object.assign({}, this.dataStore).news);
     });
   }
-
-
+  addApiUrl(url: string): string { return environment.apiUrl + url; }
 }
