@@ -1,7 +1,6 @@
 import { Injectable, EventEmitter } from '@angular/core';
 import { Observable } from "rxjs/Observable";
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
 
 import { ApiService } from 'services/api.service';
 import { NewsItem } from "models/news-item";
@@ -16,6 +15,7 @@ export class DataService {
   private userProjects: BehaviorSubject<ProjectItem[]> = <BehaviorSubject<ProjectItem[]>>new BehaviorSubject([]);
   private userEnrolledProjects: BehaviorSubject<ProjectItem[]> = <BehaviorSubject<ProjectItem[]>>new BehaviorSubject([]);
   private projectsForMainPage: BehaviorSubject<ProjectItem[]> = <BehaviorSubject<ProjectItem[]>>new BehaviorSubject([]);
+
   private dataStore: {
     news: NewsItem[];
     projects: ProjectItem[];
@@ -100,5 +100,6 @@ export class DataService {
       this.news.next(Object.assign({}, this.dataStore).news);
     });
   }
+
   addApiUrl(url: string): string { return environment.apiUrl + url; }
 }

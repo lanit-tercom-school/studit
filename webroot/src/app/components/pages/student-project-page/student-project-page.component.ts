@@ -38,8 +38,8 @@ export class StudentProjectPageComponent implements OnInit, OnDestroy {
 
     this.getTaskItems();
   }
+  
   ngOnDestroy() {
-
   }
 
   getProjectInfo() {

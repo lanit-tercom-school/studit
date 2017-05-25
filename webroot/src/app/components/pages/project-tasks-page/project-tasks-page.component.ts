@@ -25,10 +25,10 @@ ngOnInit() {
     });
 }
 
-getProjectAllTaskItem(): ProjectTaskItem[] {
+getProjectAllTaskItem() {
   return this.apiService.getProjectAllTaskItem(1);
 }
-getProjectStudentTaskItem(): ProjectTaskItem[] {
+getProjectStudentTaskItem() {
   return this.apiService.getProjectStudentTaskItem(1);
 }
 }
