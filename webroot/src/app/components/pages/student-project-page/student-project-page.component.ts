@@ -8,6 +8,9 @@ import { MaterialsItem } from 'models/materials-item';
 import { ProjectItem } from 'models/project-item';
 import { ProjectNewsItem } from 'models/proj-news-item';
 import { TasksItem } from 'models/tasks-item';
+import { Observable } from "rxjs/Observable";
+
+import 'rxjs/add/operator/filter';
 
 
 @Component({
@@ -16,17 +19,8 @@ import { TasksItem } from 'models/tasks-item';
   styleUrls: ['./student-project-page.component.css']
 })
 export class StudentProjectPageComponent implements OnInit, OnDestroy {
-  private project = {
-    'id': 0,
-    'name': '',
-    'description': '',
-    'created': '0',
-    'logo': '',
-    'tags': [
-      ''
-    ],
-    'status': ''
-  };
+  
+  private project;
   private projectId;
   private authorized = false;
   private tasks = [];
@@ -38,6 +32,7 @@ export class StudentProjectPageComponent implements OnInit, OnDestroy {
     this.route.params
       .subscribe(params => {
         this.projectId = params['id'];
+        this.getProjectInfo();
         this.choseButtonStatus();
       });
 
@@ -45,6 +40,10 @@ export class StudentProjectPageComponent implements OnInit, OnDestroy {
   }
   ngOnDestroy() {
 
+  }
+
+  getProjectInfo() {
+    this.data.Projects.subscribe(projects => this.project = projects.find(res => res.id == this.projectId));
   }
 
   getMaterialsItems(): MaterialsItem[] {
