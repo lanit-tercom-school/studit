@@ -1,12 +1,13 @@
 #main-info
 {
-    //padding: 1rem 0;
+    padding: 1rem 1rem;
     margin-bottom: 1rem;
     background: whitesmoke;
 }
 
 #project-img
 {
+    margin-top: 2rem;
     margin-bottom: 1rem;
 }
 

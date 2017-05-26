@@ -11,12 +11,12 @@
         <div *ngIf="enrollButtonStatus==2">
           <button type="button" role="button" class="btn btn-large btn-block btn-warning" (click)="unenroll()">Отменить заявку</button>
         </div>
-        <div *ngIf="enrollButtonStatus==1">
+        <div align = "center" *ngIf="enrollButtonStatus==1">
           <h5>Вы участвуете в проекте</h5>
         </div>
       </div>
     </div>
-    <div class="col-lg-9 col-md-offset-12">
+    <div id = "main-info" class="col-lg-9 col-md-offset-12">
       <h2 id = "project-name">Lorem ipsum dolomet amer<!--{{project.name}}--></h2>
       <p class="lead">Lorem ipsum dolor sit amet, consectetur adipiscing elit.
          Cras dignissim sollicitudin vulputate. Maecenas porttitor massa ante,
@@ -30,13 +30,13 @@
     </div>
   </div>
   <div class="row">
-    <div class="col-sm-3" id="materials">
+    <div class="col-lg-3" id="materials">
       <app-materials [MaterialsList]=getMaterialsItems()></app-materials>
     </div>
-    <div class="col-sm-6">
+    <div class="col-lg-6 col-md-offset-12">
       <app-tasks [TasksItemList]="this.tasks"></app-tasks>
     </div>
-    <div class="col-sm-3">
+    <div class="col-lg-3 col-md-offset-12">
       <app-proj-news [ProjectNewsList]=getProjectNewsItem()>
         <a href="#" class="btn btn-secondary">Author profile</a>) ></app-proj-news>
     </div>
