@@ -1,7 +1,9 @@
-<div class="container">
-  <div class="row" id="main-info">
-    <div class="col-sm-3" id="img-btn">
-      <img id="project-img" width="225px" height="225px" src="http://www.slabtoc.ru/images/about-company.jpg" alt="Project image">
+<div class="container" id = "main-info">
+  <div class="row">
+    <div class="col-lg-3 col-md-12">
+       <div align = "center">
+         <img id = "project-img" width="225px" height="225px" src="http://www.slabtoc.ru/images/about-company.jpg" alt="Project image">
+       </div>
       <div *ngIf="authorized">
         <div *ngIf="enrollButtonStatus==0">
           <button type="button" role="button" class="btn btn-large btn-block btn-primary" (click)="enroll()">Подать заявку</button>
@@ -14,7 +16,7 @@
         </div>
       </div>
     </div>
-    <div class="col-sm-9">
+    <div class="col-lg-9 col-md-offset-12">
       <h2 id = "project-name">Lorem ipsum dolomet amer<!--{{project.name}}--></h2>
       <p class="lead">Lorem ipsum dolor sit amet, consectetur adipiscing elit.
          Cras dignissim sollicitudin vulputate. Maecenas porttitor massa ante,

@@ -1,15 +1,8 @@
 #main-info
 {
-    padding: 1rem 0;
+    //padding: 1rem 0;
     margin-bottom: 1rem;
     background: whitesmoke;
-}
-
-#img-btn
-{
-    //display: flex;
-    //flex-direction: column;
-    align-items: center;
 }
 
 #project-img
