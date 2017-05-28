@@ -111,15 +111,14 @@ func (c *ProjectController) GetOne() {
 // GetAll ...
 // @Title Get All
 // @Description get Project
-// @Param	query	query	string	false	"Filter. e.g. col1:v1,col2:v2 ..."
-// @Param	sortby	query	string	false	"Sorted-by fields. e.g. col1,col2 ..."
-// @Param	order	query	string	false	"Order corresponding to each sortby field, if single value, apply to all sortby fields. e.g. desc,asc ..."
-// @Param       user    query   string  false   "Получить проекты, в которых участвует пользователь с заданным ID."
-// @Param       master  query   string  false   "Получить проекты, автором которых является пользователь с заданным ID."
-// @Param       tag     query   string  false   "Получить проекты с тегом. Тег может быть только один."
-// @Param       status  query   string  false   "Получить проекты с заданным статусом ('завершен'/'еще не начат')"
-// @Param	limit	query	string	false	"Limit the size of result set. Must be an integer. Default 10"
-// @Param	offset	query	string	false	"Start position of result set. Must be an integer"
+// @Param   sortby  query   string  false   "Sorted-by fields. e.g. col1,col2 ..."
+// @Param   order   query   string  false   "Order corresponding to each sortby field, if single value, apply to all sortby fields. e.g. desc,asc ..."
+// @Param   user    query   string  false   "Получить проекты, в которых участвует пользователь с заданным ID."
+// @Param   master  query   string  false   "Получить проекты, автором которых является пользователь с заданным ID."
+// @Param   tag     query   string  false   "Получить проекты с тегом. Тег может быть только один."
+// @Param   status  query   string  false   "Получить проекты с заданным статусом ('завершен'/'еще не начат')"
+// @Param   limit   query   string  false   "Limit the size of result set. Must be an integer. Default 10"
+// @Param   offset  query   string  false   "Start position of result set. Must be an integer"
 // @Success 200 {object} []models.Project Get array of projects filtered with specified filters (wtf this description)
 // @Failure 403
 // @router / [get]
@@ -164,11 +163,12 @@ func (c *ProjectController) GetAll() {
 	if v := c.GetString("tag"); v!= ""{
 		tag = v
 	}
-	if v := c.GetString("status"); v!= "" {
-		if(correctStatus(v)){
+	if v := c.GetString("status"); v != "" {
+		if correctStatus(v) {
 			status = v
 		}
 	}
+	beego.Trace(status)
 	// query: k:v,k:v
 	if v := c.GetString("query"); v != "" {
 		for _, cond := range strings.Split(v, ",") {
@@ -182,7 +182,7 @@ func (c *ProjectController) GetAll() {
 			query[k] = v
 		}
 	}
-	beego.Trace(c.Ctx.Input.IP(), "Select from table")
+	beego.Trace("Select from table")
 	l, err := models.GetAllProjects(query, sortBy, order, offset, limit, tag, user, master, status)
 	if err != nil {
 		beego.Debug(c.Ctx.Input.IP(), "News GetAll `GetAllProjects` error", err.Error())
@@ -196,7 +196,7 @@ func (c *ProjectController) GetAll() {
 
 
 func correctStatus(status string) bool{
-	if(status == "еще не начат" || status == "завершен" || status == "начат"){
+	if status == "0" || status == "1" || status == "2" {
 		return true
 	}
 	return false

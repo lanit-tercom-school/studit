@@ -40,8 +40,8 @@ func main() {
 		Description: "Разработка образовательного портала для Lanit-Tercom School",
 		DateOfCreation: time.Now(),
 		Logo: "/files/1.jpg",
-		Tags: "studit, summerschool",
-		Status: "еще не начат",
+		Tags: "studit,summerschool",
+		Status: 1,
 	}
 	fastCheckErr(o.Insert(&project1))
 
@@ -52,7 +52,7 @@ func main() {
 		DateOfCreation: time.Now(),
 		Logo: "/files/2.jpg",
 		Tags: "freelance",
-		Status: "начат",
+		Status: 0,
 	}
 	fastCheckErr(o.Insert(&project2))
 
@@ -63,7 +63,7 @@ func main() {
 		DateOfCreation: time.Now(),
 		Logo: "/files/3.jpg",
 		Tags: "creative",
-		Status: "начат",
+		Status: 0,
 	}
 	fastCheckErr(o.Insert(&project3))
 
@@ -73,8 +73,8 @@ func main() {
 		Description: "Студенческий проект TFS Mobile",
 		DateOfCreation: time.Now(),
 		Logo: "/files/4.jpg",
-		Tags: "TFSMobile, summerschool",
-		Status: "еще не начат",
+		Tags: "TFSMobile,summerschool",
+		Status: 0,
 	}
 	fastCheckErr(o.Insert(&project4))
 
@@ -85,7 +85,7 @@ func main() {
 		DateOfCreation: time.Now(),
 		Logo: "/files/5.jpg",
 		Tags: "project",
-		Status: "завершен",
+		Status: 0,
 	}
 	fastCheckErr(o.Insert(&project5))
 
