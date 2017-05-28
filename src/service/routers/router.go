@@ -177,12 +177,12 @@ func init() {
 			),
 		),
 */
-		beego.NSNamespace("/land/projects",
+		beego.NSNamespace("/main/projects",
 			beego.NSInclude(
 				&controllers.LandingProjectsController{},
 			),
 		),
-		beego.NSNamespace("/auth/login",
+		beego.NSNamespace("/auth/signin",
 			beego.NSInclude(
 				&controllers.AuthController{},
 			),
