@@ -20,6 +20,46 @@ func init() {
 	orm.RegisterModel(new(ProjectMaster))
 }
 
+//GetProjectMasterIdByUserId return array of projects
+//where user is master
+func GetProjectMasterIdByUserId (userId int) (projectid []int64, err error){
+	o := orm.NewOrm()
+	var projects []ProjectMaster
+	_, err = o.QueryTable(new(ProjectMaster)).Filter("MasterId", User{Id: userId}).RelatedSel().All(&projects)
+	if err != nil {
+		return projectid, err
+	}
+	for _, v := range projects {
+		projectid = append(projectid, v.ProjectId.Id)
+	}
+	return projectid, nil
+}
+
+//IsProjectMasterUserByIdIsProjectMasterUserById returns true
+//if master is master of userproject
+func IsProjectMasterForUserById(userId int,masterId int)(masterOfUser bool, err error){
+	userProjects, err :=GetProjectUserIdByUserId(userId)
+	if err != nil{
+		return false, err
+	}
+	masterProjects, err :=GetProjectMasterIdByUserId(masterId)
+	if err != nil{
+		return false, err
+	}
+	//finding intersection
+	target := make(map[int64]bool)
+	for _, v := range masterProjects {
+		target[v] = true
+	}
+	for _, v := range userProjects {
+		if target[v] {
+			return true, nil
+		}
+	}
+
+	return false, nil
+}
+
 // AddProjectUser insert a new ProjectMaster into database and returns
 // last inserted Id on success.
 func AddMasterToProject(user *User, project *ProjectJson) (err error) {

@@ -26,6 +26,7 @@ func (c *UserController) URLMapping() {
 // @Title Get One
 // @Description get User by id
 // @Param	id		path 	string	true		"The key for staticblock"
+// @Param   Bearer-token        header      string          true    "Токен"
 // @Success 200 {object} models.User
 // @Failure 400 :id is empty string
 // @router /:id [get]
@@ -39,12 +40,36 @@ func (c *UserController) GetOne() {
 			c.Data["json"] = err.Error()
 			c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
 		} else {
-			c.Data["json"] = models.User{
-				Id: v.Id,
-				Nickname: v.Nickname,
-				Description: v.Description,
-				Avatar: v.Avatar,
+			if contact, err := models.GetAllUserContacts(id); err != nil {
+				beego.Critical("GetOne user Contacts GetAllUserContact error ", err.Error())
+				c.Data["json"] = err.Error()
+				c.Ctx.Output.SetStatus(500)
+			} else {
+				ismaster, err :=models.IsProjectMasterForUserById(id, c.CurrentUser.UserId)
+				if err ==nil {
+					if c.CurrentUser.UserId == v.Id || c.CurrentUser.PermissionLevel == 2 || ismaster {
+						c.Data["json"] = models.UserInfo{
+							Id:              v.Id,
+							Nickname:        v.Nickname,
+							Description:     v.Description,
+							Avatar:          v.Avatar,
+							PermissionLevel: v.PermissionLevel,
+							Contact:         contact,
+						}
+					} else {
+						c.Data["json"] = models.User{
+							Id:          v.Id,
+							Nickname:    v.Nickname,
+							Description: v.Description,
+							Avatar:      v.Avatar,
+						}
+					}
+				} else {
+					beego.Critical("Error in IsProjectMasterForUserById in User `GetOne(ID)` ", err.Error())
+					c.Data["json"] = err.Error()
+					c.Ctx.Output.SetStatus(500)
 				}
+			}
 		}
 	} else {
 		beego.Debug("GetOne user `Atoi` error", err.Error())
@@ -53,7 +78,6 @@ func (c *UserController) GetOne() {
 	}
 	c.ServeJSON()
 }
-
 // GetAll ...
 // @Title Get All
 // @Description get User

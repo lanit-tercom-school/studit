@@ -77,7 +77,7 @@ CREATE TABLE "project_enroll" (
 CREATE TABLE "user_contact" (
 	"id" serial NOT NULL,
 	"contact" varchar(255) NOT NULL,
-	"contact_type_id" bigint NOT NULL,
+	"contact_type" varchar(255) NOT NULL,
 	"user_id" bigint NOT NULL,
 	CONSTRAINT user_contact_pk PRIMARY KEY ("id")
 ) WITH (
@@ -310,8 +310,8 @@ ALTER TABLE "lesson" ADD CONSTRAINT "lesson_fk0" FOREIGN KEY ("course_id") REFER
 
 ALTER TABLE "project_user" ADD CONSTRAINT "project_user_fk0" FOREIGN KEY ("project_id") REFERENCES "project"("id");
 ALTER TABLE "project_user" ADD CONSTRAINT "project_user_fk1" FOREIGN KEY ("user_id") REFERENCES "user"("id");
-
-ALTER TABLE "user_contact" ADD CONSTRAINT "user_contact_fk0" FOREIGN KEY ("contact_type_id") REFERENCES "contact_type"("id");
+/*
+ALTER TABLE "user_contact" ADD CONSTRAINT "user_contact_fk0" FOREIGN KEY ("contact_type_id") REFERENCES "contact_type"("id");*/
 ALTER TABLE "user_contact" ADD CONSTRAINT "user_contact_fk1" FOREIGN KEY ("user_id") REFERENCES "user"("id");
 
 ALTER TABLE "user_course" ADD CONSTRAINT "user_course_fk0" FOREIGN KEY ("course_id") REFERENCES "course"("id");

@@ -342,7 +342,7 @@ func main() {
 	fastCheckErr(o.Insert(&prj_usr_con6))
 
 	// add contact types
-
+/*
 	contactType1 := m.ContactType{
 		Id: 1,
 		Type: "email",
@@ -384,14 +384,14 @@ func main() {
 		Type: "viber",
 	}
 	fastCheckErr(o.Insert(&contactType7))
-
+*/
 	// add user contacts
 
 	user_contact1 := m.UserContact{
 		Id: 1,
 		UserId: &user1,
 		Contact: "a@a",
-		ContactTypeId: &contactType1,
+		Type: "skype",
 	}
 	fastCheckErr(o.Insert(&user_contact1))
 
@@ -399,7 +399,7 @@ func main() {
 		Id: 2,
 		UserId: &user2,
 		Contact: "moder@moder.moder",
-		ContactTypeId: &contactType1,
+		Type: "email",
 	}
 	fastCheckErr(o.Insert(&user_contact2))
 
@@ -407,7 +407,7 @@ func main() {
 		Id: 3,
 		UserId: &user3,
 		Contact: "egorka2003@maaail.ru",
-		ContactTypeId: &contactType1,
+		Type: "email",
 	}
 	fastCheckErr(o.Insert(&user_contact3))
 
@@ -415,7 +415,7 @@ func main() {
 		Id: 4,
 		UserId: &user1,
 		Contact: "+7-123-456-78-90",
-		ContactTypeId: &contactType2,
+		Type: "mobile phone",
 	}
 	fastCheckErr(o.Insert(&user_contact4))
 
@@ -423,7 +423,7 @@ func main() {
 		Id: 5,
 		UserId: &user5,
 		Contact: "slayer17",
-		ContactTypeId: &contactType5,
+		Type: "vk.com",
 	}
 	fastCheckErr(o.Insert(&user_contact5))
 
@@ -431,7 +431,7 @@ func main() {
 		Id: 6,
 		UserId: &user4,
 		Contact: "zagad0chnaya",
-		ContactTypeId: &contactType6,
+		Type: "telegram",
 	}
 	fastCheckErr(o.Insert(&user_contact6))
 
@@ -439,7 +439,7 @@ func main() {
 		Id: 7,
 		UserId: &user6,
 		Contact: "nekotyanmimimi",
-		ContactTypeId: &contactType5,
+		Type: "viber",
 	}
 	fastCheckErr(o.Insert(&user_contact7))
 
