@@ -20,13 +20,19 @@ type User struct {
     PermissionLevel     int     `orm:"column(permission_level);default(0)"  json:"permission_level,omitempty"`
 }
 
-type UserInfo struct {
+type FullUserInfo struct {
 	Id              int                     `json:"id"`
-	Nickname        string                	`json:"nickname"`
-	Description     string                	`json:"description"`
-	Avatar          string                	`json:"avatar"`
-	PermissionLevel int               	`json:"permission_level"`
-	Contact         []interface{}         	`json:"contacts"`
+	Nickname        string                  `json:"nickname"`
+	Description     string                  `json:"description"`
+	Avatar          string                  `json:"avatar"`
+	PermissionLevel int                     `json:"permission_level"`
+	Contact         []interface{}           `json:"contacts"`
+}
+
+type PartUserInfo struct {
+	Id       int    `json:"id"`
+	Nickname string `json:"nickname"`
+	Avatar   string `json:"avatar"`
 }
 
 func (t *User) TableName() string {

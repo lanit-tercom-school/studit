@@ -48,7 +48,7 @@ func (c *UserController) GetOne() {
 				ismaster, err :=models.IsProjectMasterForUserById(id, c.CurrentUser.UserId)
 				if err ==nil {
 					if c.CurrentUser.UserId == v.Id || c.CurrentUser.PermissionLevel == 2 || ismaster {
-						c.Data["json"] = models.UserInfo{
+						c.Data["json"] = models.FullUserInfo{
 							Id:              v.Id,
 							Nickname:        v.Nickname,
 							Description:     v.Description,

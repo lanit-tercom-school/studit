@@ -10,7 +10,7 @@ import (
 
 // Модель для базы данных
 type Project struct {
-	Id             int64        `orm:"column(id);pk;auto"`
+	Id             int          `orm:"column(id);pk;auto"`
 	Name           string       `orm:"column(name)"`
 	Description    string       `orm:"column(description)"`
 	DateOfCreation time.Time    `orm:"column(date_of_creation);type(datetime)"`
@@ -23,7 +23,7 @@ type Project struct {
 
 // Модель для общения с клиентами
 type ProjectJson struct {
-	Id             int64       `json:"id,omitempty"` //
+	Id             int         `json:"id,omitempty"` //
 	Name           string      `json:"name"`
 	Description    string      `json:"description"`
 	DateOfCreation time.Time   `json:"created"`
@@ -32,8 +32,16 @@ type ProjectJson struct {
 	Status         int         `json:"status"` // см модель для бд
 }
 
+// Вся информация о проекте
+type AllInformationAboutProject struct {
+	Project  *ProjectJson    `json:"project"`
+	Enrolled []PartUserInfo `json:"enrolled"`
+	Members  []PartUserInfo `json:"members"`
+	Masters  []PartUserInfo `json:"masters"`
+}
+
 // Обязательный перевод от одной модели в другую
-func (t *Project) translate()  ProjectJson{
+func (t *Project) translate() ProjectJson{
 	return ProjectJson{
 		Id: t.Id,
 		Name: t.Name,
@@ -45,7 +53,7 @@ func (t *Project) translate()  ProjectJson{
 	}
 }
 
-func (t *ProjectJson) translate()  Project{
+func (t *ProjectJson) translate() Project{
 	return Project{
 		Id: t.Id,
 		Name: t.Name,
@@ -67,19 +75,20 @@ func init() {
 
 // AddProject insert a new Project into database and returns
 // last inserted Id on success.
-func AddProject(m *ProjectJson) (id int64, err error) {
+func AddProject(m *ProjectJson) (id int, err error) {
 	v := m.translate()
 	v.Id = 0 // for auto inc
 	v.DateOfCreation = time.Now()
 	v.Status = 0
 	o := orm.NewOrm()
-	id, err = o.Insert(&v)
+	id_, err := o.Insert(&v)
+	id = int(id_)
 	return
 }
 
 // GetProjectById retrieves Project by Id. Returns error if
 // Id doesn't exist
-func GetProjectById(id int64) (*ProjectJson, error) {
+func GetProjectById(id int) (*ProjectJson, error) {
 	o := orm.NewOrm()
 	temp := &Project{Id: id}
 	if err := o.Read(temp); err == nil {
@@ -195,7 +204,7 @@ func FilterByUser(ml *[]ProjectJson, user int64){
 	qs := o.QueryTable(new(ProjectUser))
 	var l []ProjectUser
 	qs.All(&l)
-	userProjects := make(map[int64]bool)
+	userProjects := make(map[int]bool)
 	for _, v := range l {
 		if int(user) == (v.UserId).Id {
 			userProjects[(v.ProjectId).Id] = true
@@ -216,7 +225,7 @@ func FilterByMaster(ml * []ProjectJson, master int64){
 	qs := o.QueryTable(new(ProjectMaster))
 	var l []ProjectMaster
 	qs.All(&l)
-	createdProjects := make(map[int64]bool)
+	createdProjects := make(map[int]bool)
 	for _, v := range l {
 		if int(master) == (v.MasterId).Id {
 			createdProjects[(v.ProjectId).Id] = true
@@ -250,7 +259,7 @@ func UpdateProjectById(m *ProjectJson) (err error) {
 
 // DeleteProject deletes Project by Id and returns error if
 // the record to be deleted doesn't exist
-func DeleteProject(id int64) (err error) {
+func DeleteProject(id int) (err error) {
 	o := orm.NewOrm()
 	v := Project{Id: id}
 	// ascertain id exists in the database

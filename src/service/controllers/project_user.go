@@ -39,7 +39,7 @@ func (c *ProjectUserController) Post() {
 		c.Ctx.Output.SetStatus(HTTP_FORBIDDEN)
 		c.Data["json"] = HTTP_FORBIDDEN_STR
 
-	} else if project_id, err := c.GetInt64("project_id"); err != nil {
+	} else if project_id, err := c.GetInt("project_id"); err != nil {
 		beego.Debug(c.Ctx.Input.IP(), "Not an int param. Should be int")
 		c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
 		c.Data["json"] = err.Error()

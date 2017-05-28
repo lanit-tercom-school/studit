@@ -28,7 +28,7 @@ func init() {
 
 // GetProjectUserIdByUserId returns an array of projects
 //where user exists
-func GetProjectUserIdByUserId (userId int) (projectid []int64, err error){
+func GetProjectUserIdByUserId (userId int) (projectid []int, err error){
 	o := orm.NewOrm()
 	var projects []ProjectUser
 	_, err = o.QueryTable(new(ProjectUser)).Filter("UserId", User{Id: userId}).RelatedSel().All(&projects)
@@ -74,7 +74,7 @@ func AddProjectUser(m *ProjectUser) (id int64, err error) {
 	return
 }
 
-func GetUsersByProjectId(project_id int) (ml []interface{}, err error) {
+func GetUsersByProjectId(project_id int) (ml []*User, err error) {
 	o := orm.NewOrm()
 	var users []ProjectUser
 	_, err = o.QueryTable(new(ProjectUser)).
@@ -85,7 +85,7 @@ func GetUsersByProjectId(project_id int) (ml []interface{}, err error) {
 		return nil, err
 	}
 	for _, x := range users {
-		ml = append(ml, x.UserId.Id)
+		ml = append(ml, x.UserId)
 	}
 	return ml, nil
 }

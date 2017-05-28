@@ -25,7 +25,7 @@ func init() {
 
 // GetProjectEnrollIdByUserId returns an array of projects
 //where user enrolls
-func GetProjectEnrollIdByUserId(userId int) (projectid []int64, err error){
+func GetProjectEnrollIdByUserId(userId int) (projectid []int, err error){
 	o := orm.NewOrm()
 	var projects []ProjectEnroll
 	_, err = o.QueryTable(new(ProjectEnroll)).Filter("UserId", User{Id: userId}).RelatedSel().All(&projects)
@@ -37,6 +37,7 @@ func GetProjectEnrollIdByUserId(userId int) (projectid []int64, err error){
 	}
 	return projectid, nil
 }
+
 // AddProjectAuthor insert a new ProjectEnroll into database and returns
 // last inserted Id on success.
 func AddApplicationFromUserForProject(u *User, p *ProjectJson) (id int64, err error) {
@@ -60,7 +61,7 @@ func GetProjectAuthorById(id int) (v *ProjectEnroll, err error) {
 	return nil, err
 }
 
-func GetAllSignedUpOnProject(project_id int) (ml []interface{}, err error) {
+func GetAllSignedUpOnProject(project_id int) (ml []*User, err error) {
 	o := orm.NewOrm()
 	var singed_up []ProjectEnroll
 	_, err = o.QueryTable(new(ProjectEnroll)).
@@ -71,11 +72,12 @@ func GetAllSignedUpOnProject(project_id int) (ml []interface{}, err error) {
 		return nil, err
 	}
 	for _, x := range singed_up {
-		ml = append(ml, x.UserId.Id)
+		ml = append(ml, x.UserId)
 	}
 	return ml, nil
 }
 
+// TODO: remove
 // GetAllProjectAuthor retrieves all ProjectEnroll matches certain condition. Returns empty list if
 // no records exist
 func GetAllProjectAuthor(query map[string]string, fields []string, sortby []string, order []string,

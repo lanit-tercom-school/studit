@@ -79,11 +79,34 @@ func (c *ProjectController) Post() {
 	c.ServeJSON()
 }
 
+
+type usersGetter func(int) ([]*models.User, error)
+
+// Вызывает функцию с указанным Id и отсылает в канал полученных пользователей в сокращенном виде
+// Используется для параллельного запроса к Masters, Enrolled и Users для проекта
+// Функция должна соответствовать usersGetter прототипу
+func CallForPartUsers(f usersGetter, id int, c chan []models.PartUserInfo) {
+	users, err := f(id)
+	if err != nil {
+		c <- nil
+	} else {
+		var partUsers []models.PartUserInfo
+		for _, u := range users {
+			partUsers = append(partUsers, models.PartUserInfo{
+				Id: u.Id,
+				Avatar: u.Avatar,
+				Nickname: u.Nickname,
+			})
+		}
+		c <- partUsers
+	}
+}
+
 // GetOne ...
 // @Title Get One
-// @Description Получить подробную информацию
-// @Param   id  path    string  true    "ID проекта, информацию о котором нужно получить"
-// @Success 200 {object} models.Project     Запрос прошел успешно
+// @Description Получить подробную информацию о проекте
+// @Param   id  path    string  true        "ID проекта, информацию о котором нужно получить"
+// @Success 200 {object} models.AllInformationAboutProject     Запрос прошел успешно
 // @Failure 400 :id is wrong
 // @router /:id [get]
 func (c *ProjectController) GetOne() {
@@ -95,14 +118,28 @@ func (c *ProjectController) GetOne() {
 		c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
 		c.Data["json"] = err.Error() // TODO: change to "Wrong project id"
 	} else {
-		v, err := models.GetProjectById(int64(id))
+		v, err := models.GetProjectById(id)
 		if err != nil {
 			beego.Debug("GetOne `GetProjectById` error", err.Error())
 			c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
 			c.Data["json"] = err.Error()
 		} else {
+			// Запускаем 3 параллельных запроса к мастерам, участникам и заявкам на проект
+			// TODO: Исследовать на утечки памяти
+			enrolledChan := make(chan []models.PartUserInfo)
+			membersChan := make(chan []models.PartUserInfo)
+			mastersChan := make(chan []models.PartUserInfo)
+			go CallForPartUsers(models.GetAllSignedUpOnProject, id, enrolledChan)
+			go CallForPartUsers(models.GetMastersOfTheProject, id, mastersChan)
+			go CallForPartUsers(models.GetUsersByProjectId, id, membersChan)
+			H := models.AllInformationAboutProject{
+				Project: v,
+				Enrolled: <-enrolledChan,
+				Members: <-membersChan,
+				Masters: <-mastersChan,
+			}
 			beego.Trace("GetOne OK")
-			c.Data["json"] = v
+			c.Data["json"] = H
 		}
 	}
 	c.ServeJSON()
@@ -221,7 +258,7 @@ func (c *ProjectController) Put() {
 			c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
 			c.Data["json"] = err.Error()
 		}
-		v := models.ProjectJson{Id: int64(id)}
+		v := models.ProjectJson{Id: id}
 		if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
 			if err := models.UpdateProjectById(&v); err == nil {
 				beego.Trace("Put project OK")
@@ -263,7 +300,7 @@ func (c *ProjectController) Delete() {
 			c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
 			c.Data["json"] = err.Error()
 		}
-		if err := models.DeleteProject(int64(id)); err == nil {
+		if err := models.DeleteProject(id); err == nil {
 			beego.Trace("Delete OK")
 			c.Data["json"] = "OK"
 		} else {

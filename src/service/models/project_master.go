@@ -20,9 +20,9 @@ func init() {
 	orm.RegisterModel(new(ProjectMaster))
 }
 
-//GetProjectMasterIdByUserId return array of projects
-//where user is master
-func GetProjectMasterIdByUserId (userId int) (projectid []int64, err error){
+// GetProjectMasterIdByUserId return array of projects
+// where user is master
+func GetProjectMasterIdByUserId(userId int) (projectid []int, err error){
 	o := orm.NewOrm()
 	var projects []ProjectMaster
 	_, err = o.QueryTable(new(ProjectMaster)).Filter("MasterId", User{Id: userId}).RelatedSel().All(&projects)
@@ -35,19 +35,19 @@ func GetProjectMasterIdByUserId (userId int) (projectid []int64, err error){
 	return projectid, nil
 }
 
-//IsProjectMasterUserByIdIsProjectMasterUserById returns true
-//if master is master of userproject
-func IsProjectMasterForUserById(userId int,masterId int)(masterOfUser bool, err error){
-	userProjects, err :=GetProjectUserIdByUserId(userId)
-	if err != nil{
+// IsProjectMasterUserById returns true
+// if master is master of userproject
+func IsProjectMasterForUserById(userId int, masterId int)(masterOfUser bool, err error) {
+	userProjects, err := GetProjectUserIdByUserId(userId)
+	if err != nil {
 		return false, err
 	}
-	masterProjects, err :=GetProjectMasterIdByUserId(masterId)
-	if err != nil{
+	masterProjects, err := GetProjectMasterIdByUserId(masterId)
+	if err != nil {
 		return false, err
 	}
-	//finding intersection
-	target := make(map[int64]bool)
+	// finding intersection
+	target := make(map[int]bool)
 	for _, v := range masterProjects {
 		target[v] = true
 	}
@@ -83,7 +83,7 @@ func IsUserInArray(user_id int, users []*User) bool {
 	return false
 }
 
-func GetMastersOfTheProject(project_id int64) (masters []*User, err error) {
+func GetMastersOfTheProject(project_id int) (masters []*User, err error) {
 	o := orm.NewOrm()
 	var connections []ProjectMaster
 	// выбираем всех пользователей, являющихся мастерами данного проекта
@@ -117,7 +117,7 @@ func GetAllProjectMaster() (ml []interface{}, err error) {
 
 // DeleteProjectUser deletes ProjectMaster by Id and returns error if
 // the record to be deleted doesn't exist
-func DeleteMasterFromProject(master_id int, project_id int64) (err error) {
+func DeleteMasterFromProject(master_id int, project_id int) (err error) {
 	o := orm.NewOrm()
 	_, err = o.QueryTable(new(ProjectMaster)).
 		Filter("MasterId", master_id).
