@@ -27,18 +27,18 @@ func init() {
 }
 
 // GetProjectUserIdByUserId returns an array of projects
-//where user exists
-func GetProjectUserIdByUserId (userId int) (projectid []int, err error){
+// where user exists
+func GetProjectUserIdByUserId (userId int) (projects []*Project, err error){
 	o := orm.NewOrm()
-	var projects []ProjectUser
-	_, err = o.QueryTable(new(ProjectUser)).Filter("UserId", User{Id: userId}).RelatedSel().All(&projects)
+	var project_members []ProjectUser
+	_, err = o.QueryTable(new(ProjectUser)).Filter("UserId", User{Id: userId}).RelatedSel().All(&project_members)
 	if err != nil {
-		return projectid, err
+		return projects, err
 	}
-	for _, v := range projects {
-		projectid = append(projectid, v.ProjectId.Id)
+	for _, v := range project_members {
+		projects = append(projects, v.ProjectId)
 	}
-	return projectid, nil
+	return projects, nil
 }
 
 // AddProjectUser insert a new ProjectUser into database and returns

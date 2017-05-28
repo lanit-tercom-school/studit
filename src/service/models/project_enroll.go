@@ -25,17 +25,17 @@ func init() {
 
 // GetProjectEnrollIdByUserId returns an array of projects
 //where user enrolls
-func GetProjectEnrollIdByUserId(userId int) (projectid []int, err error){
+func GetProjectEnrollIdByUserId(userId int) (projects []*Project, err error){
 	o := orm.NewOrm()
-	var projects []ProjectEnroll
-	_, err = o.QueryTable(new(ProjectEnroll)).Filter("UserId", User{Id: userId}).RelatedSel().All(&projects)
+	var project_enrolled []ProjectEnroll
+	_, err = o.QueryTable(new(ProjectEnroll)).Filter("UserId", User{Id: userId}).RelatedSel().All(&project_enrolled)
 	if err != nil {
-		return projectid, err
+		return projects, err
 	}
-	for _, v := range projects {
-		projectid = append(projectid, v.ProjectId.Id)
+	for _, v := range project_enrolled {
+		projects = append(projects, v.ProjectId)
 	}
-	return projectid, nil
+	return projects, nil
 }
 
 // AddProjectAuthor insert a new ProjectEnroll into database and returns

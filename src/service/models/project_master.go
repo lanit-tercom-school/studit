@@ -22,22 +22,22 @@ func init() {
 
 // GetProjectMasterIdByUserId return array of projects
 // where user is master
-func GetProjectMasterIdByUserId(userId int) (projectid []int, err error){
+func GetProjectMasterIdByUserId(userId int) (projects []*Project, err error){
 	o := orm.NewOrm()
-	var projects []ProjectMaster
-	_, err = o.QueryTable(new(ProjectMaster)).Filter("MasterId", User{Id: userId}).RelatedSel().All(&projects)
+	var project_masters []ProjectMaster
+	_, err = o.QueryTable(new(ProjectMaster)).Filter("MasterId", User{Id: userId}).RelatedSel().All(&project_masters)
 	if err != nil {
-		return projectid, err
+		return nil, err
 	}
-	for _, v := range projects {
-		projectid = append(projectid, v.ProjectId.Id)
+	for _, v := range project_masters {
+		projects = append(projects, v.ProjectId)
 	}
-	return projectid, nil
+	return projects, nil
 }
 
 // IsProjectMasterUserById returns true
-// if master is master of userproject
-func IsProjectMasterForUserById(userId int, masterId int)(masterOfUser bool, err error) {
+// if master (project_master, not user) is master of this user on project
+func IsProjectMasterForUserById(userId int, masterId int) (masterOfUser bool, err error) {
 	userProjects, err := GetProjectUserIdByUserId(userId)
 	if err != nil {
 		return false, err
@@ -49,10 +49,10 @@ func IsProjectMasterForUserById(userId int, masterId int)(masterOfUser bool, err
 	// finding intersection
 	target := make(map[int]bool)
 	for _, v := range masterProjects {
-		target[v] = true
+		target[v.Id] = true
 	}
 	for _, v := range userProjects {
-		if target[v] {
+		if target[v.Id] {
 			return true, nil
 		}
 	}

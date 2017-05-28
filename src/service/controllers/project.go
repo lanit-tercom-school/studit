@@ -85,14 +85,14 @@ type usersGetter func(int) ([]*models.User, error)
 // Вызывает функцию с указанным Id и отсылает в канал полученных пользователей в сокращенном виде
 // Используется для параллельного запроса к Masters, Enrolled и Users для проекта
 // Функция должна соответствовать usersGetter прототипу
-func CallForPartUsers(f usersGetter, id int, c chan []models.PartUserInfo) {
+func CallForPartUsers(f usersGetter, id int, c chan []models.MainUserInfo) {
 	users, err := f(id)
 	if err != nil {
 		c <- nil
 	} else {
-		var partUsers []models.PartUserInfo
+		var partUsers []models.MainUserInfo
 		for _, u := range users {
-			partUsers = append(partUsers, models.PartUserInfo{
+			partUsers = append(partUsers, models.MainUserInfo{
 				Id: u.Id,
 				Avatar: u.Avatar,
 				Nickname: u.Nickname,
@@ -126,9 +126,9 @@ func (c *ProjectController) GetOne() {
 		} else {
 			// Запускаем 3 параллельных запроса к мастерам, участникам и заявкам на проект
 			// TODO: Исследовать на утечки памяти
-			enrolledChan := make(chan []models.PartUserInfo)
-			membersChan := make(chan []models.PartUserInfo)
-			mastersChan := make(chan []models.PartUserInfo)
+			enrolledChan := make(chan []models.MainUserInfo)
+			membersChan := make(chan []models.MainUserInfo)
+			mastersChan := make(chan []models.MainUserInfo)
 			go CallForPartUsers(models.GetAllSignedUpOnProject, id, enrolledChan)
 			go CallForPartUsers(models.GetMastersOfTheProject, id, mastersChan)
 			go CallForPartUsers(models.GetUsersByProjectId, id, membersChan)

@@ -22,6 +22,28 @@ func (c *UserController) URLMapping() {
 	c.Mapping("Delete", c.Delete)
 }
 
+type projectsGetter func(int) ([]*models.Project, error)
+
+// Вызывает функцию с указанным Id и отсылает в канал полученных пользователей в сокращенном виде
+// Используется для параллельного запроса к Masters, Enrolled и Users для проекта
+// Функция должна соответствовать usersGetter прототипу
+func CallForProjectMainInfo(f projectsGetter, id int, c chan []models.MainProjectInfo) {
+	users, err := f(id)
+	if err != nil {
+		c <- nil
+	} else {
+		var mainProjectInfo []models.MainProjectInfo
+		for _, u := range users {
+			mainProjectInfo = append(mainProjectInfo, models.MainProjectInfo{
+				Id: u.Id,
+				Logo: u.Logo,
+				Name: u.Name,
+			})
+		}
+		c <- mainProjectInfo
+	}
+}
+
 // GetOne ...
 // @Title Get One
 // @Description get User by id
@@ -40,35 +62,40 @@ func (c *UserController) GetOne() {
 			c.Data["json"] = err.Error()
 			c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
 		} else {
-			if contact, err := models.GetAllUserContacts(id); err != nil {
-				beego.Critical("GetOne user Contacts GetAllUserContact error ", err.Error())
+			U := models.FullUserInfo{
+				Id:              v.Id,
+				Nickname:        v.Nickname,
+				Description:     v.Description,
+				Avatar:          v.Avatar,
+				PermissionLevel: v.PermissionLevel,
+			}
+			is_master, err := models.IsProjectMasterForUserById(id, c.CurrentUser.UserId)
+			if err == nil {
+				if contact, err := models.GetAllUserContacts(id); err != nil {
+					beego.Critical("GetOne user Contacts GetAllUserContact error ", err.Error())
+					//c.Data["json"] = err.Error()
+					//c.Ctx.Output.SetStatus(500)
+				} else {
+					if c.CurrentUser.UserId == v.Id || c.CurrentUser.PermissionLevel == 2 || is_master {
+						U.Contact = contact
+					}
+				}
+			} else {
+				beego.Critical("Error in IsProjectMasterForUserById in User `GetOne(ID)` ", err.Error())
 				c.Data["json"] = err.Error()
 				c.Ctx.Output.SetStatus(500)
-			} else {
-				ismaster, err :=models.IsProjectMasterForUserById(id, c.CurrentUser.UserId)
-				if err ==nil {
-					if c.CurrentUser.UserId == v.Id || c.CurrentUser.PermissionLevel == 2 || ismaster {
-						c.Data["json"] = models.FullUserInfo{
-							Id:              v.Id,
-							Nickname:        v.Nickname,
-							Description:     v.Description,
-							Avatar:          v.Avatar,
-							PermissionLevel: v.PermissionLevel,
-							Contact:         contact,
-						}
-					} else {
-						c.Data["json"] = models.User{
-							Id:          v.Id,
-							Nickname:    v.Nickname,
-							Description: v.Description,
-							Avatar:      v.Avatar,
-						}
-					}
-				} else {
-					beego.Critical("Error in IsProjectMasterForUserById in User `GetOne(ID)` ", err.Error())
-					c.Data["json"] = err.Error()
-					c.Ctx.Output.SetStatus(500)
-				}
+			}
+			enrolledChan := make(chan []models.MainProjectInfo)
+			membersChan := make(chan []models.MainProjectInfo)
+			mastersChan := make(chan []models.MainProjectInfo)
+			go CallForProjectMainInfo(models.GetProjectEnrollIdByUserId, id, enrolledChan)
+			go CallForProjectMainInfo(models.GetProjectUserIdByUserId, id, membersChan)
+			go CallForProjectMainInfo(models.GetProjectMasterIdByUserId, id, mastersChan)
+			c.Data["json"] = models.AllInformationAboutUser{
+				User: U,
+				EnrolledOn: <-enrolledChan,
+				MasterOf: <-mastersChan,
+				MemberOf: <-membersChan,
 			}
 		}
 	} else {

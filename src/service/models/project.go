@@ -35,9 +35,15 @@ type ProjectJson struct {
 // Вся информация о проекте
 type AllInformationAboutProject struct {
 	Project  *ProjectJson    `json:"project"`
-	Enrolled []PartUserInfo `json:"enrolled"`
-	Members  []PartUserInfo `json:"members"`
-	Masters  []PartUserInfo `json:"masters"`
+	Enrolled []MainUserInfo `json:"enrolled"`
+	Members  []MainUserInfo `json:"members"`
+	Masters  []MainUserInfo `json:"masters"`
+}
+
+type MainProjectInfo struct {
+	Id   int    `json:"id"`
+	Name string `json:"name"`
+	Logo string `json:"logo"`
 }
 
 // Обязательный перевод от одной модели в другую
