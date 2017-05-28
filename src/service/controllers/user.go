@@ -47,7 +47,8 @@ func CallForProjectMainInfo(f projectsGetter, id int, c chan []models.MainProjec
 // GetOne ...
 // @Title Get One
 // @Description get User by id
-// @Param	id		path 	string	true		"The key for staticblock"
+// @Param   id  path    string  true    "ID пользователя, о котором нужно узнать информацию"
+// @Param   cut query   bool    false   "Оставить только информацию о пользователе?"
 // @Param   Bearer-token        header      string          true    "Токен"
 // @Success 200 {object} models.User
 // @Failure 400 :id is empty string
@@ -62,6 +63,7 @@ func (c *UserController) GetOne() {
 			c.Data["json"] = err.Error()
 			c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
 		} else {
+			beego.Trace("User founded, search for contacts")
 			U := models.FullUserInfo{
 				Id:              v.Id,
 				Nickname:        v.Nickname,
@@ -76,27 +78,43 @@ func (c *UserController) GetOne() {
 					//c.Data["json"] = err.Error()
 					//c.Ctx.Output.SetStatus(500)
 				} else {
+					beego.Trace("Contacts founded")
+					beego.Trace(c.CurrentUser.UserId)
+					beego.Trace(v.Id)
+					beego.Trace(is_master)
 					if c.CurrentUser.UserId == v.Id || c.CurrentUser.PermissionLevel == 2 || is_master {
+						beego.Trace("Contacts pinned to response")
 						U.Contact = contact
 					}
 				}
 			} else {
 				beego.Critical("Error in IsProjectMasterForUserById in User `GetOne(ID)` ", err.Error())
-				c.Data["json"] = err.Error()
-				c.Ctx.Output.SetStatus(500)
+				//c.Data["json"] = err.Error()
+				//c.Ctx.Output.SetStatus(500)
 			}
 			enrolledChan := make(chan []models.MainProjectInfo)
 			membersChan := make(chan []models.MainProjectInfo)
 			mastersChan := make(chan []models.MainProjectInfo)
-			go CallForProjectMainInfo(models.GetProjectEnrollIdByUserId, id, enrolledChan)
-			go CallForProjectMainInfo(models.GetProjectUserIdByUserId, id, membersChan)
-			go CallForProjectMainInfo(models.GetProjectMasterIdByUserId, id, mastersChan)
+			beego.Trace("Search for projects")
+			if cut_info, _ := c.GetBool("cut"); !cut_info {
+				go CallForProjectMainInfo(models.GetProjectEnrollIdByUserId, id, enrolledChan)
+				go CallForProjectMainInfo(models.GetProjectUserIdByUserId, id, membersChan)
+				go CallForProjectMainInfo(models.GetProjectMasterIdByUserId, id, mastersChan)
+			} else {
+				go func() {
+					enrolledChan <- nil
+					mastersChan <- nil
+					membersChan <- nil
+				}()
+			}
+			beego.Trace("Ready to sent response")
 			c.Data["json"] = models.AllInformationAboutUser{
 				User: U,
 				EnrolledOn: <-enrolledChan,
 				MasterOf: <-mastersChan,
 				MemberOf: <-membersChan,
 			}
+			beego.Trace("Get user OK")
 		}
 	} else {
 		beego.Debug("GetOne user `Atoi` error", err.Error())

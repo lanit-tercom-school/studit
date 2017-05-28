@@ -110,8 +110,16 @@ func (c *ProjectMasterController) GetOne() {
 		c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
 
 	} else {
+		var t []models.MainUserInfo
+		for _, r := range v {
+			t = append(t, models.MainUserInfo{
+				Id: r.Id,
+				Nickname: r.Nickname,
+				Avatar: r.Avatar,
+			})
+		}
 		beego.Trace("Success GET")
-		c.Data["json"] = v
+		c.Data["json"] = t
 	}
 	c.ServeJSON()
 }

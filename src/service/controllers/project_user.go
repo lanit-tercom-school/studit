@@ -74,8 +74,8 @@ func (c *ProjectUserController) Post() {
 
 // Get...
 // @Title Get
-// @Description Получение списка пользователей, подписанных на данный проект
-// @Param	id		path 	string	true		"ID проекта, список пользователей которого надо узнать"
+// @Description Получение списка участников проекта
+// @Param	id		path 	string	true		"ID проекта, список участников которого нужно узнать"
 // @Success 200 {object} []int "Список пользователей"
 // @Failure 403 :id is empty
 // @router /:id [get]
@@ -93,7 +93,16 @@ func (c *ProjectUserController) GetOne() {
 		c.Data["json"] = err.Error()
 
 	} else {
-		c.Data["json"] = users
+		var t []models.MainUserInfo
+		for _, r := range users {
+			t = append(t, models.MainUserInfo{
+				Id: r.Id,
+				Nickname: r.Nickname,
+				Avatar: r.Avatar,
+			})
+		}
+		beego.Trace("Success GET")
+		c.Data["json"] = t
 	}
 	c.ServeJSON()
 }

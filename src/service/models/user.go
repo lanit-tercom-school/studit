@@ -31,9 +31,9 @@ type FullUserInfo struct {
 
 type AllInformationAboutUser struct {
 	User       FullUserInfo         `json:"user"`
-	MemberOf   []MainProjectInfo    `json:"member_of"`
-	MasterOf   []MainProjectInfo    `json:"master_of"`
-	EnrolledOn []MainProjectInfo    `json:"enrolled_on"`
+	MemberOf   []MainProjectInfo    `json:"member_of,omitempty"`
+	MasterOf   []MainProjectInfo    `json:"master_of,omitempty"`
+	EnrolledOn []MainProjectInfo    `json:"enrolled_on,omitempty"`
 }
 
 type MainUserInfo struct {

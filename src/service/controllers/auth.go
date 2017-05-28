@@ -101,12 +101,14 @@ func (c *AuthController) URLMapping() {
 
 func (c *AuthController) Login() {
 	var v auth.Usr
+	// Парсим тело запроса
 	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err != nil {
 		beego.Debug(c.Ctx.Input.IP(), "Login error (403):", err.Error())
 		c.Data["json"] = err.Error() // TODO: change to "Wrong request"
 		c.Ctx.Output.SetStatus(HTTP_FORBIDDEN)
 	} else {
 		beego.Trace(v.Login, "Try to login")
+		// Ищем в бд соответствия
 		user, err := auth.TryToLogin(v.Login, v.Password)
 		if err != nil {
 			beego.Debug("Login error (403):", err.Error())
@@ -114,7 +116,7 @@ func (c *AuthController) Login() {
 			c.Ctx.Output.SetStatus(HTTP_FORBIDDEN)
 		} else {
 			beego.Trace(user.Login, "Success login")
-			// success, register new session
+			// Правильный логин, выдаём новый токен
 			claim := jwt.NewClaim()
 			claim.Set("user_id", user.Id)
             claim.Set("perm_lvl", user.PermissionLevel)
@@ -127,10 +129,14 @@ func (c *AuthController) Login() {
 				c.Data["json"] = err.Error()
 				c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
 			}
-
+			// Прикрепляем токен, уровень, время истечения и базовую информацию о пользователе
 			sessionResponse := auth.UserAndToken{
 				Token: token,
-				UserId: user.Id,
+				User: models.MainUserInfo{
+					Id: user.Id,
+					Nickname: user.Nickname,
+					Avatar: user.Avatar,
+				},
 				ExpiresIn: f.Format(time.UnixDate),
                 PermissionLevel: user.PermissionLevel,
 			}

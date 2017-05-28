@@ -106,6 +106,7 @@ func CallForPartUsers(f usersGetter, id int, c chan []models.MainUserInfo) {
 // @Title Get One
 // @Description Получить подробную информацию о проекте
 // @Param   id  path    string  true        "ID проекта, информацию о котором нужно получить"
+// @Param   cut query   bool    false       "Оставить только информацию о проекте?"
 // @Success 200 {object} models.AllInformationAboutProject     Запрос прошел успешно
 // @Failure 400 :id is wrong
 // @router /:id [get]
@@ -129,17 +130,24 @@ func (c *ProjectController) GetOne() {
 			enrolledChan := make(chan []models.MainUserInfo)
 			membersChan := make(chan []models.MainUserInfo)
 			mastersChan := make(chan []models.MainUserInfo)
-			go CallForPartUsers(models.GetAllSignedUpOnProject, id, enrolledChan)
-			go CallForPartUsers(models.GetMastersOfTheProject, id, mastersChan)
-			go CallForPartUsers(models.GetUsersByProjectId, id, membersChan)
-			H := models.AllInformationAboutProject{
+			if cut_info, _ := c.GetBool("cut"); !cut_info {
+				go CallForPartUsers(models.GetAllSignedUpOnProject, id, enrolledChan)
+				go CallForPartUsers(models.GetMastersOfTheProject, id, mastersChan)
+				go CallForPartUsers(models.GetUsersByProjectId, id, membersChan)
+			} else {
+				go func() {
+					enrolledChan <- nil
+					mastersChan <- nil
+					membersChan <- nil
+				}()
+			}
+			beego.Trace("GetOne OK")
+			c.Data["json"] = models.AllInformationAboutProject{
 				Project: v,
 				Enrolled: <-enrolledChan,
 				Members: <-membersChan,
 				Masters: <-mastersChan,
 			}
-			beego.Trace("GetOne OK")
-			c.Data["json"] = H
 		}
 	}
 	c.ServeJSON()
@@ -147,15 +155,15 @@ func (c *ProjectController) GetOne() {
 
 // GetAll ...
 // @Title Get All
-// @Description get Project
+// @Description Получить фильтрованный список проектов
 // @Param   sortby  query   string  false   "Sorted-by fields. e.g. col1,col2 ..."
 // @Param   order   query   string  false   "Order corresponding to each sortby field, if single value, apply to all sortby fields. e.g. desc,asc ..."
 // @Param   user    query   string  false   "Получить проекты, в которых участвует пользователь с заданным ID."
 // @Param   master  query   string  false   "Получить проекты, автором которых является пользователь с заданным ID."
 // @Param   tag     query   string  false   "Получить проекты с тегом. Тег может быть только один."
 // @Param   status  query   string  false   "Получить проекты с заданным статусом ('завершен'/'еще не начат')"
-// @Param   limit   query   string  false   "Limit the size of result set. Must be an integer. Default 10"
-// @Param   offset  query   string  false   "Start position of result set. Must be an integer"
+// @Param   limit   query   string  false   "Наибольшее число объектов в ответе. Должно быть целым числом. Изначально равно 10"
+// @Param   offset  query   string  false   "Смещение от начала. Должно быть целым числом"
 // @Success 200 {object} []models.Project Get array of projects filtered with specified filters (wtf this description)
 // @Failure 403
 // @router / [get]

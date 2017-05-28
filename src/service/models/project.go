@@ -34,7 +34,7 @@ type ProjectJson struct {
 
 // Вся информация о проекте
 type AllInformationAboutProject struct {
-	Project  *ProjectJson    `json:"project"`
+	Project  *ProjectJson   `json:"project"`
 	Enrolled []MainUserInfo `json:"enrolled"`
 	Members  []MainUserInfo `json:"members"`
 	Masters  []MainUserInfo `json:"masters"`
