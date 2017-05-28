@@ -9,6 +9,7 @@ import (
 	"github.com/robbert229/jwt"
 	"time"
 	"service/models"
+	"github.com/astaxie/beego/config"
 )
 
 
@@ -17,6 +18,23 @@ type CurrentClient struct {
 	PermissionLevel int
 }
 
+var jwtManager jwt.Algorithm
+
+func init() {
+	auth_config, err := config.NewConfig("ini", "conf/auth.conf")
+	var r string
+	if err != nil {
+		beego.Critical(err)
+	} else {
+		// Пробует считать из конфига
+		r = auth_config.String("jwt_secret")
+	}
+	if r == "" {
+		// Если в конфиге нет, то генерирует непустой секрет. При перезапуске секрет изменится => токены протухнут
+		r = auth.GenerateNewToken(15)
+	}
+	jwtManager = jwt.HmacSha256(r)
+}
 
 // Функция проверяет валидность токена и его полей и предоставляет Id пользователя и его уровень допуска
 // для следующих методов контроллера
@@ -82,8 +100,6 @@ func (c *ControllerWithAuthorization) Prepare() {
 	}
 	beego.Trace("Exit AUTH Controller")
 }
-
-var jwtManager = jwt.HmacSha256("Secret")
 
 // Login, получение Bearer-token
 type AuthController struct {

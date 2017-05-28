@@ -79,9 +79,6 @@ func (c *UserController) GetOne() {
 					//c.Ctx.Output.SetStatus(500)
 				} else {
 					beego.Trace("Contacts founded")
-					beego.Trace(c.CurrentUser.UserId)
-					beego.Trace(v.Id)
-					beego.Trace(is_master)
 					if c.CurrentUser.UserId == v.Id || c.CurrentUser.PermissionLevel == 2 || is_master {
 						beego.Trace("Contacts pinned to response")
 						U.Contact = contact
