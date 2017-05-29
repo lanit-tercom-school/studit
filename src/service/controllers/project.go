@@ -25,7 +25,7 @@ func (c *ProjectController) URLMapping() {
 
 // Post ...
 // @Title Post
-// @Description Создать новый проект
+// @Description Создать новый проект, автоматически создателя делает мастером
 // @Param   body            body        models.ProjectJson     true    "Тело запроса, см. пример"
 // @Param   Bearer-token    header  string          true    "Токен доступа, пользователь должен быть не ниже куратора"
 // @Success 201 {int} Created
@@ -85,7 +85,7 @@ type usersGetter func(int) ([]*models.User, error)
 // Вызывает функцию с указанным Id и отсылает в канал полученных пользователей в сокращенном виде
 // Используется для параллельного запроса к Masters, Enrolled и Users для проекта
 // Функция должна соответствовать usersGetter прототипу
-func CallForPartUsers(f usersGetter, id int, c chan []models.MainUserInfo) {
+func CallForMainInformationAboutUsers(f usersGetter, id int, c chan []models.MainUserInfo) {
 	users, err := f(id)
 	if err != nil {
 		c <- nil
@@ -131,9 +131,9 @@ func (c *ProjectController) GetOne() {
 			membersChan := make(chan []models.MainUserInfo)
 			mastersChan := make(chan []models.MainUserInfo)
 			if cut_info, _ := c.GetBool("cut"); !cut_info {
-				go CallForPartUsers(models.GetAllSignedUpOnProject, id, enrolledChan)
-				go CallForPartUsers(models.GetMastersOfTheProject, id, mastersChan)
-				go CallForPartUsers(models.GetUsersByProjectId, id, membersChan)
+				go CallForMainInformationAboutUsers(models.GetAllSignedUpOnProject, id, enrolledChan)
+				go CallForMainInformationAboutUsers(models.GetMastersOfTheProject, id, mastersChan)
+				go CallForMainInformationAboutUsers(models.GetUsersByProjectId, id, membersChan)
 			} else {
 				go func() {
 					enrolledChan <- nil
@@ -239,8 +239,8 @@ func (c *ProjectController) GetAll() {
 	c.ServeJSON()
 }
 
-
-func correctStatus(status string) bool{
+// Проверяет корректность статуса проекта
+func correctStatus(status string) bool {
 	if status == "0" || status == "1" || status == "2" {
 		return true
 	}
