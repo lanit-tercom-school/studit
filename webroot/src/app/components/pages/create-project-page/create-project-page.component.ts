@@ -9,7 +9,7 @@ import { Observable } from "rxjs/Observable";
   styleUrls: ['./create-project-page.component.css']
 })
 export class CreateProjectPageComponent implements OnInit {
-    private createdProject  =  { name: "", description: "", status: "начат",
+    private createdProject  =  { name: "", description: "", status: 0,
      logo: "https://yegitsin.com/admin/pages/pictures/empty.jpg",
      id : 0 };
     private projectId : number;
@@ -20,7 +20,7 @@ export class CreateProjectPageComponent implements OnInit {
     }
 
     makeProject(){
-      this.api.postProject(this.createdProject, JSON.parse(localStorage.getItem('current_user')).token)
+      this.api.postProject(this.createdProject, JSON.parse(localStorage.getItem('current_user')).bearer_token)
       .subscribe(()  => {
       console.log('Project was added');
       this.isCreated = true;
