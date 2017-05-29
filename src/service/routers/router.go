@@ -128,22 +128,25 @@ func init() {
 			),
 		),
 
-		beego.NSNamespace("/project/users",
+		beego.NSNamespace("/project/user",
 			beego.NSInclude(
 				&controllers.ProjectUserController{},
 			),
 		),
+
 /*
 		beego.NSNamespace("/contact_type",
 			beego.NSInclude(
 				&controllers.ContactTypeController{},
 			),
 		),
+*/
 		beego.NSNamespace("/user/contact",
 			beego.NSInclude(
 				&controllers.UserContactController{},
 			),
 		),
+/*
 		beego.NSNamespace("/course",
 			beego.NSInclude(
 				&controllers.CourseController{},
@@ -184,17 +187,17 @@ func init() {
 				&controllers.AuthController{},
 			),
 		),
-		beego.NSNamespace("/auth/change-password",
+		beego.NSNamespace("/auth/change",
 			beego.NSInclude(
 				&controllers.ChangePasswordController{},
 			),
 		),
-		beego.NSNamespace("/auth/signup",
+		beego.NSNamespace("/auth/register",
 			beego.NSInclude(
 				&controllers.RegistrationController{},
 			),
 		),
-		beego.NSNamespace("/auth/reset-password", // reset password
+		beego.NSNamespace("/auth/reset", // reset password
 			beego.NSInclude(
 				&controllers.ResetPasswordController{},
 			),

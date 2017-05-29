@@ -38,7 +38,7 @@ func (c *UserEnrollOnProjectController) Post() {
 
 	} else {
 		// получить id проекта, на который пользователь хочет записаться
-		project_id, err := c.GetInt64(":id")
+		project_id, err := c.GetInt(":id")
 		if err != nil {
 			beego.Debug(c.Ctx.Input.IP(), "Not an int param. Should be int", err.Error())
 			c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
@@ -103,8 +103,16 @@ func (c *UserEnrollOnProjectController) GetOne() {
 		c.Data["json"] = err.Error()
 		c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
 	} else {
+		var t []models.MainUserInfo
+		for _, r := range v {
+			t = append(t, models.MainUserInfo{
+				Avatar: r.Avatar,
+				Nickname: r.Nickname,
+				Id: r.Id,
+			})
+		}
 		beego.Trace("Success GET")
-		c.Data["json"] = v
+		c.Data["json"] = t
 	}
 	c.ServeJSON()
 }
