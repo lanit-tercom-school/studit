@@ -5,7 +5,6 @@ import { DataService } from "services/data.service";
 import { ProjectItem } from 'models/project-item';
 import { ApiService } from 'services/api.service';
 
-
 @Component({
   selector: 'app-main',
   templateUrl: './main.component.html',

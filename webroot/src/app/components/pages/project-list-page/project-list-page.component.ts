@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from "rxjs/Observable";
-
 import { DataService } from 'services/data.service';
 import { ApiService } from 'services/api.service';
 import { ProjectItem } from 'models/project-item';
+
 
 @Component({
   selector: 'app-project-list-page',
