@@ -1,14 +1,20 @@
 #main-info
 {
-    padding: 1rem 1rem;
-    margin-bottom: 1rem;
+    padding: 1rem;
     background: whitesmoke;
 }
 
-#project-img
+#project-img-status
 {
-    margin-top: 2rem;
-    margin-bottom: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0;
+}
+
+#status
+{
+  padding-top: 1rem;
 }
 
 #project-name
