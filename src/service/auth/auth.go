@@ -8,7 +8,7 @@ import (
 
 // TODO: rename
 type UserAndToken struct {
-	Token           string              `json:"bearer-token"`
+	Token           string              `json:"bearer_token"`
 	User            models.MainUserInfo `json:"user"`
 	ExpiresIn       string              `json:"exp"`
 	PermissionLevel int                 `json:"perm_lvl"`
