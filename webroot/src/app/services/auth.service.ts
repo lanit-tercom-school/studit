@@ -18,7 +18,7 @@ export class AuthService {
             .map((response: Response) => {
                 // successful login => getting jwt
                 let res = response.json();
-                if (res && res.token) {
+                if (res && res.bearer_token) {
                     // save data for keeping user logged in
                     res.login = user.login;
                     localStorage.setItem('current_user', JSON.stringify(res));
