@@ -226,13 +226,14 @@ export class ApiService {
       return new RequestOptions({ headers: headers });
     }
   }
-  postProject(project, token: string) {
+  postProject(project, token: string){
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
     headers.append('Accept', 'application/json')
     headers.append('Bearer-token', token);
     console.log(environment.apiUrl + '/v1/project/id/', JSON.stringify(project));
-    return this.http.post(environment.apiUrl + '/v1/project/id/', JSON.stringify(project), { headers: headers });
+    return this.http.post(environment.apiUrl + '/v1/project/id/',
+     JSON.stringify(project), { headers: headers });
   }
 
   deleteProject(id: string, token: string) {

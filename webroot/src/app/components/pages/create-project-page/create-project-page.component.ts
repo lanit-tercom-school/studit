@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ApiService } from "../../../services/api.service";
+import { Observable } from "rxjs/Observable";
 
 @Component({
   selector: 'create-project-page',
@@ -8,7 +9,7 @@ import { ApiService } from "../../../services/api.service";
   styleUrls: ['./create-project-page.component.css']
 })
 export class CreateProjectPageComponent implements OnInit {
-    private createdProject  =  { name: "", description: "",
+    private createdProject  =  { name: "", description: "", status: "начат",
      logo: "https://yegitsin.com/admin/pages/pictures/empty.jpg",
      id : 0 };
     private projectId : number;
