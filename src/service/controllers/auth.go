@@ -9,6 +9,7 @@ import (
 	"github.com/robbert229/jwt"
 	"time"
 	"service/models"
+	"github.com/astaxie/beego/config"
 )
 
 
@@ -17,6 +18,23 @@ type CurrentClient struct {
 	PermissionLevel int
 }
 
+var jwtManager jwt.Algorithm
+
+func init() {
+	auth_config, err := config.NewConfig("ini", "conf/auth.conf")
+	var r string
+	if err != nil {
+		beego.Critical(err)
+	} else {
+		// Пробует считать из конфига
+		r = auth_config.String("jwt_secret")
+	}
+	if r == "" {
+	// Если в конфиге нет, то генерирует непустой секрет. При перезапуске секрет изменится => старые токены протухнут
+		r = auth.GenerateNewToken(15)
+	}
+	jwtManager = jwt.HmacSha256(r)
+}
 
 // Функция проверяет валидность токена и его полей и предоставляет Id пользователя и его уровень допуска
 // для следующих методов контроллера
@@ -83,8 +101,6 @@ func (c *ControllerWithAuthorization) Prepare() {
 	beego.Trace("Exit AUTH Controller")
 }
 
-var jwtManager = jwt.HmacSha256("Secret")
-
 // Login, получение Bearer-token
 type AuthController struct {
 	beego.Controller
@@ -101,12 +117,14 @@ func (c *AuthController) URLMapping() {
 
 func (c *AuthController) Login() {
 	var v auth.Usr
+	// Парсим тело запроса
 	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err != nil {
 		beego.Debug(c.Ctx.Input.IP(), "Login error (403):", err.Error())
 		c.Data["json"] = err.Error() // TODO: change to "Wrong request"
 		c.Ctx.Output.SetStatus(HTTP_FORBIDDEN)
 	} else {
 		beego.Trace(v.Login, "Try to login")
+		// Ищем в бд соответствия
 		user, err := auth.TryToLogin(v.Login, v.Password)
 		if err != nil {
 			beego.Debug("Login error (403):", err.Error())
@@ -114,7 +132,7 @@ func (c *AuthController) Login() {
 			c.Ctx.Output.SetStatus(HTTP_FORBIDDEN)
 		} else {
 			beego.Trace(user.Login, "Success login")
-			// success, register new session
+			// Правильный логин, выдаём новый токен
 			claim := jwt.NewClaim()
 			claim.Set("user_id", user.Id)
             claim.Set("perm_lvl", user.PermissionLevel)
@@ -127,10 +145,14 @@ func (c *AuthController) Login() {
 				c.Data["json"] = err.Error()
 				c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
 			}
-
+			// Прикрепляем токен, уровень, время истечения и базовую информацию о пользователе
 			sessionResponse := auth.UserAndToken{
 				Token: token,
-				UserId: user.Id,
+				User: models.MainUserInfo{
+					Id: user.Id,
+					Nickname: user.Nickname,
+					Avatar: user.Avatar,
+				},
 				ExpiresIn: f.Format(time.UnixDate),
                 PermissionLevel: user.PermissionLevel,
 			}

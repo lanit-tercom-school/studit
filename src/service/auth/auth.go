@@ -7,11 +7,11 @@ import (
 )
 
 // TODO: rename
-type UserAndToken struct{
-    Token           string      `json:"token"`
-    UserId          int         `json:"id"`
-    ExpiresIn       string      `json:"exp"`
-    PermissionLevel int         `json:"perm_lvl"`
+type UserAndToken struct {
+	Token           string              `json:"bearer_token"`
+	User            models.MainUserInfo `json:"user"`
+	ExpiresIn       string              `json:"exp"`
+	PermissionLevel int                 `json:"perm_lvl"`
 }
 
 type Usr struct {

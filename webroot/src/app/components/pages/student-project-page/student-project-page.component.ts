@@ -8,6 +8,10 @@ import { MaterialsItem } from 'models/materials-item';
 import { ProjectItem } from 'models/project-item';
 import { ProjectNewsItem } from 'models/proj-news-item';
 import { TasksItem } from 'models/tasks-item';
+import { Observable } from "rxjs/Observable";
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+
+import 'rxjs/add/operator/filter';
 
 
 @Component({
@@ -16,17 +20,10 @@ import { TasksItem } from 'models/tasks-item';
   styleUrls: ['./student-project-page.component.css']
 })
 export class StudentProjectPageComponent implements OnInit, OnDestroy {
-  private project = {
-    'id': 0,
-    'name': '',
-    'description': '',
-    'created': '0',
-    'logo': '',
-    'tags': [
-      ''
-    ],
-    'status': ''
-  };
+
+  private projectObs: BehaviorSubject<ProjectItem> = new BehaviorSubject({
+    id: 0, name: "Loading...", description: "Loading...", logo: "dsasda"
+  });
   private projectId;
   private authorized = false;
   private tasks = [];
@@ -38,13 +35,23 @@ export class StudentProjectPageComponent implements OnInit, OnDestroy {
     this.route.params
       .subscribe(params => {
         this.projectId = params['id'];
+        this.getProjectInfo();
         this.choseButtonStatus();
       });
-
     this.getTaskItems();
   }
-  ngOnDestroy() {
 
+  ngOnDestroy() {
+  }
+
+  getProjectInfo() {
+    this.data.Projects.subscribe(projects => {
+      if (projects.find(res => res.id == this.projectId)) {
+        this.projectObs.next(projects.find(res => res.id == this.projectId));
+      }
+      else {
+      }
+    });
   }
 
   getMaterialsItems(): MaterialsItem[] {
@@ -72,9 +79,9 @@ export class StudentProjectPageComponent implements OnInit, OnDestroy {
   }
   choseButtonStatus() {
     this.data.UserProjects.subscribe(res => {
-      for (let i=0; i<res.length;i++) {
-        if (res[i].id===+this.projectId){
-          this.enrollButtonStatus=1;
+      for (let i = 0; i < res.length; i++) {
+        if (res[i].id === +this.projectId) {
+          this.enrollButtonStatus = 1;
         }
       }
     })

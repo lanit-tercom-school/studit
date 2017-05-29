@@ -26,6 +26,21 @@ func init() {
 	orm.RegisterModel(new(ProjectUser))
 }
 
+// GetProjectUserIdByUserId returns an array of projects
+// where user exists
+func GetProjectUserIdByUserId (userId int) (projects []*Project, err error){
+	o := orm.NewOrm()
+	var project_members []ProjectUser
+	_, err = o.QueryTable(new(ProjectUser)).Filter("UserId", User{Id: userId}).RelatedSel().All(&project_members)
+	if err != nil {
+		return projects, err
+	}
+	for _, v := range project_members {
+		projects = append(projects, v.ProjectId)
+	}
+	return projects, nil
+}
+
 // AddProjectUser insert a new ProjectUser into database and returns
 // last inserted Id on success.
 func AddUserToProject(u *User, y *ProjectJson) (err error) {
@@ -59,7 +74,7 @@ func AddProjectUser(m *ProjectUser) (id int64, err error) {
 	return
 }
 
-func GetUsersByProjectId(project_id int) (ml []interface{}, err error) {
+func GetUsersByProjectId(project_id int) (ml []*User, err error) {
 	o := orm.NewOrm()
 	var users []ProjectUser
 	_, err = o.QueryTable(new(ProjectUser)).
@@ -70,7 +85,7 @@ func GetUsersByProjectId(project_id int) (ml []interface{}, err error) {
 		return nil, err
 	}
 	for _, x := range users {
-		ml = append(ml, x.UserId.Id)
+		ml = append(ml, x.UserId)
 	}
 	return ml, nil
 }

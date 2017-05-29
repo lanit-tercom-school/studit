@@ -39,7 +39,7 @@ func (c *ProjectUserController) Post() {
 		c.Ctx.Output.SetStatus(HTTP_FORBIDDEN)
 		c.Data["json"] = HTTP_FORBIDDEN_STR
 
-	} else if project_id, err := c.GetInt64("project_id"); err != nil {
+	} else if project_id, err := c.GetInt("project_id"); err != nil {
 		beego.Debug(c.Ctx.Input.IP(), "Not an int param. Should be int")
 		c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
 		c.Data["json"] = err.Error()
@@ -74,8 +74,8 @@ func (c *ProjectUserController) Post() {
 
 // Get...
 // @Title Get
-// @Description Получение списка пользователей, подписанных на данный проект
-// @Param	id		path 	string	true		"ID проекта, список пользователей которого надо узнать"
+// @Description Получение списка участников проекта
+// @Param	id		path 	string	true		"ID проекта, список участников которого нужно узнать"
 // @Success 200 {object} []int "Список пользователей"
 // @Failure 403 :id is empty
 // @router /:id [get]
@@ -93,7 +93,16 @@ func (c *ProjectUserController) GetOne() {
 		c.Data["json"] = err.Error()
 
 	} else {
-		c.Data["json"] = users
+		var t []models.MainUserInfo
+		for _, r := range users {
+			t = append(t, models.MainUserInfo{
+				Id: r.Id,
+				Nickname: r.Nickname,
+				Avatar: r.Avatar,
+			})
+		}
+		beego.Trace("Success GET")
+		c.Data["json"] = t
 	}
 	c.ServeJSON()
 }

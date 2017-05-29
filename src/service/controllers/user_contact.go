@@ -4,6 +4,8 @@ import (
 	"service/models"
 	"strconv"
 
+	//"github.com/astaxie/beego"
+	"encoding/json"
 	"github.com/astaxie/beego"
 )
 
@@ -14,105 +16,108 @@ type UserContactController struct {
 
 // URLMapping ...
 func (c *UserContactController) URLMapping() {
-	//c.Mapping("Post", c.Post)
+	c.Mapping("Post", c.Post)
 	c.Mapping("GetOne", c.GetOne)
 	c.Mapping("GetAll", c.GetAll)
 	//c.Mapping("Put", c.Put)
-	//c.Mapping("Delete", c.Delete)
+	c.Mapping("Delete", c.Delete)
 }
-/*
+
 // Post ...
 // @Title Post
 // @Description create UserContact
-// @Param	body		body 	models.UserContact	true		"body for UserContact content"
+// @Param   body            body    []models.UserContactInput   true    "Тело запроса, должен быть массив, то что в примере в []"
+// @Param   Bearer-token    header  string                      true    "Токен"
 // @Success 201 {int} models.UserContact
 // @Failure 403 body is empty
 // @router / [post]
 func (c *UserContactController) Post() {
-	var v models.UserContact
-	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
-		if _, err := models.AddUserContact(&v); err == nil {
-			c.Ctx.Output.SetStatus(201)
-			c.Data["json"] = v
+	if c.CurrentUser.UserId != -1 {
+		cUser := models.User{Id: c.CurrentUser.UserId, }
+		v := []models.UserContactInput{}
+		if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
+			ContId := []string{} // Artem skazal array
+			for _, element := range v {
+				if models.IsValidContactType(element.Type) {
+					in := models.ContactTranslate(&element)
+					in.UserId = &cUser
+					if _, err := models.AddUserContact(&in); err == nil {
+						c.Ctx.Output.SetStatus(HTTP_CREATED)
+						ContId = append(ContId, element.Type+": "+element.Contact+" was added.")
+					} else {
+						ContId = append(ContId, "Fail to add "+element.Type+": "+element.Contact)
+					}
+				} else {
+					ContId = append(ContId, "Fail to add "+element.Type+": "+element.Contact)
+				}
+			}
+			c.Data["json"] = ContId
+			beego.Trace("Post user contact OK")
 		} else {
+			beego.Debug("Unmarshal error for user contact `Post`", err.Error())
+			c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
 			c.Data["json"] = err.Error()
 		}
 	} else {
-		c.Data["json"] = err.Error()
+		beego.Debug("Access denied for user contact `Post`")
+		c.Ctx.Output.SetStatus(HTTP_FORBIDDEN)
+		c.Data["json"] = HTTP_FORBIDDEN_STR
 	}
 	c.ServeJSON()
 }
-*/
-// TODO: refactor this
-// GetOne ...
-// @Title Get One
-// @Description Возвращает models.UserContact если юзер токена совпадает с владельцем контакта, другими словами, контакт доступен только владельцу
-// @Param	id		path 	string	true		"The key for staticblock"
-// @Param	token		query 	string	false		"User token for access"
-// @Success 200 {object} models.UserContact
-// @Failure 403 string Forbidden
-// @router /:id [get]
-func (c *UserContactController) GetOne() {
-	beego.Info("in getONE")
-	// TODO: обновить защиту когда будет лвлинг пользователей
-	if c.Ctx.Output.IsOk() {
-		idStr := c.Ctx.Input.Param(":id")
-		id, _ := strconv.Atoi(idStr)
-		v, err := models.GetUserContactById(id)
-		if err != nil {
-			c.Data["json"] = err.Error()
-		} else {
-			//sess := c.StartSession()
-			userId := 1
-			if userId != v.UserId.Id {
-				c.Data["json"] = "Forbidden (this contact is not yours) (dev)" // TODO: change to `Forbidden`
-				c.Ctx.Output.SetStatus(403)
-			} else {
-				// success
-				c.Data["json"] = v
-			}
-		}
-	}
-	beego.Info("exit getONE")
-	c.ServeJSON()
-}
+func (c *UserContactController) GetOne() {}
 
-// TODO: refactor this
+
 // GetAll ...
-// @Title Get All
+// @Title Get One
 // @Description get UserContact
-// @Param	token	query	string	false	"user token"
+// @Param   id              path    string  true    "АйДи пользователя, чьи контакты нужно получить"
+// @Param   Bearer-token    header  string  true    "Токен администратора или мастера проекта"
 // @Success 200 {object} models.UserContact
 // @Failure 403 Forbidden
-// @router / [get]
+// @router /:id [get]
 func (c *UserContactController) GetAll() {
-	beego.Info("in getALL")
-	beego.Info(c.Ctx.Output.Status)
-	// TODO: обновить защиту когда будет лвлинг пользователей
-	if c.Ctx.Output.IsOk() {
-		beego.Info("output is ok")
-		userToken := c.GetString("token")
-		claims, err := jwtManager.Decode(userToken)
+	if c.CurrentUser.PermissionLevel != -1 {
+		idStr := c.Ctx.Input.Param(":id")
+		id, err := strconv.Atoi(idStr)
 		if err != nil {
-			c.Data["json"] = err.Error() // TODO: change to "Internal Server Error"
-			c.Ctx.Output.SetStatus(500) // TODO: change to 400?
-		}
-		userId, err := claims.Get("user_id")
-		if userId.(float64) > 0 && err == nil {
-			l, err := models.GetAllUserContacts(int(userId.(float64)))
-			if err != nil {
-				c.Data["json"] = err.Error()  // TODO: change err.Error()
-				c.Ctx.ResponseWriter.WriteHeader(403)
-			}
-			c.Data["json"] = l
+			beego.Debug("GetAll user contact `Atoi` error", err.Error())
+			c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
+			c.Data["json"] = err.Error()
 		} else {
-			if err != nil {
-				c.Data["json"] = userId.(float64) > 0 // TODO: change to "Internal Server Error"
+			if _, err = models.GetUserById(id); err == nil {
+				is_master, err := models.IsProjectMasterForUserById(id, c.CurrentUser.UserId)
+				if err == nil {
+					if c.CurrentUser.UserId == id || c.CurrentUser.PermissionLevel == 2 || is_master {
+						v, err := models.GetAllUserContacts(id)
+						if err != nil {
+							beego.Debug("Error in `GetAllUserContacts` in user contact `GetAll`", err.Error())
+							c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
+							c.Data["json"] = err.Error()
+						} else {
+							beego.Trace("GetAll user contact OK")
+							c.Data["json"] = v
+						}
+					} else {
+						beego.Debug("Access denied for user contact `GetAll`")
+						c.Ctx.Output.SetStatus(HTTP_FORBIDDEN)
+						c.Data["json"] = HTTP_FORBIDDEN_STR
+					}
+				} else {
+					beego.Debug("Error in `IsProjectMasterForUserById` in user contact `GetAll`", err.Error())
+					c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
+					c.Data["json"] = err.Error()
+				}
 			} else {
-				c.Data["json"] = err.Error() // TODO: change to "Internal Server Error"
+				beego.Debug("Does not exist user contact `GetAll`")
+				c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
+				c.Data["json"] = "User Not Found"
 			}
-			c.Ctx.Output.SetStatus(500) // TODO: change to 400?
 		}
+	} else {
+		beego.Debug("Access denied for user contact `GetAll`")
+		c.Ctx.Output.SetStatus(HTTP_UNAUTHORIZED)
+		c.Data["json"] = HTTP_UNAUTHORIZED_STR
 	}
 	c.ServeJSON()
 }
@@ -140,22 +145,50 @@ func (c *UserContactController) Put() {
 	}
 	c.ServeJSON()
 }
-
+*/
 // Delete ...
 // @Title Delete
 // @Description delete the UserContact
-// @Param	id		path 	string	true		"The id you want to delete"
+// @Param   id              path        string  true    "АйДи контакта, который требуется удалить"
+// @Param   Bearer-token    header      string  true    "Токен"
 // @Success 200 {string} delete success!
 // @Failure 403 id is empty
 // @router /:id [delete]
 func (c *UserContactController) Delete() {
-	idStr := c.Ctx.Input.Param(":id")
-	id, _ := strconv.Atoi(idStr)
-	if err := models.DeleteUserContact(id); err == nil {
-		c.Data["json"] = "OK"
+	if c.CurrentUser.PermissionLevel != -1 {
+		idStr := c.Ctx.Input.Param(":id")
+		id, err := strconv.Atoi(idStr)
+		if err == nil {
+			v, err := models.GetUserContactById(id)
+			if err != nil {
+				beego.Debug("Delete user contact `GetUserNyId` error")
+				c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
+				c.Data["json"] = err.Error()
+			} else {
+				if v.UserId.Id == c.CurrentUser.UserId {
+					if err := models.DeleteUserContact(v.Id); err == nil {
+						beego.Trace("Delete user contact OK")
+						c.Data["json"] = HTTP_OK_STR
+					} else {
+						beego.Debug("Delete user contact error", err.Error())
+						c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
+						c.Data["json"] = err.Error()
+					}
+				} else {
+					beego.Debug("Access denied for user contact `Delete`")
+					c.Ctx.Output.SetStatus(HTTP_FORBIDDEN)
+					c.Data["json"] = HTTP_FORBIDDEN_STR
+				}
+			}
+		} else {
+			beego.Debug("Delete user contact `Atoi` error", err.Error())
+			c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
+			c.Data["json"] = err.Error()
+		}
 	} else {
-		c.Data["json"] = err.Error()
+		beego.Debug("Unauthorized user in user contact `Delete`")
+		c.Ctx.Output.SetStatus(HTTP_FORBIDDEN)
+		c.Data["json"] = HTTP_FORBIDDEN_STR
 	}
 	c.ServeJSON()
 }
-*/

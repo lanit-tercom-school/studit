@@ -20,6 +20,46 @@ func init() {
 	orm.RegisterModel(new(ProjectMaster))
 }
 
+// GetProjectMasterIdByUserId return array of projects
+// where user is master
+func GetProjectMasterIdByUserId(userId int) (projects []*Project, err error){
+	o := orm.NewOrm()
+	var project_masters []ProjectMaster
+	_, err = o.QueryTable(new(ProjectMaster)).Filter("MasterId", User{Id: userId}).RelatedSel().All(&project_masters)
+	if err != nil {
+		return nil, err
+	}
+	for _, v := range project_masters {
+		projects = append(projects, v.ProjectId)
+	}
+	return projects, nil
+}
+
+// IsProjectMasterUserById returns true
+// if master (project_master, not user) is master of this user on project
+func IsProjectMasterForUserById(userId int, masterId int) (masterOfUser bool, err error) {
+	userProjects, err := GetProjectUserIdByUserId(userId)
+	if err != nil {
+		return false, err
+	}
+	masterProjects, err := GetProjectMasterIdByUserId(masterId)
+	if err != nil {
+		return false, err
+	}
+	// finding intersection
+	target := make(map[int]bool)
+	for _, v := range masterProjects {
+		target[v.Id] = true
+	}
+	for _, v := range userProjects {
+		if target[v.Id] {
+			return true, nil
+		}
+	}
+
+	return false, nil
+}
+
 // AddProjectUser insert a new ProjectMaster into database and returns
 // last inserted Id on success.
 func AddMasterToProject(user *User, project *ProjectJson) (err error) {
@@ -43,7 +83,7 @@ func IsUserInArray(user_id int, users []*User) bool {
 	return false
 }
 
-func GetMastersOfTheProject(project_id int64) (masters []*User, err error) {
+func GetMastersOfTheProject(project_id int) (masters []*User, err error) {
 	o := orm.NewOrm()
 	var connections []ProjectMaster
 	// выбираем всех пользователей, являющихся мастерами данного проекта
@@ -77,7 +117,7 @@ func GetAllProjectMaster() (ml []interface{}, err error) {
 
 // DeleteProjectUser deletes ProjectMaster by Id and returns error if
 // the record to be deleted doesn't exist
-func DeleteMasterFromProject(master_id int, project_id int64) (err error) {
+func DeleteMasterFromProject(master_id int, project_id int) (err error) {
 	o := orm.NewOrm()
 	_, err = o.QueryTable(new(ProjectMaster)).
 		Filter("MasterId", master_id).

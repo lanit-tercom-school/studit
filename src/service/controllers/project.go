@@ -25,7 +25,7 @@ func (c *ProjectController) URLMapping() {
 
 // Post ...
 // @Title Post
-// @Description Создать новый проект
+// @Description Создать новый проект, автоматически создателя делает мастером
 // @Param   body            body        models.ProjectJson     true    "Тело запроса, см. пример"
 // @Param   Bearer-token    header  string          true    "Токен доступа, пользователь должен быть не ниже куратора"
 // @Success 201 {int} Created
@@ -79,11 +79,35 @@ func (c *ProjectController) Post() {
 	c.ServeJSON()
 }
 
+
+type usersGetter func(int) ([]*models.User, error)
+
+// Вызывает функцию с указанным Id и отсылает в канал полученных пользователей в сокращенном виде
+// Используется для параллельного запроса к Masters, Enrolled и Users для проекта
+// Функция должна соответствовать usersGetter прототипу
+func CallForMainInformationAboutUsers(f usersGetter, id int, c chan []models.MainUserInfo) {
+	users, err := f(id)
+	if err != nil {
+		c <- nil
+	} else {
+		var partUsers []models.MainUserInfo
+		for _, u := range users {
+			partUsers = append(partUsers, models.MainUserInfo{
+				Id: u.Id,
+				Avatar: u.Avatar,
+				Nickname: u.Nickname,
+			})
+		}
+		c <- partUsers
+	}
+}
+
 // GetOne ...
 // @Title Get One
-// @Description Получить подробную информацию
-// @Param   id  path    string  true    "ID проекта, информацию о котором нужно получить"
-// @Success 200 {object} models.Project     Запрос прошел успешно
+// @Description Получить подробную информацию о проекте
+// @Param   id  path    string  true        "ID проекта, информацию о котором нужно получить"
+// @Param   cut query   bool    false       "Оставить только информацию о проекте?"
+// @Success 200 {object} models.AllInformationAboutProject     Запрос прошел успешно
 // @Failure 400 :id is wrong
 // @router /:id [get]
 func (c *ProjectController) GetOne() {
@@ -95,14 +119,35 @@ func (c *ProjectController) GetOne() {
 		c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
 		c.Data["json"] = err.Error() // TODO: change to "Wrong project id"
 	} else {
-		v, err := models.GetProjectById(int64(id))
+		v, err := models.GetProjectById(id)
 		if err != nil {
 			beego.Debug("GetOne `GetProjectById` error", err.Error())
 			c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
 			c.Data["json"] = err.Error()
 		} else {
+			// Запускаем 3 параллельных запроса к мастерам, участникам и заявкам на проект
+			// TODO: Исследовать на утечки памяти
+			enrolledChan := make(chan []models.MainUserInfo)
+			membersChan := make(chan []models.MainUserInfo)
+			mastersChan := make(chan []models.MainUserInfo)
+			if cut_info, _ := c.GetBool("cut"); !cut_info {
+				go CallForMainInformationAboutUsers(models.GetAllSignedUpOnProject, id, enrolledChan)
+				go CallForMainInformationAboutUsers(models.GetMastersOfTheProject, id, mastersChan)
+				go CallForMainInformationAboutUsers(models.GetUsersByProjectId, id, membersChan)
+			} else {
+				go func() {
+					enrolledChan <- nil
+					mastersChan <- nil
+					membersChan <- nil
+				}()
+			}
 			beego.Trace("GetOne OK")
-			c.Data["json"] = v
+			c.Data["json"] = models.AllInformationAboutProject{
+				Project: v,
+				Enrolled: <-enrolledChan,
+				Members: <-membersChan,
+				Masters: <-mastersChan,
+			}
 		}
 	}
 	c.ServeJSON()
@@ -110,16 +155,15 @@ func (c *ProjectController) GetOne() {
 
 // GetAll ...
 // @Title Get All
-// @Description get Project
-// @Param	query	query	string	false	"Filter. e.g. col1:v1,col2:v2 ..."
-// @Param	sortby	query	string	false	"Sorted-by fields. e.g. col1,col2 ..."
-// @Param	order	query	string	false	"Order corresponding to each sortby field, if single value, apply to all sortby fields. e.g. desc,asc ..."
-// @Param       user    query   string  false   "Получить проекты, в которых участвует пользователь с заданным ID."
-// @Param       master  query   string  false   "Получить проекты, автором которых является пользователь с заданным ID."
-// @Param       tag     query   string  false   "Получить проекты с тегом. Тег может быть только один."
-// @Param       status  query   string  false   "Получить проекты с заданным статусом ('завершен'/'еще не начат')"
-// @Param	limit	query	string	false	"Limit the size of result set. Must be an integer. Default 10"
-// @Param	offset	query	string	false	"Start position of result set. Must be an integer"
+// @Description Получить фильтрованный список проектов
+// @Param   sortby  query   string  false   "Sorted-by fields. e.g. col1,col2 ..."
+// @Param   order   query   string  false   "Order corresponding to each sortby field, if single value, apply to all sortby fields. e.g. desc,asc ..."
+// @Param   user    query   string  false   "Получить проекты, в которых участвует пользователь с заданным ID."
+// @Param   master  query   string  false   "Получить проекты, автором которых является пользователь с заданным ID."
+// @Param   tag     query   string  false   "Получить проекты с тегом. Тег может быть только один."
+// @Param   status  query   string  false   "Получить проекты с заданным статусом ('завершен'/'еще не начат')"
+// @Param   limit   query   string  false   "Наибольшее число объектов в ответе. Должно быть целым числом. Изначально равно 10"
+// @Param   offset  query   string  false   "Смещение от начала. Должно быть целым числом"
 // @Success 200 {object} []models.Project Get array of projects filtered with specified filters (wtf this description)
 // @Failure 403
 // @router / [get]
@@ -164,11 +208,12 @@ func (c *ProjectController) GetAll() {
 	if v := c.GetString("tag"); v!= ""{
 		tag = v
 	}
-	if v := c.GetString("status"); v!= "" {
-		if(correctStatus(v)){
+	if v := c.GetString("status"); v != "" {
+		if correctStatus(v) {
 			status = v
 		}
 	}
+	beego.Trace(status)
 	// query: k:v,k:v
 	if v := c.GetString("query"); v != "" {
 		for _, cond := range strings.Split(v, ",") {
@@ -182,7 +227,7 @@ func (c *ProjectController) GetAll() {
 			query[k] = v
 		}
 	}
-	beego.Trace(c.Ctx.Input.IP(), "Select from table")
+	beego.Trace("Select from table")
 	l, err := models.GetAllProjects(query, sortBy, order, offset, limit, tag, user, master, status)
 	if err != nil {
 		beego.Debug(c.Ctx.Input.IP(), "News GetAll `GetAllProjects` error", err.Error())
@@ -194,9 +239,9 @@ func (c *ProjectController) GetAll() {
 	c.ServeJSON()
 }
 
-
-func correctStatus(status string) bool{
-	if(status == "еще не начат" || status == "завершен" || status == "начат"){
+// Проверяет корректность статуса проекта
+func correctStatus(status string) bool {
+	if status == "0" || status == "1" || status == "2" {
 		return true
 	}
 	return false
@@ -221,7 +266,7 @@ func (c *ProjectController) Put() {
 			c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
 			c.Data["json"] = err.Error()
 		}
-		v := models.ProjectJson{Id: int64(id)}
+		v := models.ProjectJson{Id: id}
 		if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
 			if err := models.UpdateProjectById(&v); err == nil {
 				beego.Trace("Put project OK")
@@ -263,7 +308,7 @@ func (c *ProjectController) Delete() {
 			c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
 			c.Data["json"] = err.Error()
 		}
-		if err := models.DeleteProject(int64(id)); err == nil {
+		if err := models.DeleteProject(id); err == nil {
 			beego.Trace("Delete OK")
 			c.Data["json"] = "OK"
 		} else {

@@ -2,37 +2,52 @@ package models
 
 import (
 	"errors"
-	"fmt"
-	//"reflect"
 	"strings"
 	"github.com/astaxie/beego/orm"
 	"time"
+	"strconv"
 )
 
 // Модель для базы данных
 type Project struct {
-	Id          int64  `orm:"column(id);pk;auto"`
-	Name        string `orm:"column(name)"`
-	Description string `orm:"column(description)"`
-	DateOfCreation time.Time   `orm:"column(date_of_creation);type(datetime)"`
-	Logo        string `orm:"column(logo)"`
-	Tags        string `orm:"column(tags)"`
-	Status 	    string `orm:"column(status)"`
+	Id             int          `orm:"column(id);pk;auto"`
+	Name           string       `orm:"column(name)"`
+	Description    string       `orm:"column(description)"`
+	DateOfCreation time.Time    `orm:"column(date_of_creation);type(datetime)"`
+	Logo           string       `orm:"column(logo)"`
+	Tags           string       `orm:"column(tags)"`
+	Status         int          `orm:"column(status)"`  // 0 - проект еще не начался, идет набор, и т.д.
+	                                                    // 1 - проект начался, ведутся лекции, разработка
+	                                                    // 2 - проект завершен, активность закончена
 }
 
 // Модель для общения с клиентами
 type ProjectJson struct {
-	Id              int64       `json:"id,omitempty"` //
-	Name            string      `json:"name"`
-	Description     string      `json:"description"`
-	DateOfCreation  time.Time   `json:"created"`
-	Logo            string      `json:"logo"`
-	Tags            []string    `json:"tags"`
-	Status          string      `json:"status"`
+	Id             int         `json:"id,omitempty"` //
+	Name           string      `json:"name"`
+	Description    string      `json:"description"`
+	DateOfCreation time.Time   `json:"created"`
+	Logo           string      `json:"logo"`
+	Tags           []string    `json:"tags"`
+	Status         int         `json:"status"` // см модель для бд
 }
 
-// Обязательный превод от одной модели в другую
-func (t *Project) translate()  ProjectJson{
+// Вся информация о проекте
+type AllInformationAboutProject struct {
+	Project  *ProjectJson   `json:"project"`
+	Enrolled []MainUserInfo `json:"enrolled"`
+	Members  []MainUserInfo `json:"members"`
+	Masters  []MainUserInfo `json:"masters"`
+}
+
+type MainProjectInfo struct {
+	Id   int    `json:"id"`
+	Name string `json:"name"`
+	Logo string `json:"logo"`
+}
+
+// Обязательный перевод от одной модели в другую
+func (t *Project) translate() ProjectJson{
 	return ProjectJson{
 		Id: t.Id,
 		Name: t.Name,
@@ -44,7 +59,7 @@ func (t *Project) translate()  ProjectJson{
 	}
 }
 
-func (t *ProjectJson) translate()  Project{
+func (t *ProjectJson) translate() Project{
 	return Project{
 		Id: t.Id,
 		Name: t.Name,
@@ -56,7 +71,6 @@ func (t *ProjectJson) translate()  Project{
 	}
 }
 
-
 func (t *Project) TableName() string {
 	return "project"
 }
@@ -67,18 +81,20 @@ func init() {
 
 // AddProject insert a new Project into database and returns
 // last inserted Id on success.
-func AddProject(m *ProjectJson) (id int64, err error) {
+func AddProject(m *ProjectJson) (id int, err error) {
 	v := m.translate()
 	v.Id = 0 // for auto inc
 	v.DateOfCreation = time.Now()
+	v.Status = 0
 	o := orm.NewOrm()
-	id, err = o.Insert(&v)
+	id_, err := o.Insert(&v)
+	id = int(id_)
 	return
 }
 
 // GetProjectById retrieves Project by Id. Returns error if
 // Id doesn't exist
-func GetProjectById(id int64) (*ProjectJson, error) {
+func GetProjectById(id int) (*ProjectJson, error) {
 	o := orm.NewOrm()
 	temp := &Project{Id: id}
 	if err := o.Read(temp); err == nil {
@@ -156,7 +172,10 @@ func GetAllProjects(query map[string]string, sortBy []string, order []string,
 			FilterByMaster(&ml, master)
 		}
 		if status != "" {
-			FilterByStatus(&ml, status)
+			r, err := strconv.Atoi(status)
+			if err == nil {
+				FilterByStatus(&ml, r)
+			}
 		}
 		return ml, nil
 	}
@@ -165,21 +184,21 @@ func GetAllProjects(query map[string]string, sortBy []string, order []string,
 
 func FilterByTag(ml *[]ProjectJson, tag string){
 	for i := 0; i < len(*ml);{
-		if( !TagInArrayOfStrings(tag, (*ml)[i].Tags)) {
+		if !TagInArrayOfStrings(tag, (*ml)[i].Tags) {
 			(*ml)[i] = (*ml)[len(*ml)-1]
-			(*ml)= (*ml)[:len(*ml)-1]
+			*ml = (*ml)[:len(*ml)-1]
 			continue
 		}
-
 		i++
 	}
 }
 
-func FilterByStatus(ml *[]ProjectJson, status string) {
-	for i := 0; i < len(*ml);{
-		if((*ml)[i].Status != status){
+func FilterByStatus(ml *[]ProjectJson, status int) {
+	for i := 0; i < len(*ml); {
+		if (*ml)[i].Status != status {
+			// remove from slice, https://github.com/golang/go/wiki/SliceTricks#delete-without-preserving-order
 			(*ml)[i] = (*ml)[len(*ml)-1]
-			(*ml)= (*ml)[:len(*ml)-1]
+			 *ml = (*ml)[:len(*ml)-1]
 			continue
 		}
 		i++
@@ -191,16 +210,16 @@ func FilterByUser(ml *[]ProjectJson, user int64){
 	qs := o.QueryTable(new(ProjectUser))
 	var l []ProjectUser
 	qs.All(&l)
-	userProjects := make(map[int64]bool)
+	userProjects := make(map[int]bool)
 	for _, v := range l {
-		if(int(user) == (v.UserId).Id){
+		if int(user) == (v.UserId).Id {
 			userProjects[(v.ProjectId).Id] = true
 		}
 	}
 	for i := 0; i < len(*ml);{
-		if(!userProjects[(*ml)[i].Id]){
+		if !userProjects[(*ml)[i].Id] {
 			(*ml)[i] = (*ml)[len(*ml)-1]
-			(*ml)= (*ml)[:len(*ml)-1]
+			*ml = (*ml)[:len(*ml)-1]
 			continue
 		}
 		i++
@@ -212,17 +231,17 @@ func FilterByMaster(ml * []ProjectJson, master int64){
 	qs := o.QueryTable(new(ProjectMaster))
 	var l []ProjectMaster
 	qs.All(&l)
-	createdProjects := make(map[int64]bool)
+	createdProjects := make(map[int]bool)
 	for _, v := range l {
-		if(int(master) == (v.MasterId).Id){
+		if int(master) == (v.MasterId).Id {
 			createdProjects[(v.ProjectId).Id] = true
 		}
 	}
 
 	for i := 0; i < len(*ml);{
-		if(!createdProjects[(*ml)[i].Id]){
+		if !createdProjects[(*ml)[i].Id] {
 			(*ml)[i] = (*ml)[len(*ml)-1]
-			(*ml)= (*ml)[:len(*ml)-1]
+			*ml = (*ml)[:len(*ml)-1]
 			continue
 		}
 		i++
@@ -246,15 +265,12 @@ func UpdateProjectById(m *ProjectJson) (err error) {
 
 // DeleteProject deletes Project by Id and returns error if
 // the record to be deleted doesn't exist
-func DeleteProject(id int64) (err error) {
+func DeleteProject(id int) (err error) {
 	o := orm.NewOrm()
 	v := Project{Id: id}
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
-		var num int64
-		if num, err = o.Delete(&Project{Id: id}); err == nil {
-			fmt.Println("Number of records deleted in database:", num)
-		}
+		_, err = o.Delete(&Project{Id: id})
 	}
 	return
 }
