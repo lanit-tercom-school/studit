@@ -26,7 +26,7 @@ type FullUserInfo struct {
 	Description     string          `json:"description"`
 	Avatar          string          `json:"avatar"`
 	PermissionLevel int             `json:"permission_level"`
-	Contact         []interface{}   `json:"contacts,omitempty"`
+	Contact         []*UserContact  `json:"contacts,omitempty"`
 }
 
 type AllInformationAboutUser struct {

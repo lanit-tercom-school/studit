@@ -2,17 +2,17 @@ package models
 
 import (
 	"errors"
-	"reflect"
-	"strings"
 
 	"github.com/astaxie/beego/orm"
+	"time"
 )
 
 type ProjectEnroll struct {
 	Id          int         `orm:"column(id);pk;auto"`
 	UserId      *User       `orm:"column(user_id);rel(fk)"`
 	ProjectId   *Project    `orm:"column(project_id);rel(fk)"`
-	Text        string      `orm:"column(enrolling_text)"`
+	Message     string      `orm:"column(enrolling_message)"`
+	Time        time.Time   `orm:"column(time);type(datetime)"`
 }
 
 func (t *ProjectEnroll) TableName() string {
@@ -40,28 +40,19 @@ func GetProjectEnrollIdByUserId(userId int) (projects []*Project, err error){
 
 // AddProjectAuthor insert a new ProjectEnroll into database and returns
 // last inserted Id on success.
-func AddApplicationFromUserForProject(u *User, p *ProjectJson, text string) (id int64, err error) {
+func AddApplicationFromUserForProject(u *User, p *ProjectJson, message string) (id int64, err error) {
 	temp := p.translate()
 	m := ProjectEnroll{
 		UserId: u,
 		ProjectId: &temp,
-		Text: text,
+		Message: message,
+		Time: time.Now(),
 	}
 	id, err = orm.NewOrm().Insert(&m)
 	return
 }
 
-// GetProjectAuthorById retrieves ProjectEnroll by Id. Returns error if
-// Id doesn't exist
-func GetProjectAuthorById(id int) (v *ProjectEnroll, err error) {
-	o := orm.NewOrm()
-	v = &ProjectEnroll{Id: id}
-	if err = o.Read(v); err == nil {
-		return v, nil
-	}
-	return nil, err
-}
-
+// Получить список всех пользователей, подавших заявку на проект
 func GetAllSignedUpOnProject(project_id int) (ml []*User, err error) {
 	o := orm.NewOrm()
 	var singed_up []ProjectEnroll
@@ -78,84 +69,47 @@ func GetAllSignedUpOnProject(project_id int) (ml []*User, err error) {
 	return ml, nil
 }
 
-func GetAllEnrolledOnProject(project_id, master_id int) (ml []interface{}, err error) {
-
-	return
+// Объект списка для пользователя, подавшего заявку
+// для удобного просмотра списка пользователей, кто подал заявку
+// туда добавляются контакты, текст и небольшое сообщение от самого пользователя
+type ObjectOfListOfEnrolledUsersOnProject struct {
+	User     MainUserInfo   `json:"user"`
+	Contacts []*UserContact `json:"contacts"`
+	Message  string         `json:"message"`
+	Time     time.Time      `json:"date"`
 }
 
-// TODO: remove
-// GetAllProjectAuthor retrieves all ProjectEnroll matches certain condition. Returns empty list if
-// no records exist
-func GetAllProjectAuthor(query map[string]string, fields []string, sortby []string, order []string,
-	offset int64, limit int64) (ml []interface{}, err error) {
-	o := orm.NewOrm()
-	qs := o.QueryTable(new(ProjectEnroll))
-	// query k=v
-	for k, v := range query {
-		// rewrite dot-notation to Object__Attribute
-		k = strings.Replace(k, ".", "__", -1)
-		qs = qs.Filter(k, v)
-	}
-	// order by:
-	var sortFields []string
-	if len(sortby) != 0 {
-		if len(sortby) == len(order) {
-			// 1) for each sort field, there is an associated order
-			for i, v := range sortby {
-				orderby := ""
-				if order[i] == "desc" {
-					orderby = "-" + v
-				} else if order[i] == "asc" {
-					orderby = v
-				} else {
-					return nil, errors.New("Error: Invalid order. Must be either [asc|desc]")
+// Получить информацию о пользователях, подавших заявку на проект. Запрос исходит от конкретного пользователя.
+func GetAllEnrolledOnProject(project_id, master_id int) (ml []interface{}, err error) {
+	if IsUserIsMasterForProject(master_id, project_id) {
+		o := orm.NewOrm()
+		var wtf []ProjectEnroll
+		_, err := o.QueryTable(new(ProjectEnroll)).Filter("ProjectId", project_id).RelatedSel().All(&wtf)
+		if err != nil {
+			return nil, err
+		} else {
+			for _, r := range wtf {
+				contacts, err := GetAllUserContacts(r.UserId.Id)
+				if err != nil {
+					contacts = nil
 				}
-				sortFields = append(sortFields, orderby)
+				ml = append(ml, ObjectOfListOfEnrolledUsersOnProject{
+					User: MainUserInfo{
+						Id: r.UserId.Id,
+						Avatar: r.UserId.Avatar,
+						Nickname: r.UserId.Nickname,
+					},
+					Message: r.Message,
+					Time: r.Time,
+					Contacts: contacts,
+				})
 			}
-			qs = qs.OrderBy(sortFields...)
-		} else if len(sortby) != len(order) && len(order) == 1 {
-			// 2) there is exactly one order, all the sorted fields will be sorted by this order
-			for _, v := range sortby {
-				orderby := ""
-				if order[0] == "desc" {
-					orderby = "-" + v
-				} else if order[0] == "asc" {
-					orderby = v
-				} else {
-					return nil, errors.New("Error: Invalid order. Must be either [asc|desc]")
-				}
-				sortFields = append(sortFields, orderby)
-			}
-		} else if len(sortby) != len(order) && len(order) != 1 {
-			return nil, errors.New("Error: 'sortby', 'order' sizes mismatch or 'order' size is not 1")
+			return ml, nil
 		}
 	} else {
-		if len(order) != 0 {
-			return nil, errors.New("Error: unused 'order' fields")
-		}
+		return nil, errors.New("Not a master of the project")
 	}
-
-	var l []ProjectEnroll
-	qs = qs.OrderBy(sortFields...)
-	if _, err = qs.Limit(limit, offset).All(&l, fields...); err == nil {
-		if len(fields) == 0 {
-			for _, v := range l {
-				ml = append(ml, v)
-			}
-		} else {
-			// trim unused fields
-			for _, v := range l {
-				m := make(map[string]interface{})
-				val := reflect.ValueOf(v)
-				for _, fname := range fields {
-					m[fname] = val.FieldByName(fname).Interface()
-				}
-				ml = append(ml, m)
-			}
-		}
-		return ml, nil
-	}
-	return nil, err
+	return
 }
 
 // UpdateProjectAuthor updates ProjectEnroll by Id and returns error if
