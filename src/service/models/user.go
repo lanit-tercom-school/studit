@@ -8,6 +8,13 @@ import (
 	"github.com/astaxie/beego/orm"
 )
 
+const (
+	VIEWER = iota - 1   // незарегистрированный пользователь
+	USER                // обычный пользователь
+	LEADER              // учитель, куратор, меет право создавать проекты
+	ADMIN               // администратор, может всё
+)
+
 type User struct {
     Id                  int     `orm:"column(id);pk;auto"                   json:"id"`
     Login               string  `orm:"column(login)"                        json:"-"`

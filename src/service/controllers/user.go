@@ -56,7 +56,7 @@ func CallForProjectMainInfo(f projectsGetter, id int, c chan []models.MainProjec
 func (c *UserController) GetOne() {
 	idStr := c.Ctx.Input.Param(":id")
 	id, err := strconv.Atoi(idStr)
-	if err== nil {
+	if err == nil {
 		v, err := models.GetUserById(id)
 		if err != nil {
 			beego.Debug("GetOne user id not found", err.Error())
@@ -79,7 +79,7 @@ func (c *UserController) GetOne() {
 					//c.Ctx.Output.SetStatus(500)
 				} else {
 					beego.Trace("Contacts founded")
-					if c.CurrentUser.UserId == v.Id || c.CurrentUser.PermissionLevel == 2 || is_master {
+					if c.CurrentUser.UserId == v.Id || c.CurrentUser.PermissionLevel == models.ADMIN || is_master {
 						beego.Trace("Contacts pinned to response")
 						U.Contact = contact
 					}
@@ -106,10 +106,10 @@ func (c *UserController) GetOne() {
 			}
 			beego.Trace("Ready to sent response")
 			c.Data["json"] = models.AllInformationAboutUser{
-				User: U,
+				User:       U,
 				EnrolledOn: <-enrolledChan,
-				MasterOf: <-mastersChan,
-				MemberOf: <-membersChan,
+				MasterOf:   <-mastersChan,
+				MemberOf:   <-membersChan,
 			}
 			beego.Trace("Get user OK")
 		}
@@ -194,7 +194,7 @@ func (c *UserController) GetAll() {
 // @Failure 403 :id is not int
 // @router /:id [put]
 func (c *UserController) Put() {
-	if c.CurrentUser.PermissionLevel != -1 {
+	if c.CurrentUser.PermissionLevel != models.VIEWER {
 		idStr := c.Ctx.Input.Param(":id")
 		id, err := strconv.Atoi(idStr)
 		if err != nil {
@@ -222,28 +222,6 @@ func (c *UserController) Put() {
 	} else {
 		c.Ctx.Output.SetStatus(HTTP_FORBIDDEN)
 		c.Data["json"] = HTTP_FORBIDDEN_STR
-	}
-	c.ServeJSON()
-}
-
-// Delete ...
-// @Title Delete
-// @Description delete the User
-// @Param	id		path 	string	true		"The id you want to delete"
-// @Param	token		body	string			false		"admin/moder token"
-// @Success 200 {string} delete success!
-// @Failure 403 id is empty
-// @router /:id [delete]
-func (c *UserController) Delete() {
-	// TODO: обновить защиту когда будет лвлинг пользователей
-	if c.Ctx.Output.IsOk() {
-		idStr := c.Ctx.Input.Param(":id")
-		id, _ := strconv.Atoi(idStr)
-		if err := models.DeleteUser(id); err == nil {
-			c.Data["json"] = "OK"
-		} else {
-			c.Data["json"] = err.Error()
-		}
 	}
 	c.ServeJSON()
 }

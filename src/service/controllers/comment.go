@@ -1,5 +1,5 @@
 package controllers
-
+/*
 import (
 	"encoding/json"
 	"errors"
@@ -7,7 +7,7 @@ import (
 	"strconv"
 	"strings"
 )
-/*
+
 // CommentController oprations for Comment
 type CommentController struct {
 	ControllerWithAuthorization

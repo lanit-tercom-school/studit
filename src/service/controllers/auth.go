@@ -42,7 +42,7 @@ func init() {
 func newClient(token string) (client CurrentClient) {
 	client = CurrentClient{
 		UserId:          -1,
-		PermissionLevel: -1,
+		PermissionLevel: models.VIEWER,
 	}
 	if len(token) < 2 {
 		beego.Debug("Token too short")
@@ -93,8 +93,8 @@ func (c *ControllerWithAuthorization) Prepare() {
 	clientToken := c.Ctx.Input.Header("Bearer-token")
 	if clientToken == "" {
 		beego.Debug("Empty token")
-		c.CurrentUser.PermissionLevel = -1
-		c.Data["json"] = "Empty token (dev)" // TODO: change to `Unauthorized`
+		c.CurrentUser.PermissionLevel = models.VIEWER
+		c.Data["json"] = HTTP_UNAUTHORIZED_STR
 	} else {
 		c.CurrentUser = newClient(clientToken)
 	}
@@ -405,10 +405,10 @@ func (c *ChangePasswordController) ChangePassword() {
 // @Success 200 "OK"
 // @router / [put]
 func (c *ChangePasswordController) Put() {
-	if c.CurrentUser.PermissionLevel < 0 {
+	if c.CurrentUser.PermissionLevel < models.USER {
 		beego.Debug("Unregistered user want to change password")
-		c.Data["json"] = "Forbidden"
-		c.Ctx.Output.SetStatus(403)
+		c.Data["json"] = HTTP_FORBIDDEN_STR
+		c.Ctx.Output.SetStatus(HTTP_FORBIDDEN)
 	} else {
 		c.ChangePassword()
 	}

@@ -33,7 +33,7 @@ func (c *ProjectController) URLMapping() {
 // @router / [post]
 func (c *ProjectController) Post() {
 	beego.Trace("Try to POST project")
-	if c.CurrentUser.PermissionLevel == 2 || c.CurrentUser.PermissionLevel == 1 {
+	if c.CurrentUser.PermissionLevel == models.ADMIN || c.CurrentUser.PermissionLevel == models.LEADER {
 		var v models.ProjectJson
 		if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
 			if id, err := models.AddProject(&v); err == nil {
@@ -117,7 +117,7 @@ func (c *ProjectController) GetOne() {
 	if err != nil {
 		beego.Debug("GetOne `Atoi` error", err.Error())
 		c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
-		c.Data["json"] = err.Error() // TODO: change to "Wrong project id"
+		c.Data["json"] = err.Error()
 	} else {
 		v, err := models.GetProjectById(id)
 		if err != nil {
@@ -257,8 +257,7 @@ func correctStatus(status string) bool {
 // @Failure 403 :id is not int
 // @router /:id [put]
 func (c *ProjectController) Put() {
-	// TODO: добавить автора к проекту
-	if c.CurrentUser.PermissionLevel == 2 || c.CurrentUser.PermissionLevel == 1 {
+	if c.CurrentUser.PermissionLevel == models.ADMIN || c.CurrentUser.PermissionLevel == models.LEADER {
 		idStr := c.Ctx.Input.Param(":id")
 		id, err := strconv.Atoi(idStr)
 		if err != nil {
@@ -289,7 +288,7 @@ func (c *ProjectController) Put() {
 	c.ServeJSON()
 }
 
-// TODO: удалится ли всё, что связано с проектом, если его удалить?
+/*
 // Delete ...
 // @Title Delete
 // @Description delete the Project
@@ -318,8 +317,9 @@ func (c *ProjectController) Delete() {
 		}
 	} else {
 		beego.Debug("Access denied for `Delete`")
-		c.Data["json"] = "Access denied for `Delete`" // TODO: change this
+		c.Data["json"] = "Access denied for `Delete`"
 		c.Ctx.Output.SetStatus(403)
 	}
 	c.ServeJSON()
 }
+*/

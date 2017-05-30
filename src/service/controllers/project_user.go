@@ -34,7 +34,7 @@ func (c *ProjectUserController) URLMapping() {
 // @router / [post]
 func (c *ProjectUserController) Post() {
 	// TODO: сделать проверку того, что куратор добавляет пользователя именно к своему проекту
-	if c.CurrentUser.PermissionLevel < 1 {
+	if c.CurrentUser.PermissionLevel < models.LEADER {
 		beego.Debug(c.Ctx.Input.IP(), "Access denied for `Post` new user to project")
 		c.Ctx.Output.SetStatus(HTTP_FORBIDDEN)
 		c.Data["json"] = HTTP_FORBIDDEN_STR
@@ -110,7 +110,7 @@ func (c *ProjectUserController) GetOne() {
 
 // GetAll ...
 // @Title Get All
-// @Description get ProjectUser
+// @Description Тестовый запрос
 // @Param	query	query	string	false	"Filter. e.g. col1:v1,col2:v2 ..."
 // @Param	fields	query	string	false	"Fields returned. e.g. col1,col2 ..."
 // @Param	sortby	query	string	false	"Sorted-by fields. e.g. col1,col2 ..."
@@ -219,7 +219,7 @@ func (c *ProjectUserController) Delete() {
 		c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
 		c.Data["json"] = err.Error()
 
-	} else if c.CurrentUser.PermissionLevel < 1 && c.CurrentUser.UserId != user_id {
+	} else if c.CurrentUser.PermissionLevel < models.LEADER && c.CurrentUser.UserId != user_id {
 		beego.Debug(c.Ctx.Input.IP(), "Access denied for `Delete` user from project")
 		c.Ctx.Output.SetStatus(HTTP_FORBIDDEN)
 		c.Data["json"] = HTTP_FORBIDDEN_STR
