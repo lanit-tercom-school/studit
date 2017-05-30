@@ -106,7 +106,7 @@ func (c *NewsController) GetAll() {
 	beego.Trace("Parce request params for News")
 	// limit: 10 (default is 10)
 	if v, err := c.GetInt64("limit"); err == nil {
-		if limit > 20 {
+		if v > 20 {
 			limit = 20
 		} else {
 			limit = v

@@ -140,33 +140,6 @@ func (c *ProjectMasterController) GetAll() {
 	c.ServeJSON()
 }
 
-// TODO: delete this
-// Put ...
-// @Title Put
-// @Description update the ProjectSignUp
-// @Param	id		path 	string	true		"The id you want to update"
-// @Param	body		body 	models.ProjectSignUp	true		"body for ProjectSignUp content"
-// @Success 200 {object} models.ProjectSignUp
-// @Failure 403 :id is not int
-// @router /:id [put]
-
-// wtf
-func (c *ProjectMasterController) Put() {
-	idStr := c.Ctx.Input.Param(":id")
-	id, _ := strconv.Atoi(idStr)
-	v := models.ProjectEnroll{Id: id}
-	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
-		if err := models.UpdateProjectAuthorById(&v); err == nil {
-			c.Data["json"] = "OK"
-		} else {
-			c.Data["json"] = err.Error()
-		}
-	} else {
-		c.Data["json"] = err.Error()
-	}
-	c.ServeJSON()
-}
-
 // Delete ...
 // @Title Delete
 // @Description Отобрать статус мастера. Может сделать только другой мастер или админ, самого себя удалить нельзя

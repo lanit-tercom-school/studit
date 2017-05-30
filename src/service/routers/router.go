@@ -1,9 +1,9 @@
-// @APIVersion 1.0.0 TODO: change this
+// @APIVersion 1.0.1
 // @Title Lanit-Tercom School API
-// @Description TODO: add some description here
-// @TermsOfServiceUrl TODO: change this http://beego.me/
-// @License TODO: change license Apache 2.0
-// @LicenseUrl TODO: change license http://www.apache.org/licenses/LICENSE-2.0.html
+// @Description API для Lanit-Tercom School
+// @TermsOfServiceUrl No terms
+// @License No License
+// @LicenseUrl No License
 // @URL https://vk.com/ltschool
 package routers
 

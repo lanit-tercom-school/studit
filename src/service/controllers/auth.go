@@ -109,10 +109,6 @@ type AuthController struct {
 // URLMapping ...
 func (c *AuthController) URLMapping() {
 	c.Mapping("Post", c.Post)
-	c.Mapping("GetOne", c.GetOne)
-	c.Mapping("GetAll", c.GetAll)
-	//c.Mapping("Put", c.Put)
-	//c.Mapping("Delete", c.Delete)
 }
 
 func (c *AuthController) Login() {
@@ -120,7 +116,7 @@ func (c *AuthController) Login() {
 	// Парсим тело запроса
 	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err != nil {
 		beego.Debug(c.Ctx.Input.IP(), "Login error (403):", err.Error())
-		c.Data["json"] = err.Error() // TODO: change to "Wrong request"
+		c.Data["json"] = err.Error()
 		c.Ctx.Output.SetStatus(HTTP_FORBIDDEN)
 	} else {
 		beego.Trace(v.Login, "Try to login")
@@ -146,7 +142,7 @@ func (c *AuthController) Login() {
 				c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
 			}
 			// Прикрепляем токен, уровень, время истечения и базовую информацию о пользователе
-			sessionResponse := auth.UserAndToken{
+			sessionResponse := auth.LoginResponse{
 				Token: token,
 				User: models.MainUserInfo{
 					Id: user.Id,
@@ -161,6 +157,17 @@ func (c *AuthController) Login() {
 		}
 	}
 	c.ServeJSON()
+}
+
+// Post ...
+// @Title Post
+// @Description Зайти в систему, получить Bearer-token
+// @Param   body    body    auth.Usr    true    "Логин и пароль пользователя для входа"
+// @Success	200	{object} auth.LoginResponse Description
+// @Failure	403	Invalid username or password
+// @router / [post]
+func (c *AuthController) Post() {
+	c.Login()
 }
 
 // Регистрация нового пользователя
@@ -180,25 +187,26 @@ func (c *RegistrationController) Register() {
 	beego.Trace("Start Register")
 	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &temp_u); err != nil {
 		beego.Debug("Can't Unmarshal:", err.Error())
-		c.Data["json"] = err.Error() //TODO: change to "Invalid Form"
+		c.Data["json"] = err.Error()
 		c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
-	} else { // TODO:
-		u := models.User{
-			Login: temp_u.Login,
-			Password: temp_u.Password,
-			Nickname: temp_u.Nickname,
-		}
+	} else {
 		beego.Trace("Correct Unmarshal")
 
-		if u.Login == "" || u.Password == "" || u.Nickname == "" {
-			beego.Debug("login:", u.Login)
-			beego.Debug("password:", u.Password)
-			beego.Debug("nickname:", u.Nickname)
+		if temp_u.Login == "" || temp_u.Password == "" || temp_u.Nickname == "" {
+			beego.Debug("login:", temp_u.Login)
+			beego.Debug("password:", temp_u.Password)
+			beego.Debug("nickname:", temp_u.Nickname)
 			c.Data["json"] = "Wrong Login/Password/Nickname"
 			c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
 		} else {
+			u := models.User{
+				Login: temp_u.Login,
+				Password: temp_u.Password,
+				Nickname: temp_u.Nickname,
+			}
 			beego.Trace("Valid combo login & password & nickname")
 
+			// Создает токен для подтверждения регистрации, который должен отправляться на email
 			pass := auth.GenerateNewToken(15)
 			beego.Trace(pass)
 			err := auth.NewUser(pass, u)
@@ -225,15 +233,15 @@ func (c *RegistrationController) Activate() {
 		if err != nil {
 			beego.Debug("Activation error: " + err.Error())
 			c.Data["json"] = err.Error()
-			c.Ctx.Output.SetStatus(400)
+			c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
 		} else {
 			beego.Trace("Activation OK")
-			c.Data["json"] = "Registred"
+			c.Data["json"] = "Registered"
 		}
 	} else {
 		beego.Debug("Empty pass")
-		c.Data["json"] = "Empty pass"
-		c.Ctx.Output.SetStatus(400)
+		c.Data["json"] = HTTP_BAD_REQUEST_STR
+		c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
 	}
 	c.ServeJSON()
 }
@@ -267,32 +275,6 @@ func (c *RegistrationController) Get() {
 }
 
 
-// TODO: добавить нормальные доки
-// Post ...
-// @Title Post
-// @Description Запрос: auth.Usr, Ответ: auth.UserAndToken
-// @Param	body		body 	auth.Usr	true "Логин и пароль пользователя для входа"
-// @Success	200	{object} auth.UserAndToken Description
-// @Failure	403	Invalid username or password
-// @router / [post]
-func (c *AuthController) Post() {
-	c.Login()
-}
-
-// TODO: убрать этот костыль
-func (c *AuthController) GetOne() {
-	c.Data["json"] = "Not Found"
-	c.Ctx.ResponseWriter.WriteHeader(404)
-	c.ServeJSON()
-}
-
-// TODO: убрать этот костыль
-func (c *AuthController) GetAll() {
-	c.Data["json"] = "Not Found"
-	c.Ctx.ResponseWriter.WriteHeader(404)
-	c.ServeJSON()
-}
-
 func (c *ResetPasswordController) URLMapping() {
 	c.Mapping("Get", c.Get)
 	c.Mapping("Put", c.Put)
@@ -317,14 +299,14 @@ func (c *ResetPasswordController) ResetPasswordRequest() {
 	} else {
 		beego.Info("Wrong resetRequest for", login, ":", err.Error())
 		c.Data["json"] = err.Error()
-		c.Ctx.Output.SetStatus(400)
+		c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
 	}
 	c.ServeJSON()
 }
 
 type ResetPasswordActionJson struct {
 	Login       string  `json:"login"`
-	Pass        string  `json:"pass"` // random string from email
+	Pass        string  `json:"pass"` // activation token from email
 	NewPassword string  `json:"password"`
 }
 
@@ -334,17 +316,17 @@ func (c *ResetPasswordController) ResetPasswordAction() {
 	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err != nil {
 		beego.Debug("Reset error:", err.Error())
 		c.Data["json"] = err.Error()
-		c.Ctx.Output.SetStatus(400)
+		c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
 	} else {
 		beego.Trace("Try to reset for", v.Login)
 		err := auth.ResetPassword(v.Login, v.Pass, v.NewPassword)
 		if err != nil {
 			beego.Debug(err.Error())
 			c.Data["json"] = err.Error()
-			c.Ctx.Output.SetStatus(400)
+			c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
 		} else {
 			beego.Trace("Password was reset for", v.Login)
-			c.Data["json"] = "OK"
+			c.Data["json"] = HTTP_OK_STR
 		}
 	}
 	c.ServeJSON()
@@ -365,7 +347,7 @@ func (c *ResetPasswordController) Put() {
 // Get ...
 // @Title Reset Password Request
 // @Description Осуществляет запрос на сброс пароля
-// @Param	login	query	string	false	"Логин пользователя, который хочет сбросить пароль"
+// @Param   login   query   string  true    "Логин пользователя, который хочет сбросить пароль"
 // @Success 200 "OK"
 // @router / [get]
 func (c *ResetPasswordController) Get() {
@@ -393,23 +375,23 @@ func (c *ChangePasswordController) ChangePassword() {
 	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err != nil {
 		beego.Debug("Change error:", err.Error())
 		c.Data["json"] = err.Error()
-		c.Ctx.Output.SetStatus(400)
+		c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
 	} else {
 		user, err := auth.TryToChangePassword(c.CurrentUser.UserId, v.OldPassword)
 		if err != nil {
 			beego.Critical(c.Ctx.Input.IP(), "Change password in `TryToChangePassword` error:", err.Error())
 			c.Data["json"] = err.Error()
-			c.Ctx.Output.SetStatus(500)
+			c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
 		} else {
 			user.Password = v.NewPassword
 			err := auth.ChangePasswordForUser(user)
 			if err != nil {
 				beego.Critical(c.Ctx.Input.IP(), "Change password in `ChangePasswordForUser` error:", err.Error())
 				c.Data["json"] = err.Error()
-				c.Ctx.Output.SetStatus(500)
+				c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
 			} else {
 				beego.Trace("Password was changed")
-				c.Data["json"] = "OK"
+				c.Data["json"] = HTTP_OK_STR
 			}
 		}
 	}
