@@ -67,6 +67,7 @@ CREATE TABLE "project_enroll" (
   "id" serial NOT NULL,
   "project_id" bigint NOT NULL,
   "user_id" bigint NOT NULL,
+  "enrolling_text" TEXT NOT NULL, /*Сообщение для мастеров проекта, небольшое сопроводительное письмо*/
 
   CONSTRAINT project_user_application_pk PRIMARY KEY ("id"),
   CONSTRAINT project_user_application_fk0 FOREIGN KEY ("project_id") REFERENCES "project"("id"),

@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"encoding/json"
 	"service/models"
 	"strconv"
 	"github.com/astaxie/beego"
@@ -17,7 +16,7 @@ func (c *UserEnrollOnProjectController) URLMapping() {
 	c.Mapping("Post", c.Post)
 	c.Mapping("GetOne", c.GetOne)
 	c.Mapping("GetAll", c.GetAll)
-	c.Mapping("Put", c.Put)
+	//c.Mapping("Put", c.Put)
 	c.Mapping("Delete", c.Delete)
 }
 // Param   project_id      query   int     true    "ID проекта, на который нужно записаться"
@@ -26,6 +25,7 @@ func (c *UserEnrollOnProjectController) URLMapping() {
 // @Title Post
 // @Description Записать пользователя на проект
 // @Param   id              path    string  true    "ID проекта, на который нужно записаться"
+// @Param   body            body    string  true    "Сопроводительный текст для мастеров, обязателен, но можно пусую строку"
 // @Param   Bearer-token    header  string  true    "Токен доступа любого зарегистрированного пользователя"
 // @Success 201 {int} "Created"
 // @Failure 403 body is empty
@@ -63,14 +63,14 @@ func (c *UserEnrollOnProjectController) Post() {
 				} else {
 					// записать пользователя
 					beego.Trace("Good user_id")
-					_, err := models.AddApplicationFromUserForProject(user, project)
+					_, err := models.AddApplicationFromUserForProject(user, project, string(c.Ctx.Input.RequestBody)) // TODO: прямое преобразование тела не безопасно
 					if err != nil {
 						beego.Critical("Corrupted claims", err.Error())
 						c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
 						c.Data["json"] = err.Error()
 
 					} else {
-						beego.Trace("New successfull sign up on project")
+						beego.Trace("New successful sign up on project")
 						c.Ctx.Output.SetStatus(HTTP_CREATED)
 						c.Data["json"] = HTTP_CREATED_STR
 					}
@@ -89,7 +89,7 @@ func (c *UserEnrollOnProjectController) Post() {
 // @Failure 403 :id is empty
 // @router /:id [get]
 func (c *UserEnrollOnProjectController) GetOne() {
-	beego.Trace("New GET for singed up users")
+	beego.Trace("New GET for enrolled users")
 	idStr := c.Ctx.Input.Param(":id")
 	id, err := strconv.Atoi(idStr)
 	if err != nil {
@@ -124,12 +124,28 @@ func (c *UserEnrollOnProjectController) GetOne() {
 // @Failure 403
 // @router / [get]
 func (c *UserEnrollOnProjectController) GetAll() {
-	l, err := models.GetAllProjectAuthor(make(map[string]string), []string{}, []string{}, []string{}, 0, 100)
-	if err != nil {
-		c.Data["json"] = err.Error()
-		c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
+	beego.Trace("New GET for enrolled users")
+	if c.CurrentUser.PermissionLevel != -1 {
+		project_id, err := c.GetInt("project_id")
+		if err == nil {
+			l, err := models.GetAllEnrolledOnProject(project_id, c.CurrentUser.UserId)
+			if err != nil {
+				beego.Debug("Bad id:", err.Error())
+				c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
+				c.Data["json"] = err.Error()
+			} else {
+				beego.Trace("Good request")
+				c.Data["json"] = l
+			}
+		} else {
+			beego.Debug("Bad id:", err.Error())
+			c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
+			c.Data["json"] = err.Error()
+		}
 	} else {
-		c.Data["json"] = l
+		beego.Debug("Forbidden to get enrolled users")
+		c.Ctx.Output.SetStatus(HTTP_FORBIDDEN)
+		c.Data["json"] = HTTP_FORBIDDEN_STR
 	}
 	c.ServeJSON()
 }
@@ -144,6 +160,7 @@ func (c *UserEnrollOnProjectController) GetAll() {
 // @router /:id [put]
 
 // wtf
+/*
 func (c *UserEnrollOnProjectController) Put() {
 	idStr := c.Ctx.Input.Param(":id")
 	id, _ := strconv.Atoi(idStr)
@@ -161,7 +178,7 @@ func (c *UserEnrollOnProjectController) Put() {
 	}
 	c.ServeJSON()
 }
-
+*/
 // Delete ...
 // @Title Delete
 // @Description Отписаться от проекта

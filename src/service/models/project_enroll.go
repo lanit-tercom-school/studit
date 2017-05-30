@@ -2,7 +2,6 @@ package models
 
 import (
 	"errors"
-	"fmt"
 	"reflect"
 	"strings"
 
@@ -10,9 +9,10 @@ import (
 )
 
 type ProjectEnroll struct {
-	Id          int      `orm:"column(id);pk;auto"`
-	UserId      *User    `orm:"column(user_id);rel(fk)"`
-	ProjectId   *Project `orm:"column(project_id);rel(fk)"`
+	Id          int         `orm:"column(id);pk;auto"`
+	UserId      *User       `orm:"column(user_id);rel(fk)"`
+	ProjectId   *Project    `orm:"column(project_id);rel(fk)"`
+	Text        string      `orm:"column(enrolling_text)"`
 }
 
 func (t *ProjectEnroll) TableName() string {
@@ -24,7 +24,7 @@ func init() {
 }
 
 // GetProjectEnrollIdByUserId returns an array of projects
-//where user enrolls
+// where user enrolls
 func GetProjectEnrollIdByUserId(userId int) (projects []*Project, err error){
 	o := orm.NewOrm()
 	var project_enrolled []ProjectEnroll
@@ -40,11 +40,12 @@ func GetProjectEnrollIdByUserId(userId int) (projects []*Project, err error){
 
 // AddProjectAuthor insert a new ProjectEnroll into database and returns
 // last inserted Id on success.
-func AddApplicationFromUserForProject(u *User, p *ProjectJson) (id int64, err error) {
+func AddApplicationFromUserForProject(u *User, p *ProjectJson, text string) (id int64, err error) {
 	temp := p.translate()
 	m := ProjectEnroll{
 		UserId: u,
 		ProjectId: &temp,
+		Text: text,
 	}
 	id, err = orm.NewOrm().Insert(&m)
 	return
@@ -75,6 +76,11 @@ func GetAllSignedUpOnProject(project_id int) (ml []*User, err error) {
 		ml = append(ml, x.UserId)
 	}
 	return ml, nil
+}
+
+func GetAllEnrolledOnProject(project_id, master_id int) (ml []interface{}, err error) {
+
+	return
 }
 
 // TODO: remove
@@ -159,10 +165,7 @@ func UpdateProjectAuthorById(m *ProjectEnroll) (err error) {
 	v := ProjectEnroll{Id: m.Id}
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
-		var num int64
-		if num, err = o.Update(m); err == nil {
-			fmt.Println("Number of records updated in database:", num)
-		}
+		_, err = o.Update(m)
 	}
 	return
 }
@@ -176,13 +179,5 @@ func DeleteProjectSignUp(user_id, project_id int) (err error) {
 			Filter("UserId", user_id).
 			Filter("ProjectId", project_id).
 			Delete()
-	/*v := ProjectEnroll{Id: id}
-	// ascertain id exists in the database
-	if err = o.Read(&v); err == nil {
-		var num int64
-		if num, err = o.Delete(&ProjectEnroll{Id: id}); err == nil {
-			fmt.Println("Number of records deleted in database:", num)
-		}
-	}*/
 	return
 }

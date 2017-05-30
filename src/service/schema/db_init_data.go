@@ -39,7 +39,7 @@ func main() {
 		Name: "Образовательный портал Studit",
 		Description: "Разработка образовательного портала для Lanit-Tercom School",
 		DateOfCreation: time.Now(),
-		Logo: "/files/1.jpg",
+		Logo: "http://85.143.214.42/files/1.jpg",
 		Tags: "studit,summerschool",
 		Status: 1,
 	}
@@ -50,7 +50,7 @@ func main() {
 		Name: "Модный фрилансер",
 		Description: "Какие же стрелочки вокруг ноубука!",
 		DateOfCreation: time.Now(),
-		Logo: "/files/2.jpg",
+		Logo: "http://85.143.214.42/files/2.jpg",
 		Tags: "freelance",
 		Status: 0,
 	}
@@ -61,7 +61,7 @@ func main() {
 		Name: "Оригинальное название",
 		Description: "Click-bait описание",
 		DateOfCreation: time.Now(),
-		Logo: "/files/3.jpg",
+		Logo: "http://85.143.214.42/files/3.jpg",
 		Tags: "creative",
 		Status: 0,
 	}
@@ -72,8 +72,8 @@ func main() {
 		Name: "TFS Mobile",
 		Description: "Студенческий проект TFS Mobile",
 		DateOfCreation: time.Now(),
-		Logo: "/files/4.jpg",
-		Tags: "TFSMobile,summerschool",
+		Logo: "http://www.carlthomasiv.com/wp-content/uploads/2012/08/tfs-logo2-318x235.jpg",
+		Tags: "TFS,summerschool",
 		Status: 0,
 	}
 	fastCheckErr(o.Insert(&project4))
@@ -83,7 +83,7 @@ func main() {
 		Name: "Еще один проект",
 		Description: "Описаниеописаниеописание",
 		DateOfCreation: time.Now(),
-		Logo: "/files/5.jpg",
+		Logo: "https://www.glidetraining.com/wp-content/uploads/2014/03/Microsoft-Office-Project-2013.png",
 		Tags: "project",
 		Status: 0,
 	}

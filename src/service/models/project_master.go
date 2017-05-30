@@ -98,6 +98,14 @@ func GetMastersOfTheProject(project_id int) (masters []*User, err error) {
 	return
 }
 
+func IsUserMasterForProject(user_id, project_id int) (bool) {
+	users, err := GetMastersOfTheProject(project_id)
+	if err != nil {
+		return false
+	} else {
+		
+	}
+}
 
 // GetAllProjectUser retrieves all ProjectMaster matches certain condition. Returns empty list if
 // no records exist
