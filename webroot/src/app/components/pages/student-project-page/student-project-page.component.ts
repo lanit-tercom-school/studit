@@ -1,7 +1,6 @@
 import { Component, OnInit, OnChanges, DoCheck, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { Http, Headers, RequestOptions, Response } from '@angular/http';
-
 import { ApiService } from 'services/api.service';
 import { DataService } from 'services/data.service';
 import { MaterialsItem } from 'models/materials-item';

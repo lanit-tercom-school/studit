@@ -6,8 +6,7 @@ import (
 	"crypto/rand"
 )
 
-// TODO: rename
-type UserAndToken struct {
+type LoginResponse struct {
 	Token           string              `json:"bearer_token"`
 	User            models.MainUserInfo `json:"user"`
 	ExpiresIn       string              `json:"exp"`
@@ -33,8 +32,7 @@ func TryToLogin(login, password string) (user models.User, err error) {
 		return user, errors.New("Can't find User with this login (dev)") // TODO: should be changed to "Invalid login or password"
 	} else if user.Id < 1 {
 		return user, errors.New("Bad user ID (dev)") // TODO: should be changed to "Invalid login or password"
-	} else if user.Password != CustomStr(password).ToSHA1() { // TODO: UNComment this on pub
-	//} else if user.Password != password { // TODO: comment this on pub
+	} else if user.Password != CustomStr(password).ToSHA1() {
 		return user, errors.New("Invalid login or password")
 	} else {
 		return user, nil  // all OK
@@ -49,8 +47,7 @@ func TryToChangePassword(user_id int, password string) (user *models.User, err e
 		return user, errors.New("Can't find User with this login (dev)") // TODO: should be changed to "Invalid login or password"
 	} else if user.Id < 1 {
 		return user, errors.New("Bad user ID (dev)") // TODO: should be changed to "Invalid login or password"
-	} else if user.Password != CustomStr(password).ToSHA1() { // TODO: UNComment this on pub
-	//} else if user.Password != password { // TODO: comment this on pub
+	} else if user.Password != CustomStr(password).ToSHA1() {
 		return user, errors.New("Invalid login or password")
 	} else {
 		return user, nil  // all OK

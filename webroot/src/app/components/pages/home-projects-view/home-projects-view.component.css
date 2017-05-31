@@ -1,8 +1,8 @@
-    .card
-    {
-        margin-bottom:1.5em;
-        word-wrap: break-word;
-    }
+.card
+   {
+       margin-bottom:1.5em;
+       word-wrap: break-word;
+   }
 
     .card-img
     {
@@ -11,23 +11,23 @@
         padding: 0;
     }
 
-    a
+a
 {
-    text-decoration: none;
-    color:inherit;
+   text-decoration: none;
+   color:inherit;
 }
 
 a:hover
 {
-    text-decoration: none;
-    color:cadetblue;
-    transition: color .3s;
+   text-decoration: none;
+   color:cadetblue;
+   transition: color .3s;
 }
 
-    .project-info
-    {
-        padding: .3rem;
-    }
+   .project-info
+   {
+       padding: .3rem;
+   }
 
     .read-more
     {

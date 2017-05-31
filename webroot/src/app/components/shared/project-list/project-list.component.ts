@@ -1,6 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Observable } from "rxjs/Observable";
-
 import { ProjectItem } from 'models/project-item';
 
 @Component({

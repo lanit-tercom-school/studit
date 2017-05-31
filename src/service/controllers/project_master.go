@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"encoding/json"
 	"service/models"
 	"strconv"
 	"github.com/astaxie/beego"
@@ -31,7 +30,7 @@ func (c *ProjectMasterController) URLMapping() {
 // @Failure 403 body is empty
 // @router / [post]
 func (c *ProjectMasterController) Post() {
-	if c.CurrentUser.PermissionLevel == -1 {
+	if c.CurrentUser.PermissionLevel == models.VIEWER {
 		beego.Debug("Access denied for `Post` new master for project")
 		c.Ctx.Output.SetStatus(HTTP_FORBIDDEN)
 		c.Data["json"] = HTTP_FORBIDDEN_STR
@@ -48,7 +47,7 @@ func (c *ProjectMasterController) Post() {
 		c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
 		c.Data["json"] = err.Error()
 
-	} else if c.CurrentUser.PermissionLevel != 2 && !models.IsUserInArray(c.CurrentUser.UserId, masters_of_this_project) {
+	} else if c.CurrentUser.PermissionLevel != models.ADMIN && !models.IsUserInArray(c.CurrentUser.UserId, masters_of_this_project) {
 		beego.Debug("Request from not master of this project")
 		c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
 		c.Data["json"] = "You are not a master of this project"
@@ -140,33 +139,6 @@ func (c *ProjectMasterController) GetAll() {
 	c.ServeJSON()
 }
 
-// TODO: delete this
-// Put ...
-// @Title Put
-// @Description update the ProjectSignUp
-// @Param	id		path 	string	true		"The id you want to update"
-// @Param	body		body 	models.ProjectSignUp	true		"body for ProjectSignUp content"
-// @Success 200 {object} models.ProjectSignUp
-// @Failure 403 :id is not int
-// @router /:id [put]
-
-// wtf
-func (c *ProjectMasterController) Put() {
-	idStr := c.Ctx.Input.Param(":id")
-	id, _ := strconv.Atoi(idStr)
-	v := models.ProjectEnroll{Id: id}
-	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
-		if err := models.UpdateProjectAuthorById(&v); err == nil {
-			c.Data["json"] = "OK"
-		} else {
-			c.Data["json"] = err.Error()
-		}
-	} else {
-		c.Data["json"] = err.Error()
-	}
-	c.ServeJSON()
-}
-
 // Delete ...
 // @Title Delete
 // @Description Отобрать статус мастера. Может сделать только другой мастер или админ, самого себя удалить нельзя
@@ -178,7 +150,7 @@ func (c *ProjectMasterController) Put() {
 // @router / [delete]
 func (c *ProjectMasterController) Delete() {
 	beego.Trace("User want to rank down master")
-	if c.CurrentUser.PermissionLevel == -1 {
+	if c.CurrentUser.PermissionLevel == models.VIEWER {
 		beego.Debug("Access denied for `Delete` master from project")
 		c.Ctx.Output.SetStatus(HTTP_FORBIDDEN)
 		c.Data["json"] = "Forbidden"
@@ -206,7 +178,7 @@ func (c *ProjectMasterController) Delete() {
 		c.Data["json"] = err.Error()
 
 		// Не мастера проекта и не админы не допускаются к дальнейшим действиям
-	} else if c.CurrentUser.PermissionLevel != 2 && !models.IsUserInArray(c.CurrentUser.UserId, masters) {
+	} else if c.CurrentUser.PermissionLevel != models.ADMIN && !models.IsUserInArray(c.CurrentUser.UserId, masters) {
 		beego.Debug("Request from not master of this project")
 		beego.Trace(project_id)
 		beego.Trace(masters)

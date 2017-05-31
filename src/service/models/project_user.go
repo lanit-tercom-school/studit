@@ -51,16 +51,10 @@ func AddUserToProject(u *User, y *ProjectJson) (err error) {
 		SignedDate: time.Now(),
 	}
 	o := orm.NewOrm()
-	var p ProjectEnroll
 	_, err = o.QueryTable(new(ProjectEnroll)).
 		Filter("user_id", m.UserId).
 		Filter("project_id", m.ProjectId).
-		RelatedSel().
-		All(&p)
-	if err != nil {
-		return err
-	}
-	_, err = o.QueryTable(new(ProjectEnroll)).Filter("id", p.Id).Delete()
+		Delete()
 	if err != nil {
 		return err
 	}

@@ -74,9 +74,9 @@ func AddMasterToProject(user *User, project *ProjectJson) (err error) {
 }
 
 // Проверяет, содержится ли в списке пользователей пользователь с указанным ID
-func IsUserInArray(user_id int, users []*User) bool {
+func IsUserInArray(user_id int, users []*User) (bool) {
 	for _, x := range users {
-		if x.Id == user_id{
+		if x.Id == user_id {
 			return true
 		}
 	}
@@ -98,6 +98,15 @@ func GetMastersOfTheProject(project_id int) (masters []*User, err error) {
 	return
 }
 
+// Является ли этот пользователь мастером этого проекта
+func IsUserIsMasterForProject(user_id, project_id int) (bool) {
+	users, err := GetMastersOfTheProject(project_id)
+	if err != nil {
+		return false
+	} else {
+		return IsUserInArray(user_id, users)
+	}
+}
 
 // GetAllProjectUser retrieves all ProjectMaster matches certain condition. Returns empty list if
 // no records exist

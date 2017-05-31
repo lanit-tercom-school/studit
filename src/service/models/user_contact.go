@@ -167,13 +167,13 @@ func DeleteUserContact(id int) (err error) {
 	o := orm.NewOrm()
 	v := UserContact{Id: id}
 	// ascertain id exists in the database
-	if err := o.Read(&v); err==nil{
-		o.Delete(&v);
+	if err := o.Read(&v); err == nil {
+		o.Delete(&v)
 	}
 	return
 }
 
-func GetAllUserContacts(userId int) (ml []interface{}, err error) {
+func GetAllUserContacts(userId int) (ml []*UserContact, err error) {
 	o := orm.NewOrm()
 	var contacts []UserContact
 	_, err = o.QueryTable(new(UserContact)).Filter("UserId", User{Id: userId}).RelatedSel().All(&contacts)
@@ -181,12 +181,7 @@ func GetAllUserContacts(userId int) (ml []interface{}, err error) {
 		return ml, err
 	}
 	for _, v := range contacts {
-		/*m := make(map[string]interface{})
-		val := reflect.ValueOf(v)
-		for _, fname := range user_contact_fields_to_show {
-			m[fname] = val.FieldByName(fname).Interface()
-		}*/
-		ml = append(ml, v)
+		ml = append(ml, &v)
 	}
 	return ml, nil
 }

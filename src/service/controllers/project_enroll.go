@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"encoding/json"
 	"service/models"
 	"strconv"
 	"github.com/astaxie/beego"
@@ -17,70 +16,59 @@ func (c *UserEnrollOnProjectController) URLMapping() {
 	c.Mapping("Post", c.Post)
 	c.Mapping("GetOne", c.GetOne)
 	c.Mapping("GetAll", c.GetAll)
-	c.Mapping("Put", c.Put)
 	c.Mapping("Delete", c.Delete)
 }
-// Param   project_id      query   int     true    "ID проекта, на который нужно записаться"
 
 // Post ...
 // @Title Post
 // @Description Записать пользователя на проект
 // @Param   id              path    string  true    "ID проекта, на который нужно записаться"
+// @Param   message         query   string  false   "Сопроводительный текст для мастеров, обязателен, но можно пусую строку"
 // @Param   Bearer-token    header  string  true    "Токен доступа любого зарегистрированного пользователя"
 // @Success 201 {int} "Created"
 // @Failure 403 body is empty
 // @router /:id [post]
 func (c *UserEnrollOnProjectController) Post() {
-	if c.CurrentUser.PermissionLevel == -1 {
+	if c.CurrentUser.PermissionLevel == models.VIEWER {
 		beego.Debug(c.Ctx.Input.IP(), "Access denied for `Post` new application form")
 		c.Ctx.Output.SetStatus(HTTP_FORBIDDEN)
 		c.Data["json"] = HTTP_FORBIDDEN_STR
 
-	} else {
 		// получить id проекта, на который пользователь хочет записаться
-		project_id, err := c.GetInt(":id")
+	} else if project_id, err := c.GetInt(":id"); err != nil {
+		beego.Debug(c.Ctx.Input.IP(), "Not an int param. Should be int", err.Error())
+		c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
+		c.Data["json"] = err.Error()
+
+		// проект, на который записывается пользователь
+	} else if project, err := models.GetProjectById(project_id); err != nil {
+		beego.Debug("Wrong project id", err.Error())
+		c.Data["json"] = err.Error()
+		c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
+
+		// пользователь, который записывается
+	} else if user, err := models.GetUserById(c.CurrentUser.UserId); err != nil {
+		beego.Critical("Corrupted claims", err.Error())
+		c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
+		c.Data["json"] = err.Error()
+
+	} else {
+		// записать пользователя
+		beego.Trace("Good user_id")
+		_, err := models.AddApplicationFromUserForProject(user, project, string(c.Ctx.Input.RequestBody)) // TODO: прямое преобразование тела не безопасно
 		if err != nil {
-			beego.Debug(c.Ctx.Input.IP(), "Not an int param. Should be int", err.Error())
-			c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
+			beego.Critical("Corrupted claims", err.Error())
+			c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
 			c.Data["json"] = err.Error()
 
 		} else {
-			// проект, на который записывается пользователь
-			project, err := models.GetProjectById(project_id)
-			if err != nil {
-				beego.Debug("Wrong project id", err.Error())
-				c.Data["json"] = err.Error()
-				c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
-
-			} else {
-				// пользователь, который записывается
-				user, err := models.GetUserById(c.CurrentUser.UserId)
-				if err != nil {
-					beego.Critical("Corrupted claims", err.Error())
-					c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
-					c.Data["json"] = err.Error()
-
-				} else {
-					// записать пользователя
-					beego.Trace("Good user_id")
-					_, err := models.AddApplicationFromUserForProject(user, project)
-					if err != nil {
-						beego.Critical("Corrupted claims", err.Error())
-						c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
-						c.Data["json"] = err.Error()
-
-					} else {
-						beego.Trace("New successfull sign up on project")
-						c.Ctx.Output.SetStatus(HTTP_CREATED)
-						c.Data["json"] = HTTP_CREATED_STR
-					}
-				}
-			}
+			beego.Trace("New successful sign up on project")
+			c.Ctx.Output.SetStatus(HTTP_CREATED)
+			c.Data["json"] = HTTP_CREATED_STR
 		}
 	}
 	c.ServeJSON()
 }
-
 // GetOne ...
 // @Title Get One
 // @Description Получить список записанных пользователей
@@ -89,7 +77,7 @@ func (c *UserEnrollOnProjectController) Post() {
 // @Failure 403 :id is empty
 // @router /:id [get]
 func (c *UserEnrollOnProjectController) GetOne() {
-	beego.Trace("New GET for singed up users")
+	beego.Trace("New GET for enrolled users")
 	idStr := c.Ctx.Input.Param(":id")
 	id, err := strconv.Atoi(idStr)
 	if err != nil {
@@ -119,45 +107,35 @@ func (c *UserEnrollOnProjectController) GetOne() {
 
 // GetAll ...
 // @Title Get All
-// @Description Тестовый запрос для получения всех пар
-// @Success 200 {object} models.ProjectEnroll
+// @Description Получение информации о записанных пользователях, их контакты, сообщение и время записи
+// @Param   project_id      query   int     true    "ID проекта, для которого нужно получить информацию"
+// @Param   Bearer-token    header  string  true    "Токен доступа мастера проекта"
+// @Success 200 {object} []models.ObjectOfListOfEnrolledUsersOnProject "desc"
 // @Failure 403
 // @router / [get]
 func (c *UserEnrollOnProjectController) GetAll() {
-	l, err := models.GetAllProjectAuthor(make(map[string]string), []string{}, []string{}, []string{}, 0, 100)
-	if err != nil {
-		c.Data["json"] = err.Error()
-		c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
-	} else {
-		c.Data["json"] = l
-	}
-	c.ServeJSON()
-}
-
-// Put ...
-// @Title Put
-// @Description update the ProjectEnroll
-// @Param	id		path 	string	true		"The id you want to update"
-// @Param	body		body 	models.ProjectEnroll	true		"body for ProjectEnroll content"
-// @Success 200 {object} models.ProjectEnroll
-// @Failure 403 :id is not int
-// @router /:id [put]
-
-// wtf
-func (c *UserEnrollOnProjectController) Put() {
-	idStr := c.Ctx.Input.Param(":id")
-	id, _ := strconv.Atoi(idStr)
-	v := models.ProjectEnroll{Id: id}
-	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
-		if err := models.UpdateProjectAuthorById(&v); err == nil {
-			c.Data["json"] = HTTP_OK_STR
+	beego.Trace("New GET for enrolled users")
+	if c.CurrentUser.PermissionLevel != models.VIEWER {
+		project_id, err := c.GetInt("project_id")
+		if err == nil {
+			l, err := models.GetAllEnrolledOnProject(project_id, c.CurrentUser.UserId)
+			if err != nil {
+				beego.Debug("Something wrong", err.Error())
+				c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
+				c.Data["json"] = err.Error()
+			} else {
+				beego.Trace("Good request")
+				c.Data["json"] = l
+			}
 		} else {
+			beego.Debug("Bad id:", err.Error())
+			c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
 			c.Data["json"] = err.Error()
-			c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
 		}
 	} else {
-		c.Data["json"] = err.Error()
-		c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
+		beego.Debug("Forbidden to get enrolled users")
+		c.Ctx.Output.SetStatus(HTTP_FORBIDDEN)
+		c.Data["json"] = HTTP_FORBIDDEN_STR
 	}
 	c.ServeJSON()
 }
@@ -172,7 +150,7 @@ func (c *UserEnrollOnProjectController) Put() {
 // @router /:id [delete]
 func (c *UserEnrollOnProjectController) Delete() {
 	beego.Trace("User want to sign out from project")
-	if c.CurrentUser.PermissionLevel == -1 {
+	if c.CurrentUser.PermissionLevel == models.VIEWER {
 		beego.Debug(c.Ctx.Input.IP(), "Access denied for `Delete` project_sign_up")
 		c.Ctx.Output.SetStatus(HTTP_FORBIDDEN)
 		c.Data["json"] = HTTP_FORBIDDEN_STR

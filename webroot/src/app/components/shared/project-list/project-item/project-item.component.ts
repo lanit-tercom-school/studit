@@ -1,5 +1,4 @@
 import { Component, Input, OnInit } from '@angular/core';
-
 import { ProjectItem } from 'models/project-item';
 
 @Component({

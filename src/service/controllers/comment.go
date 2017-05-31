@@ -1,5 +1,5 @@
 package controllers
-
+/*
 import (
 	"encoding/json"
 	"errors"
@@ -22,7 +22,6 @@ func (c *CommentController) URLMapping() {
 	c.Mapping("Delete", c.Delete)
 }
 
-// TODO: обновить документацию
 // Post ...
 // @Title Post
 // @Description create Comment
@@ -30,12 +29,11 @@ func (c *CommentController) URLMapping() {
 // @Success 201 {int} models.Comment
 // @Failure 403 body is empty
 // @router / [post]
-// TODO: Переработать!!!
 func (c *CommentController) Post() {
 	if c.Ctx.Output.IsOk() {
 		token := c.GetString("token")
 		claims, _ := jwtManager.Decode(token)
-		_, _ = claims.Get("user_id") // TODO: тут должна быть обработка ошибки
+		_, _ = claims.Get("user_id")
 
 		var v models.Comment
 		if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
@@ -175,3 +173,4 @@ func (c *CommentController) Delete() {
 	}
 	c.ServeJSON()
 }
+*/

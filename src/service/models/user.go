@@ -8,6 +8,13 @@ import (
 	"github.com/astaxie/beego/orm"
 )
 
+const (
+	VIEWER = iota - 1   // незарегистрированный пользователь
+	USER                // обычный пользователь
+	LEADER              // учитель, куратор, меет право создавать проекты
+	ADMIN               // администратор, может всё
+)
+
 type User struct {
     Id                  int     `orm:"column(id);pk;auto"                   json:"id"`
     Login               string  `orm:"column(login)"                        json:"-"`
@@ -21,12 +28,12 @@ type User struct {
 }
 
 type FullUserInfo struct {
-	Id              int                     `json:"id"`
-	Nickname        string                  `json:"nickname"`
-	Description     string                  `json:"description"`
-	Avatar          string                  `json:"avatar"`
-	PermissionLevel int                     `json:"permission_level"`
-	Contact         []interface{}           `json:"contacts,omitempty"`
+	Id              int             `json:"id"`
+	Nickname        string          `json:"nickname"`
+	Description     string          `json:"description"`
+	Avatar          string          `json:"avatar"`
+	PermissionLevel int             `json:"permission_level"`
+	Contact         []*UserContact  `json:"contacts,omitempty"`
 }
 
 type AllInformationAboutUser struct {

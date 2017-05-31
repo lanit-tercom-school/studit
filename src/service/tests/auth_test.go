@@ -44,7 +44,7 @@ func TestLoginAndLogout(t *testing.T) {
 	w := httptest.NewRecorder()
 	beego.BeeApp.Handlers.ServeHTTP(w, r)
 
-	var response auth.UserAndToken
+	var response auth.LoginResponse
 	err := json.Unmarshal(w.Body.Bytes(), &response)
 
 	Convey("Subject: Login\n", t, func() {
