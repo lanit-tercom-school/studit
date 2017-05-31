@@ -1,23 +1,39 @@
 #main-info
 {
-    padding: 1rem 0;
-    margin-bottom: 1rem;
+    padding: 1rem;
     background: whitesmoke;
 }
 
-#img-btn
+#project-img-status
 {
     display: flex;
     flex-direction: column;
     align-items: center;
+    padding: 0;
 }
 
-#project-img
+#status
 {
-    margin-bottom: 1rem;
+  padding-top: 1rem;
+}
+
+#project-name
+{
+  margin-bottom: 1rem;
+}
+.blacktag
+{
+  font-style: italic;
+  color: black;
+}
+
+.blacktag:hover
+{
+  text-decoration: underline;
 }
 
 .container
 {
+    background: whitesmoke;
     margin-bottom: 3rem;
 }
