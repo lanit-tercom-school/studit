@@ -46,11 +46,10 @@ export class DataService {
     this.loadProjects();
     this.loadNews();
     this.loadProjectsForMainPage();
-    if (localStorage.getItem('current_user')) {
-      this.UserId = JSON.parse(localStorage.getItem('current_user')).id;
-      this.loadUsersProjects();
-      this.loadEnrolledUsersProject();
-    }
+    if (localStorage.getItem('current_user'))
+        this.UserId = JSON.parse(localStorage.getItem('current_user')).user.id;
+    this.loadUsersProjects();
+    this.loadEnrolledUsersProject();
   }
 
   loadProjects() {

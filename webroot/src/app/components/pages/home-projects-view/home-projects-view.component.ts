@@ -22,6 +22,4 @@ export class HomeProjectsViewComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
 
   }
-  choseProjects() {
-  }
 }
