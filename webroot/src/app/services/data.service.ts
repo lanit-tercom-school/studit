@@ -117,5 +117,8 @@ export class DataService {
     });
   }
 
-  addApiUrl(url: string): string { return environment.apiUrl + url; }
+  addApiUrl(url: string): string {
+  //return environment.apiUrl + url;
+   return url;
+  }
 }
