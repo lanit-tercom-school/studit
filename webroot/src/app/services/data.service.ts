@@ -7,6 +7,8 @@ import { NewsItem } from "models/news-item";
 import { ProjectItem } from 'models/project-item';
 import { environment } from '../../environments/environment'
 
+import 'rxjs/add/operator/filter';
+
 @Injectable()
 export class DataService {
   private UserId: number;
@@ -86,7 +88,22 @@ export class DataService {
   }
 
   loadEnrolledUsersProject() {
+    this.dataStore.userEnrolledProjects.length = 0;
     if (localStorage.getItem('current_user')) {
+       this.api.getUserById(this.UserId).subscribe(res => {
+           if (res != null && res.enrolled_on != null) {
+             for (let i = 0; i < res.enrolled_on.length; i++)
+             {
+                 //console.log(res.enrolled_on[i].id);
+                 if (this.dataStore.projects.find(projectRes => projectRes.id == res.enrolled_on[i].id)){
+                        this.dataStore.userEnrolledProjects[i] =
+                                 this.dataStore.projects.find(projectRes => projectRes.id == res.enrolled_on[i].id);
+                        }
+              }
+            this.userEnrolledProjects.next(Object.assign({}, this.dataStore).userEnrolledProjects);
+           }
+      // console.log(this.dataStore.userEnrolledProjects);
+       });
 
     } else {
       console.log('Error in data.service: can not load enrolledUsersProject without auth');

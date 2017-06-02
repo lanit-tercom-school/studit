@@ -36,7 +36,7 @@ export class StudentProjectPageComponent implements OnInit, OnDestroy {
         this.projectId = params['id'];
         this.getProjectInfo();
         this.choseButtonStatus();
-        console.log(this.enrollButtonStatus);
+        //console.log(this.enrollButtonStatus);
       });
     this.getTaskItems();
   }

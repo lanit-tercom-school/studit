@@ -298,6 +298,7 @@ export class ApiService {
   getUserById(id: number) {
     return this.http.get(environment.apiUrl + '/v1/user/id/' + id).map((response: Response) => response.json());
   }
+  
   deleteUserById(id: number, token: string) {
     var headers = new Headers();
     headers.append('Accept', 'application/json');
