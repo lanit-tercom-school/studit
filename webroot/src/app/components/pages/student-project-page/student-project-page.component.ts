@@ -26,7 +26,7 @@ export class StudentProjectPageComponent implements OnInit, OnDestroy {
   private projectId;
   private authorized = false;
   private tasks = [];
-  private enrollButtonStatus: number;//0 - enrolling,1 - you are in project, 2 - unenrolling
+  private enrollButtonStatus: number = 0;//0 - enrolling,1 - you are in project, 2 - unenrolling
   constructor(private apiService: ApiService, private route: ActivatedRoute, private http: Http, private data: DataService) { }
 
   ngOnInit() {
@@ -68,23 +68,29 @@ export class StudentProjectPageComponent implements OnInit, OnDestroy {
       }).subscribe(res => this.tasks = res);
   }
   enroll() {
-    this.apiService.enrollToProject(this.projectId, JSON.parse(localStorage.getItem('current_user')).bearer_token).subscribe(res => { });
-    this.enrollButtonStatus = 2;
-    this.data.loadEnrolledUsersProject();
+    this.apiService.enrollToProject(this.projectId,
+      JSON.parse(localStorage.getItem('current_user')).bearer_token).subscribe(res => {
+        this.enrollButtonStatus = 2;
+        this.data.loadEnrolledUsersProject();
+       });
   }
   unenroll() {
-    this.apiService.unenrollToProject(this.projectId, JSON.parse(localStorage.getItem('current_user')).bearer_token).subscribe(res => { });
-    this.enrollButtonStatus = 0;
-    this.data.loadEnrolledUsersProject();
+    this.apiService.unenrollToProject(this.projectId,
+    JSON.parse(localStorage.getItem('current_user')).bearer_token).subscribe(res => {
+       this.enrollButtonStatus = 0;
+       this.data.loadEnrolledUsersProject();
+       });
   }
+  
   choseButtonStatus() {
-    this.data.UserProjects.subscribe(res => {
-      for (let i = 0; i < res.length; i++) {
-        if (res[i].id === +this.projectId) {
+    this.data.UserProjects.subscribe(response => {
+      if (response.find(res => res.id == this.projectId))
           this.enrollButtonStatus = 1;
-          break;
-        }
-      }
+    });
+
+    this.data.UserEnrolledProjects.subscribe(response => {
+      if (response.find(res => res.id == this.projectId))
+          this.enrollButtonStatus = 2;
     });
 
   }
