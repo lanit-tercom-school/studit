@@ -76,23 +76,7 @@ export class StudentProjectPageComponent implements OnInit, OnDestroy {
   }
   choseButtonStatus() {
     this.enrollButtonStatus = 0;
-    this.data.UserProjects.subscribe(res => {
-      if (res != null) {
-        for (let i = 0; i < res.length; i++) {
-          if (res[i].id === +this.projectId) {
-            this.enrollButtonStatus = 1;
-          }
-        }
-      }
-    })
-    this.data.UserEnrolledProjects.subscribe(res => {
-      if (res != null) {
-        for (let i = 0; i < res.length; i++) {
-          if (res[i].id === +this.projectId) {
-            this.enrollButtonStatus = 2;
-          }
-        }
-      }
-    })
+    this.data.UserProjects.subscribe(res => { if (res.find(pr => pr.id == this.projectId)) { this.enrollButtonStatus = 1; } })
+    this.data.UserEnrolledProjects.subscribe(res => { if (res.find(pr => pr.id == this.projectId)) { this.enrollButtonStatus = 2; } })
   }
 }
