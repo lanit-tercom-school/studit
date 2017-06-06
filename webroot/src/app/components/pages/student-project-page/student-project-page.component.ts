@@ -67,7 +67,7 @@ export class StudentProjectPageComponent implements OnInit, OnDestroy {
       }).subscribe(res => this.tasks = res);
   }
   enroll() {
-    this.apiService.enrollToProject(this.projectId, JSON.parse(localStorage.getItem('current_user')).bearer_token, ' s  ').subscribe(res => { this.data.loadEnrolledUsersProject() });
+    this.apiService.enrollToProject(this.projectId, JSON.parse(localStorage.getItem('current_user')).bearer_token, '').subscribe(res => { this.data.loadEnrolledUsersProject() });
     this.enrollButtonStatus = 2;
   }
   unenroll() {
