@@ -67,7 +67,7 @@ export class StudentProjectPageComponent implements OnInit, OnDestroy {
       }).subscribe(res => this.tasks = res);
   }
   enroll() {
-    this.apiService.enrollToProject(this.projectId, JSON.parse(localStorage.getItem('current_user')).bearer_token, '').subscribe(res => { this.data.loadEnrolledUsersProject() });
+    this.apiService.enrollToProject(this.projectId, JSON.parse(localStorage.getItem('current_user')).bearer_token, ' s  ').subscribe(res => { this.data.loadEnrolledUsersProject() });
     this.enrollButtonStatus = 2;
   }
   unenroll() {
@@ -77,16 +77,20 @@ export class StudentProjectPageComponent implements OnInit, OnDestroy {
   choseButtonStatus() {
     this.enrollButtonStatus = 0;
     this.data.UserProjects.subscribe(res => {
-      for (let i = 0; i < res.length; i++) {
-        if (res[i].id === +this.projectId) {
-          this.enrollButtonStatus = 1;
+      if (res != null) {
+        for (let i = 0; i < res.length; i++) {
+          if (res[i].id === +this.projectId) {
+            this.enrollButtonStatus = 1;
+          }
         }
       }
     })
     this.data.UserEnrolledProjects.subscribe(res => {
-      for (let i = 0; i < res.length; i++) {
-        if (res[i].id === +this.projectId) {
-          this.enrollButtonStatus = 2;
+      if (res != null) {
+        for (let i = 0; i < res.length; i++) {
+          if (res[i].id === +this.projectId) {
+            this.enrollButtonStatus = 2;
+          }
         }
       }
     })
