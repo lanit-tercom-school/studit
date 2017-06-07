@@ -9,7 +9,8 @@ import { environment } from '../../environments/environment'
 
 @Injectable()
 export class DataService {
-  private UserId: number;
+  private userId: number;
+  private userToken: string;
   private news: BehaviorSubject<NewsItem[]> = <BehaviorSubject<NewsItem[]>>new BehaviorSubject([]);
   private projects: BehaviorSubject<ProjectItem[]> = <BehaviorSubject<ProjectItem[]>>new BehaviorSubject([]);
   private userProjects: BehaviorSubject<ProjectItem[]> = <BehaviorSubject<ProjectItem[]>>new BehaviorSubject([]);
@@ -46,10 +47,11 @@ export class DataService {
     this.loadProjects();
     this.loadNews();
     this.loadProjectsForMainPage();
-    if (localStorage.getItem('current_user'))
-        this.UserId = JSON.parse(localStorage.getItem('current_user')).user.id;
-    this.loadUsersProjects();
-    this.loadEnrolledUsersProject();
+    if (localStorage.getItem('current_user')) {
+      this.userId = JSON.parse(localStorage.getItem('current_user')).user.id;
+      this.loadUsersProjects();
+      this.loadEnrolledUsersProject();
+    }
   }
 
   loadProjects() {
@@ -72,7 +74,7 @@ export class DataService {
 
   loadUsersProjects() {
     if (localStorage.getItem('current_user')) {
-      this.api.getProjectsOfUser(this.UserId).subscribe(res => {
+      this.api.getProjectsOfUser(this.userId).subscribe(res => {
         if (res != null) {
           this.dataStore.userProjects = res;
           this.dataStore.userProjects.forEach(a => { a.logo = this.addApiUrl(a.logo); })
@@ -87,7 +89,10 @@ export class DataService {
 
   loadEnrolledUsersProject() {
     if (localStorage.getItem('current_user')) {
-
+      this.api.getEnrolledUsersProject(this.userId, this.userToken).subscribe(res => {
+        this.dataStore.userEnrolledProjects = res;
+        this.userEnrolledProjects.next(Object.assign({}, this.dataStore).userEnrolledProjects);
+      })
     } else {
       console.log('Error in data.service: can not load enrolledUsersProject without auth');
     }
