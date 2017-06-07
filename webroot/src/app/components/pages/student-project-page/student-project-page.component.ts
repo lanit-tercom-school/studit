@@ -26,6 +26,7 @@ export class StudentProjectPageComponent implements OnInit, OnDestroy {
   private projectId;
   private authorized = false;
   private tasks = [];
+  private enrollMessage = 'Please write back soon!';
   private enrollButtonStatus: number = 0;//0 - enrolling,1 - you are in project, 2 - unenrolling
   constructor(private apiService: ApiService, private route: ActivatedRoute, private http: Http, private data: DataService) { }
 
@@ -69,7 +70,7 @@ export class StudentProjectPageComponent implements OnInit, OnDestroy {
   }
   enroll() {
     this.apiService.enrollToProject(this.projectId,
-      JSON.parse(localStorage.getItem('current_user')).bearer_token).subscribe(res => {
+      JSON.parse(localStorage.getItem('current_user')).bearer_token, this.enrollMessage).subscribe(res => {
         this.enrollButtonStatus = 2;
         this.data.loadEnrolledUsersProject();
        });
@@ -81,17 +82,18 @@ export class StudentProjectPageComponent implements OnInit, OnDestroy {
        this.data.loadEnrolledUsersProject();
        });
   }
-  
+
   choseButtonStatus() {
-    this.data.UserProjects.subscribe(response => {
-      if (response.find(res => res.id == this.projectId))
-          this.enrollButtonStatus = 1;
-    });
-
-    this.data.UserEnrolledProjects.subscribe(response => {
-      if (response.find(res => res.id == this.projectId))
-          this.enrollButtonStatus = 2;
-    });
-
+    this.enrollButtonStatus = 0;
+    this.data.UserProjects.subscribe(res => {
+      if (res!=null && res.find(pr => pr.id == this.projectId)) {
+        this.enrollButtonStatus = 1;
+      }
+    })
+    this.data.UserEnrolledProjects.subscribe(res => {
+      if (res!=null && res.find(pr => pr.id == this.projectId)) {
+        this.enrollButtonStatus = 2;
+      }
+    })
   }
 }

@@ -184,7 +184,7 @@ export class ApiService {
     ];
   }
 
-  getProjectStudentTaskItem(id: number)  {
+  getProjectStudentTaskItem(id: number) {
     return [
       {
         "number": "645",
@@ -226,14 +226,14 @@ export class ApiService {
       return new RequestOptions({ headers: headers });
     }
   }
-  postProject(project, token: string){
+  postProject(project, token: string) {
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
     headers.append('Accept', 'application/json')
     headers.append('Bearer-token', token);
     console.log(environment.apiUrl + '/v1/project/id/', JSON.stringify(project));
     return this.http.post(environment.apiUrl + '/v1/project/id/',
-     JSON.stringify(project), { headers: headers });
+      JSON.stringify(project), { headers: headers });
   }
 
   deleteProject(id: string, token: string) {
@@ -242,12 +242,12 @@ export class ApiService {
     headers.append('Bearer-token', token);
     return this.http.delete(environment.apiUrl + '/v1/project/id/' + id, { headers: headers });
   }
-  enrollToProject(id: number, token: string) {//Отправить заявку на участие в проекте
+  enrollToProject(id: number, token: string, message: string) {//Отправить заявку на участие в проекте
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
     headers.append('Accept', 'application/json');
     headers.append('Bearer-token', token);
-    return this.http.post(environment.apiUrl + '/v1/project/enroll/' + id, JSON.stringify({}), { headers: headers });
+    return this.http.post(environment.apiUrl + '/v1/project/enroll/' + id + '?message=' + message, JSON.stringify({}), { headers: headers });
   }
   unenrollToProject(id: number, token: string) {//Отменить заявку на участие в проекте
     let headers = new Headers();
@@ -321,5 +321,14 @@ export class ApiService {
   }
   getProjectsOfUser(id: number) {
     return this.http.get(environment.apiUrl + '/v1/project/id/?user=' + id).map((response: Response) => response.json());
+  }
+  getEnrolledUsersProject(id: number, token: string) {
+    var headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Accept', 'application/json');
+    headers.append('Bearer-token', token);
+    return this.http.get(environment.apiUrl + '/v1/user/id/' + id).map(res => {
+      return res.json().enrolled_on;
+    })
   }
 }
