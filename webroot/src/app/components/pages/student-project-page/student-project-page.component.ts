@@ -26,7 +26,8 @@ export class StudentProjectPageComponent implements OnInit, OnDestroy {
   private projectId;
   private authorized = false;
   private tasks = [];
-  private enrollButtonStatus: number;//0 - enrolling,1 - you are in project, 2 - unenrolling
+  private enrollMessage = 'Please write back soon!';
+  private enrollButtonStatus: number = 0;//0 - enrolling,1 - you are in project, 2 - unenrolling
   constructor(private apiService: ApiService, private route: ActivatedRoute, private http: Http, private data: DataService) { }
 
   ngOnInit() {
@@ -36,6 +37,7 @@ export class StudentProjectPageComponent implements OnInit, OnDestroy {
         this.projectId = params['id'];
         this.getProjectInfo();
         this.choseButtonStatus();
+        //console.log(this.enrollButtonStatus);
       });
     this.getTaskItems();
   }
@@ -67,22 +69,29 @@ export class StudentProjectPageComponent implements OnInit, OnDestroy {
       }).subscribe(res => this.tasks = res);
   }
   enroll() {
-    this.apiService.enrollToProject(this.projectId, JSON.parse(localStorage.getItem('current_user')).bearer_token, '').subscribe(res => { this.data.loadEnrolledUsersProject() });
-    this.enrollButtonStatus = 2;
+    this.apiService.enrollToProject(this.projectId,
+      JSON.parse(localStorage.getItem('current_user')).bearer_token, this.enrollMessage).subscribe(res => {
+        this.enrollButtonStatus = 2;
+        this.data.loadEnrolledUsersProject();
+       });
   }
   unenroll() {
-    this.apiService.unenrollToProject(this.projectId, JSON.parse(localStorage.getItem('current_user')).bearer_token).subscribe(res => { this.data.loadEnrolledUsersProject(); });
-    this.enrollButtonStatus = 0;
+    this.apiService.unenrollToProject(this.projectId,
+    JSON.parse(localStorage.getItem('current_user')).bearer_token).subscribe(res => {
+       this.enrollButtonStatus = 0;
+       this.data.loadEnrolledUsersProject();
+       });
   }
+
   choseButtonStatus() {
     this.enrollButtonStatus = 0;
     this.data.UserProjects.subscribe(res => {
-      if (res.find(pr => pr.id == this.projectId)) {
+      if (res!=null && res.find(pr => pr.id == this.projectId)) {
         this.enrollButtonStatus = 1;
       }
     })
     this.data.UserEnrolledProjects.subscribe(res => {
-      if (res.find(pr => pr.id == this.projectId)) {
+      if (res!=null && res.find(pr => pr.id == this.projectId)) {
         this.enrollButtonStatus = 2;
       }
     })

@@ -7,6 +7,8 @@ import { NewsItem } from "models/news-item";
 import { ProjectItem } from 'models/project-item';
 import { environment } from '../../environments/environment'
 
+import 'rxjs/add/operator/filter';
+
 @Injectable()
 export class DataService {
   private userId: number;
@@ -105,5 +107,8 @@ export class DataService {
     });
   }
 
-  addApiUrl(url: string): string { return environment.apiUrl + url; }
+  addApiUrl(url: string): string {
+  //return environment.apiUrl + url;
+   return url;
+  }
 }
