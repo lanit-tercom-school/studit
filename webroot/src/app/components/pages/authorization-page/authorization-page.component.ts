@@ -23,7 +23,6 @@ export class AuthorizationPageComponent implements OnInit {
   ngOnInit() {
     this.auth.unauthentificatenow();
     this.ReturnUrl = this.router.routerState.snapshot.root.queryParams['ReturnUrl'] || '/home';
-    console.log("You will be redirected to", this.ReturnUrl);
   }
 
   login() {

@@ -1,6 +1,6 @@
 import { Routes, RouterModule } from '@angular/router';
 
-import { AuthManager } from 'managers/authmanager';
+import { PathManager } from 'services/path.manager';
 import { MainComponent } from './main/main.component';
 import { ProjectListComponent } from './shared/project-list/project-list.component';
 import { NewsListComponent } from './shared/news-list/news-list.component';
@@ -21,10 +21,11 @@ import { MainFullNewsPageComponent } from './pages/main-full-news-page/main-full
 import { ErrorPageComponent } from './pages/error-page/error-page.component';
 
 export const routes: Routes = [
-  { path: '', redirectTo: 'main', pathMatch: 'full', canActivate: [AuthManager] },
-  { path: 'main', component: MainComponent, canActivate: [AuthManager] },
+  { path: '', redirectTo: 'main', pathMatch: 'full', canActivate: [PathManager] },
+  { path: 'home', component: ErrorPageComponent, canActivate: [PathManager] },
+  { path: 'main', component: MainComponent, canActivate: [PathManager] },
   { path: 'projects', component: ProjectListPageComponent },
-  { path: 'auth', component: AuthorizationPageComponent, canActivate: [AuthManager] },
+  { path: 'auth', component: AuthorizationPageComponent, canActivate: [PathManager] },
   { path: 'student', loadChildren: 'student/student.module#StudentModule' },
   { path: 'teacher', loadChildren: 'teacher/teacher.module#TeacherModule' },
   { path: 'admin', loadChildren: 'admin/admin.module#AdminModule' },
@@ -39,12 +40,12 @@ export const routes: Routes = [
       component: ProjectTasksPageComponent,
     }]
   },
-  { path: 'registration', component: RegistrationPageComponent, canActivate: [AuthManager] },
-  { path: 'registration/validate', component: ValidationPageComponent, canActivate: [AuthManager] },
+  { path: 'registration', component: RegistrationPageComponent, canActivate: [PathManager] },
+  { path: 'registration/validate', component: ValidationPageComponent, canActivate: [PathManager] },
   { path: 'author/:id', component: AuthorPublicPageComponent },
   { path: 'author/:id/settings', component: UserSettingsPageComponent },
-  /* { path: 'student/:id', component: StudentPublicPageComponent },
-   { path: 'student/:id/settings', component: UserSettingsPageComponent },*/
+  { path: 'students/:id', component: StudentPublicPageComponent },
+  { path: 'students/:id/settings', component: UserSettingsPageComponent },
   { path: 'news', component: MainNewsPageComponent },
   { path: 'news/:id', component: MainFullNewsPageComponent },
   { path: '**', component: ErrorPageComponent },

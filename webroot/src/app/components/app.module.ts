@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
 import { AppRouterProvider } from './routes';
-import { AuthManager } from './../managers/authmanager';
+import { PathManager } from 'services/path.manager';
 
 import { DataService } from 'services/data.service';
 import { ApiService } from 'services/api.service';
@@ -86,7 +86,7 @@ import { ErrorPageComponent } from './pages/error-page/error-page.component';
     ProjectTaskListComponent,
     ErrorPageComponent,
   ],
-  providers: [ApiService, AuthService, AuthManager, DataService],
+  providers: [ApiService, AuthService, PathManager, DataService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
