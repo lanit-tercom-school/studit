@@ -1,0 +1,22 @@
+h1 {
+  margin-bottom: 70pt;
+  font-family: "PT Sans Caption", sans-serif;
+}
+
+.container
+{
+  text-align: center;
+  margin: 100px auto;
+}
+
+small
+{
+  font-weight: 600;
+  font-family: "Roboto", sans-serif;
+}
+
+.project-list
+{
+  display: flex;
+  background: var(--section-color);
+}
