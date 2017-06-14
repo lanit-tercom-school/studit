@@ -22,16 +22,10 @@ export class AuthService {
                     // save data for keeping user logged in
                     res.login = user.login;
                     localStorage.setItem('current_user', JSON.stringify(res));
-                    if (res.perm_lvl === 0) {
-                        localStorage.setItem('user_type', 'student');
-                    } else if (res.perm_lvl === 1 || res.perm_lvl === 2) {
-                        localStorage.setItem('user_type', 'teacher');
-                    }
                 }
             });
     }
     unauthentificatenow() {
         localStorage.removeItem("current_user");
-        localStorage.removeItem("user_type");
     }
 }
