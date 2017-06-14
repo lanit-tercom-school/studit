@@ -42,10 +42,9 @@ import { MainFullNewsPageComponent } from './pages/main-full-news-page/main-full
 import { ProjectTasksPageComponent } from './pages/project-tasks-page/project-tasks-page.component';
 import { ProjectTaskItemComponent } from './pages/project-tasks-page/project-task-list/project-task-item/project-task-item.component';
 import { ProjectTaskListComponent } from './pages/project-tasks-page/project-task-list/project-task-list.component';
-import { HomePageStudentComponent } from './pages/home-page-student/home-page-student.component'
-import { HomeProjectsViewComponent } from './pages/home-projects-view/home-projects-view.component';
 import { HomePageTeacherComponent } from './pages/home-page-teacher/home-page-teacher.component';
 import { ErrorPageComponent } from './pages/error-page/error-page.component';
+
 
 @NgModule({
   imports: [
@@ -55,7 +54,6 @@ import { ErrorPageComponent } from './pages/error-page/error-page.component';
     AppRouterProvider,
   ],
   declarations: [
-    HomePageStudentComponent,
     AppComponent,
     MainComponent,
     TopPanelComponent,
@@ -89,7 +87,6 @@ import { ErrorPageComponent } from './pages/error-page/error-page.component';
     ProjectTaskItemComponent,
     ProjectTaskListComponent,
     CreateProjectPageComponent,
-    HomeProjectsViewComponent,
     ErrorPageComponent,
     HomePageTeacherComponent,
   ],

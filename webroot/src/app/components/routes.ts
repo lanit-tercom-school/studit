@@ -26,7 +26,10 @@ export const routes: Routes = [
   { path: 'main', component: MainComponent, canActivate: [AuthManager] },
   { path: 'projects', component: ProjectListPageComponent },
   { path: 'auth', component: AuthorizationPageComponent, canActivate: [AuthManager] },
-  { path: 'home', redirectTo: 'home-student', pathMatch: 'full', },
+  { path: 'student', loadChildren: 'student/student.module#StudentModule' },
+  { path: 'teacher', loadChildren: 'teacher/teacher.module#TeacherModule' },
+  { path: 'admin', loadChildren: 'admin/admin.module#AdminModule' },
+ /* { path: 'home', redirectTo: 'home-student', pathMatch: 'full', },
   {
     path: 'home-student',
     component: HomePageStudentComponent,
@@ -40,8 +43,8 @@ export const routes: Routes = [
       path: 'projects',
       component: HomeProjectsViewComponent,
     }]
-  },
-  {
+  },*/
+  /*{
     path: 'home-teacher',
     component: HomePageTeacherComponent,
     canActivate: [AuthManager],
@@ -54,7 +57,7 @@ export const routes: Routes = [
       path: 'projects',
       component: HomeProjectsViewComponent,
     }]
-  },
+  },*/
   {
     path: 'project/:id',
     children: [{
@@ -67,12 +70,12 @@ export const routes: Routes = [
     }]
   },
   { path: 'home-teacher/projects/createproject', component: CreateProjectPageComponent },
-  { path: 'registration', component: RegistrationPageComponent, canActivate: [AuthManager]},
+  { path: 'registration', component: RegistrationPageComponent, canActivate: [AuthManager] },
   { path: 'registration/validate', component: ValidationPageComponent, canActivate: [AuthManager] },
   { path: 'author/:id', component: AuthorPublicPageComponent },
   { path: 'author/:id/settings', component: UserSettingsPageComponent },
-  { path: 'student/:id', component: StudentPublicPageComponent },
-  { path: 'student/:id/settings', component: UserSettingsPageComponent },
+  /* { path: 'student/:id', component: StudentPublicPageComponent },
+   { path: 'student/:id/settings', component: UserSettingsPageComponent },*/
   { path: 'news', component: MainNewsPageComponent },
   { path: 'news/:id', component: MainFullNewsPageComponent },
   { path: '**', component: ErrorPageComponent },
