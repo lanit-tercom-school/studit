@@ -17,7 +17,6 @@ import { UserSettingsPageComponent } from './pages/user-settings-page/user-setti
 import { MainNewsPageComponent } from './pages/main-news-page/main-news-page.component';
 import { ProjectTasksPageComponent } from './pages/project-tasks-page/project-tasks-page.component';
 import { HomeProjectsViewComponent } from './pages/home-projects-view/home-projects-view.component';
-import { CreateProjectPageComponent } from './pages/create-project-page/create-project-page.component';
 import { MainFullNewsPageComponent } from './pages/main-full-news-page/main-full-news-page.component';
 import { ErrorPageComponent } from './pages/error-page/error-page.component';
 
@@ -29,35 +28,6 @@ export const routes: Routes = [
   { path: 'student', loadChildren: 'student/student.module#StudentModule' },
   { path: 'teacher', loadChildren: 'teacher/teacher.module#TeacherModule' },
   { path: 'admin', loadChildren: 'admin/admin.module#AdminModule' },
- /* { path: 'home', redirectTo: 'home-student', pathMatch: 'full', },
-  {
-    path: 'home-student',
-    component: HomePageStudentComponent,
-    canActivate: [AuthManager],
-    children: [{
-      path: '',
-      redirectTo: 'projects',
-      pathMatch: 'full',
-    },
-    {
-      path: 'projects',
-      component: HomeProjectsViewComponent,
-    }]
-  },*/
-  /*{
-    path: 'home-teacher',
-    component: HomePageTeacherComponent,
-    canActivate: [AuthManager],
-    children: [{
-      path: '',
-      redirectTo: 'projects',
-      pathMatch: 'full',
-    },
-    {
-      path: 'projects',
-      component: HomeProjectsViewComponent,
-    }]
-  },*/
   {
     path: 'project/:id',
     children: [{
@@ -69,7 +39,6 @@ export const routes: Routes = [
       component: ProjectTasksPageComponent,
     }]
   },
-  { path: 'home-teacher/projects/createproject', component: CreateProjectPageComponent },
   { path: 'registration', component: RegistrationPageComponent, canActivate: [AuthManager] },
   { path: 'registration/validate', component: ValidationPageComponent, canActivate: [AuthManager] },
   { path: 'author/:id', component: AuthorPublicPageComponent },

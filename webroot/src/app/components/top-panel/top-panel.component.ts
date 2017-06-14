@@ -11,9 +11,9 @@ import { User } from 'models/user';
   styleUrls: ['./top-panel.component.css']
 })
 export class TopPanelComponent implements OnInit, DoCheck {
-
+  private home_url: string;
   private currentUser;
-  url: string;
+  private url: string;
   constructor(private auth: AuthService, private router: Router) { }
 
   ngOnInit() {
@@ -22,7 +22,11 @@ export class TopPanelComponent implements OnInit, DoCheck {
   ngDoCheck() {
     this.currentUser = JSON.parse(localStorage.getItem('current_user'));
     this.url = this.router.routerState.snapshot.url;
-
+    if (localStorage.getItem('user_type') === 'student') {
+      this.home_url = '/student/home';
+    } else if (localStorage.getItem('user_type') === 'teacher') {
+      this.home_url = '/teacher/home';
+    }
   }
 
   logout() {

@@ -31,7 +31,6 @@ import { RegistrationPageComponent } from './pages/registration-page/registratio
 import { ValidationPageComponent } from './pages/registration-page/validation-page/validation-page.component';
 import { UserSettingsPageComponent } from './pages/user-settings-page/user-settings-page.component';
 import { ProjectListPageComponent } from './pages/project-list-page/project-list-page.component';
-import { CreateProjectPageComponent } from './pages/create-project-page/create-project-page.component';
 import { FooterComponent } from "./footer/footer.component";
 import { TasksItemComponent } from "./pages/student-project-page/tasks/tasks-item/tasks-item.component";
 import { ProjNewsItemComponent } from "./pages/student-project-page/proj-news/proj-news-item/proj-news-item.component";
@@ -42,7 +41,6 @@ import { MainFullNewsPageComponent } from './pages/main-full-news-page/main-full
 import { ProjectTasksPageComponent } from './pages/project-tasks-page/project-tasks-page.component';
 import { ProjectTaskItemComponent } from './pages/project-tasks-page/project-task-list/project-task-item/project-task-item.component';
 import { ProjectTaskListComponent } from './pages/project-tasks-page/project-task-list/project-task-list.component';
-import { HomePageTeacherComponent } from './pages/home-page-teacher/home-page-teacher.component';
 import { ErrorPageComponent } from './pages/error-page/error-page.component';
 
 
@@ -86,9 +84,7 @@ import { ErrorPageComponent } from './pages/error-page/error-page.component';
     ProjectTasksPageComponent,
     ProjectTaskItemComponent,
     ProjectTaskListComponent,
-    CreateProjectPageComponent,
     ErrorPageComponent,
-    HomePageTeacherComponent,
   ],
   providers: [ApiService, AuthService, AuthManager, DataService],
   bootstrap: [AppComponent]
