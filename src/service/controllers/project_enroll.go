@@ -23,7 +23,7 @@ func (c *UserEnrollOnProjectController) URLMapping() {
 // @Title Post
 // @Description Записать пользователя на проект
 // @Param   id              path    string  true    "ID проекта, на который нужно записаться"
-// @Param   message         query   string  false   "Сопроводительный текст для мастеров, обязателен, но можно пусую строку"
+// @Param   message         query   string  false   "Сопроводительный текст для мастеров"
 // @Param   Bearer-token    header  string  true    "Токен доступа любого зарегистрированного пользователя"
 // @Success 201 {int} "Created"
 // @Failure 403 body is empty
@@ -55,7 +55,7 @@ func (c *UserEnrollOnProjectController) Post() {
 	} else {
 		// записать пользователя
 		beego.Trace("Good user_id")
-		_, err := models.AddApplicationFromUserForProject(user, project, string(c.Ctx.Input.RequestBody)) // TODO: прямое преобразование тела не безопасно
+		_, err := models.AddApplicationFromUserForProject(user, project, c.GetString("message"))
 		if err != nil {
 			beego.Critical("Corrupted claims", err.Error())
 			c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
