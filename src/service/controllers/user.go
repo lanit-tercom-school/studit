@@ -53,7 +53,7 @@ func CallForProjectMainInfo(f projectsGetter, id int, c chan []models.MainProjec
 
 func CallForProjectApplications(c chan []models.ProjectApplications, projects_chan chan []models.MainProjectInfo) {
 	projects := <-projects_chan
-	if projects == nil {
+	if projects == nil || len(projects) == 0 {
 		c <- nil
 	} else {
 		// Создаем массив, элементы которого уже инициализированы,

@@ -81,8 +81,8 @@ type ObjectOfListOfEnrolledUsersOnProject struct {
 
 // Для выдачи мастеру проекту, содержит информацию о проекте и список заявок
 type ProjectApplications struct {
-	Project      MainProjectInfo `json:"project"`
-	Applications []interface{}   `json:"apps"`
+	Project      MainProjectInfo `json:"project,omitempty"`
+	Applications []interface{}   `json:"apps,omitempty"`
 }
 
 // Получить информацию о пользователях, подавших заявку на проект. Запрос исходит от конкретного пользователя.
