@@ -22,7 +22,7 @@ type User struct {
     Nickname            string  `orm:"column(nickname)"                     json:"nickname"`
     Description         string  `orm:"column(description)"                  json:"description,omitempty"`
     Avatar              string  `orm:"column(avatar)"                       json:"avatar,omitempty"`
-    // viewer - -1, registered user - 0, teacher - 1, admin - 2, default is -1
+    // viewer - -1, registered user - 0, leader - 1, admin - 2, default is -1
     // Can't be higher than `auth.MaxPermissionLevel` !
     PermissionLevel     int     `orm:"column(permission_level);default(0)"  json:"permission_level,omitempty"`
 }
@@ -37,10 +37,11 @@ type FullUserInfo struct {
 }
 
 type AllInformationAboutUser struct {
-	User       FullUserInfo         `json:"user"`
-	MemberOf   []MainProjectInfo    `json:"member_of,omitempty"`
-	MasterOf   []MainProjectInfo    `json:"master_of,omitempty"`
-	EnrolledOn []MainProjectInfo    `json:"enrolled_on,omitempty"`
+	User           FullUserInfo          `json:"user"`
+	MemberOf       []MainProjectInfo     `json:"member_of,omitempty"`
+	MasterOf       []MainProjectInfo     `json:"master_of,omitempty"`
+	EnrolledOn     []MainProjectInfo     `json:"enrolled_on,omitempty"`
+	MyApplications []ProjectApplications `json:"my_applications,omitempty"`
 }
 
 type MainUserInfo struct {

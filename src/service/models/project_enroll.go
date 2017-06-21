@@ -79,6 +79,12 @@ type ObjectOfListOfEnrolledUsersOnProject struct {
 	Time     time.Time      `json:"date"`
 }
 
+// Для выдачи мастеру проекту, содержит информацию о проекте и список заявок
+type ProjectApplications struct {
+	Project      MainProjectInfo `json:"project"`
+	Applications []interface{}   `json:"apps"`
+}
+
 // Получить информацию о пользователях, подавших заявку на проект. Запрос исходит от конкретного пользователя.
 func GetAllEnrolledOnProject(project_id, master_id int) (ml []interface{}, err error) {
 	if IsUserIsMasterForProject(master_id, project_id) {
@@ -110,6 +116,35 @@ func GetAllEnrolledOnProject(project_id, master_id int) (ml []interface{}, err e
 		return nil, errors.New("Not a master of the project")
 	}
 	return
+}
+
+// Получает записанных без проверки на то, что пользователь является мастером проекта конкурентным способом
+func GetAllEnrolledOnProjectWithoutAuthChecking(project_id int, c chan []interface{}) {
+	o := orm.NewOrm()
+	var wtf []ProjectEnroll
+	_, err := o.QueryTable(new(ProjectEnroll)).Filter("ProjectId", project_id).RelatedSel().All(&wtf)
+	if err != nil {
+		c <- nil
+	} else {
+		var ml []interface{}
+		for _, r := range wtf {
+			contacts, err := GetAllUserContacts(r.UserId.Id)
+			if err != nil {
+				contacts = nil
+			}
+			ml = append(ml, ObjectOfListOfEnrolledUsersOnProject{
+				User: MainUserInfo{
+					Id: r.UserId.Id,
+					Avatar: r.UserId.Avatar,
+					Nickname: r.UserId.Nickname,
+				},
+				Message: r.Message,
+				Time: r.Time,
+				Contacts: contacts,
+			})
+		}
+		c <- ml
+	}
 }
 
 // UpdateProjectAuthor updates ProjectEnroll by Id and returns error if

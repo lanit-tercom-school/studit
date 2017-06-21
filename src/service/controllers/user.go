@@ -7,6 +7,7 @@ import (
 	"strconv"
 	"strings"
 	"github.com/astaxie/beego"
+	"sync"
 )
 
 // Операции с models.User, для некоторых требуется авторизация
@@ -24,13 +25,16 @@ func (c *UserController) URLMapping() {
 
 type projectsGetter func(int) ([]*models.Project, error)
 
-// Вызывает функцию с указанным Id и отсылает в канал полученных пользователей в сокращенном виде
+// Вызывает функцию с указанным Id пользователя и отсылает в канал полученных пользователей в сокращенном виде
 // Используется для параллельного запроса к Masters, Enrolled и Users для проекта
-// Функция должна соответствовать usersGetter прототипу
-func CallForProjectMainInfo(f projectsGetter, id int, c chan []models.MainProjectInfo) {
+// Функция должна соответствовать projectsGetter прототипу
+func CallForProjectMainInfo(f projectsGetter, id int, c chan []models.MainProjectInfo, secondChan chan []models.MainProjectInfo) {
 	users, err := f(id)
 	if err != nil {
 		c <- nil
+		if secondChan != nil {
+			secondChan <- nil
+		}
 	} else {
 		var mainProjectInfo []models.MainProjectInfo
 		for _, u := range users {
@@ -41,6 +45,35 @@ func CallForProjectMainInfo(f projectsGetter, id int, c chan []models.MainProjec
 			})
 		}
 		c <- mainProjectInfo
+		if secondChan != nil {
+			secondChan <- mainProjectInfo
+		}
+	}
+}
+
+func CallForProjectApplications(c chan []models.ProjectApplications, projects_chan chan []models.MainProjectInfo) {
+	projects := <-projects_chan
+	if projects == nil {
+		c <- nil
+	} else {
+		// Создаем массив, элементы которого уже инициализированы,
+		// так возможна непоследовательная запись
+		apps := make([]models.ProjectApplications, len(projects))
+		// Группа ожидания синхронизации потоков
+		var wg sync.WaitGroup
+		for index, project := range projects {
+			t := make(chan []interface{})
+			wg.Add(1)
+			go func() {
+				// конкурентным способом получаем все заявки
+				go models.GetAllEnrolledOnProjectWithoutAuthChecking(project.Id, t)
+				apps[index].Project = project
+				apps[index].Applications = <-t
+				wg.Done()
+			}()
+		}
+		wg.Wait()
+		c <- apps
 	}
 }
 
@@ -89,19 +122,24 @@ func (c *UserController) GetOne() {
 				//c.Data["json"] = err.Error()
 				//c.Ctx.Output.SetStatus(500)
 			}
+			// TODO: refactor this govnocode
 			enrolledChan := make(chan []models.MainProjectInfo)
 			membersChan := make(chan []models.MainProjectInfo)
 			mastersChan := make(chan []models.MainProjectInfo)
+			applicationsChan := make(chan []models.ProjectApplications)
+			chan_for_apps := make(chan []models.MainProjectInfo)
 			beego.Trace("Search for projects")
 			if cut_info, _ := c.GetBool("cut"); !cut_info {
-				go CallForProjectMainInfo(models.GetProjectEnrollIdByUserId, id, enrolledChan)
-				go CallForProjectMainInfo(models.GetProjectUserIdByUserId, id, membersChan)
-				go CallForProjectMainInfo(models.GetProjectMasterIdByUserId, id, mastersChan)
+				go CallForProjectMainInfo(models.GetProjectEnrollIdByUserId, id, enrolledChan, nil)
+				go CallForProjectMainInfo(models.GetProjectUserIdByUserId, id, membersChan, nil)
+				go CallForProjectMainInfo(models.GetProjectMasterIdByUserId, id, mastersChan, chan_for_apps)
+				go CallForProjectApplications(applicationsChan, chan_for_apps)
 			} else {
 				go func() {
 					enrolledChan <- nil
 					mastersChan <- nil
 					membersChan <- nil
+					applicationsChan <- nil
 				}()
 			}
 			beego.Trace("Ready to sent response")
@@ -110,6 +148,7 @@ func (c *UserController) GetOne() {
 				EnrolledOn: <-enrolledChan,
 				MasterOf:   <-mastersChan,
 				MemberOf:   <-membersChan,
+				MyApplications: <-applicationsChan,
 			}
 			beego.Trace("Get user OK")
 		}
