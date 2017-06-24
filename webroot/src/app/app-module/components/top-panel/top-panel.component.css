@@ -14,9 +14,14 @@
     justify-content: space-around;
 }
 
+button.navbar-toggler
+{
+margin-top: 0.5rem;
+position: fixed;
+}
+
 .fa-bars
 {
-  margin-top: 0.5rem;
   color: white;
 }
 
