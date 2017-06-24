@@ -1,3 +1,8 @@
+.container
+{
+  width: 100%;
+}
+
 .navbar
 {
     padding: 0;
@@ -15,14 +20,19 @@
     justify-content: space-around;
 }
 
+.navbar-brand
+{
+    margin-left: 2rem;
+}
+
 li.nav-item
 {
   text-align: center;
 }
-button.navbar-toggler
+
+.navbar-toggler
 {
     margin-top: 0.5rem;
-    position: fixed;
 }
 
 .fa-bars
