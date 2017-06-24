@@ -1,6 +1,9 @@
 @import url('https://fonts.googleapis.com/css?family=Jura');
-#cover {
+#cover
+{
     background: var(--primary-color);
+    background-position: center -35%;
+    background-image: url(http://www.hd1080pwallpaper.com/web/wallpapers/mac-waves-wallpaper-1920x1200/2880x1800.jpg);
     background-size: cover;
     height: 94%;
     text-align: center;
@@ -8,14 +11,19 @@
     align-items: center;
 }
 
-#cover-caption {
+#cover-caption
+{
     width: 100%;
 }
 
-h1, p{
-    color: white;
+h1
+{
     font-family: 'Jura', sans-serif;
-    font-size: 5.5rem;
+}
+
+h1,p
+{
+     color: white;
 }
 .container .reg
 {
