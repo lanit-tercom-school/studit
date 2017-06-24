@@ -2,9 +2,10 @@
 #cover
 {
     background: var(--primary-color);
-    background-position: center -35%;
     background-image: url(http://www.hd1080pwallpaper.com/web/wallpapers/mac-waves-wallpaper-1920x1200/2880x1800.jpg);
-    background-size: cover;
+    background-size: 100% 100%;
+    //background-position: center -35%;
+    background-repeat: no-repeat;
     height: 94%;
     text-align: center;
     display: flex;
