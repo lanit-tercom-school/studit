@@ -3,14 +3,16 @@
     background-color: white;
 }
 
-.container{
+.feature-content{
     margin-top: 100px;
     margin-bottom: 100px;
 }
 
 .row
 {
-    margin: 30px;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    width: 100%;
 }
 
 .feature-img{

@@ -1,30 +1,26 @@
 <section id="cover">
-    <div id="cover-caption">
-        <div class="container">
-
-                <h1 class="display-3">Школа Ланит-Терком</h1>
-                <div class="container reg">
+  <div class="about-content">
+    <h1 class="display-3">Школа Ланит-Терком</h1>
+          <div class="reg">
                 <div class="row ">
-                    <div class="col-md-5">
+                    <div class="col-sm-12">
                         <p>Прими участие в одном из студенческих проектов, чтобы получить опыт работы в IT-компании</p>
                     </div>
-                    <div class="col-md-5 offset-md-2">
+                    <div class="col-sm-12">
                         <form>
-                            <div class="form-group row">
+                            <div class="form-group">
                                     <input type="text" name="name" class="form-control" id="inputName" placeholder="Полное имя" [(ngModel)]="user.nickname">
                             </div>
-                             <div class="form-group row">
+                             <div class="form-group">
                                    <input type="email" name="email" class="form-control" id="inputEmail3" placeholder="Email" [(ngModel)]="user.login">
                             </div>
-                            <div class="form-group row">
+                            <div class="form-group">
                                    <input type="password" name="password" class="form-control" id="inputPassword3" placeholder="Пароль" [(ngModel)]="user.password">
                             </div>
                             <button role="button" class="btn btn-lg btn-warning" role="button" (click)="register()">Зарегистрироваться</button>
                         </form>
                     </div>
                 </div>
-
-            </div>
         </div>
-    </div>
+      </div>
 </section>

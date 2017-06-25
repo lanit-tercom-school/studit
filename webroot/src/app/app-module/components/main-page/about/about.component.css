@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css?family=Jura');
+
 #cover
 {
     background: var(--primary-color);
@@ -7,16 +8,25 @@
     //background-position: center -35%;
     background-repeat: no-repeat;
     height: 94%;
-    text-align: center;
-    display: flex;
-    align-items: center;
+    //width: 100%;
 }
 
-#cover-caption
+.about-content
 {
-    width: 100%;
+  text-align: center;
+  padding: 5rem 5rem;
 }
 
+.reg
+{
+    margin-top: 3rem;
+}
+
+input, button
+{
+  max-width: 70%;
+  margin: auto;
+}
 h1
 {
     font-family: 'Jura', sans-serif;
@@ -26,11 +36,8 @@ h1,p
 {
      color: white;
 }
-.container .reg
+p
 {
-    margin-top: 50px;
-}
-p{
     font-size: x-large;
     font-weight: 550;
 }
