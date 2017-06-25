@@ -21,7 +21,7 @@ h1
 
 .partner-card{
     align-items: center;
-    display: flex;
+    //display: flex;
     justify-content: space-around;
-    margin: 2rem auto;
+    margin-top: 2rem;
 }
