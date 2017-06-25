@@ -4,7 +4,8 @@
   --primary-color: #000000;
   --logo-color: #1CB5DE;
   --dark-logo-color:#1796B8;
-  --section-color: #E7F4FB;
+  //--section-color: #E7F4FB;
+  --section-color: #EEEEE0;
   --accent-color: #D94949;
   --dark-accent-color:#BF4040;
 }

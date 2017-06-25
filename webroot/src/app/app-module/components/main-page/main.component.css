@@ -1,21 +1,16 @@
-h1 {
-  margin-bottom: 70pt;
-  font-family: "PT Sans Caption", sans-serif;
-}
-
-.main-content
+.projects-content
 {
   text-align: center;
-  margin: 100px auto;
+  margin: 2rem auto;
 }
 
 small
 {
   font-weight: 600;
-  font-family: "Roboto", sans-serif;
+//  font-family: "Roboto", sans-serif;
 }
 
-.project-list
+.projects-cover
 {
   display: flex;
   background: var(--section-color);
