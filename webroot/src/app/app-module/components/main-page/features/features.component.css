@@ -15,29 +15,7 @@
     padding-right: 2%;
 }
 
-.feature-title
-{
-  text-align: center;
-  color:var(--primary-color);
-  margin-bottom: 0.5rem;
-}
 
-.long-line,.short-line
-{
-  margin: auto;
-  height: 10px;
-  border-bottom: 3px solid var(--dark-logo-color);
-}
-
-.long-line
-{
-  width: 200px;
-}
-
-.short-line
-{
-  width: 70px;
-}
 
 .feature-img
 {
