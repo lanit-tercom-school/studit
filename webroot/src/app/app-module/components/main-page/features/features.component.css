@@ -1,13 +1,35 @@
-:host {
+:host
+{
     display: flex;
     background-color: white;
 }
 
-.feature-content{
-    margin-top: 100px;
-    margin-bottom: 100px;
+.feature-content
+{
+    margin-top: 3rem;
+    margin-bottom: 3rem;
 }
 
+.feature-title
+{
+  text-align: center;
+  color:var(--primary-color);
+  text-align: center;
+}
+.long-line,.short-line
+{
+  margin: auto;
+  height: 10px;
+  border-bottom: 3px solid var(--dark-logo-color);
+}
+.long-line
+{
+  width: 300px;
+}
+.short-line
+{
+  width: 150px;
+}
 .row
 {
     margin-top: 30px;
@@ -15,7 +37,8 @@
     width: 100%;
 }
 
-.feature-img{
+.feature-img
+{
     margin: 1rem auto;
     display: flex;
     justify-content: space-around;
