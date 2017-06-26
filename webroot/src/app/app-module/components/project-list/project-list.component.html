@@ -1,5 +1,7 @@
-<div class="row card-desk">
-  <div *ngFor="let project of ProjectList| async" class="col-sm-12 col-md-6 col-lg-4">
-    <app-project-item [ProjectItem]="project"></app-project-item>
-  </div>
+<div class="container">
+  <div class="row">
+   <div *ngFor="let project of ProjectList| async" class="col-lg-4 col-md-6 col-sm-12">
+     <app-project-item [ProjectItem]="project"></app-project-item>
+   </div>
+ </div>
 </div>

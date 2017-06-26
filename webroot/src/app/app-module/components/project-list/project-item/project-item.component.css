@@ -1,19 +1,22 @@
-.card
+.project-card
 {
+  background-color: white;
   text-align: left;
-  border: 0px;
-  max-width: 22rem;
+  border: 1px solid var(--section-color);
+  max-width: 300px;
+  height: 500px; /*!*/
+  margin: 1rem auto; /*!*/
 }
 
-.card-block
+.text-card
 {
-  min-height: 12rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
-
 .card-img-top
 {
   height: 300;
-  width: 100%;
+  width: 100%; /*!*/
 }
 
 a
