@@ -1,24 +1,19 @@
-:host{
-  display: flex;
-  background-color: white;
-}
 
-h3 {
-  margin-bottom: 40px;
-}
-
-.enrolment-info{
-    display: flex;
-    justify-content: space-around;
-}
-
-.btn{
-  max-width: 15rem;
-  margin-top: 2rem;
-}
-
-.container
+h3, h4
 {
-  margin-top: 100px;
-  margin-bottom: 100px;
+  color: black;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
+.welcome-cover
+{
+  background: linear-gradient(to top, var(--primary-color) 0.25%, var(--dark-logo-color));
+  //background-color: black;
+}
+
+button
+{
+  margin: 2rem auto;
+  max-width: 70%;
 }
