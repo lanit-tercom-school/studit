@@ -4,6 +4,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { HomePageTeacherComponent } from './components/home-page-teacher/home-page-teacher.component';
 import { HomeProjectsViewComponent } from 'shared-components/home-projects-view/home-projects-view.component';
 import { CreateProjectPageComponent } from 'shared-components/create-project-page/create-project-page.component';
+import { TeacherNotePageComponent } from './components/teacher-notification-page/teacher-notification-page.component';
 
 const routes: Routes = [
 
@@ -23,7 +24,9 @@ const routes: Routes = [
         component: HomeProjectsViewComponent,
       },
     ]
-  }
+  },
+
+  { path: ':id/notifications', component: TeacherNotePageComponent, },
 ];
 
 @NgModule({

@@ -298,7 +298,7 @@ export class ApiService {
   getUserById(id: number) {
     return this.http.get(environment.apiUrl + '/v1/user/id/' + id).map((response: Response) => response.json());
   }
-  
+
   deleteUserById(id: number, token: string) {
     var headers = new Headers();
     headers.append('Accept', 'application/json');
@@ -330,5 +330,16 @@ export class ApiService {
     return this.http.get(environment.apiUrl + '/v1/user/id/' + id).map(res => {
       return res.json().enrolled_on;
     })
+  }
+
+  getEnrollsForTeacher(id: number, token: string)
+  {
+  var headers = new Headers();
+  headers.append('Content-Type', 'application/json');
+  headers.append('Accept', 'application/json');
+  headers.append('Bearer-token', token);
+  return this.http.get(environment.apiUrl + '/v1/user/id/' + id + '?cut=false').map(res => {
+    return res.json().my_applications;
+  })
   }
 }

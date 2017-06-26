@@ -5,6 +5,7 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { ApiService } from 'services/api.service';
 import { NewsItem } from "models/news-item";
 import { ProjectItem } from 'models/project-item';
+import { EnrollItem } from 'models/enroll-item';
 import { environment } from '../../environments/environment'
 
 import 'rxjs/add/operator/filter';
@@ -18,6 +19,7 @@ export class DataService {
   private userProjects: BehaviorSubject<ProjectItem[]> = <BehaviorSubject<ProjectItem[]>>new BehaviorSubject([]);
   private userEnrolledProjects: BehaviorSubject<ProjectItem[]> = <BehaviorSubject<ProjectItem[]>>new BehaviorSubject([]);
   private projectsForMainPage: BehaviorSubject<ProjectItem[]> = <BehaviorSubject<ProjectItem[]>>new BehaviorSubject([]);
+  private enrollsForTeacher: BehaviorSubject<EnrollItem[]> = <BehaviorSubject<EnrollItem[]>>new BehaviorSubject([]);
 
   private dataStore: {
     news: NewsItem[];
@@ -25,7 +27,9 @@ export class DataService {
     userProjects: ProjectItem[];
     userEnrolledProjects: ProjectItem[];
     projectsForMainPage: ProjectItem[];
-  } = { news: [], projects: [], userProjects: [], userEnrolledProjects: [], projectsForMainPage: [], };
+    enrollsForTeacher: EnrollItem[];
+  } = { news: [], projects: [], userProjects: [],
+   userEnrolledProjects: [], projectsForMainPage: [], enrollsForTeacher: []};
 
   public get News() {
     return this.news.asObservable();
@@ -39,6 +43,10 @@ export class DataService {
   public get UserEnrolledProjects() {
     return this.userEnrolledProjects.asObservable();
   }
+  public get EnrollsForTeacher() {
+   return this.enrollsForTeacher.asObservable();
+ }
+
   public get ProjectsForMainPage() {
     return this.projectsForMainPage.asObservable();
   }
@@ -53,6 +61,7 @@ export class DataService {
       this.userId = JSON.parse(localStorage.getItem('current_user')).user.id;
       this.loadUsersProjects();
       this.loadEnrolledUsersProject();
+      this.loadEnrollsForTeacher();
     }
   }
 
@@ -99,6 +108,32 @@ export class DataService {
       console.log('Error in data.service: can not load enrolledUsersProject without auth');
     }
   }
+
+  loadEnrollsForTeacher()
+    {
+    this.dataStore.enrollsForTeacher.length = 0;
+    this.api.getEnrollsForTeacher(this.userId, this.userToken).subscribe(res => {
+      /*res.forEach(project => {
+      if (project!=null) {
+        project.apps.forEach(enroll => {
+      if (enroll!=null) {
+          var tempEnroll : EnrollItem;
+          tempEnroll.userId = enroll.user.id;
+          tempEnroll.userNickname = enroll.user.nickname;
+          tempEnroll.userLogo = enroll.user.avatar;
+          tempEnroll.projectId = project.id;
+          tempEnroll.projectName = project.name;
+          tempEnroll.message = enroll.message;
+          tempEnroll.date = enroll.date;
+          this.dataStore.enrollsForTeacher.push(tempEnroll);
+      }
+      });
+      }
+      });
+      this.enrollsForTeacher.next(Object.assign({}, this.dataStore).enrollsForTeacher);*/
+      console.log(res);
+    })
+    }
 
   loadNews() {
     this.api.getNewsPage().subscribe(res => {
