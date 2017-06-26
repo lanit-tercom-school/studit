@@ -14,6 +14,12 @@ h3, h4
 
 button
 {
-  margin: 2rem auto;
+  margin-bottom: 2rem;
   max-width: 70%;
+}
+.enroll-button
+{
+  display: flex;
+	align-items: center;
+	justify-content: center;
 }
