@@ -2,18 +2,22 @@
 {
   text-align: left;
   border: 0px;
+  max-width: 22rem;
 }
 
-.card-block{
+.card-block
+{
   min-height: 12rem;
 }
 
-.card-img-top{
+.card-img-top
+{
   height: 300;
   width: 100%;
 }
 
-a{
+a
+{
     text-decoration: none;
     color: black;
 }

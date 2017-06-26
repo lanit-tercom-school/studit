@@ -1,9 +1,6 @@
-.project-card{
-    margin-bottom: 2rem;
-    max-width: 22rem;
-}
-
-.card-deck{
+.card-deck
+{
     display: flex;
     justify-content: space-around;
+    //margin:   2rem auto;
 }

@@ -1,3 +1,4 @@
+
 .projects-content
 {
   text-align: center;
@@ -9,11 +10,17 @@ small
   font-weight: 600;
 //  font-family: "Roboto", sans-serif;
 }
-
+h1
+{
+  //color: var(--section-color);
+}
 .projects-cover
 {
   display: flex;
-  background: var(--section-color);
+  //background: var(--section-color);
+  background-image: url(http://potolki-lyubertsi.ru/uploads/gallery/9/АБСТРАКЦИЯ_26.jpg);
+  //background-image: url(http://oboi.cc/uploads/11_05_2013/view/201210/oboik.ru_51824.jpg);
+  background-size: cover;
   //background: linear-gradient(45deg, var(--primary-color) 0.25%, var(--dark-logo-color));
 }
 
@@ -21,7 +28,7 @@ small
 {
   text-align: center;
   color:var(--primary-color);
-  margin-bottom: 0.5rem;
+  margin-bottom: 2rem;
 }
 
 .long-line,.short-line
@@ -39,4 +46,9 @@ small
 .short-line
 {
   width: 70px;
+}
+
+button
+{
+  margin-top: 2rem;
 }
