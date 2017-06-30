@@ -15,163 +15,6 @@
     },
     "basePath": "/v1",
     "paths": {
-        "/auth/change/": {
-            "put": {
-                "tags": [
-                    "auth/change"
-                ],
-                "description": "Для изменения пароля",
-                "operationId": "ChangePasswordController.Запрос для смены пароля пользователя",
-                "parameters": [
-                    {
-                        "in": "body",
-                        "name": "body",
-                        "description": "Старый и новый пароль",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/controllers.ChangePasswordJson"
-                        }
-                    },
-                    {
-                        "in": "header",
-                        "name": "Bearer-token",
-                        "description": "Токен аутентификации",
-                        "required": true,
-                        "type": "string"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "\"OK\""
-                    }
-                }
-            }
-        },
-        "/auth/reset/": {
-            "get": {
-                "tags": [
-                    "auth/reset"
-                ],
-                "description": "Осуществляет запрос на сброс пароля",
-                "operationId": "ResetPasswordController.Reset Password Request",
-                "parameters": [
-                    {
-                        "in": "query",
-                        "name": "login",
-                        "description": "Логин пользователя, который хочет сбросить пароль",
-                        "required": true,
-                        "type": "string"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "\"OK\""
-                    }
-                }
-            },
-            "put": {
-                "tags": [
-                    "auth/reset"
-                ],
-                "description": "Сбросить пароль и установить новый",
-                "operationId": "ResetPasswordController.Reset Password Action",
-                "parameters": [
-                    {
-                        "in": "body",
-                        "name": "body",
-                        "description": "Логин пользователя, его пропуск и новый пароль",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/controllers.ResetPasswordActionJson"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "\"OK\""
-                    }
-                }
-            }
-        },
-        "/auth/signin/": {
-            "post": {
-                "tags": [
-                    "auth/signin"
-                ],
-                "description": "Зайти в систему, получить Bearer-token",
-                "operationId": "AuthController.Post",
-                "parameters": [
-                    {
-                        "in": "body",
-                        "name": "body",
-                        "description": "Логин и пароль пользователя для входа",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/auth.Usr"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Description",
-                        "schema": {
-                            "$ref": "#/definitions/auth.LoginResponse"
-                        }
-                    },
-                    "403": {
-                        "description": "Invalid username or password"
-                    }
-                }
-            }
-        },
-        "/auth/signup/": {
-            "get": {
-                "tags": [
-                    "auth/signup"
-                ],
-                "description": "Активирует аккаунт",
-                "operationId": "RegistrationController.Activate",
-                "parameters": [
-                    {
-                        "in": "query",
-                        "name": "pass",
-                        "description": "Код для активации аккаунта",
-                        "type": "string"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK"
-                    }
-                }
-            },
-            "post": {
-                "tags": [
-                    "auth/signup"
-                ],
-                "description": "Проводит преварительную регистрацию пользователя, после требуется подтверждение",
-                "operationId": "RegistrationController.Register",
-                "parameters": [
-                    {
-                        "in": "body",
-                        "name": "body",
-                        "description": "Никнейм, логин(email) и пароль обязательны",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/controllers.RegistrationUserModel"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "\"OK\""
-                    },
-                    "400": {
-                        "description": "\"This user is already registered\""
-                    }
-                }
-            }
-        },
         "/main/projects/": {
             "get": {
                 "tags": [
@@ -1253,79 +1096,6 @@
         }
     },
     "definitions": {
-        "auth.LoginResponse": {
-            "title": "LoginResponse",
-            "type": "object",
-            "properties": {
-                "bearer_token": {
-                    "type": "string"
-                },
-                "exp": {
-                    "type": "string"
-                },
-                "perm_lvl": {
-                    "type": "integer",
-                    "format": "int64"
-                },
-                "user": {
-                    "$ref": "#/definitions/models.MainUserInfo"
-                }
-            }
-        },
-        "auth.Usr": {
-            "title": "Usr",
-            "type": "object",
-            "properties": {
-                "login": {
-                    "type": "string"
-                },
-                "password": {
-                    "type": "string"
-                }
-            }
-        },
-        "controllers.ChangePasswordJson": {
-            "title": "ChangePasswordJson",
-            "type": "object",
-            "properties": {
-                "new": {
-                    "type": "string"
-                },
-                "old": {
-                    "type": "string"
-                }
-            }
-        },
-        "controllers.RegistrationUserModel": {
-            "title": "RegistrationUserModel",
-            "type": "object",
-            "properties": {
-                "login": {
-                    "type": "string"
-                },
-                "nickname": {
-                    "type": "string"
-                },
-                "password": {
-                    "type": "string"
-                }
-            }
-        },
-        "controllers.ResetPasswordActionJson": {
-            "title": "ResetPasswordActionJson",
-            "type": "object",
-            "properties": {
-                "login": {
-                    "type": "string"
-                },
-                "pass": {
-                    "type": "string"
-                },
-                "password": {
-                    "type": "string"
-                }
-            }
-        },
         "models.AllInformationAboutProject": {
             "title": "AllInformationAboutProject",
             "type": "object",
@@ -1740,10 +1510,6 @@
                 },
                 "nickname": {
                     "type": "string"
-                },
-                "permission_level": {
-                    "type": "integer",
-                    "format": "int64"
                 }
             }
         },
@@ -1883,22 +1649,6 @@
         {
             "name": "main/projects",
             "description": "Контроллер для главной/landing страниц\n"
-        },
-        {
-            "name": "auth/signin",
-            "description": "Login, получение Bearer-token\n"
-        },
-        {
-            "name": "auth/change",
-            "description": "Изменить пароль пользователя\n"
-        },
-        {
-            "name": "auth/signup",
-            "description": "Регистрация нового пользователя\n"
-        },
-        {
-            "name": "auth/reset",
-            "description": "Запрос на сброс пароля\n"
         }
     ]
 }

@@ -102,7 +102,6 @@ func (c *UserController) GetOne() {
 				Nickname:        v.Nickname,
 				Description:     v.Description,
 				Avatar:          v.Avatar,
-				PermissionLevel: v.PermissionLevel,
 			}
 			is_master, err := models.IsProjectMasterForUserById(id, c.CurrentUser.UserId)
 			if err == nil {

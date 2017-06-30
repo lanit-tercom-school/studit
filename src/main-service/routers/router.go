@@ -182,7 +182,7 @@ func init() {
 				&controllers.LandingProjectsController{},
 			),
 		),
-		beego.NSNamespace("/auth/signin",
+/*		beego.NSNamespace("/auth/signin",
 			beego.NSInclude(
 				&controllers.AuthController{},
 			),
@@ -202,6 +202,7 @@ func init() {
 				&controllers.ResetPasswordController{},
 			),
 		),
+		*/
 	)
 	beego.AddNamespace(ns)
 }

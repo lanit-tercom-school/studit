@@ -10,7 +10,7 @@ import (
 	"time"
 	"github.com/astaxie/beego"
 	"fmt"
-	"main-service/auth"
+	 auth "main-service/auth"
 )
 
 func init() {
@@ -95,26 +95,20 @@ func main() {
 	user1 := m.User{
 		Id: 1,
 		Nickname: "Admin",
-		Login: "a@a",
-		Password: auth.CustomStr("a").ToSHA1(),
 		Avatar: fmt.Sprintf("%s%s?colors=%s&colors=%s&size=%s", auth.AvatarTemplatePath, avatar_seed,
 			color_str, "FFFFFF", auth.AvatarTemplateSize),
 		Description: "Главный по тарелкам",
-		PermissionLevel: 2,
 	}
 	fastCheckErr(o.Insert(&user1))
 
 	avatar_seed = auth.GenerateNewToken(6)
 	color_str = auth.GenerateRandomColor()
 	user2 := m.User{
-		Id: 2,
+		Id:       2,
 		Nickname: "Moderator",
-		Login: "moder@moder.moder",
-		Password: auth.CustomStr("moder").ToSHA1(),
 		Avatar: fmt.Sprintf("%s%s?colors=%s&colors=%s&size=%s", auth.AvatarTemplatePath, avatar_seed,
 			color_str, "FFFFFF", auth.AvatarTemplateSize),
 		Description: "Главный по молоткам",
-        	PermissionLevel: 1,
 	}
 	fastCheckErr(o.Insert(&user2))
 
@@ -123,12 +117,9 @@ func main() {
 	user3 := m.User{
 		Id: 3,
 		Nickname: "Егорка2003",
-		Login: "egorka2003@maaail.ru",
-		Password: auth.CustomStr("пароль").ToSHA1(),
 		Avatar: fmt.Sprintf("%s%s?colors=%s&colors=%s&size=%s", auth.AvatarTemplatePath, avatar_seed,
 			color_str, "FFFFFF", auth.AvatarTemplateSize),
 		Description: "ЮЮЮ, ААА",
-        	PermissionLevel: 0,
 	}
 	fastCheckErr(o.Insert(&user3))
 
@@ -137,12 +128,9 @@ func main() {
 	user4 := m.User{
 		Id: 4,
 		Nickname: "ZagadOchNayA",
-		Login: "zagadka@maaail.ru",
-		Password: auth.CustomStr("котикипёсики").ToSHA1(),
 		Avatar: fmt.Sprintf("%s%s?colors=%s&colors=%s&size=%s", auth.AvatarTemplatePath, avatar_seed,
 			color_str, "FFFFFF", auth.AvatarTemplateSize),
 		Description: "Легко потерять, невозможно забить",
-		PermissionLevel: 0,
 	}
 	fastCheckErr(o.Insert(&user4))
 
@@ -151,12 +139,9 @@ func main() {
 	user5 := m.User{
 		Id: 5,
 		Nickname: "S1ayeR1",
-		Login: "slayer342@bbk.ru",
-		Password: auth.CustomStr("lala").ToSHA1(),
 		Avatar: fmt.Sprintf("%s%s?colors=%s&colors=%s&size=%s", auth.AvatarTemplatePath, avatar_seed,
 			color_str, "FFFFFF", auth.AvatarTemplateSize),
 		Description: "bjklknufu",
-		PermissionLevel: 0,
 	}
 	fastCheckErr(o.Insert(&user5))
 
@@ -165,12 +150,9 @@ func main() {
 	user6 := m.User{
 		Id: 6,
 		Nickname: "NekoTyan",
-		Login: "petrovich82@maaail.ru",
-		Password: auth.CustomStr("pasuwaado").ToSHA1(),
 		Avatar: fmt.Sprintf("%s%s?colors=%s&colors=%s&size=%s", auth.AvatarTemplatePath, avatar_seed,
 			color_str, "FFFFFF", auth.AvatarTemplateSize),
 		Description: "^_^",
-		PermissionLevel: 0,
 	}
 	fastCheckErr(o.Insert(&user6))
 
@@ -179,12 +161,9 @@ func main() {
 	user7 := m.User{
 		Id: 7,
 		Nickname: "B",
-		Login: "b@b",
-		Password: auth.CustomStr("b").ToSHA1(),
 		Avatar: fmt.Sprintf("%s%s?colors=%s&colors=%s&size=%s", auth.AvatarTemplatePath, avatar_seed,
 			color_str, "FFFFFF", auth.AvatarTemplateSize),
 		Description: "BBB",
-		PermissionLevel: 0,
 	}
 	fastCheckErr(o.Insert(&user7))
 
