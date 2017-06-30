@@ -1,0 +1,1299 @@
+swagger: "2.0"
+info:
+  title: Lanit-Tercom School API
+  description: API для Lanit-Tercom School
+  version: 1.0.1
+  termsOfService: No terms
+  contact:
+    url: https://vk.com/ltschool
+  license:
+    name: No License
+    url: No License
+basePath: /v1
+paths:
+  /auth/change/:
+    put:
+      tags:
+      - auth/change
+      description: Для изменения пароля
+      operationId: ChangePasswordController.Запрос для смены пароля пользователя
+      parameters:
+      - in: body
+        name: body
+        description: Старый и новый пароль
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.ChangePasswordJson'
+      - in: header
+        name: Bearer-token
+        description: Токен аутентификации
+        required: true
+        type: string
+      responses:
+        "200":
+          description: '"OK"'
+  /auth/reset/:
+    get:
+      tags:
+      - auth/reset
+      description: Осуществляет запрос на сброс пароля
+      operationId: ResetPasswordController.Reset Password Request
+      parameters:
+      - in: query
+        name: login
+        description: Логин пользователя, который хочет сбросить пароль
+        required: true
+        type: string
+      responses:
+        "200":
+          description: '"OK"'
+    put:
+      tags:
+      - auth/reset
+      description: Сбросить пароль и установить новый
+      operationId: ResetPasswordController.Reset Password Action
+      parameters:
+      - in: body
+        name: body
+        description: Логин пользователя, его пропуск и новый пароль
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.ResetPasswordActionJson'
+      responses:
+        "200":
+          description: '"OK"'
+  /auth/signin/:
+    post:
+      tags:
+      - auth/signin
+      description: Зайти в систему, получить Bearer-token
+      operationId: AuthController.Post
+      parameters:
+      - in: body
+        name: body
+        description: Логин и пароль пользователя для входа
+        required: true
+        schema:
+          $ref: '#/definitions/auth.Usr'
+      responses:
+        "200":
+          description: Description
+          schema:
+            $ref: '#/definitions/auth.LoginResponse'
+        "403":
+          description: Invalid username or password
+  /auth/signup/:
+    get:
+      tags:
+      - auth/signup
+      description: Активирует аккаунт
+      operationId: RegistrationController.Activate
+      parameters:
+      - in: query
+        name: pass
+        description: Код для активации аккаунта
+        type: string
+      responses:
+        "200":
+          description: OK
+    post:
+      tags:
+      - auth/signup
+      description: Проводит преварительную регистрацию пользователя, после требуется
+        подтверждение
+      operationId: RegistrationController.Register
+      parameters:
+      - in: body
+        name: body
+        description: Никнейм, логин(email) и пароль обязательны
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.RegistrationUserModel'
+      responses:
+        "200":
+          description: '"OK"'
+        "400":
+          description: '"This user is already registered"'
+  /main/projects/:
+    get:
+      tags:
+      - main/projects
+      description: Получить проекты для главной страницы
+      operationId: LandingProjectsController.Get
+      responses:
+        "200":
+          description: Удачный запрос
+          schema:
+            $ref: '#/definitions/models.Project'
+        "400":
+          description: Bad Request
+  /news/:
+    get:
+      tags:
+      - news
+      description: Получить список новостей
+      operationId: NewsController.Get All
+      parameters:
+      - in: query
+        name: sort_by
+        description: Поле, по которому сортировать новости, напр. title, description,
+          time
+        type: string
+      - in: query
+        name: order
+        description: Order corresponding to each sort_by field, if single value, apply
+          to all sort_by fields. e.g. desc,asc ..., can be only `desc` or `asc`, default
+          is asc
+        type: string
+      - in: query
+        name: tag
+        description: Получить новость с тегом. Тег может быть только один.
+        type: string
+      - in: query
+        name: limit
+        description: Максимальное количество новостей. Должно быть числом. Не более
+          20
+        type: string
+      - in: query
+        name: offset
+        description: Отступ от начала. Должно быть числом.
+        type: string
+      responses:
+        "200":
+          description: Успешный запрос
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/models.NewsJson'
+        "400":
+          description: Error
+    post:
+      tags:
+      - news
+      description: Создать новую новость
+      operationId: NewsController.Post
+      parameters:
+      - in: body
+        name: body
+        description: Тело запроса, см. пример, поля `id`, `created`, `edited` игнорируются
+        required: true
+        schema:
+          $ref: '#/definitions/models.NewsJson'
+      - in: header
+        name: Bearer-token
+        description: Токен доступа администратора
+        required: true
+        type: string
+      responses:
+        "201":
+          description: '{int} ID созданой новости'
+        "400":
+          description: Forbidden
+  /news/{id}:
+    get:
+      tags:
+      - news
+      description: Получить подробную новость
+      operationId: NewsController.Get One
+      parameters:
+      - in: path
+        name: id
+        description: ID новости
+        required: true
+        type: string
+      responses:
+        "200":
+          description: Успешный запрос
+          schema:
+            $ref: '#/definitions/models.NewsJson'
+        "403":
+          description: :id is empty
+    put:
+      tags:
+      - news
+      description: Изменить новость
+      operationId: NewsController.Put
+      parameters:
+      - in: path
+        name: id
+        description: ID новости, которую нужно изменить
+        required: true
+        type: string
+      - in: body
+        name: body
+        description: Тело запроса, см. пример, поля id, created and edited fields
+          ignores
+        required: true
+        schema:
+          $ref: '#/definitions/models.NewsJson'
+      - in: header
+        name: Bearer-token
+        description: Токен доступа администратора
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+        "403":
+          description: Forbidden
+    delete:
+      tags:
+      - news
+      description: Удалить новость
+      operationId: NewsController.Delete
+      parameters:
+      - in: path
+        name: id
+        description: ID новости, которую нужно удалить
+        required: true
+        type: string
+      - in: header
+        name: Bearer-token
+        description: Токен доступа администратора
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+        "403":
+          description: Forbidden
+  /project/enroll/:
+    get:
+      tags:
+      - project/enroll
+      description: Получение информации о записанных пользователях, их контакты, сообщение
+        и время записи
+      operationId: UserEnrollOnProjectController.Get All
+      parameters:
+      - in: query
+        name: project_id
+        description: ID проекта, для которого нужно получить информацию
+        required: true
+        type: integer
+        format: int64
+      - in: header
+        name: Bearer-token
+        description: Токен доступа мастера проекта
+        required: true
+        type: string
+      responses:
+        "200":
+          description: '"desc"'
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/models.ObjectOfListOfEnrolledUsersOnProject'
+        "403": {}
+  /project/enroll/{id}:
+    get:
+      tags:
+      - project/enroll
+      description: Получить список записанных пользователей
+      operationId: UserEnrollOnProjectController.Get One
+      parameters:
+      - in: path
+        name: id
+        description: ID проекта, на которых нужно узнать список записанных
+        required: true
+        type: string
+      responses:
+        "200":
+          description: '[]{int} список из ID пользователей'
+        "403":
+          description: :id is empty
+    post:
+      tags:
+      - project/enroll
+      description: Записать пользователя на проект
+      operationId: UserEnrollOnProjectController.Post
+      parameters:
+      - in: path
+        name: id
+        description: ID проекта, на который нужно записаться
+        required: true
+        type: string
+      - in: query
+        name: message
+        description: Сопроводительный текст для мастеров
+        type: string
+      - in: header
+        name: Bearer-token
+        description: Токен доступа любого зарегистрированного пользователя
+        required: true
+        type: string
+      responses:
+        "201":
+          description: '{int} "Created"'
+        "403":
+          description: body is empty
+    delete:
+      tags:
+      - project/enroll
+      description: Отписаться от проекта
+      operationId: UserEnrollOnProjectController.Delete
+      parameters:
+      - in: path
+        name: id
+        description: ID проекта, из которого нужно удалить заявку
+        required: true
+        type: string
+      - in: header
+        name: Bearer-token
+        description: Токен доступа любого зарегистрированного пользователя
+        required: true
+        type: string
+      responses:
+        "200":
+          description: '{string} delete success!'
+        "403":
+          description: id is empty
+  /project/id/:
+    get:
+      tags:
+      - project/id
+      description: Получить фильтрованный список проектов
+      operationId: ProjectController.Get All
+      parameters:
+      - in: query
+        name: sortby
+        description: Sorted-by fields. e.g. col1,col2 ...
+        type: string
+      - in: query
+        name: order
+        description: Order corresponding to each sortby field, if single value, apply
+          to all sortby fields. e.g. desc,asc ...
+        type: string
+      - in: query
+        name: user
+        description: Получить проекты, в которых участвует пользователь с заданным
+          ID.
+        type: string
+      - in: query
+        name: master
+        description: Получить проекты, автором которых является пользователь с заданным
+          ID.
+        type: string
+      - in: query
+        name: tag
+        description: Получить проекты с тегом. Тег может быть только один.
+        type: string
+      - in: query
+        name: status
+        description: Получить проекты с заданным статусом ('завершен'/'еще не начат')
+        type: string
+      - in: query
+        name: limit
+        description: Наибольшее число объектов в ответе. Должно быть целым числом.
+          Изначально равно 10
+        type: string
+      - in: query
+        name: offset
+        description: Смещение от начала. Должно быть целым числом
+        type: string
+      responses:
+        "200":
+          description: Get array of projects filtered with specified filters (wtf
+            this description)
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/models.Project'
+        "403": {}
+    post:
+      tags:
+      - project/id
+      description: Создать новый проект, автоматически создателя делает мастером
+      operationId: ProjectController.Post
+      parameters:
+      - in: body
+        name: body
+        description: Тело запроса, см. пример
+        required: true
+        schema:
+          $ref: '#/definitions/models.ProjectJson'
+      - in: header
+        name: Bearer-token
+        description: Токен доступа, пользователь должен быть не ниже куратора
+        required: true
+        type: string
+      responses:
+        "201":
+          description: '{int} Created'
+        "403":
+          description: body is empty
+  /project/id/{id}:
+    get:
+      tags:
+      - project/id
+      description: Получить подробную информацию о проекте
+      operationId: ProjectController.Get One
+      parameters:
+      - in: path
+        name: id
+        description: ID проекта, информацию о котором нужно получить
+        required: true
+        type: string
+      - in: query
+        name: cut
+        description: Оставить только информацию о проекте?
+        type: boolean
+      responses:
+        "200":
+          description: Запрос прошел успешно
+          schema:
+            $ref: '#/definitions/models.AllInformationAboutProject'
+        "400":
+          description: :id is wrong
+    put:
+      tags:
+      - project/id
+      description: Изменить/обновить проект
+      operationId: ProjectController.Put
+      parameters:
+      - in: path
+        name: id
+        description: ID проекта, который нужно обновить
+        required: true
+        type: string
+      - in: body
+        name: body
+        description: Тело запроса, см. пример
+        required: true
+        schema:
+          $ref: '#/definitions/models.Project'
+      - in: header
+        name: Bearer-token
+        description: Токен доступа администратора или создателя проекта
+        required: true
+        type: string
+      responses:
+        "200":
+          description: '"OK"'
+        "403":
+          description: :id is not int
+  /project/masters/:
+    get:
+      tags:
+      - project/masters
+      description: Тестовый запрос для получения всех пар
+      operationId: ProjectMasterController.Get All
+      responses:
+        "200":
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/models.ProjectMaster'
+        "403": {}
+    post:
+      tags:
+      - project/masters
+      description: Добавить мастера к проекту
+      operationId: ProjectMasterController.Post
+      parameters:
+      - in: query
+        name: user_id
+        description: ID пользователя, корого нужно сделать мастером
+        required: true
+        type: string
+      - in: query
+        name: project_id
+        description: ID проекта, на который нужно добавить мастера
+        required: true
+        type: string
+      - in: header
+        name: Bearer-token
+        description: Токен доступа мастера проекта или админа
+        required: true
+        type: string
+      responses:
+        "201":
+          description: '{int} "Created"'
+        "403":
+          description: body is empty
+    delete:
+      tags:
+      - project/masters
+      description: Отобрать статус мастера. Может сделать только другой мастер или
+        админ, самого себя удалить нельзя
+      operationId: ProjectMasterController.Delete
+      parameters:
+      - in: query
+        name: user_id
+        description: ID пользователя, у которого нужно отобрать статус мастера
+        required: true
+        type: string
+      - in: query
+        name: project_id
+        description: ID проекта, на котором пользователь является мастером
+        required: true
+        type: string
+      - in: header
+        name: Bearer-token
+        description: Токен доступа мастера или админа
+        required: true
+        type: string
+      responses:
+        "200":
+          description: '"OK"'
+        "403":
+          description: id is empty
+  /project/masters/{id}:
+    get:
+      tags:
+      - project/masters
+      description: Получить список записанных пользователей
+      operationId: ProjectMasterController.Get One
+      parameters:
+      - in: path
+        name: id
+        description: ID проекта, на которых нужно узнать список записанных
+        required: true
+        type: string
+      responses:
+        "200":
+          description: '[]{int} список из ID пользователей'
+        "403":
+          description: :id is empty
+  /project/user/:
+    get:
+      tags:
+      - project/user
+      description: Тестовый запрос
+      operationId: ProjectUserController.Get All
+      parameters:
+      - in: query
+        name: query
+        description: Filter. e.g. col1:v1,col2:v2 ...
+        type: string
+      - in: query
+        name: fields
+        description: Fields returned. e.g. col1,col2 ...
+        type: string
+      - in: query
+        name: sortby
+        description: Sorted-by fields. e.g. col1,col2 ...
+        type: string
+      - in: query
+        name: order
+        description: Order corresponding to each sortby field, if single value, apply
+          to all sortby fields. e.g. desc,asc ...
+        type: string
+      - in: query
+        name: limit
+        description: Limit the size of result set. Must be an integer
+        type: string
+      - in: query
+        name: offset
+        description: Start position of result set. Must be an integer
+        type: string
+      responses:
+        "200":
+          schema:
+            $ref: '#/definitions/models.ProjectUser'
+        "403": {}
+    post:
+      tags:
+      - project/user
+      description: Добавление пользователя к проекту
+      operationId: ProjectUserController.Post
+      parameters:
+      - in: query
+        name: project_id
+        description: ID проекта, на который надо записать пользователя
+        required: true
+        type: string
+      - in: query
+        name: user_id
+        description: ID пользователя, которого надо записать
+        required: true
+        type: string
+      - in: header
+        name: Bearer-token
+        description: Токен доступа администратора или куратора проекта
+        required: true
+        type: string
+      responses:
+        "201":
+          description: '{int} models.ProjectUser "Добавленное поле ProjectUser"'
+        "403":
+          description: access denied
+    delete:
+      tags:
+      - project/user
+      description: Удаление пользователя из проекта
+      operationId: ProjectUserController.Delete
+      parameters:
+      - in: query
+        name: user_id
+        description: ID пользователя, которого надо удалить
+        required: true
+        type: string
+      - in: query
+        name: project_id
+        description: ID проекта, с которого надо удалить пользователя
+        required: true
+        type: string
+      - in: header
+        name: Bearer-token
+        description: Токен доступа пользователя (куратора/админа)
+        required: true
+        type: string
+      responses:
+        "200":
+          description: '{string} delete success!'
+        "403":
+          description: id is empty
+  /project/user/{id}:
+    get:
+      tags:
+      - project/user
+      description: Получение списка участников проекта
+      operationId: ProjectUserController.Get
+      parameters:
+      - in: path
+        name: id
+        description: ID проекта, список участников которого нужно узнать
+        required: true
+        type: string
+      responses:
+        "200":
+          description: '"Список пользователей"'
+          schema:
+            type: array
+            items:
+              format: int64
+              type: integer
+        "403":
+          description: :id is empty
+    put:
+      tags:
+      - project/user
+      description: update the ProjectUser
+      operationId: ProjectUserController.Put
+      parameters:
+      - in: path
+        name: id
+        description: The id you want to update
+        required: true
+        type: string
+      - in: body
+        name: body
+        description: body for ProjectUser content
+        required: true
+        schema:
+          $ref: '#/definitions/models.ProjectUser'
+      responses:
+        "200":
+          schema:
+            $ref: '#/definitions/models.ProjectUser'
+        "403":
+          description: :id is not int
+  /user/contact/:
+    post:
+      tags:
+      - user/contact
+      description: create UserContact
+      operationId: UserContactController.Post
+      parameters:
+      - in: body
+        name: body
+        description: Тело запроса, должен быть массив, то что в примере в []
+        required: true
+        schema:
+          $ref: '#/definitions/models.UserContactInput'
+      - in: header
+        name: Bearer-token
+        description: Токен
+        required: true
+        type: string
+      responses:
+        "201":
+          description: '{int} models.UserContact'
+        "403":
+          description: body is empty
+  /user/contact/{id}:
+    get:
+      tags:
+      - user/contact
+      description: get UserContact
+      operationId: UserContactController.Get One
+      parameters:
+      - in: path
+        name: id
+        description: АйДи пользователя, чьи контакты нужно получить
+        required: true
+        type: string
+      - in: header
+        name: Bearer-token
+        description: Токен администратора или мастера проекта
+        required: true
+        type: string
+      responses:
+        "200":
+          schema:
+            $ref: '#/definitions/models.UserContact'
+        "403":
+          description: Forbidden
+    delete:
+      tags:
+      - user/contact
+      description: delete the UserContact
+      operationId: UserContactController.Delete
+      parameters:
+      - in: path
+        name: id
+        description: АйДи контакта, который требуется удалить
+        required: true
+        type: string
+      - in: header
+        name: Bearer-token
+        description: Токен
+        required: true
+        type: string
+      responses:
+        "200":
+          description: '{string} delete success!'
+        "403":
+          description: id is empty
+  /user/id/:
+    get:
+      tags:
+      - user/id
+      description: get User
+      operationId: UserController.Get All
+      parameters:
+      - in: query
+        name: query
+        description: Filter. e.g. col1:v1,col2:v2 ...
+        type: string
+      - in: query
+        name: fields
+        description: Fields returned. e.g. col1,col2 ...
+        type: string
+      - in: query
+        name: sortby
+        description: Sorted-by fields. e.g. col1,col2 ...
+        type: string
+      - in: query
+        name: order
+        description: Order corresponding to each sortby field, if single value, apply
+          to all sortby fields. e.g. desc,asc ...
+        type: string
+      - in: query
+        name: limit
+        description: Limit the size of result set. Must be an integer
+        type: string
+      - in: query
+        name: offset
+        description: Start position of result set. Must be an integer
+        type: string
+      responses:
+        "200":
+          schema:
+            $ref: '#/definitions/models.User'
+        "400": {}
+  /user/id/{id}:
+    get:
+      tags:
+      - user/id
+      description: get User by id
+      operationId: UserController.Get One
+      parameters:
+      - in: path
+        name: id
+        description: ID пользователя, о котором нужно узнать информацию
+        required: true
+        type: string
+      - in: query
+        name: cut
+        description: Оставить только информацию о пользователе?
+        type: boolean
+      - in: header
+        name: Bearer-token
+        description: Токен
+        required: true
+        type: string
+      responses:
+        "200":
+          schema:
+            $ref: '#/definitions/models.User'
+        "400":
+          description: :id is empty string
+    put:
+      tags:
+      - user/id
+      description: update the User
+      operationId: UserController.Put
+      parameters:
+      - in: path
+        name: id
+        description: The id you want to update
+        required: true
+        type: string
+      - in: body
+        name: body
+        description: body for User content
+        required: true
+        schema:
+          $ref: '#/definitions/models.User'
+      - in: header
+        name: Bearer-token
+        description: Access token, Permission Level should be 2
+        required: true
+        type: string
+      responses:
+        "200":
+          schema:
+            $ref: '#/definitions/models.User'
+        "403":
+          description: :id is not int
+definitions:
+  auth.LoginResponse:
+    title: LoginResponse
+    type: object
+    properties:
+      bearer_token:
+        type: string
+      exp:
+        type: string
+      perm_lvl:
+        type: integer
+        format: int64
+      user:
+        $ref: '#/definitions/models.MainUserInfo'
+  auth.Usr:
+    title: Usr
+    type: object
+    properties:
+      login:
+        type: string
+      password:
+        type: string
+  controllers.ChangePasswordJson:
+    title: ChangePasswordJson
+    type: object
+    properties:
+      new:
+        type: string
+      old:
+        type: string
+  controllers.RegistrationUserModel:
+    title: RegistrationUserModel
+    type: object
+    properties:
+      login:
+        type: string
+      nickname:
+        type: string
+      password:
+        type: string
+  controllers.ResetPasswordActionJson:
+    title: ResetPasswordActionJson
+    type: object
+    properties:
+      login:
+        type: string
+      pass:
+        type: string
+      password:
+        type: string
+  models.AllInformationAboutProject:
+    title: AllInformationAboutProject
+    type: object
+    properties:
+      enrolled:
+        type: array
+        items:
+          $ref: '#/definitions/models.MainUserInfo'
+      masters:
+        type: array
+        items:
+          $ref: '#/definitions/models.MainUserInfo'
+      members:
+        type: array
+        items:
+          $ref: '#/definitions/models.MainUserInfo'
+      project:
+        $ref: '#/definitions/models.ProjectJson'
+  models.Comment:
+    title: Comment
+    type: object
+    properties:
+      text:
+        type: string
+  models.ContactType:
+    title: ContactType
+    type: object
+    properties:
+      type:
+        type: string
+  models.Course:
+    title: Course
+    type: object
+    properties:
+      desc:
+        type: string
+      logo:
+        type: string
+      rate:
+        type: number
+        format: float
+      title:
+        type: string
+  models.Lesson:
+    title: Lesson
+    type: object
+    properties:
+      CourseId:
+        $ref: '#/definitions/models.Course'
+      Description:
+        type: string
+      Id:
+        type: integer
+        format: int64
+      Rating:
+        type: integer
+        format: int64
+      Title:
+        type: string
+  models.MainUserInfo:
+    title: MainUserInfo
+    type: object
+    properties:
+      avatar:
+        type: string
+      id:
+        type: integer
+        format: int64
+      nickname:
+        type: string
+  models.NewsJson:
+    title: NewsJson
+    type: object
+    properties:
+      created:
+        type: string
+        format: string
+      description:
+        type: string
+      edited:
+        type: string
+        format: string
+      id:
+        type: integer
+        format: int64
+      image:
+        type: string
+      tags: {}
+      title:
+        type: string
+  models.ObjectOfListOfEnrolledUsersOnProject:
+    title: ObjectOfListOfEnrolledUsersOnProject
+    type: object
+    properties:
+      contacts:
+        type: array
+        items:
+          $ref: '#/definitions/models.UserContact'
+      date:
+        type: string
+        format: string
+      message:
+        type: string
+      user:
+        $ref: '#/definitions/models.MainUserInfo'
+  models.Practise:
+    title: Practise
+    type: object
+    properties:
+      Description:
+        type: string
+      Id:
+        type: integer
+        format: int64
+      LessonId:
+        $ref: '#/definitions/models.Lesson'
+  models.Project:
+    title: Project
+    type: object
+    properties:
+      DateOfCreation:
+        type: string
+        format: string
+      Description:
+        type: string
+      Id:
+        type: integer
+        format: int64
+      Logo:
+        type: string
+      Name:
+        type: string
+      Status:
+        type: integer
+        format: int64
+      Tags:
+        type: string
+  models.ProjectJson:
+    title: ProjectJson
+    type: object
+    properties:
+      created:
+        type: string
+        format: string
+      description:
+        type: string
+      id:
+        type: integer
+        format: int64
+      logo:
+        type: string
+      name:
+        type: string
+      status:
+        type: integer
+        format: int64
+      tags: {}
+  models.ProjectMaster:
+    title: ProjectMaster
+    type: object
+    properties:
+      Id:
+        type: integer
+        format: int64
+      MasterId:
+        $ref: '#/definitions/models.User'
+      ProjectId:
+        $ref: '#/definitions/models.Project'
+      SignedDate:
+        type: string
+        format: string
+  models.ProjectUser:
+    title: ProjectUser
+    type: object
+    properties:
+      Id:
+        type: integer
+        format: int64
+      Progress:
+        type: integer
+        format: int64
+      ProjectId:
+        $ref: '#/definitions/models.Project'
+      SignedDate:
+        type: string
+        format: string
+      UserId:
+        $ref: '#/definitions/models.User'
+  models.RecomendCourses:
+    title: RecomendCourses
+    type: object
+    properties:
+      CourseId:
+        $ref: '#/definitions/models.Course'
+      Id:
+        type: integer
+        format: int64
+      Link:
+        type: string
+  models.Statistic:
+    title: Statistic
+    type: object
+    properties:
+      CourseId:
+        $ref: '#/definitions/models.Course'
+      Hours:
+        type: integer
+        format: int64
+      Id:
+        type: integer
+        format: int64
+  models.Tag:
+    title: Tag
+    type: object
+    properties:
+      Id:
+        type: integer
+        format: int64
+      Name:
+        type: string
+  models.Task:
+    title: Task
+    type: object
+    properties:
+      Description:
+        type: string
+      Id:
+        type: integer
+        format: int64
+      NumberOfTask:
+        type: integer
+        format: int64
+      Priority:
+        type: integer
+        format: int64
+      ProjectId:
+        $ref: '#/definitions/models.Project'
+      ProjectUserId:
+        $ref: '#/definitions/models.ProjectUser'
+      Tags:
+        type: string
+      Title:
+        type: string
+  models.TaskForTest:
+    title: TaskForTest
+    type: object
+    properties:
+      Id:
+        type: integer
+        format: int64
+      Question:
+        type: string
+      TestId:
+        $ref: '#/definitions/models.Test'
+  models.TasksTagsTable:
+    title: TasksTagsTable
+    type: object
+    properties:
+      Id:
+        type: integer
+        format: int64
+      TagId:
+        $ref: '#/definitions/models.Tag'
+      TaskId:
+        $ref: '#/definitions/models.Task'
+  models.Test:
+    title: Test
+    type: object
+    properties:
+      Id:
+        type: integer
+        format: int64
+      LessonId:
+        $ref: '#/definitions/models.Lesson'
+      Title:
+        type: string
+  models.User:
+    title: User
+    type: object
+    properties:
+      avatar:
+        type: string
+      description:
+        type: string
+      id:
+        type: integer
+        format: int64
+      nickname:
+        type: string
+      permission_level:
+        type: integer
+        format: int64
+  models.UserComments:
+    title: UserComments
+    type: object
+    properties:
+      date:
+        type: string
+        format: string
+      msg_id:
+        $ref: '#/definitions/models.Comment'
+      user_id:
+        $ref: '#/definitions/models.User'
+  models.UserContact:
+    title: UserContact
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+      type:
+        type: string
+      value:
+        type: string
+  models.UserContactInput:
+    title: UserContactInput
+    type: object
+    properties:
+      type:
+        type: string
+      value:
+        type: string
+  models.UserCourse:
+    title: UserCourse
+    type: object
+    properties:
+      CourseId:
+        $ref: '#/definitions/models.Course'
+      Date:
+        type: string
+        format: string
+      Id:
+        type: integer
+        format: int64
+      Progress:
+        type: integer
+        format: int64
+      UserId:
+        $ref: '#/definitions/models.User'
+  models.Variant:
+    title: Variant
+    type: object
+    properties:
+      CorrectAnswer:
+        type: boolean
+      Id:
+        type: integer
+        format: int64
+      TaskForTestId:
+        $ref: '#/definitions/models.TaskForTest'
+      Text:
+        type: string
+  models.Video:
+    title: Video
+    type: object
+    properties:
+      Id:
+        type: integer
+        format: int64
+      LessonId:
+        $ref: '#/definitions/models.Lesson'
+      Link:
+        type: string
+tags:
+- name: news
+  description: |
+    Создание, изменение, удаление и просмотр новостей
+- name: project/enroll
+  description: |
+    Записаться и отписаться от проекта, получить список записанных
+- name: project/masters
+  description: |
+    Записаться и отписаться от проекта, получить список записанных
+- name: project/id
+  description: |
+    Создание, изменение, удаление и просмотр проектов
+- name: project/user
+  description: |
+    ProjectUserController operations for ProjectUser
+- name: user/contact
+  description: |
+    Доступ к контактам пользователей
+- name: user/id
+  description: |
+    Операции с models.User, для некоторых требуется авторизация
+- name: main/projects
+  description: |
+    Контроллер для главной/landing страниц
+- name: auth/signin
+  description: |
+    Login, получение Bearer-token
+- name: auth/change
+  description: |
+    Изменить пароль пользователя
+- name: auth/signup
+  description: |
+    Регистрация нового пользователя
+- name: auth/reset
+  description: |
+    Запрос на сброс пароля
