@@ -7,6 +7,7 @@ import (
 	"github.com/astaxie/beego/orm"
 	"github.com/astaxie/beego/config"
 	_ "github.com/lib/pq"
+	_ "auth-service/routers"
 )
 
 func init() {
@@ -34,7 +35,11 @@ func main() {
 		ExposeHeaders:    []string{"Content-Length", "Access-Control-Allow-Origin"},
 		AllowCredentials: true,
 	}))
-	if beego.BConfig.RunMode == "prod" {
+	if beego.BConfig.RunMode == "dev" {
+		beego.BConfig.WebConfig.DirectoryIndex = true
+		beego.SetStaticPath("/", "static")
+		beego.SetStaticPath("/swagger", "swagger")
+	} else if beego.BConfig.RunMode == "prod" {
 		beego.SetLevel(beego.LevelError)
 	}
 	os.Mkdir("logs", 0777)
