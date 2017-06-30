@@ -4,13 +4,12 @@ import (
 	"github.com/astaxie/beego"
 	"encoding/json"
 	"auth-service/models"
-	ms "main-service/controllers" // ms = main service
 	"errors"
 )
 
 // Изменить пароль пользователя
 type ChangePasswordController struct{
-	ms.ControllerWithAuthorization
+	ControllerWithAuthorization
 }
 
 type ChangePasswordJson struct {

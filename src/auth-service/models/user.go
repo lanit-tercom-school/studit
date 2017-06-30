@@ -26,6 +26,10 @@ type User struct {
 	PermissionLevel int     `orm:"column(permission_level);default(0)"  json:"permission_level"`
 }
 
+func (t *User) TableName() string {
+	return "user"
+}
+
 func init() {
 	orm.RegisterModel(new(User))
 }

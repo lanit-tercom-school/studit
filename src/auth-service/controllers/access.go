@@ -3,10 +3,9 @@ package controllers
 import (
 	"github.com/astaxie/beego"
 	"github.com/robbert229/jwt"
-	"main-service/models"
 	"github.com/astaxie/beego/config"
+	"auth-service/models"
 )
-
 
 type CurrentClient struct {
 	UserId          int
@@ -14,8 +13,6 @@ type CurrentClient struct {
 }
 
 const MaxPermissionLevel int = 2
-
-var jwtManager jwt.Algorithm
 
 func init() {
 	auth_config, err := config.NewConfig("ini", "conf/auth.conf")

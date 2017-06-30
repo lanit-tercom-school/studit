@@ -7,7 +7,6 @@ import (
 	"errors"
 	"time"
 	"net/rpc"
-	"main-service/auth"
 	"sync"
 )
 
@@ -22,8 +21,13 @@ type RegistrationUserModel struct {
 	Nickname string    `json:"nickname"`
 }
 
+type ActivationUser struct {
+	Id int
+	Nickname string
+}
+
 // activation channel
-var ac chan auth.ActivationUser
+var ac chan ActivationUser
 
 // TODO: this block is not tested
 // Вызов функции активации на главном сервисе через RPC,
@@ -78,7 +82,7 @@ func StartActivationCycle() {
 	client.Close()
 }
 
-func AddForActivationQueue(user auth.ActivationUser) {
+func AddForActivationQueue(user ActivationUser) {
 	u := models.NotActivatedOnMainServiceUser{
 		Nickname: user.Nickname,
 		UserId: user.Id,
@@ -104,7 +108,7 @@ func LoadActivationQueue() {
 		beego.Critical("Can't read pending users", err.Error())
 	} else {
 		for _, user := range users {
-			x := auth.ActivationUser{
+			x := ActivationUser{
 				Id: user.UserId,
 				Nickname: user.Nickname,
 			}
@@ -122,7 +126,7 @@ func init() {
 }
 
 func MainServiceActivateUser(id int, nickname string) {
-	ac <- auth.ActivationUser{
+	ac <- ActivationUser{
 		Nickname: nickname,
 		Id: id,
 	}

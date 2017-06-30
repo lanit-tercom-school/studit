@@ -8,6 +8,10 @@ type NotActivatedOnMainServiceUser struct {
 	Nickname string `orm:"column(nickname)"`
 }
 
+func (t *NotActivatedOnMainServiceUser) TableName() string {
+	return "wait_for_activation"
+}
+
 func init() {
 	orm.RegisterModel(new(NotActivatedOnMainServiceUser))
 }

@@ -6,6 +6,7 @@ import (
 	"os"
 	"github.com/astaxie/beego/orm"
 	"github.com/astaxie/beego/config"
+	_ "github.com/lib/pq"
 )
 
 func init() {

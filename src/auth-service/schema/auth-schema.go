@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/astaxie/beego/orm"
 	"github.com/astaxie/beego"
+	_ "github.com/lib/pq"
 	m "auth-service/models"
 	auth "auth-service/controllers"
 )

@@ -49,6 +49,7 @@ func StartRPCService() error {
 		} else {
 			// Start RPC service
 			go http.Serve(l, nil)
+			return nil
 		}
 	}
 }
