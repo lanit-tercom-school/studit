@@ -1,4 +1,4 @@
-export GOPATH=$PWD/../..
+export GOPATH=$PWD/..
 export PATH=$PATH:$GOPATH/bin
 
 go get github.com/astaxie/beego           && \

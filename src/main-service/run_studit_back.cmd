@@ -1,4 +1,4 @@
-echo off
+@echo off
 cd ..
 cd ..
 set GOPATH=%cd%
