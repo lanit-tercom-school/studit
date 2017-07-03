@@ -1,29 +1,30 @@
 package models
 
 import (
-	"github.com/astaxie/beego/orm"
-	"errors"
-	"net/http"
-	"fmt"
-	"github.com/astaxie/beego"
-	"io/ioutil"
 	"encoding/json"
+	"errors"
+	"fmt"
+	"io/ioutil"
+	"net/http"
+
+	"github.com/astaxie/beego"
+	"github.com/astaxie/beego/orm"
 )
 
 const (
-	VIEWER = iota - 1   // незарегистрированный пользователь
-	USER                // обычный пользователь
-	LEADER              // учитель, куратор, меет право создавать проекты
-	ADMIN               // администратор, может всё
+	VIEWER = iota - 1 // незарегистрированный пользователь
+	USER              // обычный пользователь
+	LEADER            // учитель, куратор, меет право создавать проекты
+	ADMIN             // администратор, может всё
 )
 
 type User struct {
-	Id       int     `orm:"column(id);pk;auto"                   json:"id"`
-	Login    string  `orm:"column(login)"                        json:"-"`
-	Password string  `orm:"column(password)"                     json:"-"`
+	Id       int    `orm:"column(id);pk;auto"                   json:"id"`
+	Login    string `orm:"column(login)"                        json:"-"`
+	Password string `orm:"column(password)"                     json:"-"`
 	// viewer - -1, registered user - 0, leader - 1, admin - 2, default is -1
 	// Can't be higher than `auth.MaxPermissionLevel` !
-	PermissionLevel int     `orm:"column(permission_level);default(0)"  json:"permission_level"`
+	PermissionLevel int `orm:"column(permission_level);default(0)"  json:"permission_level"`
 }
 
 func (t *User) TableName() string {
@@ -108,7 +109,7 @@ type MainUserInfo struct {
 }
 
 func GetMainUserInfo(id int) *MainUserInfo {
-	resp, err := http.Get(fmt.Sprintf("localhost:8081/v1/user/%d?cut=true", id))
+	resp, err := http.Get(fmt.Sprintf("http://localhost:8081/v1/user/id/%d?cut=true", id))
 	if err != nil {
 		beego.Critical("Get MainUserInfo error:", err.Error())
 		return nil
@@ -118,7 +119,7 @@ func GetMainUserInfo(id int) *MainUserInfo {
 			beego.Critical("Get MainUserInfo error:", err.Error())
 			return nil
 		} else {
-			var temp struct{
+			var temp struct {
 				User MainUserInfo `json:"user"`
 			}
 			err = json.Unmarshal(body, &temp)
