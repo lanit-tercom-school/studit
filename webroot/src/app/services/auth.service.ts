@@ -14,7 +14,7 @@ export class AuthService {
     constructor(private http: Http) { }
 
     authenticatenow(user: User) {
-        return this.http.post(environment.apiUrl + '/v1/auth/signin/', JSON.stringify(user))
+        return this.http.post(environment.authUrl + '/v1/auth/signin/', JSON.stringify(user))
             .map((response: Response) => {
                 // successful login => getting jwt
                 let res = response.json();
