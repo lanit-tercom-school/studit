@@ -51,8 +51,11 @@ export class PathManager implements CanActivate {
                 if (JSON.parse(localStorage.getItem('current_user')).perm_lvl === 0) {
                     this.router.navigate(['student/home']);
                 }
-                else {
+                else if (JSON.parse(localStorage.getItem('current_user')).perm_lvl === 1) {
                     this.router.navigate(['teacher/home']);
+                }
+                else if (JSON.parse(localStorage.getItem('current_user')).perm_lvl === 2) {
+                    this.router.navigate(['admin/home']);
                 }
             }
             else {
