@@ -23,9 +23,9 @@ export const routes: Routes = [
   { path: 'main', component: MainComponent, canActivate: [PathManager] },
   { path: 'projects', component: ProjectListPageComponent },
   { path: 'auth', component: AuthorizationPageComponent, canActivate: [PathManager] },
-  { path: 'student', loadChildren: 'student-module/student.module#StudentModule' },
-  { path: 'teacher', loadChildren: 'teacher-module/teacher.module#TeacherModule' },
-  { path: 'admin', loadChildren: 'admin-module/admin.module#AdminModule' },
+  { path: 'student', loadChildren: 'student-module/student.module#StudentModule',canActivate: [PathManager] },
+  { path: 'teacher', loadChildren: 'teacher-module/teacher.module#TeacherModule',canActivate: [PathManager] },
+  { path: 'admin', loadChildren: 'admin-module/admin.module#AdminModule',canActivate: [PathManager] },
   {
     path: 'project/:id',
     children: [{
