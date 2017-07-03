@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 import { AdminRoutingModule } from './admin-routing.module';
+import { HomePageAdminComponent } from './components/home-page-admin/home-page-admin.component';
 
 @NgModule({
   imports: [
@@ -10,6 +11,6 @@ import { AdminRoutingModule } from './admin-routing.module';
     AdminRoutingModule,
     FormsModule
   ],
-  declarations: []
+  declarations: [HomePageAdminComponent]
 })
 export class AdminModule { }
