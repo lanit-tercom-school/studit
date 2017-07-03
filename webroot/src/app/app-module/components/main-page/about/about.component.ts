@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { UserInfo } from 'models/user-info';
-import { ApiService } from 'services/api.service';
+import { AuthService } from 'services/auth.service';
 
 @Component({
   selector: 'app-about',
@@ -13,7 +13,7 @@ export class AboutComponent implements OnInit {
   private user: UserInfo = { login: "", nickname: "", password: "" };
   private error: string;
   private currentUser;
-  constructor(private api: ApiService, private router: Router) {
+  constructor(private auth: AuthService, private router: Router) {
     this.currentUser = JSON.parse(localStorage.getItem('current_user'));
   }
 
@@ -21,7 +21,7 @@ export class AboutComponent implements OnInit {
   }
 
   register() {
-    this.api.register(this.user).subscribe(
+    this.auth.register(this.user).subscribe(
       data => {
         this.router.navigate(['/registration/validate']);
       },
