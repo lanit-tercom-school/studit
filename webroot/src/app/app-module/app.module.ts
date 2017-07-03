@@ -42,6 +42,7 @@ import { ProjectTasksPageComponent } from './components/project-tasks-page/proje
 import { ProjectTaskItemComponent } from './components/project-tasks-page/project-task-list/project-task-item/project-task-item.component';
 import { ProjectTaskListComponent } from './components/project-tasks-page/project-task-list/project-task-list.component';
 import { ErrorPageComponent } from './components/error-page/error-page.component';
+import { SlackComponent } from './components/slack/slack.component';
 
 
 @NgModule({
@@ -85,6 +86,7 @@ import { ErrorPageComponent } from './components/error-page/error-page.component
     ProjectTaskItemComponent,
     ProjectTaskListComponent,
     ErrorPageComponent,
+    SlackComponent,
   ],
   providers: [ApiService, AuthService, PathManager, DataService],
   bootstrap: [AppComponent]

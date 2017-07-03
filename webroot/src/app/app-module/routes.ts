@@ -16,6 +16,7 @@ import { MainNewsPageComponent } from './components/main-news-page/main-news-pag
 import { ProjectTasksPageComponent } from './components/project-tasks-page/project-tasks-page.component'; 
 import { MainFullNewsPageComponent } from './components/main-full-news-page/main-full-news-page.component';
 import { ErrorPageComponent } from './components/error-page/error-page.component';
+import { SlackComponent } from './components/slack/slack.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'main', pathMatch: 'full', canActivate: [PathManager] },
@@ -45,6 +46,7 @@ export const routes: Routes = [
   { path: 'user/:id/settings', component: UserSettingsPageComponent },
   { path: 'news', component: MainNewsPageComponent },
   { path: 'news/:id', component: MainFullNewsPageComponent },
+  { path :'slack', component: SlackComponent},
   { path: '**', component: ErrorPageComponent },
 ];
 
