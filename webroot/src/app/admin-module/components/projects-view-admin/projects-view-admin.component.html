@@ -1,4 +1,4 @@
-<!--<div *ngFor="let Project of ProjectList | async" class="card card-outline">
+<div *ngFor="let Project of ProjectList | async" class="card card-outline">
   <div class="row">
     <div class="col-sm-4">
       <img class="card-img" src="{{Project.logo}}" alt="Card image cap">
@@ -7,11 +7,11 @@
       <p class="lead">{{Project.name}}</p>
       <p>{{Project.description}}</p>
       <div class="read-more">
-        <a routerLink="/project/{{Project.id}}" routerLinkActive="active">
+        <button role="button" class="btn btn-outline-danger btn-block">Архивировать</button>
+        <!--<a routerLink="/project/{{Project.id}}" routerLinkActive="active">
           <p>Подробнее <i class="fa fa-angle-double-right" aria-hidden="true"></i></p>
-        </a>
+        </a>-->
       </div>
     </div>
   </div>
-</div>-->
-<h1>Все проекты </h1>
+</div>

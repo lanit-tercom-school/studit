@@ -1,4 +1,8 @@
-.admin-content
+.admin-cover
 {
   margin: 2rem auto;
+}
+.admin-content
+{
+  margin: 1rem auto;
 }

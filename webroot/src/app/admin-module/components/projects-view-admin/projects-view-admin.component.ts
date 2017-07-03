@@ -12,12 +12,12 @@ import { DataService } from 'services/data.service';
 })
 export class ProjectsViewAdminComponent implements OnInit, OnDestroy {
   //private userId: string;
-  //private ProjectList: Observable<ProjectItem[]>;
+  private ProjectList: Observable<ProjectItem[]>;
 
   constructor(private api: ApiService, private data: DataService) { }
 
   ngOnInit() {
-    //this.ProjectList = this.data.UserProjects;
+    this.ProjectList = this.data.Projects;
   }
   ngOnDestroy() {
 
