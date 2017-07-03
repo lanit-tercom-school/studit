@@ -2,11 +2,12 @@ package routers
 
 import (
 	"auth-service/controllers"
+
 	"github.com/astaxie/beego"
 )
 
 func init() {
-	ns := beego.NewNamespace("/v1",
+	ns := beego.NewNamespace("/v1/auth",
 		beego.NSNamespace("/signin",
 			beego.NSInclude(
 				&controllers.AuthController{},
