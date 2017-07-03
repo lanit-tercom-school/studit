@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { ApiService } from 'services/api.service';
+import { AuthService } from 'services/auth.service';
 
 @Component({
   selector: 'app-validation-page',
@@ -14,10 +14,10 @@ export class ValidationPageComponent implements OnInit {
   private isValidated: boolean;
 
 
-  constructor(private api: ApiService) { }
+  constructor(private auth: AuthService) { }
 
   validate() {
-    this.api.validate(this.validationCode)
+    this.auth.validate(this.validationCode)
       .subscribe(
       data => {
         this.message = 'Registered!';
