@@ -2,20 +2,23 @@
 h3, h4
 {
   color: black;
-  margin-top: 2rem;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
 }
 
 .welcome-cover
 {
-  background: linear-gradient(to top, var(--primary-color) 0.25%, var(--dark-logo-color));
-  //background-color: black;
+  //background: linear-gradient(to top, var(--primary-color) 0.25%, var(--dark-logo-color));
+  //background-image: url(http://potolki-lyubertsi.ru/uploads/gallery/9/АБСТРАКЦИЯ_26.jpg);
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+  //background-color: var(--primary-color);
 }
 
 button
 {
   margin-bottom: 2rem;
   max-width: 70%;
+  font-size: 25px;
 }
 .enroll-button
 {

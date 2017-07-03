@@ -17,10 +17,9 @@ h1
 .projects-cover
 {
   display: flex;
-  //background: var(--section-color);
-  background-image: url(http://potolki-lyubertsi.ru/uploads/gallery/9/АБСТРАКЦИЯ_26.jpg);
-  //background-image: url(http://oboi.cc/uploads/11_05_2013/view/201210/oboik.ru_51824.jpg);
-  background-size: cover;
+  background: var(--section-color);
+  //background-image: url(http://potolki-lyubertsi.ru/uploads/gallery/9/АБСТРАКЦИЯ_26.jpg);
+  //background-size: cover;
 }
 
 .feature-title
