@@ -60,7 +60,7 @@ export class PathManager implements CanActivate {
                 return false;
             }
         }
-        else if (next.url[0].path === 'teacher') {
+        /*else if (next.url[0].path === 'teacher') {
             if (window.localStorage.getItem('current_user')) {
                 if (JSON.parse(localStorage.getItem('current_user')).perm_lvl === 0) {
                     return false;
@@ -101,7 +101,7 @@ export class PathManager implements CanActivate {
                 }
             }
             this.router.navigate(['/error']);
-        }
+        }*/
         return true;
     }
 }

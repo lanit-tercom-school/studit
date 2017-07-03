@@ -4,6 +4,8 @@ import { FormsModule } from '@angular/forms';
 
 import { AdminRoutingModule } from './admin-routing.module';
 import { HomePageAdminComponent } from './components/home-page-admin/home-page-admin.component';
+import { ProjectsViewAdminComponent } from './components/projects-view-admin/projects-view-admin.component';
+import { UsersViewAdminComponent } from './components/users-view-admin/users-view-admin.component';
 
 @NgModule({
   imports: [
@@ -11,6 +13,6 @@ import { HomePageAdminComponent } from './components/home-page-admin/home-page-a
     AdminRoutingModule,
     FormsModule
   ],
-  declarations: [HomePageAdminComponent]
+  declarations: [HomePageAdminComponent, ProjectsViewAdminComponent, UsersViewAdminComponent]
 })
 export class AdminModule { }
