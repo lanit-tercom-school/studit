@@ -13,23 +13,23 @@ import 'rxjs/add/operator/filter';
 export class DataService {
   private userId: number;
   private userToken: string;
-  private news: BehaviorSubject<NewsItem[]> = <BehaviorSubject<NewsItem[]>>new BehaviorSubject([]);
+  //private news: BehaviorSubject<NewsItem[]> = <BehaviorSubject<NewsItem[]>>new BehaviorSubject([]);
   private projects: BehaviorSubject<ProjectItem[]> = <BehaviorSubject<ProjectItem[]>>new BehaviorSubject([]);
   private userProjects: BehaviorSubject<ProjectItem[]> = <BehaviorSubject<ProjectItem[]>>new BehaviorSubject([]);
   private userEnrolledProjects: BehaviorSubject<ProjectItem[]> = <BehaviorSubject<ProjectItem[]>>new BehaviorSubject([]);
   private projectsForMainPage: BehaviorSubject<ProjectItem[]> = <BehaviorSubject<ProjectItem[]>>new BehaviorSubject([]);
 
   private dataStore: {
-    news: NewsItem[];
+    //news: NewsItem[];
     projects: ProjectItem[];
     userProjects: ProjectItem[];
     userEnrolledProjects: ProjectItem[];
     projectsForMainPage: ProjectItem[];
-  } = { news: [], projects: [], userProjects: [], userEnrolledProjects: [], projectsForMainPage: [], };
+  } = { /*news: [],*/ projects: [], userProjects: [], userEnrolledProjects: [], projectsForMainPage: [], };
 
-  public get News() {
+  /*public get News() {
     return this.news.asObservable();
-  }
+  }*/
   public get Projects() {
     return this.projects.asObservable();
   }
@@ -47,7 +47,7 @@ export class DataService {
   loadAll() {
     console.log('Data.service ->loadAll');
     this.loadProjects();
-    this.loadNews();
+    //this.loadNews();
     this.loadProjectsForMainPage();
     if (localStorage.getItem('current_user')) {
       this.userId = JSON.parse(localStorage.getItem('current_user')).user.id;
@@ -100,12 +100,12 @@ export class DataService {
     }
   }
 
-  loadNews() {
+  /*loadNews() {
     this.api.getNewsPage().subscribe(res => {
       this.dataStore.news = res;
       this.news.next(Object.assign({}, this.dataStore).news);
     });
-  }
+  }*/
 
   addApiUrl(url: string): string {
   //return environment.apiUrl + url;

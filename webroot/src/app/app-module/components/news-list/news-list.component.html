@@ -1,5 +1,11 @@
-<div class="row news-list">
-  <div *ngFor="let news of NewsList | async">
-    <app-news-item [NewsItem]="news" ></app-news-item>
-  </div>
+<ul class="row news-list">
+    <li *ngFor="let news of NewsList | async | paginate: { id: 'server', itemsPerPage: 3, 
+    currentPage: p, totalItems: total }">
+         <app-news-item [NewsItem]="news" ></app-news-item>
+    </li>
+</ul>
+
+<div class="has-text-centered">
+    <div class="spinner" [ngClass]="{ 'hidden': !loading }"></div>
+    <pagination-controls (pageChange)="getPage($event)" id="server"></pagination-controls>
 </div>

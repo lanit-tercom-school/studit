@@ -1,9 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-import { Observable } from "rxjs/Observable";
-
-import { NewsItem } from 'models/news-item';
-import { DataService } from 'services/data.service';
-import { ApiService } from 'services/api.service';
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-main-news-page',
@@ -12,16 +7,9 @@ import { ApiService } from 'services/api.service';
 })
 export class MainNewsPageComponent implements OnInit {
 
-  news: Observable<NewsItem[]>;
-  constructor(private apiService: ApiService, private data: DataService) { }
+   constructor() { }
 
   ngOnInit() {
-    this.getNewsList();
   }
-
-  getNewsList() {
-    //this.apiService.getNewsPage().subscribe(res => this.news = res);
-    this.news = this.data.News;
-  }
-
+ 
 }
