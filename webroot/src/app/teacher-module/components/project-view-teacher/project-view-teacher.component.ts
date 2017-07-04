@@ -1,0 +1,27 @@
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Observable } from "rxjs/Observable";
+
+import { ProjectItem } from 'models/project-item';
+import { ApiService } from 'services/api.service';
+import { DataService } from 'services/data.service';
+
+@Component({
+  selector: 'app-projects-view-teacher',
+  templateUrl: './project-view-teacher.component.html',
+  styleUrls: ['./project-view-teacher.component.css']
+})
+export class ProjectViewTeacherComponent implements OnInit, OnDestroy {
+  private userId: string;
+  private ProjectList: Observable<ProjectItem[]>;
+  private ProjectEnrollList: Observable<ProjectItem[]>;
+
+  constructor(private api: ApiService, private data: DataService) { }
+
+  ngOnInit() {
+    this.ProjectList = this.data.UserProjects;
+    this.ProjectEnrollList = this.data.UserEnrolledProjects;
+  }
+  ngOnDestroy() {
+
+  }
+}

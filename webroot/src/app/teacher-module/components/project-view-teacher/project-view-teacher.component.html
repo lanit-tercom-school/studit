@@ -1,0 +1,36 @@
+<div class="container">
+  <div class="row">
+    <div *ngFor="let Project of ProjectList | async" class="col-sm-6">
+      <div class="card">
+        <div class="card-block">
+          <h3 class="card-title">{{Project.name}}</h3>
+          <p class="card-text">{{Project.description}}</p>
+          <p><i class="fa fa-user-circle-o" aria-hidden="true"></i>   5</p>
+          <a href="#" class="btn btn-primary">Перейти</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<!--
+<h3>Заявки на ваши проекты</h3>
+<div *ngFor="let Enroll of ProjectEnrollList | async" class="card card-outline">
+  <div class="row">
+    <div class="col-sm-4">
+      <img class="card-img" src="{{Enroll.logo}}" alt="Card image cap">
+    </div>
+    <div class="col-sm-8 project-info">
+      <p class="lead">{{Enroll.name}}</p>
+      <p>{{Enroll.description}}</p>
+      <div class="read-more">
+        <a routerLink="/project/{{Enroll.id}}" routerLinkActive="active">
+          <p>Подробнее <i class="fa fa-angle-double-right" aria-hidden="true"></i></p>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>-->
+<!--  <div><a class="nav-link" routerLink="/projects/tasks" routerLinkActive="active">Список задач</a> -->

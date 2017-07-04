@@ -6,6 +6,7 @@ import { TeacherRoutingModule } from './teacher-routing.module';
 import { HomePageTeacherComponent } from './components/home-page-teacher/home-page-teacher.component'
 import { HomeProjectsViewComponent } from 'shared-components/home-projects-view/home-projects-view.component';
 import { CreateProjectPageComponent } from 'shared-components/create-project-page/create-project-page.component';
+import { ProjectViewTeacherComponent } from './components/project-view-teacher/project-view-teacher.component';
 
 @NgModule({
   imports: [
@@ -17,6 +18,7 @@ import { CreateProjectPageComponent } from 'shared-components/create-project-pag
     HomePageTeacherComponent,
     HomeProjectsViewComponent,
     CreateProjectPageComponent,
+    ProjectViewTeacherComponent,
   ]
 })
 export class TeacherModule { }
