@@ -2,6 +2,7 @@ package models
 
 import (
 	"time"
+
 	"github.com/astaxie/beego/orm"
 )
 
@@ -22,7 +23,7 @@ func init() {
 
 // GetProjectMasterIdByUserId return array of projects
 // where user is master
-func GetProjectMasterIdByUserId(userId int) (projects []*Project, err error){
+func GetProjectMasterIdByUserId(userId int) (projects []*Project, err error) {
 	o := orm.NewOrm()
 	var project_masters []ProjectMaster
 	_, err = o.QueryTable(new(ProjectMaster)).Filter("MasterId", User{Id: userId}).RelatedSel().All(&project_masters)
@@ -74,7 +75,7 @@ func AddMasterToProject(user *User, project *ProjectJson) (err error) {
 }
 
 // Проверяет, содержится ли в списке пользователей пользователь с указанным ID
-func IsUserInArray(user_id int, users []*User) (bool) {
+func IsUserInArray(user_id int, users []*User) bool {
 	for _, x := range users {
 		if x.Id == user_id {
 			return true
@@ -88,9 +89,9 @@ func GetMastersOfTheProject(project_id int) (masters []*User, err error) {
 	var connections []ProjectMaster
 	// выбираем всех пользователей, являющихся мастерами данного проекта
 	_, err = o.QueryTable(new(ProjectMaster)).
-			Filter("project_id", project_id).
-			RelatedSel().
-			All(&connections, "MasterId")
+		Filter("project_id", project_id).
+		RelatedSel().
+		All(&connections, "MasterId")
 	// возвращаем только мастеров
 	for _, x := range connections {
 		masters = append(masters, x.MasterId)
@@ -99,7 +100,7 @@ func GetMastersOfTheProject(project_id int) (masters []*User, err error) {
 }
 
 // Является ли этот пользователь мастером этого проекта
-func IsUserIsMasterForProject(user_id, project_id int) (bool) {
+func IsUserIsMasterForProject(user_id, project_id int) bool {
 	users, err := GetMastersOfTheProject(project_id)
 	if err != nil {
 		return false
@@ -122,7 +123,6 @@ func GetAllProjectMaster() (ml []interface{}, err error) {
 	}
 	return nil, err
 }
-
 
 // DeleteProjectUser deletes ProjectMaster by Id and returns error if
 // the record to be deleted doesn't exist
