@@ -14,10 +14,12 @@ import { DataService } from 'services/data.service';
 })
 export class NewsListComponent implements OnInit {
 
- private p: number = 1;
-total: number = 10;  //сюда вставить число всех новостей
-loading: boolean;
-private NewsList: Observable<NewsItem[]>;
+  private p: number = 1;
+  private limit: number = 3;
+  private totalObs: Observable<number>;
+
+  loading: boolean;
+  private NewsList: Observable<NewsItem[]>;
   constructor(private data: DataService) { }
 
   ngOnInit() {
@@ -26,10 +28,13 @@ private NewsList: Observable<NewsItem[]>;
 
   getPage(page: number) {
     this.loading = true;
-    const limit = 3;
-    const offset = (page - 1) * limit;
-    //this.data.loadNews(limit, offset);
-   //this.NewsList = this.data.News;
+    let offset = 0;
+    if (page > 1)
+      offset = (page - 1) * this.limit;
+    this.data.loadNews(this.limit, offset);
+    this.NewsList = this.data.News;
+    this.totalObs = this.data.NewsCountObs;
+    this.p = page;
   }
- 
+
 }

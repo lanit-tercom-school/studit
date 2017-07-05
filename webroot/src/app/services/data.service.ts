@@ -19,9 +19,9 @@ export class DataService {
   private userEnrolledProjects: BehaviorSubject<ProjectItem[]> = <BehaviorSubject<ProjectItem[]>>new BehaviorSubject([]);
   private projectsForMainPage: BehaviorSubject<ProjectItem[]> = <BehaviorSubject<ProjectItem[]>>new BehaviorSubject([]);
   private news: BehaviorSubject<NewsItem[]> = <BehaviorSubject<NewsItem[]>>new BehaviorSubject([]);
-  
+
   private newsCount: number;
-  private newsCountObs: BehaviorSubject<number>;
+  private newsCountObs: BehaviorSubject<number> = new BehaviorSubject<number>(0);
   private dataStore: {
     news: NewsItem[];
     projects: ProjectItem[];
@@ -33,7 +33,7 @@ export class DataService {
   public get News() {
     return this.news.asObservable();
   }
-   public get NewsCount() {
+  public get NewsCountObs() {
     return this.newsCountObs.asObservable();
   }
   public get Projects() {
@@ -53,7 +53,7 @@ export class DataService {
   loadAll() {
     console.log('Data.service ->loadAll');
     this.loadProjects();
-    this.loadNews(4, 0);    //как для первого запуска. Сюда передать limit и offset
+    //this.loadNews(3, 0);    //для первого запуска. Сюда передать limit и offset
     this.loadProjectsForMainPage();
     if (localStorage.getItem('current_user')) {
       this.userId = JSON.parse(localStorage.getItem('current_user')).user.id;
@@ -106,21 +106,24 @@ export class DataService {
     }
   }
 
-  loadNews(limit: number, offset: number) {
+// значения по умолчанию
+  loadNews(limit: number = 3, offset: number) {
     this.api.getNewsPage(limit, offset).subscribe(res => {
-     /* console.log(res[0].count);
-      this.newsCount = res[0].count;
-      this.newsCountObs.next(res[0].count);*/
+      this.newsCount = res.total_count;
+      this.newsCountObs.next(Object.assign(res.total_count));
+      this.dataStore.news = res.news_list;
+      console.log(res.news_list);
+      this.news.next(Object.assign({}, this.dataStore).news);
 
     });
   }
 
 
-// TODO: сделать метод для проверки наличия новости в dataService
+  // TODO: сделать метод для проверки наличия новости в dataService
 
 
   addApiUrl(url: string): string {
-  //return environment.apiUrl + url;
-   return url;
+    //return environment.apiUrl + url;
+    return url;
   }
 }

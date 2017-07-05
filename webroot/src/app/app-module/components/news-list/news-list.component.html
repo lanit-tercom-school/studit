@@ -1,6 +1,6 @@
 <div class="row news-list">
-    <div *ngFor="let news of NewsList | async | paginate: { id: 'server', itemsPerPage: 3, 
-    currentPage: p, totalItems: total }">
+    <div *ngFor="let news of NewsList | async | paginate: { id: 'server', itemsPerPage: limit, 
+     totalItems: totalObs | async, currentPage: p}">
          <app-news-item [NewsItem]="news" ></app-news-item>
     </div>
 </div>
@@ -10,3 +10,4 @@
     <pagination-controls (pageChange)="getPage($event)" id="server" 
     previousLabel="Предыдущая" nextLabel="Следующая"></pagination-controls>
 </div>
+

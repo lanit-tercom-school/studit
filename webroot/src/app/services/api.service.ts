@@ -189,10 +189,11 @@ export class ApiService {
     ];
   }
 
-  getNewsPage(limit: number, offset: number) {
+ // необязательные параметры
+  getNewsPage(limit: number, offset: number) { 
     if (limit > 0 && offset >= 0)
-       return this.http.get(environment.apiUrl + '/v1/news/?limit='+ limit + "&offset=" + offset).map((response: Response) => response.json());
-     return this.http.get(environment.apiUrl + '/v1/news/').map((response: Response) => response.json());
+      return this.http.get(environment.apiUrl + '/v1/news/?limit=' + limit + "&offset=" + offset).map((response: Response) => response.json());
+    return this.http.get(environment.apiUrl + '/v1/news/').map((response: Response) => response.json());
   }
 
   getNewsById(id_: number) {
