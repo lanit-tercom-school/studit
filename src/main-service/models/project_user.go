@@ -28,7 +28,7 @@ func init() {
 
 // GetProjectUserIdByUserId returns an array of projects
 // where user exists
-func GetProjectUserIdByUserId (userId int) (projects []*Project, err error){
+func GetProjectUserIdByUserId(userId int) (projects []*Project, err error) {
 	o := orm.NewOrm()
 	var project_members []ProjectUser
 	_, err = o.QueryTable(new(ProjectUser)).Filter("UserId", User{Id: userId}).RelatedSel().All(&project_members)
@@ -46,8 +46,8 @@ func GetProjectUserIdByUserId (userId int) (projects []*Project, err error){
 func AddUserToProject(u *User, y *ProjectJson) (err error) {
 	temp := y.translate()
 	m := ProjectUser{
-		ProjectId: &temp,
-		UserId: u,
+		ProjectId:  &temp,
+		UserId:     u,
 		SignedDate: time.Now(),
 	}
 	o := orm.NewOrm()
@@ -83,7 +83,6 @@ func GetUsersByProjectId(project_id int) (ml []*User, err error) {
 	}
 	return ml, nil
 }
-
 
 // GetAllProjectUser retrieves all ProjectUser matches certain condition. Returns empty list if
 // no records exist
@@ -182,5 +181,12 @@ func DeleteUserFromProject(user_id int, project_id int) (err error) {
 		Filter("UserId", user_id).
 		Filter("ProjectId", project_id).
 		Delete()
+	return
+}
+
+func IsTeacherInThisProject(user_id int, project_id int) (err error) {
+	o := orm.NewOrm()
+	var user ProjectUser
+	err = o.QueryTable(new(ProjectUser)).Filter("UserId", user_id).Filter("ProjectId", project_id).RelatedSel().One(&user)
 	return
 }

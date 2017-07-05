@@ -6,6 +6,7 @@ import (
 	"main-service/models"
 	"strconv"
 	"strings"
+
 	"github.com/astaxie/beego"
 )
 
@@ -58,7 +59,10 @@ func (c *ProjectUserController) Post() {
 		beego.Critical("Wrong user id", err.Error())
 		c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
 		c.Data["json"] = err.Error()
-
+	} else if err := models.IsTeacherInThisProject(c.CurrentUser.UserId, project_id); err != nil {
+		beego.Critical("Teacher is not in this project", err.Error())
+		c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
+		c.Data["json"] = err.Error()
 	} else if err := models.AddUserToProject(user, project); err != nil {
 		beego.Debug(c.Ctx.Input.IP(), "`AddUserToProject` method error", err.Error())
 		c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
@@ -96,9 +100,9 @@ func (c *ProjectUserController) GetOne() {
 		var t []models.MainUserInfo
 		for _, r := range users {
 			t = append(t, models.MainUserInfo{
-				Id: r.Id,
+				Id:       r.Id,
 				Nickname: r.Nickname,
-				Avatar: r.Avatar,
+				Avatar:   r.Avatar,
 			})
 		}
 		beego.Trace("Success GET")
@@ -106,7 +110,6 @@ func (c *ProjectUserController) GetOne() {
 	}
 	c.ServeJSON()
 }
-
 
 // GetAll ...
 // @Title Get All
