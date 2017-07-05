@@ -18,18 +18,24 @@ export class DataService {
   private userProjects: BehaviorSubject<ProjectItem[]> = <BehaviorSubject<ProjectItem[]>>new BehaviorSubject([]);
   private userEnrolledProjects: BehaviorSubject<ProjectItem[]> = <BehaviorSubject<ProjectItem[]>>new BehaviorSubject([]);
   private projectsForMainPage: BehaviorSubject<ProjectItem[]> = <BehaviorSubject<ProjectItem[]>>new BehaviorSubject([]);
-
+  private news: BehaviorSubject<NewsItem[]> = <BehaviorSubject<NewsItem[]>>new BehaviorSubject([]);
+  
+  private newsCount: number;
+  private newsCountObs: BehaviorSubject<number>;
   private dataStore: {
-    //news: NewsItem[];
+    news: NewsItem[];
     projects: ProjectItem[];
     userProjects: ProjectItem[];
     userEnrolledProjects: ProjectItem[];
     projectsForMainPage: ProjectItem[];
-  } = { /*news: [],*/ projects: [], userProjects: [], userEnrolledProjects: [], projectsForMainPage: [], };
+  } = { news: [], projects: [], userProjects: [], userEnrolledProjects: [], projectsForMainPage: [], };
 
-  /*public get News() {
+  public get News() {
     return this.news.asObservable();
-  }*/
+  }
+   public get NewsCount() {
+    return this.newsCountObs.asObservable();
+  }
   public get Projects() {
     return this.projects.asObservable();
   }
@@ -47,7 +53,7 @@ export class DataService {
   loadAll() {
     console.log('Data.service ->loadAll');
     this.loadProjects();
-    //this.loadNews();
+    this.loadNews(4, 0);    //как для первого запуска. Сюда передать limit и offset
     this.loadProjectsForMainPage();
     if (localStorage.getItem('current_user')) {
       this.userId = JSON.parse(localStorage.getItem('current_user')).user.id;
@@ -100,12 +106,18 @@ export class DataService {
     }
   }
 
-  /*loadNews() {
-    this.api.getNewsPage().subscribe(res => {
-      this.dataStore.news = res;
-      this.news.next(Object.assign({}, this.dataStore).news);
+  loadNews(limit: number, offset: number) {
+    this.api.getNewsPage(limit, offset).subscribe(res => {
+     /* console.log(res[0].count);
+      this.newsCount = res[0].count;
+      this.newsCountObs.next(res[0].count);*/
+
     });
-  }*/
+  }
+
+
+// TODO: сделать метод для проверки наличия новости в dataService
+
 
   addApiUrl(url: string): string {
   //return environment.apiUrl + url;
