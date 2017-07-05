@@ -18,7 +18,7 @@ export class NewsListComponent implements OnInit {
   private limit: number = 3;
   private totalObs: Observable<number>;
 
-  loading: boolean;
+  private loading: boolean;
   private NewsList: Observable<NewsItem[]>;
   constructor(private data: DataService) { }
 
@@ -35,6 +35,7 @@ export class NewsListComponent implements OnInit {
     this.NewsList = this.data.News;
     this.totalObs = this.data.NewsCountObs;
     this.p = page;
+    this.loading = false;
   }
 
 }
