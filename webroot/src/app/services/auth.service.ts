@@ -14,7 +14,7 @@ export class AuthService {
     constructor(private http: Http) { }
 
     authenticatenow(user: User) {
-        return this.http.post(environment.apiUrl + '/v1/auth/signin/', JSON.stringify(user))
+        return this.http.post(environment.authUrl + '/v1/auth/signin/', JSON.stringify(user))
             .map((response: Response) => {
                 // successful login => getting jwt
                 let res = response.json();
@@ -28,4 +28,23 @@ export class AuthService {
     unauthentificatenow() {
         localStorage.removeItem("current_user");
     }
+      validate(key: string) {
+    return this.http.get(environment.authUrl + '/v1/auth/signup/?pass=' + key)
+      .catch((error: any) => { return Observable.throw(error) });
+  }
+
+  register(user) {
+    var headers = new Headers();
+
+    headers.append('Content-Type', 'application/json');
+
+    return this.http.post(environment.authUrl + '/v1/auth/signup/', JSON.stringify(user), { headers: headers })
+      .map((res: Response) => {
+        if (res.json().code)
+          localStorage.setItem('validation_code', res.json().code);
+        else
+          return Observable.throw('no code');
+      })
+      .catch((error: any) => { return Observable.throw(error) });
+  }
 }
