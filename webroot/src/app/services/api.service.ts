@@ -243,7 +243,7 @@ export class ApiService {
   getProjectUsers(id: number) {//Получить список пользователей, участвующих в проекте
     return this.http.get(environment.apiUrl + '/v1/project/users/' + id);
   }
-  getProjectMastersById(id: number) {//Получить список кураторов проекта
+/*  getProjectMastersById(id: number) {//Получить список кураторов проекта
     return this.http.get(environment.apiUrl + '/project/masters/' + id);
   }
   postProjectMaster(project_id: number, user_id: number, token: string) {//Назначить куратора проекта по ид проекта
@@ -258,7 +258,7 @@ export class ApiService {
     headers.append('Accept', 'application/json');
     headers.append('Bearer-token', token);
     return this.http.delete(environment.apiUrl + '/v1/project/masters/?user_id=' + user_id + '&project_id=' + project_id, { headers: headers });
-  }
+  }*/
   postUserToProject(user_id: number, project_id: number, token: string) {//Добавить пользователя в проект
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');

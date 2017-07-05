@@ -3,6 +3,7 @@ package controllers
 import (
 	"main-service/models"
 	"strconv"
+
 	"github.com/astaxie/beego"
 )
 
@@ -69,6 +70,7 @@ func (c *UserEnrollOnProjectController) Post() {
 	}
 	c.ServeJSON()
 }
+
 // GetOne ...
 // @Title Get One
 // @Description Получить список записанных пользователей
@@ -94,9 +96,9 @@ func (c *UserEnrollOnProjectController) GetOne() {
 		var t []models.MainUserInfo
 		for _, r := range v {
 			t = append(t, models.MainUserInfo{
-				Avatar: r.Avatar,
+				Avatar:   r.Avatar,
 				Nickname: r.Nickname,
-				Id: r.Id,
+				Id:       r.Id,
 			})
 		}
 		beego.Trace("Success GET")
@@ -107,30 +109,22 @@ func (c *UserEnrollOnProjectController) GetOne() {
 
 // GetAll ...
 // @Title Get All
-// @Description Получение информации о записанных пользователях, их контакты, сообщение и время записи
-// @Param   project_id      query   int     true    "ID проекта, для которого нужно получить информацию"
+// @Description Получение информации по заявкам на проекты учителя
 // @Param   Bearer-token    header  string  true    "Токен доступа мастера проекта"
-// @Success 200 {object} []models.ObjectOfListOfEnrolledUsersOnProject "desc"
+// @Success 200 {object} []models.ProjectApplication "Проекты с заявками"
 // @Failure 403
 // @router / [get]
 func (c *UserEnrollOnProjectController) GetAll() {
 	beego.Trace("New GET for enrolled users")
-	if c.CurrentUser.PermissionLevel != models.VIEWER {
-		project_id, err := c.GetInt("project_id")
-		if err == nil {
-			l, err := models.GetAllEnrolledOnProject(project_id, c.CurrentUser.UserId)
-			if err != nil {
-				beego.Debug("Something wrong", err.Error())
-				c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
-				c.Data["json"] = err.Error()
-			} else {
-				beego.Trace("Good request")
-				c.Data["json"] = l
-			}
-		} else {
-			beego.Debug("Bad id:", err.Error())
+	if c.CurrentUser.PermissionLevel >= models.LEADER {
+		l, err := models.GetAllEnrolledOnProject(c.CurrentUser.UserId)
+		if err != nil {
+			beego.Debug("Something wrong", err.Error())
 			c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
 			c.Data["json"] = err.Error()
+		} else {
+			beego.Trace("Good request")
+			c.Data["json"] = l
 		}
 	} else {
 		beego.Debug("Forbidden to get enrolled users")
