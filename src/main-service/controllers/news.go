@@ -64,6 +64,7 @@ func (c *NewsController) Post() {
 // @Param   id      path    string  true    "ID новости"
 // @Success 200 {object} models.NewsJson    Успешный запрос
 // @Failure 403 :id is empty
+// @Failure 404 :id doesn't exist
 // @router /:id [get]
 func (c *NewsController) GetOne() {
 	idStr := c.Ctx.Input.Param(":id")
@@ -77,7 +78,7 @@ func (c *NewsController) GetOne() {
 	v, err := models.GetNewsById(id)
 	if err != nil {
 		beego.Debug("GetOne `GetNewsById` error", err.Error())
-		c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
+		c.Ctx.Output.SetStatus(HTTP_NOT_FOUND)
 		c.Data["json"] = err.Error()
 	} else {
 		beego.Trace("GetOne OK")
