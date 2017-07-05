@@ -28,7 +28,7 @@ type NewsJson struct {
 }
 
 type CountJson struct {
-	Count          int         `json:"count"`
+	Count          int64         `json:"count"`
 }
 
 func (t *news) translate() NewsJson {
@@ -113,8 +113,10 @@ func GetAllNews(sortBy []string, order []string, offset int64, limit int64, tag 
 	o := orm.NewOrm()
 	qs := o.QueryTable(new(news))
 
-	// Step 1: parse input args to SQL syntax
+	count, _ := qs.Count()
+	ml = append(ml, CountJson{Count: count} )
 
+	// Step 1: parse input args to SQL syntax
 	// order by:
 	var sortFields []string
 	if len(sortBy) != 0 {
@@ -159,7 +161,7 @@ func GetAllNews(sortBy []string, order []string, offset int64, limit int64, tag 
 	var l []news
 	qs = qs.OrderBy(sortFields...)
 	if _, err = qs.Limit(limit, offset).All(&l); err == nil {
-		ml = append(ml, CountJson{Count: len(l)} )
+
 	
 		if tag == "" {
 			for _, v := range l {
