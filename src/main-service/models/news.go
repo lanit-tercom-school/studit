@@ -27,6 +27,10 @@ type NewsJson struct {
 	Image       string      `json:"image"`
 }
 
+type CountJson struct {
+	Count          int         `json:"count"`
+}
+
 func (t *news) translate() NewsJson {
 	return NewsJson{
 		Id:          t.Id,
@@ -155,6 +159,8 @@ func GetAllNews(sortBy []string, order []string, offset int64, limit int64, tag 
 	var l []news
 	qs = qs.OrderBy(sortFields...)
 	if _, err = qs.Limit(limit, offset).All(&l); err == nil {
+		ml = append(ml, CountJson{Count: len(l)} )
+	
 		if tag == "" {
 			for _, v := range l {
 				ml = append(ml, v.translate())
