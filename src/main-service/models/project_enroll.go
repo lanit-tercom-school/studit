@@ -125,8 +125,12 @@ func GetAllEnrolledOnProject(master_id int) (pa []ProjectApplication, err error)
 				return
 			}
 			pa[i].Project.Tags = v["project_tags"].(string)
-			pa[i].Project.DateOfCreation = time.Now()
 			pa[i].Message = v["enrolling_message"].(string)
+			pa[i].Project.DateOfCreation, err = time.Parse(time.RFC3339, v["project_date"].(string))
+			if err != nil {
+				beego.Debug("Error converting to time")
+				return
+			}
 		}
 	}
 	return
