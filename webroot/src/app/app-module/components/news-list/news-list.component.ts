@@ -36,6 +36,7 @@ export class NewsListComponent implements OnInit {
     this.totalObs = this.data.NewsCountObs;
     this.p = page;
     this.loading = false;
+    window.scrollTo(0,0);
   }
 
 }
