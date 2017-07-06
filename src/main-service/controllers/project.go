@@ -6,6 +6,7 @@ import (
 	"main-service/models"
 	"strconv"
 	"strings"
+
 	"github.com/astaxie/beego"
 )
 
@@ -46,7 +47,7 @@ func (c *ProjectController) Post() {
 					c.Data["json"] = err.Error()
 
 				} else {
-					err := models.AddMasterToProject(user, &v)
+					err := models.AddUserToProject(user, &v)
 					if err != nil {
 						beego.Critical(c.Ctx.Input.IP(), "Can't add creator to project", err.Error())
 						c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
@@ -79,7 +80,6 @@ func (c *ProjectController) Post() {
 	c.ServeJSON()
 }
 
-
 type usersGetter func(int) ([]*models.User, error)
 
 // Вызывает функцию с указанным Id и отсылает в канал полученных пользователей в сокращенном виде
@@ -93,8 +93,8 @@ func CallForMainInformationAboutUsers(f usersGetter, id int, c chan []models.Mai
 		var partUsers []models.MainUserInfo
 		for _, u := range users {
 			partUsers = append(partUsers, models.MainUserInfo{
-				Id: u.Id,
-				Avatar: u.Avatar,
+				Id:       u.Id,
+				Avatar:   u.Avatar,
 				Nickname: u.Nickname,
 			})
 		}
@@ -143,10 +143,10 @@ func (c *ProjectController) GetOne() {
 			}
 			beego.Trace("GetOne OK")
 			c.Data["json"] = models.AllInformationAboutProject{
-				Project: v,
+				Project:  v,
 				Enrolled: <-enrolledChan,
-				Members: <-membersChan,
-				Masters: <-mastersChan,
+				Members:  <-membersChan,
+				Masters:  <-mastersChan,
 			}
 		}
 	}
@@ -174,10 +174,9 @@ func (c *ProjectController) GetAll() {
 	var query = make(map[string]string)
 	var limit int64 = 10
 	var offset int64
-	var user   int64
+	var user int64
 	var master int64
 	var status string
-
 
 	// limit: 10 (default is 10)
 	if v, err := c.GetInt64("limit"); err == nil {
@@ -196,16 +195,16 @@ func (c *ProjectController) GetAll() {
 	// sortBy: col1,col2
 	if v := c.GetString("sortby"); v != "" {
 		sortBy = strings.Split(v, ",")
-	}else{
+	} else {
 		sortBy = []string{"Name"}
 	}
 	// order: desc,asc
 	if v := c.GetString("order"); v != "" {
 		order = strings.Split(v, ",")
-	}else{
-		order  = []string{"asc"}
+	} else {
+		order = []string{"asc"}
 	}
-	if v := c.GetString("tag"); v!= ""{
+	if v := c.GetString("tag"); v != "" {
 		tag = v
 	}
 	if v := c.GetString("status"); v != "" {
