@@ -236,13 +236,13 @@ export class ApiService {
     headers.append('Bearer-token', token);
     return this.http.delete(environment.apiUrl + '/v1/project/enroll/' + id, { headers: headers });
   }
-  getEnrolledUsersToProject(id: number) {//Получить список пользователей оставивших заявку на проект
+  /*getEnrolledUsersToProject(id: number) {//Получить список пользователей оставивших заявку на проект
     return this.http.get(environment.apiUrl + '/v1/project/enroll/' + id);
-  }
+  }*/
 
-  getProjectUsers(id: number) {//Получить список пользователей, участвующих в проекте
+  /*getProjectUsers(id: number) {//Получить список пользователей, участвующих в проекте
     return this.http.get(environment.apiUrl + '/v1/project/users/' + id);
-  }
+  }*/
 /*  getProjectMastersById(id: number) {//Получить список кураторов проекта
     return this.http.get(environment.apiUrl + '/project/masters/' + id);
   }
@@ -312,14 +312,14 @@ export class ApiService {
     })
   }
 
-  getEnrollsForTeacher(id: number, token: string)
+  getEnrollsForTeacher(token: string)
   {
   var headers = new Headers();
   headers.append('Content-Type', 'application/json');
   headers.append('Accept', 'application/json');
   headers.append('Bearer-token', token);
-  return this.http.get(environment.apiUrl + '/v1/user/id/' + id + '?cut=false').map(res => {
-    return res.json().my_applications;
+  return this.http.get(environment.apiUrl + '/v1/project/enroll').map(res => {
+    return res.json();
   })
   }
 }

@@ -13,6 +13,7 @@ import 'rxjs/add/operator/filter';
 @Injectable()
 export class DataService {
   private userId: number;
+  private userPermLvl: number;
   private userToken: string;
   private news: BehaviorSubject<NewsItem[]> = <BehaviorSubject<NewsItem[]>>new BehaviorSubject([]);
   private projects: BehaviorSubject<ProjectItem[]> = <BehaviorSubject<ProjectItem[]>>new BehaviorSubject([]);
@@ -59,9 +60,12 @@ export class DataService {
     this.loadProjectsForMainPage();
     if (localStorage.getItem('current_user')) {
       this.userId = JSON.parse(localStorage.getItem('current_user')).user.id;
+      this.userPermLvl = JSON.parse(localStorage.getItem('current_user')).perm_lvl;
       this.loadUsersProjects();
-      this.loadEnrolledUsersProject();
-      this.loadEnrollsForTeacher();
+      if (this.userPermLvl == 0)
+         this.loadEnrolledUsersProject();
+      if (this.userPermLvl == 1)
+         this.loadEnrollsForTeacher();
     }
   }
 
@@ -112,27 +116,14 @@ export class DataService {
   loadEnrollsForTeacher()
     {
     this.dataStore.enrollsForTeacher.length = 0;
-    this.api.getEnrollsForTeacher(this.userId, this.userToken).subscribe(res => {
-      /*res.forEach(project => {
-      if (project!=null) {
-        project.apps.forEach(enroll => {
-      if (enroll!=null) {
-          var tempEnroll : EnrollItem;
-          tempEnroll.userId = enroll.user.id;
-          tempEnroll.userNickname = enroll.user.nickname;
-          tempEnroll.userLogo = enroll.user.avatar;
-          tempEnroll.projectId = project.id;
-          tempEnroll.projectName = project.name;
-          tempEnroll.message = enroll.message;
-          tempEnroll.date = enroll.date;
-          this.dataStore.enrollsForTeacher.push(tempEnroll);
-      }
-      });
-      }
-      });
-      this.enrollsForTeacher.next(Object.assign({}, this.dataStore).enrollsForTeacher);*/
+    if (this.userPermLvl==1)
+    this.api.getEnrollsForTeacher(this.userToken).subscribe(res => {
+  
+      console.log('teacher');
       console.log(res);
-    })
+    });
+    else
+    console.log(this.userPermLvl);
     }
 
   loadNews() {
