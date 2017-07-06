@@ -1,9 +1,8 @@
+import { UserInfo } from './user-info';
+import { ProjectItem } from './project-item';
+
 export interface EnrollItem {
-    userId: number;
-    userNickname: string;
-    userLogo: string;
-    projectId: number;
-    projectName: string;
+    user: UserInfo;
+    project: ProjectItem;
     message: string;
-    date: string;
 }

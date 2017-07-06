@@ -62,10 +62,10 @@ export class DataService {
       this.userId = JSON.parse(localStorage.getItem('current_user')).user.id;
       this.userPermLvl = JSON.parse(localStorage.getItem('current_user')).perm_lvl;
       this.loadUsersProjects();
-      if (this.userPermLvl == 0)
+     /* if (this.userPermLvl == 0)
          this.loadEnrolledUsersProject();
       if (this.userPermLvl == 1)
-         this.loadEnrollsForTeacher();
+         this.loadEnrollsForTeacher();*/
     }
   }
 

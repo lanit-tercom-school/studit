@@ -1,14 +1,14 @@
 <div class = "container">
   <h1 align ="center">Уведомления</h1>
-  <div *ngFor="let Enroll of EnrollList | async" class = "card col-lg-8 col-sm-12">
+  <div *ngFor="let Enroll of EnrollList" class = "card col-lg-8 col-sm-12">
     <div class="row">
        <div class="col-lg-2 col-md-2 col-sm-3" >
-         <img src="{{Enroll.userLogo}}" alt="User avatar" width = "100px">
+         <img src="http://www.animalsglobe.ru/wp-content/uploads/2012/08/surok-41.jpg" alt="User avatar" width = "100px">
        </div>
        <div class="col-lg-10 col-md-10 col-sm-9">
-          <h4><a routerLink = "/student/{{Enroll.userId}}">{{Enroll.userNickname}}</a>
+          <h4><a routerLink = "/student/{{Enroll.userId}}">{{Enroll.user.nickname}}</a>
           отправил заявку на участие в проекте
-          <a routerLink = "/project/{{Enroll.projectId}}">{{Enroll.projectName}}</a>:</h4>
+          <a routerLink = "/project/{{Enroll.projectId}}">{{Enroll.project.name}}</a>:</h4>
           <span>{{Enroll.message}}</span>
        </div>
     </div>
