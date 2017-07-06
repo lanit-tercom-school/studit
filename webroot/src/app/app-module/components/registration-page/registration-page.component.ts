@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { AuthService } from 'services/auth.service';
-import { UserInfo } from 'models/user-info';
+import { UserRegister } from 'models/user-register';
 
 @Component({
   selector: 'app-registration-page',
@@ -11,7 +11,7 @@ import { UserInfo } from 'models/user-info';
 })
 export class RegistrationPageComponent implements OnInit {
 
-  private user: UserInfo = { login: "", nickname: "", password: "" };
+  private user: UserRegister = { login: "", nickname: "", password: "" };
   private error: string;
 
   constructor(private auth: AuthService, private router: Router) { }

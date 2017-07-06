@@ -1,5 +1,7 @@
-export interface UserInfo {
-    login: string;
+export interface UserInfo
+{
+    id: string;
     nickname: string;
-    password: string;
+    avatar: string;
+    description: string;
 }
