@@ -24,6 +24,10 @@ export class HomeTeacherProjectViewComponent implements OnInit {
     this.EnrollList = this.data.EnrollsForTeacher;
   }
   ngOnDestroy() {
-
+  }
+  accept(user_id: number, project_id: number) {
+    this.api.postUserToProject(user_id, project_id, JSON.parse(localStorage.getItem('current_user')).bearer_token).subscribe(res => {
+       this.data.loadEnrollsForTeacher();
+      });
   }
 }

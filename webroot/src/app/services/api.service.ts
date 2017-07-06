@@ -264,7 +264,7 @@ export class ApiService {
     headers.append('Content-Type', 'application/json');
     headers.append('Accept', 'application/json');
     headers.append('Bearer-token', token);
-    return this.http.post(environment.apiUrl + '/v1/project/users/?user_id=' + user_id + '&project_id=' + project_id, {}, { headers: headers });
+    return this.http.post(environment.apiUrl + '/v1/project/user/?user_id=' + user_id + '&project_id=' + project_id, {}, { headers: headers });
   }
   deleteProjectUser(project_id: number, user_id: number, token: string) {//Удалить пользователя проекта
     let headers = new Headers();

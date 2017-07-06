@@ -25,9 +25,7 @@
       <p class="lead">{{Enroll.user.nickname}} хочет записаться на {{Enroll.project.name}}</p>
       <p>Сообщение: "{{Enroll.message}}"</p>
       <div class="read-more">
-        <a routerLink="/project/{{Enroll.project.id}}" routerLinkActive="active">
-          <p>Подробнее <i class="fa fa-angle-double-right" aria-hidden="true"></i></p>
-        </a>
+        <button type="button" class="btn btn-success" (click)="accept(Enroll.user.id,Enroll.project.id)">Принять</button>
       </div>
     </div>
   </div>
