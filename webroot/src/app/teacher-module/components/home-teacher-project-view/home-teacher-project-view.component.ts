@@ -14,17 +14,14 @@ import { EnrollItem } from 'models/enroll-item';
 export class HomeTeacherProjectViewComponent implements OnInit {
   private ProjectList: Observable<ProjectItem[]>;
   private ProjectEnrollList: Observable<ProjectItem[]>;
-  private EnrollList: EnrollItem[];
+  private EnrollList: Observable<EnrollItem[]>;
 
   constructor(private api: ApiService, private data: DataService) { }
 
   ngOnInit() {
     this.ProjectList = this.data.UserProjects;
     this.ProjectEnrollList = this.data.UserEnrolledProjects;
-    this.api.getEnrollsForTeacher(JSON.parse(window.localStorage.getItem("current_user")).bearer_token).subscribe(res => {
-      console.log(res);
-      this.EnrollList = res;
-    });
+    this.EnrollList = this.data.EnrollsForTeacher;
   }
   ngOnDestroy() {
 

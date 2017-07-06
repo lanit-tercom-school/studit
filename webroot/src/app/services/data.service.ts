@@ -29,8 +29,10 @@ export class DataService {
     userEnrolledProjects: ProjectItem[];
     projectsForMainPage: ProjectItem[];
     enrollsForTeacher: EnrollItem[];
-  } = { news: [], projects: [], userProjects: [],
-   userEnrolledProjects: [], projectsForMainPage: [], enrollsForTeacher: []};
+  } = {
+    news: [], projects: [], userProjects: [],
+    userEnrolledProjects: [], projectsForMainPage: [], enrollsForTeacher: []
+  };
 
   public get News() {
     return this.news.asObservable();
@@ -45,8 +47,8 @@ export class DataService {
     return this.userEnrolledProjects.asObservable();
   }
   public get EnrollsForTeacher() {
-   return this.enrollsForTeacher.asObservable();
- }
+    return this.enrollsForTeacher.asObservable();
+  }
 
   public get ProjectsForMainPage() {
     return this.projectsForMainPage.asObservable();
@@ -59,13 +61,16 @@ export class DataService {
     this.loadNews();
     this.loadProjectsForMainPage();
     if (localStorage.getItem('current_user')) {
+      this.userToken = JSON.parse(localStorage.getItem('current_user')).bearer_token;
       this.userId = JSON.parse(localStorage.getItem('current_user')).user.id;
       this.userPermLvl = JSON.parse(localStorage.getItem('current_user')).perm_lvl;
       this.loadUsersProjects();
-     /* if (this.userPermLvl == 0)
-         this.loadEnrolledUsersProject();
-      if (this.userPermLvl == 1)
-         this.loadEnrollsForTeacher();*/
+      if (this.userPermLvl === 0) {
+        this.loadEnrolledUsersProject();
+      }
+      if (this.userPermLvl === 1) {
+        this.loadEnrollsForTeacher();
+      }
     }
   }
 
@@ -113,18 +118,12 @@ export class DataService {
     }
   }
 
-  loadEnrollsForTeacher()
-    {
-    this.dataStore.enrollsForTeacher.length = 0;
-    if (this.userPermLvl==1)
+  loadEnrollsForTeacher() {
     this.api.getEnrollsForTeacher(this.userToken).subscribe(res => {
-  
-      console.log('teacher');
-      console.log(res);
+      this.dataStore.enrollsForTeacher = res;
+      this.enrollsForTeacher.next(Object.assign({}, this.dataStore).enrollsForTeacher);
     });
-    else
-    console.log(this.userPermLvl);
-    }
+  }
 
   loadNews() {
     this.api.getNewsPage().subscribe(res => {
@@ -134,7 +133,7 @@ export class DataService {
   }
 
   addApiUrl(url: string): string {
-  //return environment.apiUrl + url;
-   return url;
+    //return environment.apiUrl + url;
+    return url;
   }
 }

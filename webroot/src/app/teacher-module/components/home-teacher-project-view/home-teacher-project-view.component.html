@@ -16,7 +16,7 @@
 </div>
 
 <h3>Заявки на ваши проекты</h3>
-<div *ngFor="let Enroll of EnrollList" class="card col-lg-12 col-sm-12">
+<div *ngFor="let Enroll of EnrollList | async" class="card col-lg-12 col-sm-12">
   <div class="row">
     <div class="col-sm-4">
       <img class="card-img" src="http://www.animalsglobe.ru/wp-content/uploads/2012/08/surok-41.jpg" alt="Card image cap">
