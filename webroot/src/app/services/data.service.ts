@@ -13,6 +13,7 @@ import 'rxjs/add/operator/filter';
 export class DataService {
   private userId: number;
   private userToken: string;
+  private userPermLvl: number;
   private news: BehaviorSubject<NewsItem[]> = <BehaviorSubject<NewsItem[]>>new BehaviorSubject([]);
   private projects: BehaviorSubject<ProjectItem[]> = <BehaviorSubject<ProjectItem[]>>new BehaviorSubject([]);
   private userProjects: BehaviorSubject<ProjectItem[]> = <BehaviorSubject<ProjectItem[]>>new BehaviorSubject([]);
@@ -42,6 +43,10 @@ export class DataService {
   public get ProjectsForMainPage() {
     return this.projectsForMainPage.asObservable();
   }
+  public get PermLvl()
+  {
+    return this.userPermLvl;
+  }
   constructor(private api: ApiService) { }
 
   loadAll() {
@@ -51,6 +56,7 @@ export class DataService {
     this.loadProjectsForMainPage();
     if (localStorage.getItem('current_user')) {
       this.userId = JSON.parse(localStorage.getItem('current_user')).user.id;
+      this.userPermLvl = JSON.parse(localStorage.getItem('current_user')).perm_lvl;
       this.loadUsersProjects();
       this.loadEnrolledUsersProject();
     }
