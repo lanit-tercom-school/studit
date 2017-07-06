@@ -15,6 +15,10 @@ export class ApiService {
 
   getPublicStudentInfoById(student_id: number) {
     return this.http.get(environment.apiUrl + '/v1/user/id/' + student_id)
+      .catch((error: any) => {
+        console.log('ERROR: ApiService -> getPublicStudentInfoById()');
+        return Observable.throw(error)
+      });
   }
 
   getPublicAuthorInfoById(author_id: number) {
@@ -58,21 +62,39 @@ export class ApiService {
           element.Logo = environment.apiUrl + element.Logo;
         });
         return res;
+      })
+      .catch((error: any) => {
+        console.log('ERROR: ApiService -> getMainPageProjects()');
+        return Observable.throw(error);
       });
-
   }
+
 
   getProjectItems() {
-    return this.http.get(environment.apiUrl + '/v1/project/id/').map((response: Response) => response.json());
+    return this.http.get(environment.apiUrl + '/v1/project/id/')
+      .map((response: Response) => response.json())
+      .catch((error: any) => {
+        console.log('ERROR: ApiService -> getProjectItems()');
+        return Observable.throw(error);
+      });
   }
+
   getProjectItemsByUserId(userId: string) {
-    return this.http.get(environment.apiUrl + '/v1/project/id/').map((response: Response) => response.json());
+    return this.http.get(environment.apiUrl + '/v1/project/id/')
+      .map((response: Response) => response.json())
+      .catch((error: any) => {
+        console.log('ERROR: ApiService -> getProjectItemsByUserId()');
+        return Observable.throw(error);
+      });
   }
 
   getProjectById(id: number) {
-    return this.http.get(environment.apiUrl + '/v1/project/id/' + id);
+    return this.http.get(environment.apiUrl + '/v1/project/id/' + id)
+      .catch((error: any) => {
+        console.log('ERROR: ApiService -> getProjectById()')
+        return Observable.throw(error);
+      });
   }
-
 
   getMaterialsItems(id: number) {
     return [
@@ -190,12 +212,22 @@ export class ApiService {
   }
 
   getNewsPage() {
-    return this.http.get(environment.apiUrl + '/v1/news/').map((response: Response) => response.json());
+    return this.http.get(environment.apiUrl + '/v1/news/')
+      .map((response: Response) => response.json())
+      .catch((error: any) => {
+        console.log('ERROR: ApiService -> getNewsPage()');
+        return Observable.throw(error);
+      });
+
   }
 
   getNewsById(id_: number) {
     return this.http.get(environment.apiUrl + '/v1/news/' + id_)
-      .map((response: Response) => response.json());
+      .map((response: Response) => response.json())
+      .catch((error: any) => {
+        console.log('ERROR: ApiService -> getNewsById()');
+        return Observable.throw(error);
+      });
   }
 
   private jwt() {
@@ -206,6 +238,7 @@ export class ApiService {
       return new RequestOptions({ headers: headers });
     }
   }
+
   postProject(project, token: string) {
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
@@ -213,102 +246,175 @@ export class ApiService {
     headers.append('Bearer-token', token);
     console.log(environment.apiUrl + '/v1/project/id/', JSON.stringify(project));
     return this.http.post(environment.apiUrl + '/v1/project/id/',
-      JSON.stringify(project), { headers: headers });
+      JSON.stringify(project), { headers: headers })
+      .catch((error: any) => {
+        console.log('ERROR: ApiService -> postProject()');
+        return Observable.throw(error);
+      });
   }
 
   deleteProject(id: string, token: string) {
     let headers = new Headers();
     headers.append('Accept', 'application/json')
     headers.append('Bearer-token', token);
-    return this.http.delete(environment.apiUrl + '/v1/project/id/' + id, { headers: headers });
-  }
-  enrollToProject(id: number, token: string, message: string) {//Отправить заявку на участие в проекте
-    let headers = new Headers();
-    headers.append('Content-Type', 'application/json');
-    headers.append('Accept', 'application/json');
-    headers.append('Bearer-token', token);
-    return this.http.post(environment.apiUrl + '/v1/project/enroll/' + id + '?message=' + message, JSON.stringify({}), { headers: headers });
-  }
-  unenrollToProject(id: number, token: string) {//Отменить заявку на участие в проекте
-    let headers = new Headers();
-    headers.append('Content-Type', 'application/json');
-    headers.append('Accept', 'application/json');
-    headers.append('Bearer-token', token);
-    return this.http.delete(environment.apiUrl + '/v1/project/enroll/' + id, { headers: headers });
-  }
-  getEnrolledUsersToProject(id: number) {//Получить список пользователей оставивших заявку на проект
-    return this.http.get(environment.apiUrl + '/v1/project/enroll/' + id);
+    return this.http.delete(environment.apiUrl + '/v1/project/id/' + id, { headers: headers })
+      .catch((error: any) => {
+        console.log('ERROR: ApiService -> deleteProject()');
+        return Observable.throw(error);
+      });
   }
 
-  getProjectUsers(id: number) {//Получить список пользователей, участвующих в проекте
-    return this.http.get(environment.apiUrl + '/v1/project/users/' + id);
-  }
-/*  getProjectMastersById(id: number) {//Получить список кураторов проекта
-    return this.http.get(environment.apiUrl + '/project/masters/' + id);
-  }
-  postProjectMaster(project_id: number, user_id: number, token: string) {//Назначить куратора проекта по ид проекта
+  //Отправить заявку на участие в проекте
+  enrollToProject(id: number, token: string, message: string) {
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
     headers.append('Accept', 'application/json');
     headers.append('Bearer-token', token);
-    return this.http.post(environment.apiUrl + '/v1/project/masters/?user_id=' + user_id + '&project_id=' + project_id, {}, { headers: headers });
+    return this.http.post(environment.apiUrl + '/v1/project/enroll/' + id + '?message=' + message,
+      JSON.stringify({}), { headers: headers })
+      .catch((error: any) => {
+        console.log('ERROR: ApiService -> enrollToProject()');
+        return Observable.throw(error);
+      });
   }
-  deleteProjectMaster(project_id: number, user_id: number, token: string) {//Удалить куратора проекта
+  //Отменить заявку на участие в проекте
+  unenrollToProject(id: number, token: string) {
     let headers = new Headers();
+    headers.append('Content-Type', 'application/json');
     headers.append('Accept', 'application/json');
     headers.append('Bearer-token', token);
-    return this.http.delete(environment.apiUrl + '/v1/project/masters/?user_id=' + user_id + '&project_id=' + project_id, { headers: headers });
-  }*/
+    return this.http.delete(environment.apiUrl + '/v1/project/enroll/' + id, { headers: headers })
+      .catch((error: any) => {
+        console.log('ERROR: ApiService -> unenrollToProject()');
+        return Observable.throw(error);
+      });
+  }
+
+  //Получить список пользователей оставивших заявку на конкретный проект
+  getEnrolledUsersToProject(id: number) {
+    return this.http.get(environment.apiUrl + '/v1/project/enroll/' + id)
+      .catch((error: any) => {
+        console.log('ERROR: ApiService -> getEnrolledUsersToProject()');
+        return Observable.throw(error);
+      });
+  }
+
+  //Получить список пользователей, участвующих в проекте
+  getProjectUsers(id: number) {
+    return this.http.get(environment.apiUrl + '/v1/project/users/' + id)
+      .catch((error: any) => {
+        console.log('ERROR: ApiService -> getProjectUsers()');
+        return Observable.throw(error);
+      });
+  }
+  /*  getProjectMastersById(id: number) {//Получить список кураторов проекта
+      return this.http.get(environment.apiUrl + '/project/masters/' + id);
+    }
+    postProjectMaster(project_id: number, user_id: number, token: string) {//Назначить куратора проекта по ид проекта
+      let headers = new Headers();
+      headers.append('Content-Type', 'application/json');
+      headers.append('Accept', 'application/json');
+      headers.append('Bearer-token', token);
+      return this.http.post(environment.apiUrl + '/v1/project/masters/?user_id=' + user_id + '&project_id=' + project_id, {}, { headers: headers });
+    }
+    deleteProjectMaster(project_id: number, user_id: number, token: string) {//Удалить куратора проекта
+      let headers = new Headers();
+      headers.append('Accept', 'application/json');
+      headers.append('Bearer-token', token);
+      return this.http.delete(environment.apiUrl + '/v1/project/masters/?user_id=' + user_id + '&project_id=' + project_id, { headers: headers });
+    }*/
   postUserToProject(user_id: number, project_id: number, token: string) {//Добавить пользователя в проект
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
     headers.append('Accept', 'application/json');
     headers.append('Bearer-token', token);
-    return this.http.post(environment.apiUrl + '/v1/project/users/?user_id=' + user_id + '&project_id=' + project_id, {}, { headers: headers });
+    return this.http.post(environment.apiUrl + '/v1/project/users/?user_id=' + user_id + '&project_id='
+      + project_id, {}, { headers: headers })
+      .catch((error: any) => {
+        console.log('ERROR: ApiService -> postUserToProject()');
+        return Observable.throw(error);
+      });
   }
   deleteProjectUser(project_id: number, user_id: number, token: string) {//Удалить пользователя проекта
     let headers = new Headers();
     headers.append('Accept', 'application/json');
     headers.append('Bearer-token', token);
-    return this.http.delete(environment.apiUrl + '/v1/project/users/?user_id=' + user_id + '&project_id=' + project_id, { headers: headers });
+    return this.http.delete(environment.apiUrl + '/v1/project/users/?user_id=' + user_id + '&project_id='
+      + project_id, { headers: headers })
+      .catch((error: any) => {
+        console.log('ERROR: ApiService -> postUserToProject()');
+        return Observable.throw(error);
+      });
   }
   getUsers() {
-    return this.http.get(environment.apiUrl + '/v1/user/id/').map((response: Response) => response.json());
+    return this.http.get(environment.apiUrl + '/v1/user/id/')
+      .map((response: Response) => response.json())
+      .catch((error: any) => {
+        console.log('ERROR: ApiService -> getUsers()');
+        return Observable.throw(error);
+      });
   }
   getUserById(id: number) {
-    return this.http.get(environment.apiUrl + '/v1/user/id/' + id).map((response: Response) => response.json());
+    return this.http.get(environment.apiUrl + '/v1/user/id/' + id)
+      .map((response: Response) => response.json())
+      .catch((error: any) => {
+        console.log('ERROR: ApiService -> getUserById()');
+        return Observable.throw(error);
+      });
   }
-  
+
   deleteUserById(id: number, token: string) {
     var headers = new Headers();
     headers.append('Accept', 'application/json');
     headers.append('Bearer-token', token);
-    return this.http.delete(environment.apiUrl + '/v1/user/id/' + id, { headers: headers });
+    return this.http.delete(environment.apiUrl + '/v1/user/id/' + id, { headers: headers })
+      .catch((error: any) => {
+        console.log('ERROR: ApiService -> deleteUserById()');
+        return Observable.throw(error);
+      });
   }
+
   changeUserById(id: number, token: string, user) {
     var headers = new Headers();
     headers.append('Content-Type', 'application/json');
     headers.append('Accept', 'application/json');
     headers.append('Bearer-token', token);
-    return this.http.put(environment.apiUrl + '/v1/user/id/' + id, user, { headers: headers });
+    return this.http.put(environment.apiUrl + '/v1/user/id/' + id, user, { headers: headers })
+      .catch((error: any) => {
+        console.log('ERROR: ApiService -> changeUserById()');
+        return Observable.throw(error);
+      });
   }
   changePasswordForUser(token: string, passwords) {
     var headers = new Headers();
     headers.append('Content-Type', 'application/json');
     headers.append('Accept', 'application/json');
     headers.append('Bearer-token', token);
-    return this.http.put(environment.apiUrl + '/v1/auth/change-password/', passwords, { headers: headers });
+    return this.http.put(environment.apiUrl + '/v1/auth/change-password/', passwords, { headers: headers })
+      .catch((error: any) => {
+        console.log('ERROR: ApiService -> changePasswordForUser()');
+        return Observable.throw(error);
+      });
   }
   getProjectsOfUser(id: number) {
-    return this.http.get(environment.apiUrl + '/v1/project/id/?user=' + id).map((response: Response) => response.json());
+    return this.http.get(environment.apiUrl + '/v1/project/id/?user=' + id)
+      .map((response: Response) => response.json())
+      .catch((error: any) => {
+        console.log('ERROR: ApiService -> changePasswordForUser()');
+        return Observable.throw(error);
+      });
   }
+
   getEnrolledUsersProject(id: number, token: string) {
     var headers = new Headers();
     headers.append('Content-Type', 'application/json');
     headers.append('Accept', 'application/json');
     headers.append('Bearer-token', token);
-    return this.http.get(environment.apiUrl + '/v1/user/id/' + id).map(res => {
-      return res.json().enrolled_on;
-    })
+    return this.http.get(environment.apiUrl + '/v1/user/id/' + id)
+      .map(res => { return res.json().enrolled_on; })
+      .catch((error: any) => {
+        console.log('ERROR: ApiService -> getEnrolledUsersProject()');
+        return Observable.throw(error);
+      });
   }
 }
