@@ -2,34 +2,35 @@ package models
 
 import (
 	"errors"
-	"strings"
-	"github.com/astaxie/beego/orm"
-	"time"
 	"strconv"
+	"strings"
+	"time"
+
+	"github.com/astaxie/beego/orm"
 )
 
 // Модель для базы данных
 type Project struct {
-	Id             int          `orm:"column(id);pk;auto"`
-	Name           string       `orm:"column(name)"`
-	Description    string       `orm:"column(description)"`
-	DateOfCreation time.Time    `orm:"column(date_of_creation);type(datetime)"`
-	Logo           string       `orm:"column(logo)"`
-	Tags           string       `orm:"column(tags)"`
-	Status         int          `orm:"column(status)"`  // 0 - проект еще не начался, идет набор, и т.д.
-	                                                    // 1 - проект начался, ведутся лекции, разработка
-	                                                    // 2 - проект завершен, активность закончена
+	Id             int       `orm:"column(id);pk;auto" json:"id"`
+	Name           string    `orm:"column(name)" json:"name"`
+	Description    string    `orm:"column(description)" json:"descriptiom"`
+	DateOfCreation time.Time `orm:"column(date_of_creation);type(datetime)" json:"created"`
+	Logo           string    `orm:"column(logo)" json:"logo"`
+	Tags           string    `orm:"column(tags)" json:"tags"`
+	Status         int       `orm:"column(status)" json:"status"` // 0 - проект еще не начался, идет набор, и т.д.
+	// 1 - проект начался, ведутся лекции, разработка
+	// 2 - проект завершен, активность закончена
 }
 
 // Модель для общения с клиентами
 type ProjectJson struct {
-	Id             int         `json:"id,omitempty"` //
-	Name           string      `json:"name"`
-	Description    string      `json:"description"`
-	DateOfCreation time.Time   `json:"created"`
-	Logo           string      `json:"logo"`
-	Tags           []string    `json:"tags"`
-	Status         int         `json:"status"` // см модель для бд
+	Id             int       `json:"id,omitempty"` //
+	Name           string    `json:"name"`
+	Description    string    `json:"description"`
+	DateOfCreation time.Time `json:"created"`
+	Logo           string    `json:"logo"`
+	Tags           []string  `json:"tags"`
+	Status         int       `json:"status"` // см модель для бд
 }
 
 // Вся информация о проекте
@@ -47,27 +48,27 @@ type MainProjectInfo struct {
 }
 
 // Обязательный перевод от одной модели в другую
-func (t *Project) translate() ProjectJson{
+func (t *Project) translate() ProjectJson {
 	return ProjectJson{
-		Id: t.Id,
-		Name: t.Name,
-		Description: t.Description,
+		Id:             t.Id,
+		Name:           t.Name,
+		Description:    t.Description,
 		DateOfCreation: t.DateOfCreation,
-		Logo: t.Logo,
-		Tags: strings.Split(t.Tags, ","),
-		Status: t.Status,
+		Logo:           t.Logo,
+		Tags:           strings.Split(t.Tags, ","),
+		Status:         t.Status,
 	}
 }
 
-func (t *ProjectJson) translate() Project{
+func (t *ProjectJson) translate() Project {
 	return Project{
-		Id: t.Id,
-		Name: t.Name,
-		Description: t.Description,
+		Id:             t.Id,
+		Name:           t.Name,
+		Description:    t.Description,
 		DateOfCreation: t.DateOfCreation,
-		Logo: t.Logo,
-		Tags: strings.Join(t.Tags, ","),
-		Status: t.Status,
+		Logo:           t.Logo,
+		Tags:           strings.Join(t.Tags, ","),
+		Status:         t.Status,
 	}
 }
 
@@ -182,8 +183,8 @@ func GetAllProjects(query map[string]string, sortBy []string, order []string,
 	return nil, err
 }
 
-func FilterByTag(ml *[]ProjectJson, tag string){
-	for i := 0; i < len(*ml);{
+func FilterByTag(ml *[]ProjectJson, tag string) {
+	for i := 0; i < len(*ml); {
 		if !TagInArrayOfStrings(tag, (*ml)[i].Tags) {
 			(*ml)[i] = (*ml)[len(*ml)-1]
 			*ml = (*ml)[:len(*ml)-1]
@@ -198,14 +199,14 @@ func FilterByStatus(ml *[]ProjectJson, status int) {
 		if (*ml)[i].Status != status {
 			// remove from slice, https://github.com/golang/go/wiki/SliceTricks#delete-without-preserving-order
 			(*ml)[i] = (*ml)[len(*ml)-1]
-			 *ml = (*ml)[:len(*ml)-1]
+			*ml = (*ml)[:len(*ml)-1]
 			continue
 		}
 		i++
 	}
 }
 
-func FilterByUser(ml *[]ProjectJson, user int64){
+func FilterByUser(ml *[]ProjectJson, user int64) {
 	o := orm.NewOrm()
 	qs := o.QueryTable(new(ProjectUser))
 	var l []ProjectUser
@@ -216,7 +217,7 @@ func FilterByUser(ml *[]ProjectJson, user int64){
 			userProjects[(v.ProjectId).Id] = true
 		}
 	}
-	for i := 0; i < len(*ml);{
+	for i := 0; i < len(*ml); {
 		if !userProjects[(*ml)[i].Id] {
 			(*ml)[i] = (*ml)[len(*ml)-1]
 			*ml = (*ml)[:len(*ml)-1]
@@ -226,7 +227,7 @@ func FilterByUser(ml *[]ProjectJson, user int64){
 	}
 }
 
-func FilterByMaster(ml * []ProjectJson, master int64){
+func FilterByMaster(ml *[]ProjectJson, master int64) {
 	o := orm.NewOrm()
 	qs := o.QueryTable(new(ProjectMaster))
 	var l []ProjectMaster
@@ -238,7 +239,7 @@ func FilterByMaster(ml * []ProjectJson, master int64){
 		}
 	}
 
-	for i := 0; i < len(*ml);{
+	for i := 0; i < len(*ml); {
 		if !createdProjects[(*ml)[i].Id] {
 			(*ml)[i] = (*ml)[len(*ml)-1]
 			*ml = (*ml)[:len(*ml)-1]
