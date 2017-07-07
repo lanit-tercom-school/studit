@@ -85,7 +85,7 @@
             <div class="dropdown-menu">
               <a class="dropdown-item" routerLink="/user/{{currentUser.user.id}}"><i class="fa fa-address-card fa-fw" aria-hidden="true"></i> Мой профиль</a>
               <a class="dropdown-item" routerLink="/user/{{currentUser.user.id}}/settings"><i class="fa fa-cog fa-fw" aria-hidden="true"></i> Настройки</a>
-              <a class="dropdown-item" href="#"><i class="fa fa-bell-o fa-fw" aria-hidden="true"></i> Уведомления</a>
+              <a class="dropdown-item" href="/teacher/notifications"><i class="fa fa-bell-o fa-fw" aria-hidden="true"></i> Уведомления</a>
               <div class="dropdown-divider"></div>
               <a class="dropdown-item" id="log-out" routerLink="/auth" routerLinkActive="active" (click)="logout()">
                 <i class="fa fa-times-circle fa=fw" aria-hidden="true"></i> Выход</a>
