@@ -27,6 +27,11 @@ private sub: any;
   }
 
   getReadingNews(){
-   this.apiService.getNewsById(this.id_).subscribe(res => this.readingNews = res);
+   this.apiService.getNewsById(this.id_).subscribe(res => this.readingNews = res,
+   error => {
+      alert('Ошибка! ' + error.status + ' ' + error.statusText);
+      console.debug('ERROR: status ' + error.status + ' ' + error.statusText);
+      console.debug('ERROR: apiService: getNewsById()');
+      });
   }
 }

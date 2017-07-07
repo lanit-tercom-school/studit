@@ -20,7 +20,12 @@ ngOnInit() {
   this.route.params
     .subscribe(params => {
     this.project = this.apiService.getProjectById(+params['id'])
-      .subscribe(res => this.project = res.json());
+      .subscribe(res => this.project = res.json(),
+        error => {
+      alert('Ошибка! ' + error.status + ' ' + error.statusText);
+      console.debug('ERROR: status ' + error.status + ' ' + error.statusText);
+      console.debug('ERROR: apiService: getProjectById()');
+      });
     });
 }
 

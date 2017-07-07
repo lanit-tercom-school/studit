@@ -17,7 +17,7 @@ export class ApiService {
   getPublicStudentInfoById(student_id: number) {
     return this.http.get(environment.apiUrl + '/v1/user/id/' + student_id)
       .catch((error: any) => {
-        return Observable.throw(error)
+        return Observable.throw(error);
       });
   }
 

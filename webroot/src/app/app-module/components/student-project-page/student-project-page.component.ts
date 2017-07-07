@@ -73,25 +73,35 @@ export class StudentProjectPageComponent implements OnInit, OnDestroy {
       JSON.parse(localStorage.getItem('current_user')).bearer_token, this.enrollMessage).subscribe(res => {
         this.enrollButtonStatus = 2;
         this.data.loadEnrolledUsersProject();
-       });
+      },
+      error => {
+        alert('Ошибка! ' + error.status + ' ' + error.statusText);
+        console.debug('ERROR: status ' + error.status + ' ' + error.statusText);
+        console.debug('ERROR: apiService: enrollToProject()');
+      });
   }
   unenroll() {
     this.apiService.unenrollToProject(this.projectId,
-    JSON.parse(localStorage.getItem('current_user')).bearer_token).subscribe(res => {
-       this.enrollButtonStatus = 0;
-       this.data.loadEnrolledUsersProject();
-       });
+      JSON.parse(localStorage.getItem('current_user')).bearer_token).subscribe(res => {
+        this.enrollButtonStatus = 0;
+        this.data.loadEnrolledUsersProject();
+      },
+      error => {
+      alert('Ошибка! ' + error.status + ' ' + error.statusText);
+      console.debug('ERROR: status ' + error.status + ' ' + error.statusText);
+      console.debug('ERROR: apiService: unenrollToProject()');
+      });
   }
 
   choseButtonStatus() {
     this.enrollButtonStatus = 0;
     this.data.UserProjects.subscribe(res => {
-      if (res!=null && res.find(pr => pr.id == this.projectId)) {
+      if (res != null && res.find(pr => pr.id == this.projectId)) {
         this.enrollButtonStatus = 1;
       }
     })
     this.data.UserEnrolledProjects.subscribe(res => {
-      if (res!=null && res.find(pr => pr.id == this.projectId)) {
+      if (res != null && res.find(pr => pr.id == this.projectId)) {
         this.enrollButtonStatus = 2;
       }
     })

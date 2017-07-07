@@ -45,7 +45,6 @@ export class DataService {
   constructor(private api: ApiService) { }
 
   loadAll() {
-    console.debug('Data.service ->loadAll');
     this.loadProjects();
     this.loadNews();
     this.loadProjectsForMainPage();
@@ -54,6 +53,7 @@ export class DataService {
       this.loadUsersProjects();
       this.loadEnrolledUsersProject();
     }
+    console.debug('Data.service ->loadAll');
   }
 
   loadProjects() {
@@ -65,7 +65,9 @@ export class DataService {
       }
     },
     error => {
-      console.debug(error);
+      alert('Ошибка! ' + error.status + ' ' + error.statusText);
+      console.debug('ERROR: status ' + error.status + ' ' + error.statusText);
+      console.debug('ERROR: loadProjects() -> getProjectItems()');
     });
   }
 
@@ -74,7 +76,12 @@ export class DataService {
       this.dataStore.projectsForMainPage = res;
       this.dataStore.projectsForMainPage.forEach(a => { a.logo = this.addApiUrl(a.logo); })
       this.projectsForMainPage.next(Object.assign({}, this.dataStore).projectsForMainPage);
-    })
+    },
+      error => {
+      alert('Ошибка! ' + error.status + ' ' + error.statusText);
+      console.debug('ERROR: status ' + error.status + ' ' + error.statusText);
+      console.debug('ERROR: loadProjectsForMainPage() -> getMainPageProjects()');
+    });
   }
 
   loadUsersProjects() {
@@ -86,9 +93,14 @@ export class DataService {
           this.userProjects.next(Object.assign({}, this.dataStore).userProjects);
         }
 
+      },
+      error => {
+      alert('Ошибка! ' + error.status + ' ' + error.statusText);
+      console.debug('ERROR: status ' + error.status + ' ' + error.statusText);
+      console.debug('ERROR: loadUsersProjects() -> getProjectsOfUser()');
       });
     } else {
-      console.log('Error in data.service: can not load usersProject without auth');
+      console.debug('ERROR: data.service: can not load usersProject without auth');
     }
   }
 
@@ -97,9 +109,14 @@ export class DataService {
       this.api.getEnrolledUsersProject(this.userId, this.userToken).subscribe(res => {
         this.dataStore.userEnrolledProjects = res;
         this.userEnrolledProjects.next(Object.assign({}, this.dataStore).userEnrolledProjects);
-      })
+      },
+       error => {
+      alert('Ошибка! ' + error.status + ' ' + error.statusText);
+      console.debug('ERROR: status ' + error.status + ' ' + error.statusText);
+      console.debug('ERROR: loadEnrolledUsersProject() -> getEnrolledUsersProject()');
+      });
     } else {
-      console.log('Error in data.service: can not load enrolledUsersProject without auth');
+      console.debug('ERROR: data.service: can not load enrolledUsersProject without auth');
     }
   }
 
@@ -107,7 +124,12 @@ export class DataService {
     this.api.getNewsPage().subscribe(res => {
       this.dataStore.news = res;
       this.news.next(Object.assign({}, this.dataStore).news);
-    });
+    },
+      error => {
+      alert('Ошибка! ' + error.status + ' ' + error.statusText);
+      console.debug('ERROR: status ' + error.status + ' ' + error.statusText);
+      console.debug('ERROR: loadNews() -> getNewsPage()');
+      });
   }
 
   addApiUrl(url: string): string {

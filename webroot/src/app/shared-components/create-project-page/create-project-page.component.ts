@@ -22,9 +22,14 @@ export class CreateProjectPageComponent implements OnInit {
     makeProject(){
       this.api.postProject(this.createdProject, JSON.parse(localStorage.getItem('current_user')).bearer_token)
       .subscribe(()  => {
-      console.log('Project was added');
+      console.debug('Project was added');
       this.isCreated = true;
       //this.router.navigate(['/home']);
+    },
+    error => {
+      alert('Ошибка! ' + error.status + ' ' + error.statusText);
+      console.debug('ERROR: status ' + error.status + ' ' + error.statusText);
+      console.debug('ERROR: makeProject() -> apiService: postProject()');
       });
     }
 

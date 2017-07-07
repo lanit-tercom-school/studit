@@ -35,7 +35,7 @@ export class MainComponent implements OnInit {
   }
 
   getMainProjectList(){
-    this.projects=this.data.ProjectsForMainPage;
+    this.projects = this.data.ProjectsForMainPage;
   }
 
 
