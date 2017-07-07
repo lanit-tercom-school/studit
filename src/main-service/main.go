@@ -3,6 +3,7 @@ package main
 import (
 	"main-service/auth"
 	_ "main-service/routers"
+	"main-service/sql"
 	"net"
 	"net/http"
 	"net/rpc"
@@ -57,7 +58,7 @@ func StartRPCService() error {
 }
 
 func main() {
-
+	sql.LoadSql("sql/queries/")
 	beego.InsertFilter("*", beego.BeforeRouter, cors.Allow(&cors.Options{
 		AllowOrigins:     []string{"*"},
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},

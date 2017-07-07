@@ -4,8 +4,10 @@ import { FormsModule } from '@angular/forms';
 
 import { AdminRoutingModule } from './admin-routing.module';
 import { HomePageAdminComponent } from './components/home-page-admin/home-page-admin.component';
-import { ProjectsViewAdminComponent } from './components/projects-view-admin/projects-view-admin.component';
-import { UsersViewAdminComponent } from './components/users-view-admin/users-view-admin.component';
+import { AdminUserConrolComponent } from './components/admin-user-conrol/admin-user-conrol.component';
+import { AdminProjectConrolComponent } from './components/admin-project-conrol/admin-project-conrol.component';
+import { AdminNewsConrolComponent } from './components/admin-news-conrol/admin-news-conrol.component';
+
 
 @NgModule({
   imports: [
@@ -13,6 +15,6 @@ import { UsersViewAdminComponent } from './components/users-view-admin/users-vie
     AdminRoutingModule,
     FormsModule
   ],
-  declarations: [HomePageAdminComponent, ProjectsViewAdminComponent, UsersViewAdminComponent]
+  declarations: [HomePageAdminComponent, AdminUserConrolComponent, AdminProjectConrolComponent, AdminNewsConrolComponent, ]
 })
 export class AdminModule { }
