@@ -2,6 +2,7 @@ package models
 
 import (
 	"errors"
+	"fmt"
 	"github.com/astaxie/beego/orm"
 	"strings"
 	"time"
@@ -64,8 +65,7 @@ func init() {
 	orm.RegisterModel(new(news))
 }
 
-// AddNews insert a new News into database and returns
-// last inserted Id on success.
+// AddNews inserts a new News into database and returns last inserted id on success
 func AddNews(m *NewsJson) (id int64, err error) {
 	v := m.translate()
 	v.Id = 0 // for auto inc
@@ -76,8 +76,7 @@ func AddNews(m *NewsJson) (id int64, err error) {
 	return
 }
 
-// GetNewsById retrieves News by Id. Returns error if
-// Id doesn't exist
+// GetNewsById retrieves News by Id and returns error if id doesn't exist
 func GetNewsById(id int) (m *NewsJson, err error) {
 	o := orm.NewOrm()
 	v := &news{Id: id}
@@ -98,7 +97,7 @@ func TagInArrayOfStrings(tag string, tags []string) bool {
 	return false
 }
 
-func TagInString(tag string, tags string) bool {
+func TagInString(tag, tags string) bool {
 	temp_tags := strings.Split(tags, ",")
 	for _, t := range temp_tags {
 		if t == tag {
@@ -108,60 +107,66 @@ func TagInString(tag string, tags string) bool {
 	return false
 }
 
-// GetAllNews retrieves all News matches certain condition. Returns empty list if
-// no records exist
-func GetAllNews(sortBy []string, order []string, offset int64, limit int64, tag string) (
-	result interface{}, err error) {
-	o := orm.NewOrm()
-	qs := o.QueryTable(new(news))
+func GetSortFields(sortBy, order []string) ([]string, error) {
+	var result []string
 
-	totalCount, _ := qs.Count()
-	//result = append(result, NewsSetJson{Count: count} )
-
-	// Step 1: parse input args to SQL syntax
-	// order by:
-	var sortFields []string
-	if len(sortBy) != 0 {
-		if len(sortBy) == len(order) {
-			// 1) for each sort field, there is an associated order
-			for i, v := range sortBy {
-				orderBy := ""
-				if order[i] == "desc" {
-					orderBy = "-" + v
-				} else if order[i] == "asc" {
-					orderBy = v
-				} else {
-					return nil, errors.New("Error: Invalid order. Must be either [asc|desc]")
-				}
-				sortFields = append(sortFields, orderBy)
-			}
-			qs = qs.OrderBy(sortFields...)
-		} else if len(sortBy) != len(order) && len(order) == 1 {
-			// 2) there is exactly one order, all the sorted fields will be sorted by this order
-			for _, v := range sortBy {
-				orderBy := ""
-				if order[0] == "desc" {
-					orderBy = "-" + v
-				} else if order[0] == "asc" {
-					orderBy = v
-				} else {
-					return nil, errors.New("Error: Invalid order. Must be either [asc|desc]")
-				}
-				sortFields = append(sortFields, orderBy)
-			}
-		} else if len(sortBy) != len(order) && len(order) != 1 {
-			return nil, errors.New("Error: 'sortby', 'order' sizes mismatch or 'order' size is not 1")
+	switch len(order) {
+	case 0:
+		if len(sortBy) != 0 {
+			return nil, errors.New("Error: Insufficient number of orders")
 		}
-	} else {
-		if len(order) != 0 {
+	// there is exactly one order, all the sorted fields will be sorted by this order
+	case 1:
+		for _, v := range sortBy {
+			switch order[0] {
+			case "desc":
+				result = append(result, "-"+v)
+			case "asc":
+				result = append(result, v)
+			default:
+				return nil, errors.New("Error: Invalid order. Must be either [asc|desc]")
+			}
+		}
+	// there is an order for each sorted fields
+	case len(sortBy):
+		for i, v := range sortBy {
+			switch order[i] {
+			case "desc":
+				result = append(result, "-"+v)
+			case "asc":
+				result = append(result, v)
+			default:
+				return nil, errors.New("Error: Invalid order. Must be either [asc|desc]")
+			}
+		}
+	default:
+		if len(sortBy) == 0 {
 			return nil, errors.New("Error: Unused 'order' fields")
+		} else {
+			return nil, errors.New("Error: 'sortby', 'order' sizes mismatch or 'order' size is not 1")
 		}
 	}
 
-	// Step 2: Select items from table with params
+	return result, nil
+}
+
+// GetAllNews returns News that match certain conditions
+func GetAllNews(sortBy, order []string, offset, limit int, tag string) (
+	interface{}, error) {
+	orm.Debug = true
+
+	sortFields, err := GetSortFields(sortBy, order)
+	if err !=nil {
+		return nil, err
+	}
+
+	query := orm.NewOrm().QueryTable(new(news))
+	query = query.OrderBy(sortFields...)
+
+	totalCount, err := query.Count()
+
 	var newsList []news
-	qs = qs.OrderBy(sortFields...)
-	if _, err = qs.Limit(limit, offset).All(&newsList); err != nil {
+	if _, err = query.Limit(limit, offset).All(&newsList); err != nil {
 		return nil, err
 	}
 
