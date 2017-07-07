@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { ApiService } from "services/api.service";
 import { Observable } from "rxjs/Observable";
+
+import { ApiService } from "services/api.service";
 
 @Component({
   selector: 'create-project-page',

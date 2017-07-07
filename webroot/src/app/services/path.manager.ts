@@ -51,8 +51,11 @@ export class PathManager implements CanActivate {
                 if (JSON.parse(localStorage.getItem('current_user')).perm_lvl === 0) {
                     this.router.navigate(['student/home']);
                 }
-                else {
+                else if (JSON.parse(localStorage.getItem('current_user')).perm_lvl === 1) {
                     this.router.navigate(['teacher/home']);
+                }
+                else if (JSON.parse(localStorage.getItem('current_user')).perm_lvl === 2) {
+                    this.router.navigate(['admin/home']);
                 }
             }
             else {
@@ -60,6 +63,48 @@ export class PathManager implements CanActivate {
                 return false;
             }
         }
+        /*else if (next.url[0].path === 'teacher') {
+            if (window.localStorage.getItem('current_user')) {
+                if (JSON.parse(localStorage.getItem('current_user')).perm_lvl === 0) {
+                    return false;
+                }
+                else if (JSON.parse(localStorage.getItem('current_user')).perm_lvl === 1) {
+                    return true;
+                }
+                else if (JSON.parse(localStorage.getItem('current_user')).perm_lvl === 2) {
+                    return false;
+                }
+            }
+            this.router.navigate(['/error']);
+        }
+        else if (next.url[0].path === 'student') {
+            if (window.localStorage.getItem('current_user')) {
+                if (JSON.parse(localStorage.getItem('current_user')).perm_lvl === 0) {
+                    return true;
+                }
+                else if (JSON.parse(localStorage.getItem('current_user')).perm_lvl === 1) {
+                    return false;
+                }
+                else if (JSON.parse(localStorage.getItem('current_user')).perm_lvl === 2) {
+                    return false;
+                }
+            }
+            this.router.navigate(['/error']);
+        }
+        else if (next.url[0].path === 'admin') {
+            if (window.localStorage.getItem('current_user')) {
+                if (JSON.parse(localStorage.getItem('current_user')).perm_lvl === 0) {
+                    return false;
+                }
+                else if (JSON.parse(localStorage.getItem('current_user')).perm_lvl === 1) {
+                    return false;
+                }
+                else if (JSON.parse(localStorage.getItem('current_user')).perm_lvl === 2) {
+                    return true
+                }
+            }
+            this.router.navigate(['/error']);
+        }*/
         return true;
     }
 }
