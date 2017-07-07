@@ -13,7 +13,6 @@ import 'rxjs/add/operator/filter';
 @Injectable()
 export class DataService {
   private userId: number;
-  private userPermLvl: number;
   private userToken: string;
   private userPermLvl: number;
   private news: BehaviorSubject<NewsItem[]> = <BehaviorSubject<NewsItem[]>>new BehaviorSubject([]);
