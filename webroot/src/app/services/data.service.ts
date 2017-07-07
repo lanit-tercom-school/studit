@@ -45,7 +45,7 @@ export class DataService {
   constructor(private api: ApiService) { }
 
   loadAll() {
-    console.log('Data.service ->loadAll');
+    console.debug('Data.service ->loadAll');
     this.loadProjects();
     this.loadNews();
     this.loadProjectsForMainPage();
@@ -63,6 +63,9 @@ export class DataService {
         this.dataStore.projects.forEach(a => { a.logo = this.addApiUrl(a.logo); })
         this.projects.next(Object.assign({}, this.dataStore).projects);
       }
+    },
+    error => {
+      console.debug(error);
     });
   }
 
