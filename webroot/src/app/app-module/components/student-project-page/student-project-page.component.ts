@@ -25,6 +25,7 @@ export class StudentProjectPageComponent implements OnInit, OnDestroy {
   });
   private projectId;
   private authorized = false;
+  private isTeacher = false;
   private tasks = [];
   private enrollMessage = 'Please write back soon!';
   private enrollButtonStatus: number = 0;//0 - enrolling,1 - you are in project, 2 - unenrolling
@@ -40,6 +41,9 @@ export class StudentProjectPageComponent implements OnInit, OnDestroy {
         //console.log(this.enrollButtonStatus);
       });
     this.getTaskItems();
+    if (this.data.PermLvl === 1)
+       this.isTeacher = true;
+
   }
 
   ngOnDestroy() {
