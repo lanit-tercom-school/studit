@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute, Router, Params } from '@angular/router';
 import { Observable } from "rxjs/Observable";
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
@@ -15,13 +15,23 @@ export class StudentPublicPageComponent implements OnInit {
 
   private currentUser: BehaviorSubject<CurrentUser> = new BehaviorSubject(new CurrentUser());
 
-  constructor(private apiService: ApiService, private route: ActivatedRoute) { }
+  constructor(private apiService: ApiService, private router: Router, private route: ActivatedRoute) { }
 
   ngOnInit() {
     this.route.params
       .subscribe(params => {
         this.apiService.getPublicStudentInfoById(+params['id'])
-          .subscribe(res => this.currentUser.next(res.json()));
+          .subscribe(res => this.currentUser.next(res.json()),
+          error => {
+            // сейчас на бэке по отстутствию пользователя ошибка 400
+            if ((error.status === 404) || (error.status === 400))
+              this.router.navigate(['/error']);
+            else {
+              alert('Ошибка! ' + error.status + ' ' + error.statusText);
+              console.debug('ERROR: status ' + error.status + ' ' + error.statusText);
+              console.debug('apiService: getPublicStudentInfoById()');
+            }
+          });
       });
   }
 }

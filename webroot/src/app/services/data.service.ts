@@ -1,6 +1,7 @@
 import { Injectable, EventEmitter } from '@angular/core';
 import { Observable } from "rxjs/Observable";
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Router } from '@angular/router';
 
 import { ApiService } from 'services/api.service';
 import { NewsItem } from "models/news-item";
@@ -42,7 +43,7 @@ export class DataService {
   public get ProjectsForMainPage() {
     return this.projectsForMainPage.asObservable();
   }
-  constructor(private api: ApiService) { }
+  constructor(private api: ApiService, private router: Router) { }
 
   loadAll() {
     this.loadProjects();

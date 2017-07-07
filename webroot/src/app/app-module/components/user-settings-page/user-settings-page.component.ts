@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Observable } from "rxjs/Observable";
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
@@ -20,7 +20,7 @@ export class UserSettingsPageComponent implements OnInit {
   private NewPasswordAgain = '';
   private error: any;
 
-  constructor(private apiService: ApiService, private route: ActivatedRoute) { }
+  constructor(private apiService: ApiService, private router: Router, private route: ActivatedRoute) { }
 
   ngOnInit() {
     this.route.params
@@ -28,48 +28,52 @@ export class UserSettingsPageComponent implements OnInit {
         this.apiService.getPublicStudentInfoById(+params['id'])
           .subscribe(res => this.currentUser.next(res.json()),
           error => {
-            alert('Ошибка! ' + error.status + ' ' + error.statusText);
-            console.debug('ERROR: status ' + error.status + ' ' + error.statusText);
-            console.debug('apiService: getPublicStudentInfoById()');
+            // сейчас на бэке по отстутствию пользователя ошибка 400
+            if ((error.status === 404) || (error.status === 400))
+              this.router.navigate(['/error']);
+            else {
+              alert('Ошибка! ' + error.status + ' ' + error.statusText);
+              console.debug('ERROR: status ' + error.status + ' ' + error.statusText);
+              console.debug('apiService: getPublicStudentInfoById()');
+            }
           });
-  });
-  }
-
-ShowHide() {
-  if (!this.clicked) {
-    this.clicked = true;
-    this.isChanged = false;
-  }
-  else
-    this.clicked = false;
-}
-
-ChangePassword() {
-  if (this.passwords.new != this.NewPasswordAgain) {
-    alert('Пароли не совпадают!');
-    this.ClearPasswords();
-  }
-  else {
-    this.apiService.changePasswordForUser(JSON.parse(localStorage.getItem('current_user')).token, this.passwords)
-      .subscribe(res => {
-        this.isChanged = true;
-        this.clicked = false;
-        this.ClearPasswords();
-      },
-      error => {
-        //this.error = error;
-        console.debug('ERROR: status ' + error.status + ' ' + error.statusText);
-        console.debug('apiService: getPublicStudentInfoById()');
-        alert('Ошибка! ' + error);
-        this.ClearPasswords();
-        this.isChanged = false;
       });
   }
-}
+  ShowHide() {
+    if (!this.clicked) {
+      this.clicked = true;
+      this.isChanged = false;
+    }
+    else
+      this.clicked = false;
+  }
 
-ClearPasswords() {
-  this.passwords.old = '';
-  this.passwords.new = '';
-  this.NewPasswordAgain = '';
-}
+  ChangePassword() {
+    if (this.passwords.new != this.NewPasswordAgain) {
+      alert('Пароли не совпадают!');
+      this.ClearPasswords();
+    }
+    else {
+      this.apiService.changePasswordForUser(JSON.parse(localStorage.getItem('current_user')).token, this.passwords)
+        .subscribe(res => {
+          this.isChanged = true;
+          this.clicked = false;
+          this.ClearPasswords();
+        },
+        error => {
+          //this.error = error;
+          console.debug('ERROR: status ' + error.status + ' ' + error.statusText);
+          console.debug('apiService: getPublicStudentInfoById()');
+          alert('Ошибка! ' + error);
+          this.ClearPasswords();
+          this.isChanged = false;
+        });
+    }
+  }
+
+  ClearPasswords() {
+    this.passwords.old = '';
+    this.passwords.new = '';
+    this.NewPasswordAgain = '';
+  }
 }

@@ -1,5 +1,5 @@
 import { Component, OnInit, OnChanges, DoCheck, OnDestroy } from '@angular/core';
-import { ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute, Router, Params } from '@angular/router';
 import { Http, Headers, RequestOptions, Response } from '@angular/http';
 import { ApiService } from 'services/api.service';
 import { DataService } from 'services/data.service';
@@ -21,14 +21,20 @@ import 'rxjs/add/operator/filter';
 export class StudentProjectPageComponent implements OnInit, OnDestroy {
 
   private projectObs: BehaviorSubject<ProjectItem> = new BehaviorSubject({
-    id: 0, name: "Loading...", description: "Loading...", logo: "dsasda"
+    id: 0, name: "Loading...", description: "Loading...",
+    logo: "https://web2.hirez.com/smite-esports/wp-content/uploads/2017/03/404.png"
   });
   private projectId;
   private authorized = false;
   private tasks = [];
   private enrollMessage = 'Please write back soon!';
   private enrollButtonStatus: number = 0;//0 - enrolling,1 - you are in project, 2 - unenrolling
-  constructor(private apiService: ApiService, private route: ActivatedRoute, private http: Http, private data: DataService) { }
+  
+  constructor(private apiService: ApiService,
+    private data: DataService,
+    private route: ActivatedRoute,
+    private router: Router,
+    private http: Http) { }
 
   ngOnInit() {
     if (localStorage.getItem('current_user')) { this.authorized = true; }
@@ -37,7 +43,6 @@ export class StudentProjectPageComponent implements OnInit, OnDestroy {
         this.projectId = params['id'];
         this.getProjectInfo();
         this.choseButtonStatus();
-        //console.log(this.enrollButtonStatus);
       });
     this.getTaskItems();
   }
@@ -50,10 +55,10 @@ export class StudentProjectPageComponent implements OnInit, OnDestroy {
       if (projects.find(res => res.id == this.projectId)) {
         this.projectObs.next(projects.find(res => res.id == this.projectId));
       }
-      else {
+      else
+       this.router.navigate(['/error']);
+       });
       }
-    });
-  }
 
   getMaterialsItems(): MaterialsItem[] {
     return this.apiService.getMaterialsItems(1);
@@ -87,10 +92,10 @@ export class StudentProjectPageComponent implements OnInit, OnDestroy {
         this.data.loadEnrolledUsersProject();
       },
       error => {
-      alert('Ошибка! ' + error.status + ' ' + error.statusText);
-      console.debug('ERROR: status ' + error.status + ' ' + error.statusText);
-      console.debug('ERROR: apiService: unenrollToProject()');
-      });
+          alert('Ошибка! ' + error.status + ' ' + error.statusText);
+          console.debug('ERROR: status ' + error.status + ' ' + error.statusText);
+          console.debug('ERROR: apiService: unenrollToProject()');
+        });
   }
 
   choseButtonStatus() {
