@@ -15,6 +15,7 @@ export class DataService {
   private userId: number;
   private userPermLvl: number;
   private userToken: string;
+  private userPermLvl: number;
   private news: BehaviorSubject<NewsItem[]> = <BehaviorSubject<NewsItem[]>>new BehaviorSubject([]);
   private projects: BehaviorSubject<ProjectItem[]> = <BehaviorSubject<ProjectItem[]>>new BehaviorSubject([]);
   private userProjects: BehaviorSubject<ProjectItem[]> = <BehaviorSubject<ProjectItem[]>>new BehaviorSubject([]);
@@ -52,6 +53,10 @@ export class DataService {
 
   public get ProjectsForMainPage() {
     return this.projectsForMainPage.asObservable();
+  }
+  public get PermLvl()
+  {
+    return this.userPermLvl;
   }
   constructor(private api: ApiService) { }
 
