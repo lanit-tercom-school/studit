@@ -4,29 +4,30 @@ import (
 	"errors"
 	"reflect"
 	"strings"
+
 	"github.com/astaxie/beego/orm"
 )
 
 const (
-	VIEWER = iota - 1   // незарегистрированный пользователь
-	USER                // обычный пользователь
-	LEADER              // учитель, куратор, меет право создавать проекты
-	ADMIN               // администратор, может всё
+	VIEWER = iota - 1 // незарегистрированный пользователь
+	USER   = 0        // обычный пользователь
+	LEADER = 1        // учитель, куратор, меет право создавать проекты
+	ADMIN  = 2        // администратор, может всё
 )
 
 type User struct {
-	Id          int     `orm:"column(id);pk;auto"                   json:"id"`
-	Nickname    string  `orm:"column(nickname)"                     json:"nickname"`
-	Description string  `orm:"column(description)"                  json:"description,omitempty"`
-	Avatar      string  `orm:"column(avatar)"                       json:"avatar,omitempty"`
+	Id          int    `orm:"column(id);pk;auto"                   json:"id"`
+	Nickname    string `orm:"column(nickname)"                     json:"nickname"`
+	Description string `orm:"column(description)"                  json:"description,omitempty"`
+	Avatar      string `orm:"column(avatar)"                       json:"avatar,omitempty"`
 }
 
 type FullUserInfo struct {
-	Id              int             `json:"id"`
-	Nickname        string          `json:"nickname"`
-	Description     string          `json:"description"`
-	Avatar          string          `json:"avatar"`
-	Contact         []*UserContact  `json:"contacts,omitempty"`
+	Id          int            `json:"id"`
+	Nickname    string         `json:"nickname"`
+	Description string         `json:"description"`
+	Avatar      string         `json:"avatar"`
+	Contact     []*UserContact `json:"contacts,omitempty"`
 }
 
 type AllInformationAboutUser struct {
@@ -44,11 +45,11 @@ type MainUserInfo struct {
 }
 
 func (t *User) TableName() string {
-    return "user"
+	return "user"
 }
 
 func init() {
-    orm.RegisterModel(new(User))
+	orm.RegisterModel(new(User))
 }
 
 // AddUser insert a new User into database and returns
@@ -153,10 +154,10 @@ func UpdateUserById(n *User) (err error) {
 	if err = o.Read(&v); err == nil {
 		//fields filter
 		m := User{
-			Id: n.Id,
-			Nickname: n.Nickname,
+			Id:          n.Id,
+			Nickname:    n.Nickname,
 			Description: n.Description,
-			Avatar: n.Avatar,
+			Avatar:      n.Avatar,
 		}
 		_, err = o.Update(&m)
 	}

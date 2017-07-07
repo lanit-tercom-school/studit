@@ -5,6 +5,7 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { ApiService } from 'services/api.service';
 import { NewsItem } from "models/news-item";
 import { ProjectItem } from 'models/project-item';
+import { EnrollItem } from 'models/enroll-item';
 import { environment } from '../../environments/environment'
 
 import 'rxjs/add/operator/filter';
@@ -13,11 +14,13 @@ import 'rxjs/add/operator/filter';
 export class DataService {
   private userId: number;
   private userToken: string;
+  private userPermLvl: number;
   private news: BehaviorSubject<NewsItem[]> = <BehaviorSubject<NewsItem[]>>new BehaviorSubject([]);
   private projects: BehaviorSubject<ProjectItem[]> = <BehaviorSubject<ProjectItem[]>>new BehaviorSubject([]);
   private userProjects: BehaviorSubject<ProjectItem[]> = <BehaviorSubject<ProjectItem[]>>new BehaviorSubject([]);
   private userEnrolledProjects: BehaviorSubject<ProjectItem[]> = <BehaviorSubject<ProjectItem[]>>new BehaviorSubject([]);
   private projectsForMainPage: BehaviorSubject<ProjectItem[]> = <BehaviorSubject<ProjectItem[]>>new BehaviorSubject([]);
+  private enrollsForTeacher: BehaviorSubject<EnrollItem[]> = <BehaviorSubject<EnrollItem[]>>new BehaviorSubject([]);
 
   private dataStore: {
     news: NewsItem[];
@@ -25,7 +28,11 @@ export class DataService {
     userProjects: ProjectItem[];
     userEnrolledProjects: ProjectItem[];
     projectsForMainPage: ProjectItem[];
-  } = { news: [], projects: [], userProjects: [], userEnrolledProjects: [], projectsForMainPage: [], };
+    enrollsForTeacher: EnrollItem[];
+  } = {
+    news: [], projects: [], userProjects: [],
+    userEnrolledProjects: [], projectsForMainPage: [], enrollsForTeacher: []
+  };
 
   public get News() {
     return this.news.asObservable();
@@ -39,8 +46,16 @@ export class DataService {
   public get UserEnrolledProjects() {
     return this.userEnrolledProjects.asObservable();
   }
+  public get EnrollsForTeacher() {
+    return this.enrollsForTeacher.asObservable();
+  }
+
   public get ProjectsForMainPage() {
     return this.projectsForMainPage.asObservable();
+  }
+  public get PermLvl()
+  {
+    return this.userPermLvl;
   }
   constructor(private api: ApiService) { }
 
@@ -50,9 +65,16 @@ export class DataService {
     this.loadNews();
     this.loadProjectsForMainPage();
     if (localStorage.getItem('current_user')) {
+      this.userToken = JSON.parse(localStorage.getItem('current_user')).bearer_token;
       this.userId = JSON.parse(localStorage.getItem('current_user')).user.id;
+      this.userPermLvl = JSON.parse(localStorage.getItem('current_user')).perm_lvl;
       this.loadUsersProjects();
-      this.loadEnrolledUsersProject();
+      if (this.userPermLvl === 0) {
+        this.loadEnrolledUsersProject();
+      }
+      if (this.userPermLvl === 1) {
+        this.loadEnrollsForTeacher();
+      }
     }
   }
 
@@ -100,6 +122,13 @@ export class DataService {
     }
   }
 
+  loadEnrollsForTeacher() {
+    this.api.getEnrollsForTeacher(this.userToken).subscribe(res => {
+      this.dataStore.enrollsForTeacher = res;
+      this.enrollsForTeacher.next(Object.assign({}, this.dataStore).enrollsForTeacher);
+    });
+  }
+
   loadNews() {
     this.api.getNewsPage().subscribe(res => {
       this.dataStore.news = res;
@@ -108,7 +137,7 @@ export class DataService {
   }
 
   addApiUrl(url: string): string {
-  //return environment.apiUrl + url;
-   return url;
+    //return environment.apiUrl + url;
+    return url;
   }
 }

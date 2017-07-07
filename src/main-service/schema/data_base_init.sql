@@ -45,20 +45,7 @@ CREATE TABLE "project_user" (
 OIDS = FALSE
 );
 
-/*Связь мастеров и проектов*/
-CREATE TABLE "project_master" (
-	"id"          SERIAL                   NOT NULL,
-	"project_id"  BIGINT                   NOT NULL,
-	"master_id"   BIGINT                   NOT NULL,
-	"signed_date" TIMESTAMP WITH TIME ZONE NOT NULL,
 
-	UNIQUE ("project_id", "master_id"),
-	CONSTRAINT project_master_pk PRIMARY KEY ("id"),
-	CONSTRAINT project_master_fk0 FOREIGN KEY ("project_id") REFERENCES "project" ("id"),
-	CONSTRAINT project_master_fk1 FOREIGN KEY ("master_id") REFERENCES "user" ("id")
-) WITH (
-OIDS = FALSE
-);
 
 /*Связь пользователя и проекта, на который пользователь записан*/
 CREATE TABLE "project_enroll" (

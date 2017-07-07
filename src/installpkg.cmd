@@ -5,4 +5,5 @@ go get github.com/beego/bee               && ^
 go get github.com/lib/pq                  && ^
 go get github.com/smartystreets/goconvey  && ^
 go get github.com/robbert229/jwt          && ^
+go get -u github.com/nleof/goyesql        && ^
 echo "Packeges were installed successfully"
