@@ -42,3 +42,22 @@
 {
   margin-top: 1rem;
 }
+#enrollMessage
+{
+   width: 100%;
+   height: 5rem;
+   text-align: left;
+}
+.modal-header
+{
+
+  border-style: none;
+}
+.modal-title
+{
+  margin: auto;
+}
+.modal-footer
+{
+  border-style: none;
+}

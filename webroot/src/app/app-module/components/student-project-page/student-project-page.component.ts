@@ -1,4 +1,4 @@
-import { Component, OnInit, OnChanges, DoCheck, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnChanges, ViewContainerRef, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { Http, Headers, RequestOptions, Response } from '@angular/http';
 import { ApiService } from 'services/api.service';
@@ -26,10 +26,16 @@ export class StudentProjectPageComponent implements OnInit, OnDestroy {
   private projectId;
   private authorized = false;
   private isTeacher = false;
+  private isSuccess = false;
   private tasks = [];
-  private enrollMessage = 'Please write back soon!';
+  private message = 'Please write back soon!';
   private enrollButtonStatus: number = 0;//0 - enrolling,1 - you are in project, 2 - unenrolling
-  constructor(private apiService: ApiService, private route: ActivatedRoute, private http: Http, private data: DataService) { }
+  constructor(private apiService: ApiService,
+   private route: ActivatedRoute,
+    private http: Http,
+     private data: DataService,
+) 
+     { }
 
   ngOnInit() {
     if (localStorage.getItem('current_user')) { this.authorized = true; }
@@ -38,7 +44,6 @@ export class StudentProjectPageComponent implements OnInit, OnDestroy {
         this.projectId = params['id'];
         this.getProjectInfo();
         this.choseButtonStatus();
-        //console.log(this.enrollButtonStatus);
       });
     this.getTaskItems();
     if (this.data.PermLvl === 1)
@@ -73,18 +78,22 @@ export class StudentProjectPageComponent implements OnInit, OnDestroy {
       }).subscribe(res => this.tasks = res);
   }
   enroll() {
+    this.isSuccess = false;
     this.apiService.enrollToProject(this.projectId,
-      JSON.parse(localStorage.getItem('current_user')).bearer_token, this.enrollMessage).subscribe(res => {
+      JSON.parse(localStorage.getItem('current_user')).bearer_token, this.message).subscribe(res => {
         this.enrollButtonStatus = 2;
         this.data.loadEnrolledUsersProject();
        });
+       this.isSuccess = true;
   }
   unenroll() {
+        this.isSuccess = false;
     this.apiService.unenrollToProject(this.projectId,
     JSON.parse(localStorage.getItem('current_user')).bearer_token).subscribe(res => {
        this.enrollButtonStatus = 0;
        this.data.loadEnrolledUsersProject();
-       });
+      });
+          this.isSuccess = true;
   }
 
   choseButtonStatus() {
