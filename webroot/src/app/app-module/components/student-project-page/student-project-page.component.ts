@@ -31,6 +31,7 @@ export class StudentProjectPageComponent implements OnInit, OnDestroy {
   constructor(private apiService: ApiService, private route: ActivatedRoute, private http: Http, private data: DataService) { }
 
   ngOnInit() {
+    window.scrollTo(0, 0);
     if (localStorage.getItem('current_user')) { this.authorized = true; }
     this.route.params
       .subscribe(params => {

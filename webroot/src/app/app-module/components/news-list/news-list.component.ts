@@ -23,6 +23,7 @@ export class NewsListComponent implements OnInit {
   constructor(private data: DataService) { }
 
   ngOnInit() {
+    this.data.NumberOfNewsOnPage = 3;
     this.getPage(1);
   }
 
@@ -31,12 +32,12 @@ export class NewsListComponent implements OnInit {
     let offset = 0;
     if (page > 1)
       offset = (page - 1) * this.limit;
-    this.data.loadNews(this.limit, offset);
+    this.data.loadNews(offset);
     this.NewsList = this.data.News;
     this.totalObs = this.data.NewsCountObs;
     this.p = page;
     this.loading = false;
-    window.scrollTo(0,0);
+    window.scrollTo(0, 0);
   }
 
 }
