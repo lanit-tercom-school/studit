@@ -1,13 +1,14 @@
 package controllers
 
 import (
-	"github.com/astaxie/beego"
-	"encoding/json"
 	"auth-service/models"
+	"encoding/json"
 	"errors"
-	"time"
 	"net/rpc"
 	"sync"
+	"time"
+
+	"github.com/astaxie/beego"
 )
 
 // Регистрация нового пользователя
@@ -16,13 +17,13 @@ type RegistrationController struct {
 }
 
 type RegistrationUserModel struct {
-	Login    string    `json:"login"`
-	Password string    `json:"password"`
-	Nickname string    `json:"nickname"`
+	Login    string `json:"login"`
+	Password string `json:"password"`
+	Nickname string `json:"nickname"`
 }
 
 type ActivationUser struct {
-	Id int
+	Id       int
 	Nickname string
 }
 
@@ -70,7 +71,7 @@ func StartActivationCycle() {
 		case t := <-time.After(time.Second * 30):
 			if connected {
 				// Close connection after 30 second of idling
-				if t.Sub(lastuse) > time.Second * 30 {
+				if t.Sub(lastuse) > time.Second*30 {
 					client.Close()
 					connected = false
 				}
@@ -85,7 +86,7 @@ func StartActivationCycle() {
 func AddForActivationQueue(user ActivationUser) {
 	u := models.NotActivatedOnMainServiceUser{
 		Nickname: user.Nickname,
-		UserId: user.Id,
+		UserId:   user.Id,
 	}
 	err := u.Insert()
 	if err != nil {
@@ -109,7 +110,7 @@ func LoadActivationQueue() {
 	} else {
 		for _, user := range users {
 			x := ActivationUser{
-				Id: user.UserId,
+				Id:       user.UserId,
 				Nickname: user.Nickname,
 			}
 			ac <- x
@@ -123,12 +124,13 @@ func LoadActivationQueue() {
 
 func init() {
 	go StartActivationCycle()
+	ac = make(chan ActivationUser)
 }
 
 func MainServiceActivateUser(id int, nickname string) {
 	ac <- ActivationUser{
 		Nickname: nickname,
-		Id: id,
+		Id:       id,
 	}
 }
 
@@ -158,7 +160,7 @@ func ActivateUser(pass string) error {
 	if user, ok := unactivated_users[pass]; ok {
 		delete(unactivated_users, pass)
 		usr := models.User{
-			Login: user.Login,
+			Login:    user.Login,
 			Password: user.Password,
 		}
 		id, err := usr.Insert()
