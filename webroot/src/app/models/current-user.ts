@@ -1,5 +1,5 @@
 import { ProjectShort } from './project-short'
-import { PermLevel } from '../shared-components/permission-level.enum';
+import { PermLevel } from './permission-level.enum';
 
 export class CurrentUser {
 

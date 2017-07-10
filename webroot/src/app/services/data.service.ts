@@ -7,7 +7,7 @@ import { NewsItem } from "models/news-item";
 import { ProjectItem } from 'models/project-item';
 import { EnrollItem } from 'models/enroll-item';
 import { environment } from '../../environments/environment';
-import { PermLevel } from '../shared-components/permission-level.enum';
+import { PermLevel } from 'models/permission-level.enum';
 
 import 'rxjs/add/operator/filter';
 
