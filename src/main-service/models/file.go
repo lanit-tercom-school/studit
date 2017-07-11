@@ -50,3 +50,8 @@ func GetFilesByUserId(userId int) (v []File, err error) {
 	}
 	return
 }
+func DeleteFile(m *File) (id int64, err error) {
+	o := orm.NewOrm()
+	id, err = o.Delete(m)
+	return
+}
