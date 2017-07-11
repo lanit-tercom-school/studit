@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { HomeProjectsViewComponent } from 'shared-components/home-projects-view/home-projects-view.component';
+//import { HomeProjectsViewComponent } from 'shared-components/home-projects-view/home-projects-view.component';
 
 @Component({
   selector: 'app-home-page-admin',

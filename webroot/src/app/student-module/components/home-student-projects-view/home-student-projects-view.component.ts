@@ -6,11 +6,11 @@ import { ApiService } from 'services/api.service';
 import { DataService } from 'services/data.service';
 
 @Component({
-  selector: 'app-home-projects-view',
-  templateUrl: './home-projects-view.component.html',
-  styleUrls: ['./home-projects-view.component.css']
+  selector: 'app-home-student-projects-view',
+  templateUrl: './home-student-projects-view.component.html',
+  styleUrls: ['./home-student-projects-view.component.css']
 })
-export class HomeProjectsViewComponent implements OnInit, OnDestroy {
+export class HomeStudentProjectsViewComponent implements OnInit, OnDestroy {
   private userId: string;
   private ProjectList: Observable<ProjectItem[]>;
   private ProjectEnrollList: Observable<ProjectItem[]>;

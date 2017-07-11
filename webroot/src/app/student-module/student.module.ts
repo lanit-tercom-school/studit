@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { StudentRoutingModule } from './student-routing.module';
 
 import { HomePageStudentComponent } from './components/home-page-student/home-page-student.component'
-import { HomeProjectsViewComponent } from 'shared-components/home-projects-view/home-projects-view.component';
+import { HomeStudentProjectsViewComponent } from './components/home-student-projects-view/home-student-projects-view.component'
 
 
 @NgModule({
@@ -14,7 +14,7 @@ import { HomeProjectsViewComponent } from 'shared-components/home-projects-view/
     FormsModule,
   ],
   declarations: [
-    HomeProjectsViewComponent,
+    HomeStudentProjectsViewComponent,
     HomePageStudentComponent,
   ]
 })

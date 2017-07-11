@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 import { HomePageStudentComponent } from './components/home-page-student/home-page-student.component'
-import { HomeProjectsViewComponent } from 'shared-components/home-projects-view/home-projects-view.component';
+import { HomeStudentProjectsViewComponent } from './components/home-student-projects-view/home-student-projects-view.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -17,7 +17,7 @@ const routes: Routes = [
       },
       {
         path: 'projects',
-        component: HomeProjectsViewComponent,
+        component: HomeStudentProjectsViewComponent,
       }
     ]
   }
