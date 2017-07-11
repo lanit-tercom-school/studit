@@ -15,12 +15,15 @@ export class DataService {
   private userId: number;
   private userToken: string;
   private userPermLvl: number;
+
   private news: BehaviorSubject<NewsItem[]> = <BehaviorSubject<NewsItem[]>>new BehaviorSubject([]);
   private projects: BehaviorSubject<ProjectItem[]> = <BehaviorSubject<ProjectItem[]>>new BehaviorSubject([]);
   private userProjects: BehaviorSubject<ProjectItem[]> = <BehaviorSubject<ProjectItem[]>>new BehaviorSubject([]);
   private userEnrolledProjects: BehaviorSubject<ProjectItem[]> = <BehaviorSubject<ProjectItem[]>>new BehaviorSubject([]);
   private projectsForMainPage: BehaviorSubject<ProjectItem[]> = <BehaviorSubject<ProjectItem[]>>new BehaviorSubject([]);
   private enrollsForTeacher: BehaviorSubject<EnrollItem[]> = <BehaviorSubject<EnrollItem[]>>new BehaviorSubject([]);
+
+  private missedProject: BehaviorSubject<ProjectItem> = new BehaviorSubject<ProjectItem>(null);
 
   private dataStore: {
     news: NewsItem[];
@@ -40,6 +43,11 @@ export class DataService {
   public get Projects() {
     return this.projects.asObservable();
   }
+
+   public get MissedProject() {
+    return this.missedProject.asObservable();
+  }
+
   public get UserProjects() {
     return this.userProjects.asObservable();
   }
@@ -88,6 +96,32 @@ export class DataService {
     });
   }
 
+  // для подгрузки проекта
+  loadProjectByID(id: number) {
+    console.debug('data: load Project by ID');
+    console.log(id);
+    let foundproject =  this.dataStore.projects.find(item => item.id == id);
+    console.log(foundproject);
+    console.log(this.dataStore.projects);
+        if (foundproject) {
+          this.missedProject.next(foundproject);
+          console.debug('load from data');
+        }
+        else {
+          console.debug('can not find');
+          this.api.getProjectById(id).subscribe(res => {
+            if (res != null) {
+              console.debug('NEW PROJECT');
+              // дописываем в конец массива            
+              this.dataStore.projects.push(res.project);
+              console.log(this.dataStore.projects);
+              this.missedProject.next(res.project);
+            }
+          });
+      }
+   
+  }
+  
   loadProjectsForMainPage() {
     this.api.getMainPageProjects().subscribe(res => {
       this.dataStore.projectsForMainPage = res;

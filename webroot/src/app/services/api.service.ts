@@ -70,7 +70,7 @@ export class ApiService {
   }
 
   getProjectById(id: number) {
-    return this.http.get(environment.apiUrl + '/v1/project/id/' + id);
+    return this.http.get(environment.apiUrl + '/v1/project/id/' + id).map((response: Response) => response.json());
   }
 
 

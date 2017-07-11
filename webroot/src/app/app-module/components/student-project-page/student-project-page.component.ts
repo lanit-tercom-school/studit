@@ -1,16 +1,16 @@
-import { Component, OnInit, OnChanges, DoCheck, OnDestroy } from '@angular/core';
+import { Component,  OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { Http, Headers, RequestOptions, Response } from '@angular/http';
+import { Observable } from "rxjs/Observable";
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+
 import { ApiService } from 'services/api.service';
 import { DataService } from 'services/data.service';
 import { MaterialsItem } from 'models/materials-item';
 import { ProjectItem } from 'models/project-item';
 import { ProjectNewsItem } from 'models/proj-news-item';
 import { TasksItem } from 'models/tasks-item';
-import { Observable } from "rxjs/Observable";
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
-import 'rxjs/add/operator/filter';
 
 
 @Component({
@@ -23,6 +23,7 @@ export class StudentProjectPageComponent implements OnInit, OnDestroy {
   private projectObs: BehaviorSubject<ProjectItem> = new BehaviorSubject({
     id: 0, name: "Loading...", description: "Loading...", logo: "dsasda"
   });
+
   private projectId;
   private authorized = false;
   private isTeacher = false;
@@ -50,13 +51,14 @@ export class StudentProjectPageComponent implements OnInit, OnDestroy {
   }
 
   getProjectInfo() {
-    this.data.Projects.subscribe(projects => {
-      if (projects.find(res => res.id == this.projectId)) {
-        this.projectObs.next(projects.find(res => res.id == this.projectId));
-      }
-      else {
-      }
+    this.data.loadProjectByID(this.projectId);
+    console.log('data: getProjectInfo');
+    this.data.MissedProject.subscribe(res => {
+      console.log(res);
+      if (res != null)
+        this.projectObs.next(res);
     });
+
   }
 
   getMaterialsItems(): MaterialsItem[] {
