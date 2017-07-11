@@ -29,3 +29,24 @@ func AddFile(m *File) (id int64, err error) {
 	id, err = o.Insert(m)
 	return
 }
+
+// GetFileById retrieves File by Id. Returns error if
+// Id doesn't exist
+func GetFileById(id int) (v *File, err error) {
+	o := orm.NewOrm()
+	v = &File{Id: id}
+	if err = o.QueryTable("file").Filter("Id", id).RelatedSel().One(v); err == nil {
+		return v, nil
+	}
+	return nil, err
+}
+
+// GetUserById retrieves Files by user.
+func GetFilesByUserId(userId int) (v []File, err error) {
+	o := orm.NewOrm()
+	_, err = o.QueryTable("file").Filter("user_id", userId).RelatedSel().All(&v)
+	if err == nil {
+		return v, nil
+	}
+	return
+}
