@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, Params  } from '@angular/router';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 import { NewsItem } from 'models/news-item';
-import { ApiService } from 'services/api.service';
+//import { ApiService } from 'services/api.service';
+import { DataService } from 'services/data.service';
 
 @Component({
   selector: 'app-main-full-news-page',
@@ -11,22 +13,29 @@ import { ApiService } from 'services/api.service';
 
 })
 export class MainFullNewsPageComponent implements OnInit {
-private readingNews;
-id_: number;
+ private readingNews: BehaviorSubject<NewsItem> = new BehaviorSubject(null);
+newsID: number;
 private sub: any;
 
-  constructor(private apiService: ApiService,
-    private route: ActivatedRoute,
-    private router: Router) { }
+constructor(
+  private data: DataService,
+  private route: ActivatedRoute,
+  private router: Router) { }
 
   ngOnInit() {
   this.sub = this.route.params.subscribe(params => {
-         this.id_ = +params['id'];
+         this.newsID = +params['id'];
       });
   this.getReadingNews();
   }
 
   getReadingNews(){
-   this.apiService.getNewsById(this.id_).subscribe(res => this.readingNews = res);
+    this.data.loadNewsByID(this.newsID);
+    console.log('data: getReadingNews');
+    this.data.MissedNews.subscribe(res => {
+      console.log(res);
+      if (res != null)
+        this.readingNews.next(res);
+    });
   }
 }

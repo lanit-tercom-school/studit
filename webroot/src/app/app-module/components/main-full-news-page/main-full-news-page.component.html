@@ -1,14 +1,14 @@
 	<div class="container">
 		<h1>Новости</h1>
 
-		<div *ngIf="readingNews">
-			 	<h4>{{ readingNews.title}}</h4>
-				<p>{{ readingNews.edited| date: 'short'}}</p>
-				<img src="{{readingNews.image}}" alt="Waiting for picture...">
-				<p class="text">{{ readingNews.description}}</p>
-		    <p>Теги: <span *ngFor="let tag of readingNews.tags; let i = index">
+		<div *ngIf="readingNews.value">
+			 	<h4>{{ readingNews.value.title}}</h4>
+				<p>{{ readingNews.value.edited| date: 'short'}}</p>
+				<img src="{{readingNews.value.image}}" alt="Waiting for picture...">
+				<p class="text">{{ readingNews.value.description}}</p>
+		    <p>Теги: <span *ngFor="let tag of readingNews.value.tags; let i = index">
 		  	<a href = "#" class = "blacktag">{{tag}}</a>
-		    	<span *ngIf="i!=readingNews.tags.length-1">,</span>
+		    	<span *ngIf="i!=readingNews.value.tags.length-1">,</span>
        </span></p>
    </div>
 		<p>Источник: <a class = "link" href="#">ссылка</a></p>

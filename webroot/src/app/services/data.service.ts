@@ -24,6 +24,7 @@ export class DataService {
   private enrollsForTeacher: BehaviorSubject<EnrollItem[]> = <BehaviorSubject<EnrollItem[]>>new BehaviorSubject([]);
 
   private missedProject: BehaviorSubject<ProjectItem> = new BehaviorSubject<ProjectItem>(null);
+  private missedNews: BehaviorSubject<NewsItem> = new BehaviorSubject<NewsItem>(null);
 
   private dataStore: {
     news: NewsItem[];
@@ -40,6 +41,11 @@ export class DataService {
   public get News() {
     return this.news.asObservable();
   }
+
+ public get MissedNews() {
+    return this.missedNews.asObservable();
+  }
+
   public get Projects() {
     return this.projects.asObservable();
   }
@@ -168,6 +174,34 @@ export class DataService {
       this.dataStore.news = res;
       this.news.next(Object.assign({}, this.dataStore).news);
     });
+  }
+
+
+  // для подгрузки новости
+  loadNewsByID(id: number) {
+    console.debug('data: load News by ID');
+    console.log(id);
+    let foundnews =  this.dataStore.news.find(item => item.id == id);
+    console.log(foundnews);
+    console.log(this.dataStore.news);
+        if (foundnews) {
+          this.missedNews.next(foundnews);
+          console.debug('load from data');
+        }
+        else {
+          console.debug('can not find');
+          this.api.getNewsById(id).subscribe(res => {
+            if (res != null) {
+              console.log(res);
+              console.debug('NEW NEWS');
+              // дописываем в конец массива            
+              this.dataStore.news.push(res);
+              console.log(this.dataStore.news);
+              this.missedNews.next(res);
+            }
+          });
+      }
+   
   }
 
   addApiUrl(url: string): string {
