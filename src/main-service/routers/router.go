@@ -182,6 +182,11 @@ func init() {
 				&controllers.LandingProjectsController{},
 			),
 		),
+		beego.NSNamespace("/upload",
+			beego.NSInclude(
+				&controllers.UploadController{},
+			),
+		),
 		/*		beego.NSNamespace("/auth/signin",
 					beego.NSInclude(
 						&controllers.AuthController{},
