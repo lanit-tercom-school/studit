@@ -68,7 +68,7 @@ func main() {
 	}))
 	if beego.BConfig.RunMode == "dev" {
 		beego.BConfig.WebConfig.DirectoryIndex = true
-		beego.SetStaticPath("/", "static")
+		beego.SetStaticPath("/files", "files")
 		beego.SetStaticPath("/swagger", "swagger")
 	} else if beego.BConfig.RunMode == "prod" {
 		beego.SetLevel(beego.LevelError)
