@@ -12,12 +12,12 @@ import (
 )
 
 // UploadController --- контроллер для загрузка файлов
-type UploadController struct {
+type FileController struct {
 	ControllerWithAuthorization
 }
 
 // URLMapping ...
-func (c *UploadController) URLMapping() {
+func (c *FileController) URLMapping() {
 	c.Mapping("Post", c.Post)
 }
 
@@ -29,7 +29,7 @@ func (c *UploadController) URLMapping() {
 // @Success 201
 // @Failure 403
 // @router / [post]
-func (c *UploadController) Post() {
+func (c *FileController) Post() {
 	//if c.CurrentUser.PermissionLevel != models.VIEWER {
 	beego.Trace("Uploading file ...")
 	file, handler, err := c.Ctx.Request.FormFile("uploadfile")
