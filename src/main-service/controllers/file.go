@@ -28,8 +28,8 @@ func (c *FileController) URLMapping() {
 
 // Post ...
 // @Title Post
-// @Description Загрузить файл в свагере не работает :(
-// @Param   uploadfile            form	               true    "Файл"
+// @Description Загрузить файл
+// @Param   uploadfile      formData    file          true    "Файл"
 // @Param   Bearer-token    header      string          true    "Токен доступа пользователя"
 // @Success 201
 // @Failure 403
