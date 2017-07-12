@@ -13,9 +13,9 @@ export class ApiService {
   constructor(private http: Http) {
   }
 
-  getPublicStudentInfoById(student_id: number) {
+  /*getPublicStudentInfoById(student_id: number) {
     return this.http.get(environment.apiUrl + '/v1/user/id/' + student_id)
-  }
+  }*/
 
   getPublicAuthorInfoById(author_id: number) {
     return {

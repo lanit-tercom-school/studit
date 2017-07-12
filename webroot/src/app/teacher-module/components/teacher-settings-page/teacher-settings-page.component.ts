@@ -7,11 +7,11 @@ import { ApiService } from "services/api.service";
 import { CurrentUser } from 'models/current-user';
 
 @Component({
-  selector: 'app-user-settings-page',
-  templateUrl: './user-settings-page.component.html',
-  styleUrls: ['./user-settings-page.component.css']
+  selector: 'app-teacher-settings-page',
+  templateUrl: './teacher-settings-page.component.html',
+  styleUrls: ['./teacher-settings-page.component.css']
 })
-export class UserSettingsPageComponent implements OnInit {
+export class TeacherSettingsPageComponent implements OnInit {
 
   private currentUser: BehaviorSubject<CurrentUser> = new BehaviorSubject(new CurrentUser());
   private clicked = false;
@@ -25,8 +25,8 @@ export class UserSettingsPageComponent implements OnInit {
   ngOnInit() {
     this.route.params
       .subscribe(params => {
-        this.apiService.getPublicStudentInfoById(+params['id'])
-          .subscribe(res => this.currentUser.next(res.json()));
+        this.apiService.getUserById(JSON.parse(localStorage.getItem('current_user')).user.id)
+          .subscribe(res => this.currentUser.next(res));
       });
   }
 

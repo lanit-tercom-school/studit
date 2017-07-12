@@ -15,11 +15,11 @@ import 'rxjs/add/operator/filter';
 
 
 @Component({
-  selector: 'app-student-project-page',
-  templateUrl: './student-project-page.component.html',
-  styleUrls: ['./student-project-page.component.css']
+  selector: 'app-project-page',
+  templateUrl: './project-page.component.html',
+  styleUrls: ['./project-page.component.css']
 })
-export class StudentProjectPageComponent implements OnInit, OnDestroy {
+export class ProjectPageComponent implements OnInit, OnDestroy {
 
   private projectObs: BehaviorSubject<ProjectItem> = new BehaviorSubject({
     id: 0, name: "Loading...", description: "Loading...", logo: "dsasda"

@@ -5,11 +5,11 @@ import { ProjectItem } from 'models/project-item';
 import { ProjectTaskItem } from "models/project-task-item";
 
 @Component({
-  selector: 'app-project-tasks-page',
-  templateUrl: './project-tasks-page.component.html',
-  styleUrls: ['./project-tasks-page.component.css']
+  selector: 'app-student-project-page',
+  templateUrl: './student-project-page.component.html',
+  styleUrls: ['./student-project-page.component.css']
 })
-export class ProjectTasksPageComponent implements OnInit {
+export class StudentProjectPageComponent implements OnInit {
 
 private project;
 

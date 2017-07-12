@@ -7,11 +7,11 @@ import { ApiService } from 'services/api.service';
 import { CurrentUser } from 'models/current-user';
 
 @Component({
-  selector: 'app-student-public-page',
-  templateUrl: './student-public-page.component.html',
-  styleUrls: ['./student-public-page.component.css']
+  selector: 'app-admin-public-page',
+  templateUrl: './admin-public-page.component.html',
+  styleUrls: ['./admin-public-page.component.css']
 })
-export class StudentPublicPageComponent implements OnInit {
+export class AdminPublicPageComponent implements OnInit {
 
   private currentUser: BehaviorSubject<CurrentUser> = new BehaviorSubject(new CurrentUser());
 
@@ -20,8 +20,8 @@ export class StudentPublicPageComponent implements OnInit {
   ngOnInit() {
     this.route.params
       .subscribe(params => {
-        this.apiService.getPublicStudentInfoById(+params['id'])
-          .subscribe(res => this.currentUser.next(res.json()));
+        this.apiService.getUserById(JSON.parse(localStorage.getItem('current_user')).user.id)
+          .subscribe(res => this.currentUser.next(res));
       });
   }
 }
