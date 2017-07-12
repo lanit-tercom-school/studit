@@ -45,14 +45,14 @@ func (c *FileController) Post() {
 		}
 		defer file.Close()
 		filename := uuid.New().String()
-		u, err := models.GetUserById(c.CurrentUser.UserId)
+		//u, err := models.GetUserById(c.CurrentUser.UserId)
 		if err != nil {
 			beego.Trace(err)
 			c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
 			return
 		}
 		t := models.File{
-			User:           u,
+			User:           &models.User{Id: c.CurrentUser.UserId},
 			Name:           handler.Filename,
 			Path:           "files/" + filename,
 			DateOfCreation: time.Now(),
