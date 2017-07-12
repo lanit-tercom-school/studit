@@ -1,8 +1,8 @@
 package controllers
 
 import (
+	"file-service/models"
 	"io"
-	"data-service/models"
 	"os"
 
 	"time"
@@ -35,7 +35,7 @@ func (c *FileController) URLMapping() {
 // @Failure 403
 // @router / [post]
 func (c *FileController) Post() {
-	if c.CurrentUser.PermissionLevel != models.VIEWER {
+	if c.CurrentUser.PermissionLevel != VIEWER {
 		beego.Trace("Uploading file ...")
 		file, handler, err := c.Ctx.Request.FormFile("uploadfile")
 		if err != nil {
@@ -52,7 +52,7 @@ func (c *FileController) Post() {
 			return
 		}
 		t := models.File{
-			User:           &models.User{Id: c.CurrentUser.UserId},
+			User:           c.CurrentUser.UserId,
 			Name:           handler.Filename,
 			Path:           "files/" + filename,
 			DateOfCreation: time.Now(),
@@ -90,7 +90,7 @@ func (c *FileController) Post() {
 // @Failure 403
 // @router /:id [get]
 func (c *FileController) GetOne() {
-	if c.CurrentUser.PermissionLevel != models.VIEWER {
+	if c.CurrentUser.PermissionLevel != VIEWER {
 		idStr, err := strconv.Atoi(c.Ctx.Input.Param(":id"))
 		if err != nil {
 			beego.Trace(err)
@@ -98,7 +98,7 @@ func (c *FileController) GetOne() {
 		} else {
 			f, err := models.GetFileById(idStr)
 			if err == nil {
-				if f.User.Id == c.CurrentUser.UserId || c.CurrentUser.PermissionLevel == models.ADMIN {
+				if f.User == c.CurrentUser.UserId || c.CurrentUser.PermissionLevel == ADMIN {
 					c.Data["json"] = f
 					c.Ctx.Output.SetStatus(HTTP_OK)
 				} else {
@@ -126,7 +126,7 @@ func (c *FileController) GetOne() {
 // @Failure 403
 // @router / [get]
 func (c *FileController) GetAll() {
-	if c.CurrentUser.PermissionLevel != models.VIEWER {
+	if c.CurrentUser.PermissionLevel != VIEWER {
 		id, err := c.GetInt("Id")
 		if err != nil {
 			f, err := models.GetFilesByUserId(c.CurrentUser.UserId)
@@ -138,7 +138,7 @@ func (c *FileController) GetAll() {
 				c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
 			}
 		} else {
-			if c.CurrentUser.PermissionLevel == models.ADMIN {
+			if c.CurrentUser.PermissionLevel == ADMIN {
 				f, err := models.GetFilesByUserId(id)
 				if err == nil {
 					c.Data["json"] = f
@@ -168,7 +168,7 @@ func (c *FileController) GetAll() {
 // @Failure 403 id is empty
 // @router /:id [delete]
 func (c *FileController) Delete() {
-	if c.CurrentUser.PermissionLevel != models.VIEWER {
+	if c.CurrentUser.PermissionLevel != VIEWER {
 		idStr, err := strconv.Atoi(c.Ctx.Input.Param(":id"))
 		if err != nil {
 			beego.Trace(err)
@@ -176,7 +176,7 @@ func (c *FileController) Delete() {
 		} else {
 			f, err := models.GetFileById(idStr)
 			if err == nil {
-				if f.User.Id == c.CurrentUser.UserId || c.CurrentUser.PermissionLevel == models.ADMIN {
+				if f.User == c.CurrentUser.UserId || c.CurrentUser.PermissionLevel == ADMIN {
 					_, err := models.DeleteFile(f)
 					if err != nil {
 						beego.Trace(err)

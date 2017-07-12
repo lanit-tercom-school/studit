@@ -1,11 +1,16 @@
 package controllers
 
 import (
-	"file-service/models"
-
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/config"
 	"github.com/robbert229/jwt"
+)
+
+const (
+	VIEWER = iota - 1 // незарегистрированный пользователь
+	USER   = 0        // обычный пользователь
+	LEADER = 1        // учитель, куратор, меет право создавать проекты
+	ADMIN  = 2        // администратор, может всё
 )
 
 type CurrentClient struct {
@@ -39,7 +44,7 @@ func init() {
 func newClient(token string) (client CurrentClient) {
 	client = CurrentClient{
 		UserId:          -1,
-		PermissionLevel: models.VIEWER,
+		PermissionLevel: VIEWER,
 	}
 	if len(token) < 2 {
 		beego.Debug("Token too short")
@@ -90,7 +95,7 @@ func (c *ControllerWithAuthorization) Prepare() {
 	clientToken := c.Ctx.Input.Header("Bearer-token")
 	if clientToken == "" {
 		beego.Debug("Empty token")
-		c.CurrentUser.PermissionLevel = models.VIEWER
+		c.CurrentUser.PermissionLevel = VIEWER
 		c.Data["json"] = HTTP_UNAUTHORIZED_STR
 	} else {
 		c.CurrentUser = newClient(clientToken)

@@ -1,4 +1,4 @@
-/*
+﻿/*
 0 - проект еще не начался, идет набор, и т.д.
 1 - проект начался, ведутся лекции, разработка
 2 - проект завершен, активность закончена
@@ -74,18 +74,7 @@ CREATE TABLE "user_contact" (
 ) WITH (
 OIDS = FALSE
 );
-CREATE TABLE file (
-	id                SERIAL                        NOT NULL,
-	user_id           INT                           NOT NULL,
-	name              VARCHAR(100)                  NOT NULL,
-	path              VARCHAR(255)                  NOT NULL,
-	date_of_creation  TIMESTAMP WITH TIME ZONE      NOT NULL,
 
-	CONSTRAINT file_pk PRIMARY KEY (id),
-	CONSTRAINT file_fk0 FOREIGN KEY (user_id) REFERENCES "user"(id)
-) WITH (
-OIDS = FALSE
-);
 
 /*Тип контакта: телефон, мыло, vk, одноклассники и т.д.*/
 CREATE TABLE "contact_type" (

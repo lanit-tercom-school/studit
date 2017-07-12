@@ -11,7 +11,7 @@ type File struct {
 	Name           string    `orm:"column(name)"                               json:"name"`
 	Path           string    `orm:"column(path)"                               json:"path,omitempty"`
 	DateOfCreation time.Time `orm:"column(date_of_creation);type(datetime)"    json:"created"`
-	User           *User     `orm:"column(user_id);rel(fk)"                    json:"user"`
+	User           int       `orm:"column(user_id);"                           json:"user-id"`
 }
 
 func (t *File) TableName() string {
