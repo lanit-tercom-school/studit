@@ -184,6 +184,7 @@ func (c *FileController) Delete() {
 					} else {
 						os.Remove(f.Path)
 						c.Ctx.Output.SetStatus(HTTP_OK)
+						c.Data["json"] = "Success"
 					}
 				} else {
 					beego.Trace("Access is denied")
