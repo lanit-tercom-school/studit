@@ -22,12 +22,12 @@ import { TopPanelComponent } from './components/top-panel/top-panel.component';
 import { FooterComponent } from "./components/footer/footer.component";
 
 import { ProjectListPageComponent } from './components/project-list-page/project-list-page.component';
-import { ProjectListComponent } from './components/project-list/project-list.component';
-import { ProjectItemComponent } from './components/project-list/project-item/project-item.component';
+import { ProjectListComponent } from './components/project-list-page/project-list/project-list.component';
+import { ProjectItemComponent } from './components/project-list-page/project-list/project-item/project-item.component';
 
 import { MainNewsPageComponent } from './components/main-news-page/main-news-page.component';
-import { NewsListComponent } from './components/news-list/news-list.component';
-import { NewsItemComponent } from './components/news-list/news-item/news-item.component';
+import { NewsListComponent } from './components/main-news-page/news-list/news-list.component';
+import { NewsItemComponent } from './components/main-news-page/news-list/news-item/news-item.component';
 import { MainFullNewsPageComponent } from './components/main-full-news-page/main-full-news-page.component';
 
 import { ProjectPageComponent } from './components/project-page/project-page.component';
