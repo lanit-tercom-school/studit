@@ -62,8 +62,9 @@ export class PathManager implements CanActivate {
             }
             else {
                 console.log('You must be logged in');
-                return true;
+                this.router.navigate(['error']);
             }
+            return false;
         }
 
         else if (next.url[0].path === 'project') {
