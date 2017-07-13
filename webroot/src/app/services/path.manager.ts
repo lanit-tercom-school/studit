@@ -62,7 +62,7 @@ export class PathManager implements CanActivate {
             }
             else {
                 console.log('You must be logged in');
-                return false;
+                return true;
             }
         }
 
@@ -95,9 +95,34 @@ export class PathManager implements CanActivate {
                 }
             }
         }
-        else {
-            return true;
+
+        else if (next.url[0].path === 'student') {
+            if (window.localStorage.getItem('current_user')) {
+                if (JSON.parse(localStorage.getItem('current_user')).perm_lvl === 0) {
+                    return true;
+                }
+            }
+            this.router.navigate(['error']);
         }
+
+        else if (next.url[0].path === 'teacher') {
+            if (window.localStorage.getItem('current_user')) {
+                if (JSON.parse(localStorage.getItem('current_user')).perm_lvl === 1) {
+                    return true;
+                }
+            }
+            this.router.navigate(['error']);
+        }
+
+        else if (next.url[0].path === 'admin') {
+            if (window.localStorage.getItem('current_user')) {
+                if (JSON.parse(localStorage.getItem('current_user')).perm_lvl === 2) {
+                    return true;
+                }
+            }
+            this.router.navigate(['error']);
+        }
+
         return true;
     }
 }
