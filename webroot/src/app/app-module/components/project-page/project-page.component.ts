@@ -11,9 +11,6 @@ import { ProjectItem } from 'models/project-item';
 import { ProjectNewsItem } from 'models/proj-news-item';
 import { TasksItem } from 'models/tasks-item';
 
-import 'rxjs/add/operator/filter';
-
-
 @Component({
   selector: 'app-project-page',
   templateUrl: './project-page.component.html',
@@ -25,12 +22,8 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
     id: 0, name: "Loading...", description: "Loading...", logo: "dsasda"
   });
   private projectId;
-  private authorized = false;
-  private isTeacher = false;
-  private isSuccess = false;
   private tasks = [];
   private message = 'Please write back soon!';
-  private enrollButtonStatus: number = 0;//0 - enrolling,1 - you are in project, 2 - unenrolling
   constructor(private apiService: ApiService,
     private route: ActivatedRoute,
     private http: Http,
@@ -39,16 +32,12 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
   { }
 
   ngOnInit() {
-    if (localStorage.getItem('current_user')) { this.authorized = true; }
     this.route.params
       .subscribe(params => {
         this.projectId = params['id'];
         this.getProjectInfo();
-        this.choseButtonStatus();
       });
     this.getTaskItems();
-    if (this.data.PermLvl === 1)
-      this.isTeacher = true;
 
   }
 
@@ -77,37 +66,5 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
         let res = response.json().slice(0, 4);
         return res;
       }).subscribe(res => this.tasks = res);
-  }
-  enroll() {
-    this.isSuccess = false;
-    this.apiService.enrollToProject(this.projectId,
-      JSON.parse(localStorage.getItem('current_user')).bearer_token, this.message).subscribe(res => {
-        this.enrollButtonStatus = 2;
-        this.data.loadEnrolledUsersProject();
-      });
-    this.isSuccess = true;
-  }
-  unenroll() {
-    this.isSuccess = false;
-    this.apiService.unenrollToProject(this.projectId,
-      JSON.parse(localStorage.getItem('current_user')).bearer_token).subscribe(res => {
-        this.enrollButtonStatus = 0;
-        this.data.loadEnrolledUsersProject();
-      });
-    this.isSuccess = true;
-  }
-
-  choseButtonStatus() {
-    this.enrollButtonStatus = 0;
-    this.data.UserProjects.subscribe(res => {
-      if (res != null && res.find(pr => pr.id == this.projectId)) {
-        this.enrollButtonStatus = 1;
-      }
-    })
-    this.data.UserEnrolledProjects.subscribe(res => {
-      if (res != null && res.find(pr => pr.id == this.projectId)) {
-        this.enrollButtonStatus = 2;
-      }
-    })
   }
 }
