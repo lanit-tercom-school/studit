@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Observable } from "rxjs/Observable";
 
 import { ProjectItem } from 'models/project-item';
-import { ApiService } from 'services/api.service';
+import { TeacherService } from 'services/teacher.service';
 import { DataService } from 'services/data.service';
 import { EnrollItem } from 'models/enroll-item';
 
@@ -16,7 +16,7 @@ export class HomeTeacherProjectViewComponent implements OnInit {
   private ProjectEnrollList: Observable<ProjectItem[]>;
   private EnrollList: Observable<EnrollItem[]>;
 
-  constructor(private api: ApiService, private data: DataService) { }
+  constructor(private teacherService: TeacherService, private data: DataService) { }
 
   ngOnInit() {
     this.ProjectList = this.data.UserProjects;
@@ -26,7 +26,7 @@ export class HomeTeacherProjectViewComponent implements OnInit {
   ngOnDestroy() {
   }
   accept(user_id: number, project_id: number) {
-    this.api.postUserToProject(user_id, project_id, JSON.parse(localStorage.getItem('current_user')).bearer_token).subscribe(res => {
+    this.teacherService.postUserToProject(user_id, project_id, JSON.parse(localStorage.getItem('current_user')).bearer_token).subscribe(res => {
        this.data.loadEnrollsForTeacher();
       });
   }

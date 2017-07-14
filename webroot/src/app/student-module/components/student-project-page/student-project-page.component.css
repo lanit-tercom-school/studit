@@ -1,0 +1,97 @@
+
+/*input{
+   border-radius: 5px;
+}
+
+.projheader{
+  background-color: whitesmoke;
+  vertical-align: middle;
+  padding: 15px 0px 15px 0px
+}
+
+.projsidebar{
+  border-right: 2px solid rgba(0,0,0,.2);
+  padding : 0;
+}
+
+ .sidebaritem{
+  color: black;
+  text-align: left;
+  padding: 20px 5px 20px 7px;
+  text-decoration: none;
+
+}
+
+.colsearch{
+   margin: auto;
+}
+
+.sidebaritem:hover{
+background: whitesmoke;
+}
+.showbutton{
+  margin-bottom: 20px;
+}*/
+#main-info
+{
+    padding: 1rem;
+    background: whitesmoke;
+}
+
+#project-img-status
+{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0;
+}
+
+#status
+{
+  padding-top: 1rem;
+}
+
+#project-name
+{
+  margin-bottom: 1rem;
+}
+.blacktag
+{
+  font-style: italic;
+  color: black;
+}
+
+.blacktag:hover
+{
+  text-decoration: underline;
+}
+
+.container
+{
+    background: whitesmoke;
+    margin-bottom: 3rem;
+}
+
+.btn
+{
+  margin-top: 1rem;
+}
+#enrollMessage
+{
+   width: 100%;
+   height: 5rem;
+   text-align: left;
+}
+.modal-header
+{
+
+  border-style: none;
+}
+.modal-title
+{
+  margin: auto;
+}
+.modal-footer
+{
+  border-style: none;
+}
