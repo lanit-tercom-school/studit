@@ -1,4 +1,5 @@
 import { ProjectShort } from './project-short'
+import { PermLevel } from './permission-level.enum';
 
 export class CurrentUser {
 
@@ -8,7 +9,7 @@ export class CurrentUser {
             nickname: "",
             description: "",
             avatar: "",
-            permission_level: 0,
+            permission_level: PermLevel.Student,
         };
         this.member_of = [];
         this.master_of = [];
@@ -19,7 +20,7 @@ export class CurrentUser {
         nickname: string,
         description: string,
         avatar: string,
-        permission_level: number
+        permission_level: PermLevel
     };
     member_of: ProjectShort[];
     master_of: ProjectShort[];

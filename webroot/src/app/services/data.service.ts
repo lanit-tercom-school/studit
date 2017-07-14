@@ -11,7 +11,8 @@ import { UserService } from 'services/user.service';
 import { NewsItem } from "models/news-item";
 import { ProjectItem } from 'models/project-item';
 import { EnrollItem } from 'models/enroll-item';
-import { environment } from '../../environments/environment'
+import { environment } from '../../environments/environment';
+import { PermLevel } from 'models/permission-level.enum';
 
 import 'rxjs/add/operator/filter';
 
@@ -19,7 +20,7 @@ import 'rxjs/add/operator/filter';
 export class DataService {
   private userId: number;
   private userToken: string;
-  private userPermLvl: number;
+  private userPermLvl: PermLevel;
   private news: BehaviorSubject<NewsItem[]> = <BehaviorSubject<NewsItem[]>>new BehaviorSubject([]);
   private projects: BehaviorSubject<ProjectItem[]> = <BehaviorSubject<ProjectItem[]>>new BehaviorSubject([]);
   private userProjects: BehaviorSubject<ProjectItem[]> = <BehaviorSubject<ProjectItem[]>>new BehaviorSubject([]);
@@ -80,10 +81,10 @@ export class DataService {
       this.userId = JSON.parse(localStorage.getItem('current_user')).user.id;
       this.userPermLvl = JSON.parse(localStorage.getItem('current_user')).perm_lvl;
       this.loadUsersProjects();
-      if (this.userPermLvl === 0) {
+      if (this.userPermLvl === PermLevel.Student) {
         this.loadEnrolledUsersProject();
       }
-      if (this.userPermLvl === 1) {
+      if (this.userPermLvl === PermLevel.Teacher) {
         this.loadEnrollsForTeacher();
       }
     }
