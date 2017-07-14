@@ -1,10 +1,9 @@
 export interface ProjectTaskItem {
-  Number: string;
-  TaskName: string;
-  Data: string;
-  Author: string;
-  Addressee: string;
-  Tags: string[];
-  Rating: string;
-
+  number: string;
+  taskname: string;
+  data: string;
+  author: string;
+  addressee: string;
+  tags: string[];
+  rating: string;
 }
