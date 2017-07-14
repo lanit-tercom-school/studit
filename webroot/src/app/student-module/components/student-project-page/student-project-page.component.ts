@@ -25,7 +25,7 @@ export class StudentProjectPageComponent implements OnInit {
   private isTeacher = false;
   private isSuccess = false;
   private tasks = [];
-  private enrollMessage = 'Please write back soon!';
+  private message = 'Please write back soon!';
   //0 - enrolling,1 - you are in project, 2 - unenrolling
   private enrollButtonStatus = "Enrolling";
   constructor(private route: ActivatedRoute,
@@ -73,7 +73,7 @@ export class StudentProjectPageComponent implements OnInit {
   enroll() {
     this.isSuccess = false;
     this.studentService.enrollToProject(this.projectId,
-      JSON.parse(localStorage.getItem('current_user')).bearer_token, this.enrollMessage).subscribe(res => {
+      JSON.parse(localStorage.getItem('current_user')).bearer_token, this.message).subscribe(res => {
         this.enrollButtonStatus = "Unenrolling";
         this.data.loadEnrolledUsersProject();
       });

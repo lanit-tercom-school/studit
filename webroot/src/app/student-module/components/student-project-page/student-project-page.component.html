@@ -74,7 +74,7 @@
 			<img width="225px" height="225px" src="{{projectObs.value.logo}}" alt="Project image">
 			<div [ngSwitch]="enrollButtonStatus">
 				<div *ngSwitchCase="'Enrolling'">
-					<button type="button" role="button" class="btn btn-large btn-block btn-primary" (click)="enroll()">Подать заявку</button>
+					<button type="button" role="button" class="btn btn-large btn-block btn-primary"  data-toggle="modal" data-target="#enrollMessageModal">Подать заявку</button>
 				</div>
 				<div *ngSwitchCase="'Unenrolling'">
 					<button type="button" role="button" class="btn btn-large btn-block btn-warning" (click)="unenroll()">Отменить заявку</button>
