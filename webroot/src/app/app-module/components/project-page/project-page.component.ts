@@ -4,8 +4,9 @@ import { Http, Headers, RequestOptions, Response } from '@angular/http';
 import { Observable } from "rxjs/Observable";
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
-import { ApiService } from 'services/api.service';
+
 import { DataService } from 'services/data.service';
+import { ProjectService } from 'services/project.service';
 import { MaterialsItem } from 'models/materials-item';
 import { ProjectItem } from 'models/project-item';
 import { ProjectNewsItem } from 'models/proj-news-item';
@@ -24,10 +25,11 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
   private projectId;
   private tasks = [];
   private message = 'Please write back soon!';
-  constructor(private apiService: ApiService,
+  constructor(
     private route: ActivatedRoute,
     private http: Http,
     private data: DataService,
+    private projectService: ProjectService
   )
   { }
 
@@ -55,10 +57,10 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
   }
 
   getMaterialsItems(): MaterialsItem[] {
-    return this.apiService.getMaterialsItems(1);
+    return this.projectService.getMaterialsItems(1);
   }
   getProjectNewsItem(): ProjectNewsItem[] {
-    return this.apiService.getProjectNewsItem(1);
+    return this.projectService.getProjectNewsItem(1);
   }
   getTaskItems() {
     this.http.get('https://api.github.com/repos/lanit-tercom-school/studit/issues')

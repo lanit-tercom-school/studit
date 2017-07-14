@@ -3,7 +3,6 @@ import { Observable } from "rxjs/Observable";
 
 import { NewsItem } from 'models/news-item';
 import { DataService } from 'services/data.service';
-import { ApiService } from 'services/api.service';
 
 @Component({
   selector: 'app-main-news-page',
@@ -13,14 +12,13 @@ import { ApiService } from 'services/api.service';
 export class MainNewsPageComponent implements OnInit {
 
   news: Observable<NewsItem[]>;
-  constructor(private apiService: ApiService, private data: DataService) { }
+  constructor(private data: DataService) { }
 
   ngOnInit() {
     this.getNewsList();
   }
 
   getNewsList() {
-    //this.apiService.getNewsPage().subscribe(res => this.news = res);
     this.news = this.data.News;
   }
 

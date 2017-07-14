@@ -10,7 +10,6 @@ import { ProjectPageComponent } from './components/project-page/project-page.com
 import { AuthorizationPageComponent } from './components/authorization-page/authorization-page.component';
 import { RegistrationPageComponent } from './components/registration-page/registration-page.component';
 import { ValidationPageComponent } from './components/registration-page/validation-page/validation-page.component';
-import { AuthorPublicPageComponent } from './components/author-public-page/author-public-page.component';
 import { UserPublicPageComponent } from './components/user-public-page/user-public-page.component';
 import { MainNewsPageComponent } from './components/main-news-page/main-news-page.component';
 import { MainFullNewsPageComponent } from './components/main-full-news-page/main-full-news-page.component';
@@ -28,7 +27,6 @@ export const routes: Routes = [
   { path: 'admin', loadChildren: 'admin-module/admin.module#AdminModule',canActivate: [PathManager] },
   { path: 'registration', component: RegistrationPageComponent, canActivate: [PathManager] },
   { path: 'registration/validate', component: ValidationPageComponent, canActivate: [PathManager] },
-  { path: 'author/:id', component: AuthorPublicPageComponent },
   { path: 'user/:id', component: UserPublicPageComponent,  canActivate: [PathManager] },
   { path: 'news', component: MainNewsPageComponent },
   { path: 'news/:id', component: MainFullNewsPageComponent },

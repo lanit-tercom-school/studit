@@ -3,7 +3,7 @@ import { ActivatedRoute, Params } from '@angular/router';
 import { Observable } from "rxjs/Observable";
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
-import { ApiService } from 'services/api.service';
+import { UserService } from 'services/user.service';
 import { CurrentUser } from 'models/current-user';
 
 @Component({
@@ -15,12 +15,12 @@ export class UserPublicPageComponent implements OnInit {
 
   private currentUser: BehaviorSubject<CurrentUser> = new BehaviorSubject(new CurrentUser());
 
-  constructor(private apiService: ApiService, private route: ActivatedRoute) { }
+  constructor(private userService: UserService, private route: ActivatedRoute) { }
 
   ngOnInit() {
     this.route.params
       .subscribe(params => {
-        this.apiService.getUserById(+params['id'])
+        this.userService.getUserById(+params['id'])
           .subscribe(res => this.currentUser.next(res));
       });
   }

@@ -7,7 +7,12 @@ import { AppRouterProvider } from './routes';
 import { PathManager } from 'services/path.manager';
 
 import { DataService } from 'services/data.service';
-import { ApiService } from 'services/api.service';
+import { TeacherService } from 'services/teacher.service';
+import { StudentService } from 'services/student.service';
+import { ProjectService } from 'services/project.service';
+import { NewsService } from 'services/news.service';
+import { UserService } from 'services/user.service';
+import { TaskService } from 'services/task.service';
 import { AuthService } from 'services/auth.service';
 
 import { AppComponent } from './components/app.component';
@@ -42,7 +47,6 @@ import { AuthorizationPageComponent } from './components/authorization-page/auth
 import { RegistrationPageComponent } from './components/registration-page/registration-page.component';
 import { ValidationPageComponent } from './components/registration-page/validation-page/validation-page.component';
 
-import { AuthorPublicPageComponent } from './components/author-public-page/author-public-page.component';
 import { UserPublicPageComponent } from './components/user-public-page/user-public-page.component';
 
 import { ErrorPageComponent } from './components/error-page/error-page.component';
@@ -82,12 +86,20 @@ import { ErrorPageComponent } from './components/error-page/error-page.component
     AuthorizationPageComponent,
     RegistrationPageComponent,
     ValidationPageComponent,
-    AuthorPublicPageComponent,
     UserPublicPageComponent,
     ErrorPageComponent,
-  
   ],
-  providers: [ApiService, AuthService, PathManager, DataService],
+  providers: [
+    TeacherService,
+    StudentService,
+    ProjectService,
+    NewsService,
+    UserService,
+    TaskService,
+    AuthService,
+    DataService,
+    PathManager
+    ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

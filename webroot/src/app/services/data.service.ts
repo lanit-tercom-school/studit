@@ -2,7 +2,12 @@ import { Injectable, EventEmitter } from '@angular/core';
 import { Observable } from "rxjs/Observable";
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
-import { ApiService } from 'services/api.service';
+import { TeacherService } from 'services/teacher.service';
+import { StudentService } from 'services/student.service';
+import { ProjectService } from 'services/project.service';
+import { NewsService } from 'services/news.service';
+import { UserService } from 'services/user.service';
+
 import { NewsItem } from "models/news-item";
 import { ProjectItem } from 'models/project-item';
 import { EnrollItem } from 'models/enroll-item';
@@ -57,7 +62,13 @@ export class DataService {
   {
     return this.userPermLvl;
   }
-  constructor(private api: ApiService) { }
+  constructor(
+   private teacherService: TeacherService,
+   private studentService: StudentService,
+   private newsService: NewsService,
+   private projectService: ProjectService,
+   private userService: UserService
+   ) { }
 
   loadAll() {
     console.log('Data.service ->loadAll');
@@ -79,7 +90,7 @@ export class DataService {
   }
 
   loadProjects() {
-    this.api.getProjectItems().subscribe(res => {
+    this.projectService.getProjectItems().subscribe(res => {
       if (res != null) {
         this.dataStore.projects = res;
         this.dataStore.projects.forEach(a => { a.logo = this.addApiUrl(a.logo); })
@@ -89,7 +100,7 @@ export class DataService {
   }
 
   loadProjectsForMainPage() {
-    this.api.getMainPageProjects().subscribe(res => {
+    this.projectService.getMainPageProjects().subscribe(res => {
       this.dataStore.projectsForMainPage = res;
       this.dataStore.projectsForMainPage.forEach(a => { a.logo = this.addApiUrl(a.logo); })
       this.projectsForMainPage.next(Object.assign({}, this.dataStore).projectsForMainPage);
@@ -98,7 +109,7 @@ export class DataService {
 
   loadUsersProjects() {
     if (localStorage.getItem('current_user')) {
-      this.api.getProjectsOfUser(this.userId).subscribe(res => {
+      this.userService.getProjectsOfUser(this.userId).subscribe(res => {
         if (res != null) {
           this.dataStore.userProjects = res;
           this.dataStore.userProjects.forEach(a => { a.logo = this.addApiUrl(a.logo); })
@@ -113,7 +124,7 @@ export class DataService {
 
   loadEnrolledUsersProject() {
     if (localStorage.getItem('current_user')) {
-      this.api.getEnrolledUsersProject(this.userId, this.userToken).subscribe(res => {
+      this.studentService.getEnrolledUsersProject(this.userId, this.userToken).subscribe(res => {
         this.dataStore.userEnrolledProjects = res;
         this.userEnrolledProjects.next(Object.assign({}, this.dataStore).userEnrolledProjects);
       })
@@ -123,14 +134,14 @@ export class DataService {
   }
 
   loadEnrollsForTeacher() {
-    this.api.getEnrollsForTeacher(this.userToken).subscribe(res => {
+    this.teacherService.getEnrollsForTeacher(this.userToken).subscribe(res => {
       this.dataStore.enrollsForTeacher = res;
       this.enrollsForTeacher.next(Object.assign({}, this.dataStore).enrollsForTeacher);
     });
   }
 
   loadNews() {
-    this.api.getNewsPage().subscribe(res => {
+    this.newsService.getNewsPage().subscribe(res => {
       this.dataStore.news = res;
       this.news.next(Object.assign({}, this.dataStore).news);
     });
