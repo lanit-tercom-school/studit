@@ -15,6 +15,7 @@ import { TasksItem } from 'models/tasks-item';
 
 import 'rxjs/add/operator/filter';
 
+type StatusEnroll = "Enrolling" | "InProject" | "Unenrolling";
 
 @Component({
   selector: 'app-teacher-project-page',
@@ -23,35 +24,28 @@ import 'rxjs/add/operator/filter';
 })
 export class TeacherProjectPageComponent implements OnInit, OnDestroy {
 
-  private projectObs: BehaviorSubject<ProjectItem> = new BehaviorSubject({
-    id: 0, name: "Loading...", description: "Loading...", logo: "dsasda"
-  });
+  private projectObs: BehaviorSubject<ProjectItem> = new BehaviorSubject(null);
   private projectId;
-  private authorized = false;
-  private isTeacher = false;
   private isSuccess = false;
   private tasks = [];
   private message = 'Please write back soon!';
-  private enrollButtonStatus: number = 0;//0 - enrolling,1 - you are in project, 2 - unenrolling
+  private enrollButtonStatus: StatusEnroll = 'Enrolling';
   constructor(private teacherService: TeacherService,
     private route: ActivatedRoute,
     private http: Http,
     private data: DataService,
-     private projectService: ProjectService
+    private projectService: ProjectService
   )
   { }
 
   ngOnInit() {
-    if (localStorage.getItem('current_user')) { this.authorized = true; }
     this.route.params
       .subscribe(params => {
         this.projectId = params['id'];
         this.getProjectInfo();
         this.choseButtonStatus();
       });
-    this.getTaskItems();
-    if (this.data.PermLvl === 1)
-      this.isTeacher = true;
+    //this.getTaskItems();
 
   }
 
@@ -68,7 +62,7 @@ export class TeacherProjectPageComponent implements OnInit, OnDestroy {
     });
   }
 
-  getMaterialsItems(): MaterialsItem[] {
+  /*getMaterialsItems(): MaterialsItem[] {
     return this.projectService.getMaterialsItems(1);
   }
   getProjectNewsItem(): ProjectNewsItem[] {
@@ -80,18 +74,13 @@ export class TeacherProjectPageComponent implements OnInit, OnDestroy {
         let res = response.json().slice(0, 4);
         return res;
       }).subscribe(res => this.tasks = res);
-  }
-  
+  }*/
+
   choseButtonStatus() {
-    this.enrollButtonStatus = 0;
+    this.enrollButtonStatus = 'Enrolling';
     this.data.UserProjects.subscribe(res => {
       if (res != null && res.find(pr => pr.id == this.projectId)) {
-        this.enrollButtonStatus = 1;
-      }
-    })
-    this.data.UserEnrolledProjects.subscribe(res => {
-      if (res != null && res.find(pr => pr.id == this.projectId)) {
-        this.enrollButtonStatus = 2;
+        this.enrollButtonStatus = 'InProject';
       }
     })
   }
