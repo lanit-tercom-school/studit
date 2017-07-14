@@ -3,14 +3,21 @@
     <div class="col-lg-3 col-md-12" id="project-img-status">
       <img width="225px" height="225px" src="{{projectObs.value.logo}}" alt="Project image">
       <div *ngIf="authorized">
-        <div *ngIf="enrollButtonStatus==0">
-          <button type="button" role="button" class="btn btn-large btn-block btn-primary" (click)="enroll()">Подать заявку</button>
-        </div>
-        <div *ngIf="enrollButtonStatus==2">
-          <button type="button" role="button" class="btn btn-large btn-block btn-warning" (click)="unenroll()">Отменить заявку</button>
-        </div>
-        <div *ngIf="enrollButtonStatus==1">
-          <h5 id="status">Вы участвуете в проекте</h5>
+        <div *ngIf="!isTeacher">
+          <div [ngSwitch]="enrollButtonStatus">
+            <div *ngSwitchCase="'Enrolling'">
+              <button type="button" role="button" class="btn btn-large btn-block btn-primary" (click)="enroll()">Подать заявку</button>
+            </div>
+            <div *ngSwitchCase="'Unenrolling'">
+              <button type="button" role="button" class="btn btn-large btn-block btn-warning" (click)="unenroll()">Отменить заявку</button>
+            </div>
+            <div *ngSwitchCase="'InProject'">
+              <h5 id="status">Вы участвуете в проекте</h5>
+            </div>
+            <div *ngSwitchDefault>
+              <h5>Ой!</h5>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -30,6 +37,24 @@
     <div class="col-lg-3 col-md-offset-12">
       <app-proj-news [ProjectNewsList]=getProjectNewsItem()>
         <a href="#" class="btn btn-secondary">Author profile</a>) ></app-proj-news>
+    </div>
+  </div>
+</div>
+<!--Модальное окно-->
+<div id="enrollMessageModal" class="modal fade" data-backdrop="static">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Оставьте сообщение к заявке:</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+      </div>
+      <div class="modal-body">
+        <textarea class="form-control" id="enrollMessage" [(ngModel)]="message" name="enrollMessage" autofocus></textarea>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="enroll()" data-dismiss="modal">Отправить</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
+      </div>
     </div>
   </div>
 </div>

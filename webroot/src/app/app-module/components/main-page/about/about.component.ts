@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { UserInfo } from 'models/user-info';
+import { UserRegister } from 'models/user-register';
 import { AuthService } from 'services/auth.service';
 
 @Component({
@@ -10,7 +10,7 @@ import { AuthService } from 'services/auth.service';
   styleUrls: ['./about.component.css']
 })
 export class AboutComponent implements OnInit {
-  private user: UserInfo = { login: "", nickname: "", password: "" };
+  private user: UserRegister = { login: "", nickname: "", password: "" };
   private error: string;
   private currentUser;
   constructor(private auth: AuthService, private router: Router) {

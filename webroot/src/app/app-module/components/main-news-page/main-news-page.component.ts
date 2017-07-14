@@ -1,4 +1,8 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Observable } from "rxjs/Observable";
+
+import { NewsItem } from 'models/news-item';
+import { DataService } from 'services/data.service';
 
 @Component({
   selector: 'app-main-news-page',

@@ -1,9 +1,11 @@
 package auth
 
 import (
-	"main-service/models"
-	"fmt"
 	"crypto/rand"
+	"fmt"
+	"main-service/models"
+
+	"github.com/astaxie/beego"
 )
 
 const (
@@ -12,7 +14,6 @@ const (
 )
 
 type UserActivationService struct {
-
 }
 
 type ActivationUser struct {
@@ -21,10 +22,11 @@ type ActivationUser struct {
 }
 
 func (s *UserActivationService) Activate(user *ActivationUser, reply *bool) error {
+	beego.Trace("blabla request is here")
 	avatar_seed := GenerateNewToken(6)
 	color_str := GenerateRandomColor()
 	u := models.User{
-		Id: user.Id,
+		Id:       user.Id,
 		Nickname: user.Nickname,
 		Avatar: fmt.Sprintf("%s%s?colors=%s&colors=%s&size=%s", AvatarTemplatePath, avatar_seed,
 			color_str, "FFFFFF", AvatarTemplateSize),
@@ -38,8 +40,8 @@ func GenerateNewToken(count int) string {
 		return ""
 	}
 	// template string
-	const alphaNum= "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
-	var bytes= make([]byte, count)
+	const alphaNum = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+	var bytes = make([]byte, count)
 	rand.Read(bytes)
 	for i, b := range bytes {
 		bytes[i] = alphaNum[b%byte(len(alphaNum))]

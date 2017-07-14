@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, Params  } from '@angular/router';
 
 import { NewsItem } from 'models/news-item';
-import { ApiService } from 'services/api.service';
+import { NewsService } from 'services/news.service';
 
 @Component({
   selector: 'app-main-full-news-page',
@@ -15,7 +15,7 @@ private readingNews;
 id_: number;
 private sub: any;
 
-  constructor(private apiService: ApiService,
+  constructor(private newsService: NewsService,
     private route: ActivatedRoute,
     private router: Router) { }
 
@@ -27,6 +27,6 @@ private sub: any;
   }
 
   getReadingNews(){
-   this.apiService.getNewsById(this.id_).subscribe(res => this.readingNews = res);
+   this.newsService.getNewsById(this.id_).subscribe(res => this.readingNews = res);
   }
 }

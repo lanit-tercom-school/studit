@@ -1,0 +1,11 @@
+h1
+{
+  margin: 2rem 1rem;
+}
+
+.card
+{
+  min-width: 270px;
+  margin-bottom: 1.5rem;
+  padding: 1rem 1rem;
+}
