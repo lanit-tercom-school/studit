@@ -1,13 +1,14 @@
 package controllers
 
 import (
+	"data-service/models"
 	"encoding/json"
 	"errors"
-	"data-service/models"
 	"strconv"
 	"strings"
-	"github.com/astaxie/beego"
 	"sync"
+
+	"github.com/astaxie/beego"
 )
 
 // Операции с models.User, для некоторых требуется авторизация
@@ -39,7 +40,7 @@ func CallForProjectMainInfo(f projectsGetter, id int, c chan []models.MainProjec
 		var mainProjectInfo []models.MainProjectInfo
 		for _, u := range users {
 			mainProjectInfo = append(mainProjectInfo, models.MainProjectInfo{
-				Id: u.Id,
+				Id:   u.Id,
 				Logo: u.Logo,
 				Name: u.Name,
 			})
@@ -96,12 +97,13 @@ func (c *UserController) GetOne() {
 			c.Data["json"] = err.Error()
 			c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
 		} else {
-			beego.Trace("User founded, search for contacts")
+			c.Data["json"] = v
+			/*beego.Trace("User founded, search for contacts")
 			U := models.FullUserInfo{
-				Id:              v.Id,
-				Nickname:        v.Nickname,
-				Description:     v.Description,
-				Avatar:          v.Avatar,
+				Id:          v.Id,
+				Nickname:    v.Nickname,
+				Description: v.Description,
+				Avatar:      v.Avatar,
 			}
 			is_master, err := models.IsProjectMasterForUserById(id, c.CurrentUser.UserId)
 			if err == nil {
@@ -111,7 +113,7 @@ func (c *UserController) GetOne() {
 					//c.Ctx.Output.SetStatus(500)
 				} else {
 					beego.Trace("Contacts founded")
-					if c.CurrentUser.UserId == v.Id || c.CurrentUser.PermissionLevel == models.ADMIN || is_master {
+					if c.CurrentUser.UserId == v.Id || c.CurrentUser.PermissionLevel == ADMIN || is_master {
 						beego.Trace("Contacts pinned to response")
 						U.Contact = contact
 					}
@@ -143,13 +145,13 @@ func (c *UserController) GetOne() {
 			}
 			beego.Trace("Ready to sent response")
 			c.Data["json"] = models.AllInformationAboutUser{
-				User:       U,
-				EnrolledOn: <-enrolledChan,
-				MasterOf:   <-mastersChan,
-				MemberOf:   <-membersChan,
+				User:           U,
+				EnrolledOn:     <-enrolledChan,
+				MasterOf:       <-mastersChan,
+				MemberOf:       <-membersChan,
 				MyApplications: <-applicationsChan,
 			}
-			beego.Trace("Get user OK")
+			beego.Trace("Get user OK")*/
 		}
 	} else {
 		beego.Debug("GetOne user `Atoi` error", err.Error())
@@ -158,6 +160,7 @@ func (c *UserController) GetOne() {
 	}
 	c.ServeJSON()
 }
+
 // GetAll ...
 // @Title Get All
 // @Description get User
@@ -232,7 +235,7 @@ func (c *UserController) GetAll() {
 // @Failure 403 :id is not int
 // @router /:id [put]
 func (c *UserController) Put() {
-	if c.CurrentUser.PermissionLevel != models.VIEWER {
+	if c.CurrentUser.PermissionLevel != VIEWER {
 		idStr := c.Ctx.Input.Param(":id")
 		id, err := strconv.Atoi(idStr)
 		if err != nil {

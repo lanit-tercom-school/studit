@@ -6,7 +6,7 @@ import (
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/config"
 	"github.com/astaxie/beego/orm"
-	_ "github.com/lib/pq"
+	_ "github.com/lib/pq"	
 )
 
 func init() {

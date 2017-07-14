@@ -1,9 +1,9 @@
 package controllers
 
 import (
+	"data-service/models"
 	"encoding/json"
 	"errors"
-	"data-service/models"
 	"strconv"
 	"strings"
 
@@ -34,7 +34,7 @@ func (c *ProjectController) URLMapping() {
 // @router / [post]
 func (c *ProjectController) Post() {
 	beego.Trace("Try to POST project")
-	if c.CurrentUser.PermissionLevel == models.ADMIN || c.CurrentUser.PermissionLevel == models.LEADER {
+	if c.CurrentUser.PermissionLevel == ADMIN || c.CurrentUser.PermissionLevel == LEADER {
 		var v models.ProjectJson
 		if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
 			if id, err := models.AddProject(&v); err == nil {
@@ -125,7 +125,8 @@ func (c *ProjectController) GetOne() {
 			c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
 			c.Data["json"] = err.Error()
 		} else {
-			// Запускаем 3 параллельных запроса к мастерам, участникам и заявкам на проект
+			c.Data["json"] = v
+			/*// Запускаем 3 параллельных запроса к мастерам, участникам и заявкам на проект
 			// TODO: Исследовать на утечки памяти
 			enrolledChan := make(chan []models.MainUserInfo)
 			membersChan := make(chan []models.MainUserInfo)
@@ -147,7 +148,7 @@ func (c *ProjectController) GetOne() {
 				Enrolled: <-enrolledChan,
 				Members:  <-membersChan,
 				Masters:  <-mastersChan,
-			}
+			}*/
 		}
 	}
 	c.ServeJSON()
@@ -256,7 +257,7 @@ func correctStatus(status string) bool {
 // @Failure 403 :id is not int
 // @router /:id [put]
 func (c *ProjectController) Put() {
-	if c.CurrentUser.PermissionLevel == models.ADMIN || c.CurrentUser.PermissionLevel == models.LEADER {
+	if c.CurrentUser.PermissionLevel == ADMIN || c.CurrentUser.PermissionLevel == LEADER {
 		idStr := c.Ctx.Input.Param(":id")
 		id, err := strconv.Atoi(idStr)
 		if err != nil {

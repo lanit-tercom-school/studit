@@ -35,7 +35,7 @@ func (c *ProjectUserController) URLMapping() {
 // @router / [post]
 func (c *ProjectUserController) Post() {
 	// TODO: сделать проверку того, что куратор добавляет пользователя именно к своему проекту
-	if c.CurrentUser.PermissionLevel < models.LEADER {
+	if c.CurrentUser.PermissionLevel <LEADER {
 		beego.Debug(c.Ctx.Input.IP(), "Access denied for `Post` new user to project")
 		c.Ctx.Output.SetStatus(HTTP_FORBIDDEN)
 		c.Data["json"] = HTTP_FORBIDDEN_STR
@@ -222,7 +222,7 @@ func (c *ProjectUserController) Delete() {
 		c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
 		c.Data["json"] = err.Error()
 
-	} else if c.CurrentUser.PermissionLevel < models.LEADER && c.CurrentUser.UserId != user_id {
+	} else if c.CurrentUser.PermissionLevel < LEADER && c.CurrentUser.UserId != user_id {
 		beego.Debug(c.Ctx.Input.IP(), "Access denied for `Delete` user from project")
 		c.Ctx.Output.SetStatus(HTTP_FORBIDDEN)
 		c.Data["json"] = HTTP_FORBIDDEN_STR

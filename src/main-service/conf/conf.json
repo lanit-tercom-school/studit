@@ -1,0 +1,5 @@
+{
+    "FileServiceURL": "http://localhost:8084/",
+    "AuthServiceURL": "http://localhost:8082/",
+    "DataServiceURL": "http://localhost:8081/"
+}

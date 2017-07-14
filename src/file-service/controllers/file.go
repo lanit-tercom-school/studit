@@ -13,7 +13,6 @@ import (
 	"github.com/google/uuid"
 )
 
-// FileController --- контроллер для загрузка файлов
 type FileController struct {
 	ControllerWithAuthorization
 }

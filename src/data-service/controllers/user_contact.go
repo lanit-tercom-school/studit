@@ -32,7 +32,7 @@ func (c *UserContactController) URLMapping() {
 // @Failure 403 body is empty
 // @router / [post]
 func (c *UserContactController) Post() {
-	if c.CurrentUser.UserId != models.VIEWER {
+	if c.CurrentUser.UserId != VIEWER {
 		cUser := models.User{Id: c.CurrentUser.UserId, }
 		v := []models.UserContactInput{}
 		if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
@@ -77,7 +77,7 @@ func (c *UserContactController) GetOne() {}
 // @Failure 403 Forbidden
 // @router /:id [get]
 func (c *UserContactController) GetAll() {
-	if c.CurrentUser.PermissionLevel != models.VIEWER {
+	if c.CurrentUser.PermissionLevel !=VIEWER {
 		idStr := c.Ctx.Input.Param(":id")
 		id, err := strconv.Atoi(idStr)
 		if err != nil {
@@ -155,7 +155,7 @@ func (c *UserContactController) Put() {
 // @Failure 403 id is empty
 // @router /:id [delete]
 func (c *UserContactController) Delete() {
-	if c.CurrentUser.PermissionLevel != models.VIEWER {
+	if c.CurrentUser.PermissionLevel != VIEWER {
 		idStr := c.Ctx.Input.Param(":id")
 		id, err := strconv.Atoi(idStr)
 		if err == nil {

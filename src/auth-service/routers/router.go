@@ -1,3 +1,6 @@
+// @APIVersion 1.0.0
+// @Title Auth-Service API
+// @Description Auth-service provides authorization, registration, password change, etc.
 package routers
 
 import (
@@ -7,7 +10,7 @@ import (
 )
 
 func init() {
-	ns := beego.NewNamespace("/v1/auth",
+	ns := beego.NewNamespace("/v1",
 		beego.NSNamespace("/signin",
 			beego.NSInclude(
 				&controllers.AuthController{},

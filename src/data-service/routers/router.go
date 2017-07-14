@@ -1,10 +1,6 @@
 // @APIVersion 1.0.1
-// @Title Lanit-Tercom School API
-// @Description API для Lanit-Tercom School
-// @TermsOfServiceUrl No terms
-// @License No License
-// @LicenseUrl No License
-// @URL https://vk.com/ltschool
+// @Title Data-Service API
+// @Description The data service provides data transfer from the database
 package routers
 
 import (
@@ -48,11 +44,6 @@ func init() {
 		beego.NSNamespace("/main/projects",
 			beego.NSInclude(
 				&controllers.LandingProjectsController{},
-			),
-		),
-		beego.NSNamespace("/files",
-			beego.NSInclude(
-				&controllers.FileController{},
 			),
 		),
 	)

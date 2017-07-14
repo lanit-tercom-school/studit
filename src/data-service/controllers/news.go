@@ -33,7 +33,7 @@ func (c *NewsController) URLMapping() {
 // @router / [post]
 func (c *NewsController) Post() {
 	beego.Trace("Try to POST news")
-	if c.CurrentUser.PermissionLevel == models.ADMIN {
+	if c.CurrentUser.PermissionLevel == ADMIN {
 		var v models.NewsJson
 		if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
 			if id, err := models.AddNews(&v); err == nil {
@@ -152,7 +152,7 @@ func (c *NewsController) GetAll() {
 // @Failure 403 Forbidden
 // @router /:id [put]
 func (c *NewsController) Put() {
-	if c.CurrentUser.PermissionLevel == models.ADMIN {
+	if c.CurrentUser.PermissionLevel == ADMIN {
 		idStr := c.Ctx.Input.Param(":id")
 		id, err := strconv.Atoi(idStr)
 		if err != nil {
@@ -193,7 +193,7 @@ func (c *NewsController) Put() {
 // @Failure 403 Forbidden
 // @router /:id [delete]
 func (c *NewsController) Delete() {
-	if c.CurrentUser.PermissionLevel == models.ADMIN {
+	if c.CurrentUser.PermissionLevel == ADMIN {
 		idStr := c.Ctx.Input.Param(":id")
 		id, err := strconv.Atoi(idStr)
 		if err != nil {

@@ -30,7 +30,7 @@ func (c *UserEnrollOnProjectController) URLMapping() {
 // @Failure 403 body is empty
 // @router /:id [post]
 func (c *UserEnrollOnProjectController) Post() {
-	if c.CurrentUser.PermissionLevel == models.VIEWER {
+	if c.CurrentUser.PermissionLevel == VIEWER {
 		beego.Debug(c.Ctx.Input.IP(), "Access denied for `Post` new application form")
 		c.Ctx.Output.SetStatus(HTTP_FORBIDDEN)
 		c.Data["json"] = HTTP_FORBIDDEN_STR
@@ -116,7 +116,7 @@ func (c *UserEnrollOnProjectController) GetOne() {
 // @router / [get]
 func (c *UserEnrollOnProjectController) GetAll() {
 	beego.Trace("New GET for enrolled users")
-	if c.CurrentUser.PermissionLevel >= models.LEADER {
+	if c.CurrentUser.PermissionLevel >= LEADER {
 		l, err := models.GetAllEnrolledOnProject(c.CurrentUser.UserId)
 		if err != nil {
 			beego.Debug("Something wrong", err.Error())
@@ -144,7 +144,7 @@ func (c *UserEnrollOnProjectController) GetAll() {
 // @router /:id [delete]
 func (c *UserEnrollOnProjectController) Delete() {
 	beego.Trace("User want to sign out from project")
-	if c.CurrentUser.PermissionLevel == models.VIEWER {
+	if c.CurrentUser.PermissionLevel == VIEWER {
 		beego.Debug(c.Ctx.Input.IP(), "Access denied for `Delete` project_sign_up")
 		c.Ctx.Output.SetStatus(HTTP_FORBIDDEN)
 		c.Data["json"] = HTTP_FORBIDDEN_STR
