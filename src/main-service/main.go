@@ -1,6 +1,7 @@
 package main
 
 import (
+	"main-service/helpers"
 	"main-service/root"
 	"net/http"
 
@@ -14,19 +15,19 @@ import (
 var Schema gql.Schema
 
 func init() {
-	log.Println("Server: Schema initialization")
+	helpers.LogServer("Schema initialization")
 	schema, err := gql.NewSchema(gql.SchemaConfig{
 		Query: root.RootQuery,
 	})
 	if err != nil {
-		log.Panicf("Schema: Error: %s", err)
+		helpers.LogErrorServer(err)
 	}
-	log.Println("Server: Schema initialization successfully")
+	helpers.LogServer("Schema initialization successfully")
 	Schema = schema
 }
 
 func main() {
-	log.Print("Server: Started")
+	helpers.LogServer("Started")
 	h := handler.New(&handler.Config{
 		Schema: &Schema,
 		Pretty: true,

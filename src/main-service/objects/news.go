@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"main-service/conf"
+	"main-service/helpers"
 
 	gql "github.com/graphql-go/graphql"
 )
@@ -56,6 +57,6 @@ func ResolveGetNews(p gql.ResolveParams) (interface{}, error) {
 		return nil, err
 	}
 	var news News
-	err := httpGet(conf.Configuration.DataServiceURL+"v1/news/"+id, &news)
+	err := helpers.HttpGet(conf.Configuration.DataServiceURL+"v1/news/"+id, &news)
 	return news, err
 }

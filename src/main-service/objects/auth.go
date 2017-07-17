@@ -3,6 +3,7 @@ package objects
 import (
 	"errors"
 	"log"
+	"main-service/helpers"
 	"strconv"
 	"strings"
 
@@ -13,12 +14,6 @@ import (
 //********************************************
 //Дальше идёт код необходимый для аутенфикации
 //********************************************
-func logErrorAuth(err error) {
-	log.Printf("Auth: Error %s", err)
-}
-func logAuth(str string) {
-	log.Printf("Auth: %s", str)
-}
 
 type CurrentClient struct {
 	UserId          int
@@ -36,7 +31,7 @@ const (
 var jwtManager jwt.Algorithm
 
 func init() {
-	logAuth("Configuration")
+	helpers.LogAuth("Configuration")
 	auth_config, err := config.NewConfig("ini", "conf/auth.conf")
 	var r string
 	if err != nil {
@@ -46,10 +41,10 @@ func init() {
 		r = auth_config.String("jwt_secret")
 	}
 	if r == "" {
-		logErrorAuth(errors.New("Empty secure token"))
+		helpers.LogErrorAuth(errors.New("Empty secure token"))
 	} else {
 		jwtManager = jwt.HmacSha256(r)
-		logAuth("Configuration successfully")
+		helpers.LogAuth("Configuration successfully")
 	}
 }
 
@@ -66,29 +61,29 @@ func newClient(tokenStr string) (client CurrentClient) {
 	}
 	token := tokenStr[7:]
 	if len(token) < 2 {
-		logErrorAuth(errors.New("Token too short"))
+		helpers.LogErrorAuth(errors.New("Token too short"))
 		return
 	} else if err := jwtManager.Validate(token); err == nil {
 		claims, _ := jwtManager.Decode(token) // err не нужна, т.к. проверяется во время .Validate()
 		userId, err := claims.Get("user_id")
 		userPermissionLevel, err1 := claims.Get("perm_lvl")
 		if err != nil {
-			logErrorAuth(errors.New("Can't get user_id"))
+			helpers.LogErrorAuth(errors.New("Can't get user_id"))
 		} else if int(userId.(float64)) < 0 {
-			logErrorAuth(errors.New("UserId below 0"))
+			helpers.LogErrorAuth(errors.New("UserId below 0"))
 		} else if err1 != nil {
-			logErrorAuth(errors.New("Can't get perm_lvl"))
+			helpers.LogErrorAuth(errors.New("Can't get perm_lvl"))
 		} else if int(userPermissionLevel.(float64)) < 0 {
-			logErrorAuth(errors.New("UserPermissionLevel below 0"))
+			helpers.LogErrorAuth(errors.New("UserPermissionLevel below 0"))
 		} else if int(userPermissionLevel.(float64)) > MaxPermissionLevel {
-			logErrorAuth(errors.New("UserPermissionLevel is " + userPermissionLevel.(string) + " that higher than " + strconv.Itoa(MaxPermissionLevel)))
+			helpers.LogErrorAuth(errors.New("UserPermissionLevel is " + userPermissionLevel.(string) + " that higher than " + strconv.Itoa(MaxPermissionLevel)))
 		} else {
 			client.UserId = int(userId.(float64))
 			client.PermissionLevel = int(userPermissionLevel.(float64))
-			logAuth("Success for" + " UserId " + strconv.Itoa(client.UserId) + " PermissionLevel " + strconv.Itoa(client.PermissionLevel))
+			helpers.LogAuth("Success for" + " UserId " + strconv.Itoa(client.UserId) + " PermissionLevel " + strconv.Itoa(client.PermissionLevel))
 		}
 	} else {
-		logErrorAuth(errors.New("Invalid token"))
+		helpers.LogErrorAuth(errors.New("Invalid token"))
 	}
 	return
 }
@@ -100,13 +95,13 @@ func newClient(tokenStr string) (client CurrentClient) {
 // При условии PermissionLevel == -1 не гарантируется правильный Id
 func Auth(clientToken string) (c CurrentClient) {
 	c = CurrentClient{}
-	logAuth("Start")
+	helpers.LogAuth("Start")
 	if clientToken == "" {
-		logErrorAuth(errors.New("No token"))
+		helpers.LogErrorAuth(errors.New("No token"))
 		c.PermissionLevel = VIEWER
 	} else {
 		c = newClient(clientToken)
 	}
-	logAuth("Exit")
+	helpers.LogAuth("Exit")
 	return
 }

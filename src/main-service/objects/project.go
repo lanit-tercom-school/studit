@@ -3,6 +3,7 @@ package objects
 import (
 	"errors"
 	"main-service/conf"
+	"main-service/helpers"
 	"strconv"
 	"time"
 
@@ -120,14 +121,14 @@ func ResolveGetProjectById(p gql.ResolveParams) (interface{}, error) {
 		return nil, err
 	}
 	var project Project
-	err := httpGet(conf.Configuration.DataServiceURL+"v1/project/"+id, &project)
+	err := helpers.HttpGet(conf.Configuration.DataServiceURL+"v1/project/"+id, &project)
 	return project, err
 }
 func ResolveGetEnrollsByProjectOn(p gql.ResolveParams) (interface{}, error) {
 	if p.Context.Value("CurrentUser").(CurrentClient).PermissionLevel >= LEADER {
 		projectOn := p.Source.(ProjectOn)
 		var projectEnrolls []ProjectEnroll
-		err := httpGet(conf.Configuration.DataServiceURL+"v1/project_enroll/?query=Project:"+strconv.Itoa(projectOn.Project.Id), &projectEnrolls)
+		err := helpers.HttpGet(conf.Configuration.DataServiceURL+"v1/project_enroll/?query=Project:"+strconv.Itoa(projectOn.Project.Id), &projectEnrolls)
 		return projectEnrolls, err
 	}
 	return nil, errors.New("Access is denied")
@@ -135,7 +136,7 @@ func ResolveGetEnrollsByProjectOn(p gql.ResolveParams) (interface{}, error) {
 func ResolveGetEnrollsByUser(p gql.ResolveParams) (interface{}, error) {
 	u := p.Source.(User)
 	var projectEnrolls []ProjectEnroll
-	err := httpGet(conf.Configuration.DataServiceURL+"v1/project_enroll/?query=User:"+strconv.Itoa(u.Id), &projectEnrolls)
+	err := helpers.HttpGet(conf.Configuration.DataServiceURL+"v1/project_enroll/?query=User:"+strconv.Itoa(u.Id), &projectEnrolls)
 	return projectEnrolls, err
 }
 
@@ -146,7 +147,7 @@ func ResolveGetProjectOnByUser(p gql.ResolveParams) (interface{}, error) {
 		var projectUsers []ProjectUser
 		var projectOn ProjectOn
 		var projectOns []ProjectOn
-		err := httpGet(conf.Configuration.DataServiceURL+"v1/project_user/?query=User:"+strconv.Itoa(u.Id), &projectUsers)
+		err := helpers.HttpGet(conf.Configuration.DataServiceURL+"v1/project_user/?query=User:"+strconv.Itoa(u.Id), &projectUsers)
 		for _, v := range projectUsers {
 			projectOn.Project = v.Project
 			projectOns = append(projectOns, projectOn)

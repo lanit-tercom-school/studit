@@ -3,6 +3,7 @@ package objects
 import (
 	"errors"
 	"main-service/conf"
+	"main-service/helpers"
 
 	gql "github.com/graphql-go/graphql"
 )
@@ -51,6 +52,6 @@ func ResolveGetUserById(p gql.ResolveParams) (interface{}, error) {
 		return nil, err
 	}
 	var user User
-	err := httpGet(conf.Configuration.DataServiceURL+"v1/user/"+id, &user)
+	err := helpers.HttpGet(conf.Configuration.DataServiceURL+"v1/user/"+id, &user)
 	return user, err
 }
