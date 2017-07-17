@@ -3,13 +3,17 @@ package objects
 import (
 	"errors"
 	"main-service/conf"
-	"time"
-
-	"strconv"
 
 	gql "github.com/graphql-go/graphql"
 )
 
+func init() {
+	//Здесь прописанны поля, которые вызывали ошибку "typechecking loop involving"
+	UserType.AddFieldConfig("Enrolls", &gql.Field{Type: gql.NewList(ProjectEnrollType), Resolve: ResolveGetEnrollsByUser})
+	UserType.AddFieldConfig("ProjectOn", &gql.Field{Type: gql.NewList(ProjectOnType), Resolve: ResolveGetProjectOnByUser})
+}
+
+//User - используется для получения пользователя с data-service
 type User struct {
 	Id          int    `json:"id"`
 	Nickname    string `json:"nickname"`
@@ -17,21 +21,7 @@ type User struct {
 	Avatar      string `json:"avatar,omitempty"`
 }
 
-type ProjectEnroll struct {
-	Id               int
-	Project          Project
-	User             User
-	EnrollingMessage string
-	Time             time.Time
-}
-type ProjectUser struct {
-	Id         int
-	Project    Project
-	User       User
-	SignedDate time.Time
-	Progress   int
-}
-
+//UserType - grqphql объект пользователя
 var UserType = gql.NewObject(
 	gql.ObjectConfig{
 		Name: "User",
@@ -48,19 +38,12 @@ var UserType = gql.NewObject(
 			"Avatar": &gql.Field{
 				Type: gql.String,
 			},
-			"Enrolls": &gql.Field{
-				Type:    gql.NewList(ProjectType),
-				Resolve: ResolveGetEnrollsForUser,
-			},
-			"Projects": &gql.Field{
-				Type:    gql.NewList(ProjectType),
-				Resolve: ResolveGetProjectsForUser,
-			},
 		},
 	},
 )
 
-func ResolveGetUser(p gql.ResolveParams) (interface{}, error) {
+//ResolveGetUserById - Получение пользователя по Id с data-service
+func ResolveGetUserById(p gql.ResolveParams) (interface{}, error) {
 	var id string
 	id, ok := p.Args["Id"].(string)
 	if !ok {
@@ -70,26 +53,4 @@ func ResolveGetUser(p gql.ResolveParams) (interface{}, error) {
 	var user User
 	err := httpGet(conf.Configuration.DataServiceURL+"v1/user/"+id, &user)
 	return user, err
-}
-
-func ResolveGetEnrollsForUser(p gql.ResolveParams) (interface{}, error) {
-	u := p.Source.(User)
-	var projectEnrolls []ProjectEnroll
-	var projects []Project
-	err := httpGet(conf.Configuration.DataServiceURL+"v1/project_enroll/?query=User:"+strconv.Itoa(u.Id), &projectEnrolls)
-	for _, v := range projectEnrolls {
-		projects = append(projects, v.Project)
-	}
-	return projects, err
-}
-
-func ResolveGetProjectsForUser(p gql.ResolveParams) (interface{}, error) {
-	u := p.Source.(User)
-	var projectUsers []ProjectUser
-	var projects []Project
-	err := httpGet(conf.Configuration.DataServiceURL+"v1/project_user/?query=User:"+strconv.Itoa(u.Id), &projectUsers)
-	for _, v := range projectUsers {
-		projects = append(projects, v.Project)
-	}
-	return projects, err
 }

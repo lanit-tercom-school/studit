@@ -8,10 +8,12 @@ import (
 	"net/http"
 )
 
+//Вывод ошибки в Get запросе
 func logErrorGet(url string, err error) {
 	log.Printf("Error GET: %s----%s", url, err)
 }
 
+//Get запрос с логами
 func httpGet(url string, o interface{}) (err error) {
 	log.Printf("Sending GET: %s", url)
 	var resp *http.Response

@@ -16,6 +16,6 @@ func init() {
 				Type: gql.ID,
 			},
 		},
-		Resolve: objects.ResolveGetProject,
+		Resolve: objects.ResolveGetProjectById,
 	}
 }
