@@ -11,13 +11,13 @@ import (
 
 //Project - используется для получения проекта с data-service
 type Project struct {
-	Id             int       `json:"id"`
-	Name           string    `json:"name"`
-	Description    string    `json:"description"`
-	DateOfCreation time.Time `json:"created"`
-	Logo           string    `json:"logo"`
-	Tags           string    `json:"tags"`
-	Status         string    `json:"status"`
+	Id             int       `json:"Id"`
+	Name           string    `json:"Name"`
+	Description    string    `json:"Description"`
+	DateOfCreation time.Time `json:"DateOfCreation"`
+	Logo           string    `json:"Logo"`
+	Tags           string    `json:"Tags"`
+	Status         string    `json:"Status"`
 }
 
 //ProjectEnroll - используется для получения заявок с data-service
