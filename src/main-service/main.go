@@ -4,7 +4,7 @@ import (
 	"main-service/root"
 	"net/http"
 
-	"github.com/graphql-go/handler"
+	"main-service/handler"
 
 	"log"
 
@@ -14,13 +14,14 @@ import (
 var Schema gql.Schema
 
 func init() {
-	log.Println("Initialization schema")
+	log.Println("Initialization schema ...")
 	schema, err := gql.NewSchema(gql.SchemaConfig{
 		Query: root.RootQuery,
 	})
 	if err != nil {
 		log.Panicf("Error: %s", err)
 	}
+	log.Println("Initialization schema successfully")
 	Schema = schema
 }
 
