@@ -98,7 +98,7 @@ var ProjectEnrollType = gql.NewObject(
 //ProjectOnType - grqphql объект связи пользователя и проекта
 var ProjectOnType = gql.NewObject(
 	gql.ObjectConfig{
-		Name: "ProjectEnroll",
+		Name: "ProjectOnType",
 		Fields: gql.Fields{
 			"Project": &gql.Field{
 				Type: ProjectType,
