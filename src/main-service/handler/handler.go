@@ -7,8 +7,9 @@ import (
 	"net/url"
 	"strings"
 
-	"github.com/graphql-go/graphql"
+	"main-service/objects"
 
+	"github.com/graphql-go/graphql"
 	"golang.org/x/net/context"
 )
 
@@ -117,13 +118,9 @@ func NewRequestOptions(r *http.Request) *RequestOptions {
 func (h *Handler) ContextHandler(ctx context.Context, w http.ResponseWriter, r *http.Request) {
 	// get query
 	opts := NewRequestOptions(r)
-	c := ctx
 	//Авторизация
-	token := r.Header.Get("Authorization")
-	if strings.HasPrefix(token, "Bearer") {
-		token = token[7:]
-		c = context.WithValue(ctx, "CurrentUser", Prepare(token))
-	}
+	tokenStr := r.Header.Get("Authorization")
+	c := context.WithValue(ctx, "CurrentUser", objects.Auth(tokenStr))
 	// execute graphql query
 	params := graphql.Params{
 		Schema:         *h.Schema,

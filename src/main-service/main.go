@@ -14,19 +14,19 @@ import (
 var Schema gql.Schema
 
 func init() {
-	log.Println("Initialization schema ...")
+	log.Println("Server: Schema initialization")
 	schema, err := gql.NewSchema(gql.SchemaConfig{
 		Query: root.RootQuery,
 	})
 	if err != nil {
-		log.Panicf("Error: %s", err)
+		log.Panicf("Schema: Error: %s", err)
 	}
-	log.Println("Initialization schema successfully")
+	log.Println("Server: Schema initialization successfully")
 	Schema = schema
 }
 
 func main() {
-	log.Print("Server started")
+	log.Print("Server: Started")
 	h := handler.New(&handler.Config{
 		Schema: &Schema,
 		Pretty: true,

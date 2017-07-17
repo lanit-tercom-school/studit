@@ -10,18 +10,22 @@ import (
 
 //Вывод ошибки в Get запросе
 func logErrorGet(url string, err error) {
-	log.Printf("Error GET: %s----%s", url, err)
+	log.Printf("GET: %s Error %s", url, err)
+}
+
+func logGet(url string, str string) {
+	log.Printf("Get: %s %s", url, str)
 }
 
 //Get запрос с логами
 func httpGet(url string, o interface{}) (err error) {
-	log.Printf("Sending GET: %s", url)
+	logGet(url, "Sending")
 	var resp *http.Response
 	if resp, err = http.Get(url); err != nil {
 		logErrorGet(url, err)
 		return
 	}
-	log.Printf("Received GET: %s----%s", url, resp.Status)
+	logGet(url, "Received "+resp.Status)
 	if resp.StatusCode != 200 {
 		err = errors.New("status code is not 200 Ok")
 		logErrorGet(url, err)
@@ -37,6 +41,6 @@ func httpGet(url string, o interface{}) (err error) {
 		logErrorGet(url, err)
 		return
 	}
-	log.Printf("Success GET: %s", url)
+	logGet(url, "Success")
 	return
 }

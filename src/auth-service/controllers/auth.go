@@ -1,24 +1,25 @@
 package controllers
 
 import (
-	"github.com/astaxie/beego"
-	"github.com/robbert229/jwt"
-	"github.com/astaxie/beego/config"
-	"time"
-	"encoding/json"
 	"auth-service/models"
+	"encoding/json"
 	"errors"
+	"time"
+
+	"github.com/astaxie/beego"
+	"github.com/astaxie/beego/config"
+	"github.com/robbert229/jwt"
 )
 
 type LoginResponse struct {
-	Token           string              `json:"bearer_token"`
+	Token           string               `json:"bearer_token"`
 	User            *models.MainUserInfo `json:"user"`
-	ExpiresIn       string              `json:"exp"`
-	PermissionLevel int                 `json:"perm_lvl"`
+	ExpiresIn       string               `json:"exp"`
+	PermissionLevel int                  `json:"perm_lvl"`
 }
 
 type Usr struct {
-	Login string    `json:"login"`
+	Login    string `json:"login"`
 	Password string `json:"password"`
 }
 
@@ -40,7 +41,6 @@ func init() {
 	jwtManager = jwt.HmacSha256(r)
 }
 
-
 // basic http sign in with password and login. Func checks login+password combination with same combination in DB
 func TryToLogin(login, password string) (user models.User, err error) {
 	// create default model
@@ -56,7 +56,7 @@ func TryToLogin(login, password string) (user models.User, err error) {
 	} else if user.Password != CustomStr(password).ToSHA1() {
 		return user, errors.New("Invalid login or password")
 	} else {
-		return user, nil  // all OK
+		return user, nil // all OK
 	}
 }
 
@@ -102,9 +102,9 @@ func (c *AuthController) Login() {
 			}
 			// Прикрепляем токен, уровень, время истечения и базовую информацию о пользователе
 			sessionResponse := LoginResponse{
-				Token: token,
-				User: models.GetMainUserInfo(user.Id),
-				ExpiresIn: f.Format(time.UnixDate),
+				Token:           token,
+				User:            models.GetMainUserInfo(user.Id),
+				ExpiresIn:       f.Format(time.UnixDate),
 				PermissionLevel: user.PermissionLevel,
 			}
 			beego.Trace(user.Login, "Sent token")

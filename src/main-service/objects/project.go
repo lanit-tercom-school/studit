@@ -124,10 +124,13 @@ func ResolveGetProjectById(p gql.ResolveParams) (interface{}, error) {
 	return project, err
 }
 func ResolveGetEnrollsByProjectOn(p gql.ResolveParams) (interface{}, error) {
-	projectOn := p.Source.(ProjectOn)
-	var projectEnrolls []ProjectEnroll
-	err := httpGet(conf.Configuration.DataServiceURL+"v1/project_enroll/?query=Project:"+strconv.Itoa(projectOn.Project.Id), &projectEnrolls)
-	return projectEnrolls, err
+	if p.Context.Value("CurrentUser").(CurrentClient).PermissionLevel >= LEADER {
+		projectOn := p.Source.(ProjectOn)
+		var projectEnrolls []ProjectEnroll
+		err := httpGet(conf.Configuration.DataServiceURL+"v1/project_enroll/?query=Project:"+strconv.Itoa(projectOn.Project.Id), &projectEnrolls)
+		return projectEnrolls, err
+	}
+	return nil, errors.New("Access is denied")
 }
 func ResolveGetEnrollsByUser(p gql.ResolveParams) (interface{}, error) {
 	u := p.Source.(User)
@@ -137,15 +140,19 @@ func ResolveGetEnrollsByUser(p gql.ResolveParams) (interface{}, error) {
 }
 
 func ResolveGetProjectOnByUser(p gql.ResolveParams) (interface{}, error) {
+	c := p.Context.Value("CurrentUser").(CurrentClient)
 	u := p.Source.(User)
-	var projectUsers []ProjectUser
-	var projectOn ProjectOn
-	var projectOns []ProjectOn
-	err := httpGet(conf.Configuration.DataServiceURL+"v1/project_user/?query=User:"+strconv.Itoa(u.Id), &projectUsers)
-	for _, v := range projectUsers {
-		projectOn.Project = v.Project
-		projectOns = append(projectOns, projectOn)
-	}
+	if c.PermissionLevel == ADMIN || c.UserId == u.Id {
+		var projectUsers []ProjectUser
+		var projectOn ProjectOn
+		var projectOns []ProjectOn
+		err := httpGet(conf.Configuration.DataServiceURL+"v1/project_user/?query=User:"+strconv.Itoa(u.Id), &projectUsers)
+		for _, v := range projectUsers {
+			projectOn.Project = v.Project
+			projectOns = append(projectOns, projectOn)
+		}
 
-	return projectOns, err
+		return projectOns, err
+	}
+	return nil, errors.New("Access is denied")
 }

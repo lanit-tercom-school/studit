@@ -1,9 +1,10 @@
-package handler
+package objects
 
 import (
 	"errors"
 	"log"
 	"strconv"
+	"strings"
 
 	"github.com/astaxie/beego/config"
 	"github.com/robbert229/jwt"
@@ -13,7 +14,10 @@ import (
 //Дальше идёт код необходимый для аутенфикации
 //********************************************
 func logErrorAuth(err error) {
-	log.Printf("Error AUTH: %s", err)
+	log.Printf("Auth: Error %s", err)
+}
+func logAuth(str string) {
+	log.Printf("Auth: %s", str)
 }
 
 type CurrentClient struct {
@@ -32,7 +36,7 @@ const (
 var jwtManager jwt.Algorithm
 
 func init() {
-	log.Println("Config AUTH...")
+	logAuth("Configuration")
 	auth_config, err := config.NewConfig("ini", "conf/auth.conf")
 	var r string
 	if err != nil {
@@ -45,18 +49,22 @@ func init() {
 		logErrorAuth(errors.New("Empty secure token"))
 	} else {
 		jwtManager = jwt.HmacSha256(r)
-		log.Println("Config AUTH successfully")
+		logAuth("Configuration successfully")
 	}
 }
 
 // Функция проверяет валидность токена и его полей и предоставляет Id пользователя и его уровень допуска
 // для следующих методов контроллера
 // `token` не должен быть пустой строкой
-func newClient(token string) (client CurrentClient) {
+func newClient(tokenStr string) (client CurrentClient) {
 	client = CurrentClient{
 		UserId:          -1,
 		PermissionLevel: VIEWER,
 	}
+	if !strings.HasPrefix(tokenStr, "Bearer ") {
+		return
+	}
+	token := tokenStr[7:]
 	if len(token) < 2 {
 		logErrorAuth(errors.New("Token too short"))
 		return
@@ -75,9 +83,9 @@ func newClient(token string) (client CurrentClient) {
 		} else if int(userPermissionLevel.(float64)) > MaxPermissionLevel {
 			logErrorAuth(errors.New("UserPermissionLevel is " + userPermissionLevel.(string) + " that higher than " + strconv.Itoa(MaxPermissionLevel)))
 		} else {
-			log.Println("Success AUTH: UserId:", userId, ", Permission level:", userPermissionLevel)
 			client.UserId = int(userId.(float64))
 			client.PermissionLevel = int(userPermissionLevel.(float64))
+			logAuth("Success for" + " UserId " + strconv.Itoa(client.UserId) + " PermissionLevel " + strconv.Itoa(client.PermissionLevel))
 		}
 	} else {
 		logErrorAuth(errors.New("Invalid token"))
@@ -90,15 +98,15 @@ func newClient(token string) (client CurrentClient) {
 // Внутри метода требуется проверка (нет, если метод+маршрут общедоступны), какой уровень доступа
 // Уровень доступа хранится в `c.PermissionLevel` и изменять его вне этой функции небезопасно
 // При условии PermissionLevel == -1 не гарантируется правильный Id
-func Prepare(clientToken string) (c CurrentClient) {
+func Auth(clientToken string) (c CurrentClient) {
 	c = CurrentClient{}
-	log.Println("Start AUTH")
+	logAuth("Start")
 	if clientToken == "" {
 		logErrorAuth(errors.New("No token"))
 		c.PermissionLevel = VIEWER
 	} else {
 		c = newClient(clientToken)
 	}
-	log.Println("Exit AUTH")
+	logAuth("Exit")
 	return
 }
