@@ -10,8 +10,8 @@ import (
 )
 
 type Comment struct {
-	Id   int   `orm:"column(id);pk;auto" json:"-"`
-	Text string `orm:"column(text)" json:"text"`
+	Id   int    `orm:"column(id);pk"`
+	Text string `orm:"column(text)"`
 }
 
 func (t *Comment) TableName() string {
@@ -51,7 +51,11 @@ func GetAllComment(query map[string]string, fields []string, sortby []string, or
 	for k, v := range query {
 		// rewrite dot-notation to Object__Attribute
 		k = strings.Replace(k, ".", "__", -1)
-		qs = qs.Filter(k, v)
+		if strings.Contains(k, "isnull") {
+			qs = qs.Filter(k, (v == "true" || v == "1"))
+		} else {
+			qs = qs.Filter(k, v)
+		}
 	}
 	// order by:
 	var sortFields []string

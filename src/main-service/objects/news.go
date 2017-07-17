@@ -15,7 +15,7 @@ type News struct {
 	Description    string    `json:"description"`
 	DateOfCreation time.Time `json:"created"`
 	LastEdit       time.Time `json:"edited"`
-	Tags           []string  `json:"tags"`
+	Tags           string    `json:"tags"`
 	Image          string    `json:"image"`
 }
 
@@ -39,7 +39,7 @@ var NewsType = gql.NewObject(
 				Type: gql.String,
 			},
 			"Tags": &gql.Field{
-				Type: gql.NewList(gql.String),
+				Type: gql.String,
 			},
 			"Image": &gql.Field{
 				Type: gql.String,

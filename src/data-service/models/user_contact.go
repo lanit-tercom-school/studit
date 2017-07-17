@@ -7,41 +7,13 @@ import (
 	"strings"
 
 	"github.com/astaxie/beego/orm"
-	//"github.com/astaxie/beego"
 )
 
 type UserContact struct {
-	Id          int          `orm:"column(id);pk;auto" json:"id,omitempty"`
-	Contact     string       `orm:"column(contact)" json:"value"`
-	Type string `orm:"column(contact_type)" json:"type"`
-	UserId      *User        `orm:"column(user_id);rel(fk)" json:"-"`
-}
-
-type UserContactInput struct {
-	Contact     	string	`json:"value"`
-	Type 	string	`json:"type"`
-}
-
-func  ContactTranslate(t* UserContactInput) UserContact{
-	return UserContact{
-		Contact:     t.Contact,
-		Type: t.Type,
-	}
-}
-
-func IsValidContactType(category string) bool {
-	switch category {
-	case
-		"skype",
-		"telegram",
-		"vk.com",
-		"viber",
-		"phone",
-		"mobile phone",
-		"email":
-		return true
-	}
-	return false
+	Id          int    `orm:"column(id);pk"`
+	Contact     string `orm:"column(contact)"`
+	ContactType string `orm:"column(contact_type)"`
+	UserId      *User  `orm:"column(user_id);rel(fk)"`
 }
 
 func (t *UserContact) TableName() string {
@@ -51,7 +23,6 @@ func (t *UserContact) TableName() string {
 func init() {
 	orm.RegisterModel(new(UserContact))
 }
-
 
 // AddUserContact insert a new UserContact into database and returns
 // last inserted Id on success.
@@ -82,7 +53,11 @@ func GetAllUserContact(query map[string]string, fields []string, sortby []string
 	for k, v := range query {
 		// rewrite dot-notation to Object__Attribute
 		k = strings.Replace(k, ".", "__", -1)
-		qs = qs.Filter(k, v)
+		if strings.Contains(k, "isnull") {
+			qs = qs.Filter(k, (v == "true" || v == "1"))
+		} else {
+			qs = qs.Filter(k, v)
+		}
 	}
 	// order by:
 	var sortFields []string
@@ -167,21 +142,11 @@ func DeleteUserContact(id int) (err error) {
 	o := orm.NewOrm()
 	v := UserContact{Id: id}
 	// ascertain id exists in the database
-	if err := o.Read(&v); err == nil {
-		o.Delete(&v)
+	if err = o.Read(&v); err == nil {
+		var num int64
+		if num, err = o.Delete(&UserContact{Id: id}); err == nil {
+			fmt.Println("Number of records deleted in database:", num)
+		}
 	}
 	return
-}
-
-func GetAllUserContacts(userId int) (ml []*UserContact, err error) {
-	o := orm.NewOrm()
-	var contacts []UserContact
-	_, err = o.QueryTable(new(UserContact)).Filter("UserId", User{Id: userId}).RelatedSel().All(&contacts)
-	if err != nil {
-		return ml, err
-	}
-	for _, v := range contacts {
-		ml = append(ml, &v)
-	}
-	return ml, nil
 }

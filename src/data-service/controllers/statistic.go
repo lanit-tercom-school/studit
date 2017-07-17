@@ -1,16 +1,16 @@
 package controllers
 
 import (
+	"data-service/models"
 	"encoding/json"
 	"errors"
-	"data-service/models"
 	"strconv"
 	"strings"
 
 	"github.com/astaxie/beego"
 )
 
-// StatisticController oprations for Statistic
+// StatisticController operations for Statistic
 type StatisticController struct {
 	beego.Controller
 }

@@ -21,7 +21,7 @@ func main() {
 		Schema: &schema,
 		Pretty: true,
 	})
-	http.Handle("/graphql", h)
+	http.Handle("/gql", h)
 	err := http.ListenAndServe(":8080", nil)
 	if err != nil {
 		log.Fatal(err)

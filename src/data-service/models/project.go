@@ -2,74 +2,22 @@ package models
 
 import (
 	"errors"
-	"strconv"
+	"fmt"
+	"reflect"
 	"strings"
 	"time"
 
 	"github.com/astaxie/beego/orm"
 )
 
-// Модель для базы данных
 type Project struct {
-	Id             int       `orm:"column(id);pk;auto" json:"id"`
-	Name           string    `orm:"column(name)" json:"name"`
-	Description    string    `orm:"column(description)" json:"descriptiom"`
-	DateOfCreation time.Time `orm:"column(date_of_creation);type(datetime)" json:"created"`
-	Logo           string    `orm:"column(logo)" json:"logo"`
-	Tags           string    `orm:"column(tags)" json:"tags"`
-	Status         int       `orm:"column(status)" json:"status"` // 0 - проект еще не начался, идет набор, и т.д.
-	// 1 - проект начался, ведутся лекции, разработка
-	// 2 - проект завершен, активность закончена
-}
-
-// Модель для общения с клиентами
-type ProjectJson struct {
-	Id             int       `json:"id,omitempty"` //
-	Name           string    `json:"name"`
-	Description    string    `json:"description"`
-	DateOfCreation time.Time `json:"created"`
-	Logo           string    `json:"logo"`
-	Tags           []string  `json:"tags"`
-	Status         int       `json:"status"` // см модель для бд
-}
-
-// Вся информация о проекте
-type AllInformationAboutProject struct {
-	Project  *ProjectJson   `json:"project"`
-	Enrolled []MainUserInfo `json:"enrolled"`
-	Members  []MainUserInfo `json:"members"`
-	Masters  []MainUserInfo `json:"masters"`
-}
-
-type MainProjectInfo struct {
-	Id   int    `json:"id"`
-	Name string `json:"name"`
-	Logo string `json:"logo"`
-}
-
-// Обязательный перевод от одной модели в другую
-func (t *Project) translate() ProjectJson {
-	return ProjectJson{
-		Id:             t.Id,
-		Name:           t.Name,
-		Description:    t.Description,
-		DateOfCreation: t.DateOfCreation,
-		Logo:           t.Logo,
-		Tags:           strings.Split(t.Tags, ","),
-		Status:         t.Status,
-	}
-}
-
-func (t *ProjectJson) translate() Project {
-	return Project{
-		Id:             t.Id,
-		Name:           t.Name,
-		Description:    t.Description,
-		DateOfCreation: t.DateOfCreation,
-		Logo:           t.Logo,
-		Tags:           strings.Join(t.Tags, ","),
-		Status:         t.Status,
-	}
+	Id             int       `orm:"column(id);pk"`
+	Name           string    `orm:"column(name)"`
+	Description    string    `orm:"column(description)"`
+	DateOfCreation time.Time `orm:"column(date_of_creation);type(timestamp with time zone)"`
+	Logo           string    `orm:"column(logo)"`
+	Tags           string    `orm:"column(tags)"`
+	Status         string    `orm:"column(status)"`
 }
 
 func (t *Project) TableName() string {
@@ -82,73 +30,70 @@ func init() {
 
 // AddProject insert a new Project into database and returns
 // last inserted Id on success.
-func AddProject(m *ProjectJson) (id int, err error) {
-	v := m.translate()
-	v.Id = 0 // for auto inc
-	v.DateOfCreation = time.Now()
-	v.Status = 0
+func AddProject(m *Project) (id int64, err error) {
 	o := orm.NewOrm()
-	id_, err := o.Insert(&v)
-	id = int(id_)
+	id, err = o.Insert(m)
 	return
 }
 
 // GetProjectById retrieves Project by Id. Returns error if
 // Id doesn't exist
-func GetProjectById(id int) (*ProjectJson, error) {
+func GetProjectById(id int) (v *Project, err error) {
 	o := orm.NewOrm()
-	temp := &Project{Id: id}
-	if err := o.Read(temp); err == nil {
-		v := temp.translate()
-		return &v, nil
-	} else {
-		return nil, err
+	v = &Project{Id: id}
+	if err = o.Read(v); err == nil {
+		return v, nil
 	}
+	return nil, err
 }
 
-// GetAllProjects retrieves all Project matches certain condition. Returns empty list if
+// GetAllProject retrieves all Project matches certain condition. Returns empty list if
 // no records exist
-func GetAllProjects(query map[string]string, sortBy []string, order []string,
-	offset int64, limit int64, tag string, user int64, master int64, status string) (ml []ProjectJson, err error) {
+func GetAllProject(query map[string]string, fields []string, sortby []string, order []string,
+	offset int64, limit int64) (ml []interface{}, err error) {
 	o := orm.NewOrm()
 	qs := o.QueryTable(new(Project))
 	// query k=v
 	for k, v := range query {
 		// rewrite dot-notation to Object__Attribute
 		k = strings.Replace(k, ".", "__", -1)
-		qs = qs.Filter(k, v)
+		if strings.Contains(k, "isnull") {
+			qs = qs.Filter(k, (v == "true" || v == "1"))
+		} else {
+			qs = qs.Filter(k, v)
+		}
 	}
 	// order by:
 	var sortFields []string
-	if len(sortBy) != 0 {
-		if len(sortBy) == len(order) {
+	if len(sortby) != 0 {
+		if len(sortby) == len(order) {
 			// 1) for each sort field, there is an associated order
-			for i, v := range sortBy {
-				orderBy := ""
+			for i, v := range sortby {
+				orderby := ""
 				if order[i] == "desc" {
-					orderBy = "-" + v
+					orderby = "-" + v
 				} else if order[i] == "asc" {
-					orderBy = v
+					orderby = v
 				} else {
 					return nil, errors.New("Error: Invalid order. Must be either [asc|desc]")
 				}
-				sortFields = append(sortFields, orderBy)
+				sortFields = append(sortFields, orderby)
 			}
 			qs = qs.OrderBy(sortFields...)
-		} else if len(sortBy) != len(order) && len(order) == 1 {
+		} else if len(sortby) != len(order) && len(order) == 1 {
 			// 2) there is exactly one order, all the sorted fields will be sorted by this order
-			for _, v := range sortBy {
-				orderBy := ""
+			for _, v := range sortby {
+				orderby := ""
 				if order[0] == "desc" {
-					orderBy = "-" + v
+					orderby = "-" + v
 				} else if order[0] == "asc" {
-					orderBy = v
+					orderby = v
 				} else {
 					return nil, errors.New("Error: Invalid order. Must be either [asc|desc]")
 				}
-				sortFields = append(sortFields, orderBy)
+				sortFields = append(sortFields, orderby)
 			}
-		} else if len(sortBy) != len(order) && len(order) != 1 {
+		} else if len(sortby) != len(order) && len(order) != 1 {
 			return nil, errors.New("Error: 'sortby', 'order' sizes mismatch or 'order' size is not 1")
 		}
 	} else {
@@ -159,23 +104,20 @@ func GetAllProjects(query map[string]string, sortBy []string, order []string,
 
 	var l []Project
 	qs = qs.OrderBy(sortFields...)
-	if _, err = qs.Limit(limit, offset).All(&l); err == nil {
-		for _, v := range l {
-			ml = append(ml, v.translate())
-		}
-		if tag != "" {
-			FilterByTag(&ml, tag)
-		}
-		if user != 0 {
-			FilterByUser(&ml, user)
-		}
-		if master != 0 {
-			FilterByMaster(&ml, master)
-		}
-		if status != "" {
-			r, err := strconv.Atoi(status)
-			if err == nil {
-				FilterByStatus(&ml, r)
+	if _, err = qs.Limit(limit, offset).All(&l, fields...); err == nil {
+		if len(fields) == 0 {
+			for _, v := range l {
+				ml = append(ml, v)
+			}
+		} else {
+			// trim unused fields
+			for _, v := range l {
+				m := make(map[string]interface{})
+				val := reflect.ValueOf(v)
+				for _, fname := range fields {
+					m[fname] = val.FieldByName(fname).Interface()
+				}
+				ml = append(ml, m)
 			}
 		}
 		return ml, nil
@@ -183,83 +125,17 @@ func GetAllProjects(query map[string]string, sortBy []string, order []string,
 	return nil, err
 }
 
-func FilterByTag(ml *[]ProjectJson, tag string) {
-	for i := 0; i < len(*ml); {
-		if !TagInArrayOfStrings(tag, (*ml)[i].Tags) {
-			(*ml)[i] = (*ml)[len(*ml)-1]
-			*ml = (*ml)[:len(*ml)-1]
-			continue
-		}
-		i++
-	}
-}
-
-func FilterByStatus(ml *[]ProjectJson, status int) {
-	for i := 0; i < len(*ml); {
-		if (*ml)[i].Status != status {
-			// remove from slice, https://github.com/golang/go/wiki/SliceTricks#delete-without-preserving-order
-			(*ml)[i] = (*ml)[len(*ml)-1]
-			*ml = (*ml)[:len(*ml)-1]
-			continue
-		}
-		i++
-	}
-}
-
-func FilterByUser(ml *[]ProjectJson, user int64) {
-	o := orm.NewOrm()
-	qs := o.QueryTable(new(ProjectUser))
-	var l []ProjectUser
-	qs.All(&l)
-	userProjects := make(map[int]bool)
-	for _, v := range l {
-		if int(user) == (v.UserId).Id {
-			userProjects[(v.ProjectId).Id] = true
-		}
-	}
-	for i := 0; i < len(*ml); {
-		if !userProjects[(*ml)[i].Id] {
-			(*ml)[i] = (*ml)[len(*ml)-1]
-			*ml = (*ml)[:len(*ml)-1]
-			continue
-		}
-		i++
-	}
-}
-
-func FilterByMaster(ml *[]ProjectJson, master int64) {
-	o := orm.NewOrm()
-	qs := o.QueryTable(new(ProjectMaster))
-	var l []ProjectMaster
-	qs.All(&l)
-	createdProjects := make(map[int]bool)
-	for _, v := range l {
-		if int(master) == (v.MasterId).Id {
-			createdProjects[(v.ProjectId).Id] = true
-		}
-	}
-
-	for i := 0; i < len(*ml); {
-		if !createdProjects[(*ml)[i].Id] {
-			(*ml)[i] = (*ml)[len(*ml)-1]
-			*ml = (*ml)[:len(*ml)-1]
-			continue
-		}
-		i++
-	}
-}
-
 // UpdateProject updates Project by Id and returns error if
 // the record to be updated doesn't exist
-func UpdateProjectById(m *ProjectJson) (err error) {
-	proj, err := GetProjectById(m.Id)
-	t := m.translate()
-	t.DateOfCreation = proj.DateOfCreation
+func UpdateProjectById(m *Project) (err error) {
 	o := orm.NewOrm()
 	v := Project{Id: m.Id}
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
-		_, err = o.Update(&t)
+		var num int64
+		if num, err = o.Update(m); err == nil {
+			fmt.Println("Number of records updated in database:", num)
+		}
 	}
 	return
 }
@@ -271,15 +147,10 @@ func DeleteProject(id int) (err error) {
 	v := Project{Id: id}
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
-		_, err = o.Delete(&Project{Id: id})
+		var num int64
+		if num, err = o.Delete(&Project{Id: id}); err == nil {
+			fmt.Println("Number of records deleted in database:", num)
+		}
 	}
 	return
-}
-
-// Return 3 Projects for landing page. Returns empty list if no Projects exists
-// This is overloaded method for GetAllProjects with parameters
-// ([], [], [], [], 0, 3)
-func GetLandingProjects() (ml []ProjectJson, err error) {
-	var query = make(map[string]string)
-	return GetAllProjects(query, []string{}, []string{}, 0, 3, "", 0, 0, "")
 }

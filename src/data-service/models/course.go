@@ -10,11 +10,11 @@ import (
 )
 
 type Course struct {
-	Id          int     `orm:"column(id);pk;auto" json:"-"`
-	Title       string  `orm:"column(title)" json:"title"`
-	Description string  `orm:"column(description)" json:"desc"`
-	Logo        string  `orm:"column(logo)" json:"logo"`
-	Rating      float32 `orm:"column(rating)" json:"rate"`
+	Id          int     `orm:"column(id);pk"`
+	Title       string  `orm:"column(title)"`
+	Description string  `orm:"column(description)"`
+	Logo        string  `orm:"column(logo)"`
+	Rating      float32 `orm:"column(rating)"`
 }
 
 func (t *Course) TableName() string {
@@ -54,7 +54,11 @@ func GetAllCourse(query map[string]string, fields []string, sortby []string, ord
 	for k, v := range query {
 		// rewrite dot-notation to Object__Attribute
 		k = strings.Replace(k, ".", "__", -1)
-		qs = qs.Filter(k, v)
+		if strings.Contains(k, "isnull") {
+			qs = qs.Filter(k, (v == "true" || v == "1"))
+		} else {
+			qs = qs.Filter(k, v)
+		}
 	}
 	// order by:
 	var sortFields []string

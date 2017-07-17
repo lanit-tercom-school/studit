@@ -1,16 +1,16 @@
 package controllers
 
 import (
+	"data-service/models"
 	"encoding/json"
 	"errors"
-	"data-service/models"
 	"strconv"
 	"strings"
 
 	"github.com/astaxie/beego"
 )
 
-// TaskForTestController oprations for TaskForTest
+// TaskForTestController operations for TaskForTest
 type TaskForTestController struct {
 	beego.Controller
 }

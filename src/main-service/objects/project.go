@@ -14,8 +14,8 @@ type Project struct {
 	Description    string    `json:"description"`
 	DateOfCreation time.Time `json:"created"`
 	Logo           string    `json:"logo"`
-	Tags           []string  `json:"tags"`
-	Status         int       `json:"status"` // 0 - проект еще не начался, идет набор, и т.д.
+	Tags           string    `json:"tags"`
+	Status         string    `json:"status"` // 0 - проект еще не начался, идет набор, и т.д.
 	// 1 - проект начался, ведутся лекции, разработка
 	// 2 - проект завершен, активность закончена
 }
@@ -40,10 +40,10 @@ var ProjectType = gql.NewObject(
 				Type: gql.String,
 			},
 			"Tags": &gql.Field{
-				Type: gql.NewList(gql.String),
+				Type: gql.String,
 			},
 			"Status": &gql.Field{
-				Type: gql.Int,
+				Type: gql.String,
 			},
 		},
 	},
@@ -57,6 +57,6 @@ func ResolveGetProject(p gql.ResolveParams) (interface{}, error) {
 		return nil, err
 	}
 	var project Project
-	err := httpGet(conf.Configuration.DataServiceURL+"v1/project/id/"+id, &project)
+	err := httpGet(conf.Configuration.DataServiceURL+"v1/project/"+id, &project)
 	return project, err
 }

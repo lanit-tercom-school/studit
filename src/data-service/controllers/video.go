@@ -1,16 +1,16 @@
 package controllers
 
 import (
+	"data-service/models"
 	"encoding/json"
 	"errors"
-	"data-service/models"
 	"strconv"
 	"strings"
 
 	"github.com/astaxie/beego"
 )
 
-// VideoController oprations for Video
+// VideoController operations for Video
 type VideoController struct {
 	beego.Controller
 }

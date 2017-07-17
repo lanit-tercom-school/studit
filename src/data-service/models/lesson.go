@@ -10,7 +10,7 @@ import (
 )
 
 type Lesson struct {
-	Id          int     `orm:"column(id);pk;auto"`
+	Id          int     `orm:"column(id);pk"`
 	Title       string  `orm:"column(title)"`
 	CourseId    *Course `orm:"column(course_id);rel(fk)"`
 	Description string  `orm:"column(description)"`
@@ -54,7 +54,11 @@ func GetAllLesson(query map[string]string, fields []string, sortby []string, ord
 	for k, v := range query {
 		// rewrite dot-notation to Object__Attribute
 		k = strings.Replace(k, ".", "__", -1)
-		qs = qs.Filter(k, v)
+		if strings.Contains(k, "isnull") {
+			qs = qs.Filter(k, (v == "true" || v == "1"))
+		} else {
+			qs = qs.Filter(k, v)
+		}
 	}
 	// order by:
 	var sortFields []string

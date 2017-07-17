@@ -2,187 +2,140 @@ package models
 
 import (
 	"errors"
-	"time"
-	"github.com/astaxie/beego/orm"
+	"fmt"
+	"reflect"
 	"strings"
+	"time"
+
+	"github.com/astaxie/beego/orm"
 )
 
-type news struct {
-	Id             int         `orm:"column(id);pk;auto"`
-	Title          string      `orm:"column(title)"`
-	Description    string      `orm:"column(description)"`
-	DateOfCreation time.Time   `orm:"column(date_of_creation);type(datetime)"`
-	LastEdit       time.Time   `orm:"column(last_edit);type(datetime)"`
-	Tags           string      `orm:"column(tags)"`
-	Image          string      `orm:"columt(image)"`
+type News struct {
+	Id             int       `orm:"column(id);pk"`
+	Title          string    `orm:"column(title)"`
+	Description    string    `orm:"column(description)"`
+	Image          string    `orm:"column(image)"`
+	DateOfCreation time.Time `orm:"column(date_of_creation);type(timestamp with time zone)"`
+	LastEdit       time.Time `orm:"column(last_edit);type(timestamp without time zone)"`
+	Tags           string    `orm:"column(tags)"`
 }
 
-type NewsJson struct {
-	Id          int         `json:"id"`
-	Title       string      `json:"title"`
-	Description string      `json:"description"`
-	Created     time.Time   `json:"created"`
-	Edited      time.Time   `json:"edited"`
-	Tags        []string    `json:"tags"`
-	Image       string      `json:"image"`
-}
-
-func (t *news) translate() NewsJson {
-	return NewsJson{
-		Id:          t.Id,
-		Title:       t.Title,
-		Description: t.Description,
-		Created:     t.DateOfCreation,
-		Edited:      t.LastEdit,
-		Tags:        strings.Split(t.Tags, ","),
-		Image:       t.Image,
-	}
-}
-
-func (t *NewsJson) translate() news {
-	return news{
-		Id:             t.Id,
-		Title:          t.Title,
-		Description:    t.Description,
-		DateOfCreation: t.Created,
-		LastEdit:       t.Edited,
-		Tags:           strings.Join(t.Tags, ","),
-		Image:          t.Image,
-	}
-}
-
-func (t *news) TableName() string {
+func (t *News) TableName() string {
 	return "news"
 }
 
 func init() {
-	orm.RegisterModel(new(news))
+	orm.RegisterModel(new(News))
 }
 
 // AddNews insert a new News into database and returns
 // last inserted Id on success.
-func AddNews(m *NewsJson) (id int64, err error) {
-	v := m.translate()
-	v.Id = 0 // for auto inc
-	v.DateOfCreation = time.Now()
-	v.LastEdit = time.Now()
+func AddNews(m *News) (id int64, err error) {
 	o := orm.NewOrm()
-	id, err = o.Insert(&v)
+	id, err = o.Insert(m)
 	return
 }
 
 // GetNewsById retrieves News by Id. Returns error if
 // Id doesn't exist
-func GetNewsById(id int) (m *NewsJson, err error) {
+func GetNewsById(id int) (v *News, err error) {
 	o := orm.NewOrm()
-	v := &news{Id: id}
+	v = &News{Id: id}
 	if err = o.Read(v); err == nil {
-		m_temp := v.translate()  // need a temp variable
-		m = &m_temp
-		return m, nil
+		return v, nil
 	}
 	return nil, err
 }
 
-func TagInArrayOfStrings(tag string, tags []string) bool {
-	for _, t := range tags {
-		if t == tag {
-			return true
-		}
-	}
-	return false
-}
-
-func TagInString(tag string, tags string) bool {
-	temp_tags := strings.Split(tags, ",")
-	for _, t := range temp_tags {
-		if t == tag {
-			return true
-		}
-	}
-	return false
-}
-
 // GetAllNews retrieves all News matches certain condition. Returns empty list if
 // no records exist
-func GetAllNews(sortBy []string, order []string, offset int64, limit int64, tag string) (ml []interface{}, err error) {
+func GetAllNews(query map[string]string, fields []string, sortby []string, order []string,
+	offset int64, limit int64) (ml []interface{}, err error) {
 	o := orm.NewOrm()
-	qs := o.QueryTable(new(news))
-
-	// Step 1: parse input args to SQL syntax
-
+	qs := o.QueryTable(new(News))
+	// query k=v
+	for k, v := range query {
+		// rewrite dot-notation to Object__Attribute
+		k = strings.Replace(k, ".", "__", -1)
+		if strings.Contains(k, "isnull") {
+			qs = qs.Filter(k, (v == "true" || v == "1"))
+		} else {
+			qs = qs.Filter(k, v)
+		}
+	}
 	// order by:
 	var sortFields []string
-	if len(sortBy) != 0 {
-		if len(sortBy) == len(order) {
+	if len(sortby) != 0 {
+		if len(sortby) == len(order) {
 			// 1) for each sort field, there is an associated order
-			for i, v := range sortBy {
-				orderBy := ""
+			for i, v := range sortby {
+				orderby := ""
 				if order[i] == "desc" {
-					orderBy = "-" + v
+					orderby = "-" + v
 				} else if order[i] == "asc" {
-					orderBy = v
+					orderby = v
 				} else {
 					return nil, errors.New("Error: Invalid order. Must be either [asc|desc]")
 				}
-				sortFields = append(sortFields, orderBy)
+				sortFields = append(sortFields, orderby)
 			}
 			qs = qs.OrderBy(sortFields...)
-		} else if len(sortBy) != len(order) && len(order) == 1 {
+		} else if len(sortby) != len(order) && len(order) == 1 {
 			// 2) there is exactly one order, all the sorted fields will be sorted by this order
-			for _, v := range sortBy {
-				orderBy := ""
+			for _, v := range sortby {
+				orderby := ""
 				if order[0] == "desc" {
-					orderBy = "-" + v
+					orderby = "-" + v
 				} else if order[0] == "asc" {
-					orderBy = v
+					orderby = v
 				} else {
 					return nil, errors.New("Error: Invalid order. Must be either [asc|desc]")
 				}
-				sortFields = append(sortFields, orderBy)
+				sortFields = append(sortFields, orderby)
 			}
-		} else if len(sortBy) != len(order) && len(order) != 1 {
+		} else if len(sortby) != len(order) && len(order) != 1 {
 			return nil, errors.New("Error: 'sortby', 'order' sizes mismatch or 'order' size is not 1")
 		}
 	} else {
 		if len(order) != 0 {
-			return nil, errors.New("Error: Unused 'order' fields")
+			return nil, errors.New("Error: unused 'order' fields")
 		}
 	}
 
-	// Step 2: Select items from table with params
-
-	var l []news
+	var l []News
 	qs = qs.OrderBy(sortFields...)
-	if _, err = qs.Limit(limit, offset).All(&l); err == nil {
-		if tag == "" {
+	if _, err = qs.Limit(limit, offset).All(&l, fields...); err == nil {
+		if len(fields) == 0 {
 			for _, v := range l {
-				ml = append(ml, v.translate())
+				ml = append(ml, v)
 			}
-			return ml, nil
 		} else {
+			// trim unused fields
 			for _, v := range l {
-				r := v.translate()
-				if TagInArrayOfStrings(tag, r.Tags) {
-					ml = append(ml, r)
+				m := make(map[string]interface{})
+				val := reflect.ValueOf(v)
+				for _, fname := range fields {
+					m[fname] = val.FieldByName(fname).Interface()
 				}
+				ml = append(ml, m)
 			}
-			return ml, nil
 		}
+		return ml, nil
 	}
 	return nil, err
 }
 
 // UpdateNews updates News by Id and returns error if
 // the record to be updated doesn't exist
-func UpdateNewsById(m *NewsJson) (err error) {
-	m.Edited = time.Now()
-	t := m.translate()
+func UpdateNewsById(m *News) (err error) {
 	o := orm.NewOrm()
-	v := news{Id: m.Id}
+	v := News{Id: m.Id}
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
-		_, err = o.Update(&t)
+		var num int64
+		if num, err = o.Update(m); err == nil {
+			fmt.Println("Number of records updated in database:", num)
+		}
 	}
 	return
 }
@@ -191,10 +144,13 @@ func UpdateNewsById(m *NewsJson) (err error) {
 // the record to be deleted doesn't exist
 func DeleteNews(id int) (err error) {
 	o := orm.NewOrm()
-	v := news{Id: id}
+	v := News{Id: id}
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
-		_, err = o.Delete(&news{Id: id})
+		var num int64
+		if num, err = o.Delete(&News{Id: id}); err == nil {
+			fmt.Println("Number of records deleted in database:", num)
+		}
 	}
 	return
 }

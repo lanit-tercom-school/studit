@@ -2,6 +2,7 @@ package models
 
 import (
 	"errors"
+	"fmt"
 	"reflect"
 	"strings"
 
@@ -9,32 +10,10 @@ import (
 )
 
 type User struct {
-	Id          int    `orm:"column(id);pk;auto"                   json:"id"`
-	Nickname    string `orm:"column(nickname)"                     json:"nickname"`
-	Description string `orm:"column(description)"                  json:"description,omitempty"`
-	Avatar      string `orm:"column(avatar)"                       json:"avatar,omitempty"`
-}
-
-type FullUserInfo struct {
-	Id          int            `json:"id"`
-	Nickname    string         `json:"nickname"`
-	Description string         `json:"description"`
-	Avatar      string         `json:"avatar"`
-	Contact     []*UserContact `json:"contacts,omitempty"`
-}
-
-type AllInformationAboutUser struct {
-	User           FullUserInfo          `json:"user"`
-	MemberOf       []MainProjectInfo     `json:"member_of,omitempty"`
-	MasterOf       []MainProjectInfo     `json:"master_of,omitempty"`
-	EnrolledOn     []MainProjectInfo     `json:"enrolled_on,omitempty"`
-	MyApplications []ProjectApplications `json:"my_applications,omitempty"`
-}
-
-type MainUserInfo struct {
-	Id       int    `json:"id"`
-	Nickname string `json:"nickname"`
-	Avatar   string `json:"avatar"`
+	Id          int    `orm:"column(id);pk"`
+	Nickname    string `orm:"column(nickname)"`
+	Description string `orm:"column(description)"`
+	Avatar      string `orm:"column(avatar)"`
 }
 
 func (t *User) TableName() string {
@@ -74,7 +53,11 @@ func GetAllUser(query map[string]string, fields []string, sortby []string, order
 	for k, v := range query {
 		// rewrite dot-notation to Object__Attribute
 		k = strings.Replace(k, ".", "__", -1)
-		qs = qs.Filter(k, v)
+		if strings.Contains(k, "isnull") {
+			qs = qs.Filter(k, (v == "true" || v == "1"))
+		} else {
+			qs = qs.Filter(k, v)
+		}
 	}
 	// order by:
 	var sortFields []string
@@ -140,19 +123,15 @@ func GetAllUser(query map[string]string, fields []string, sortby []string, order
 
 // UpdateUser updates User by Id and returns error if
 // the record to be updated doesn't exist
-func UpdateUserById(n *User) (err error) {
+func UpdateUserById(m *User) (err error) {
 	o := orm.NewOrm()
-	v := User{Id: n.Id}
+	v := User{Id: m.Id}
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
-		//fields filter
-		m := User{
-			Id:          n.Id,
-			Nickname:    n.Nickname,
-			Description: n.Description,
-			Avatar:      n.Avatar,
+		var num int64
+		if num, err = o.Update(m); err == nil {
+			fmt.Println("Number of records updated in database:", num)
 		}
-		_, err = o.Update(&m)
 	}
 	return
 }
@@ -164,28 +143,10 @@ func DeleteUser(id int) (err error) {
 	v := User{Id: id}
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
-		_, err = o.Delete(&v)
+		var num int64
+		if num, err = o.Delete(&User{Id: id}); err == nil {
+			fmt.Println("Number of records deleted in database:", num)
+		}
 	}
 	return
-}
-
-func (m *User) Insert() error {
-	if _, err := orm.NewOrm().Insert(m); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (m *User) Read(fields ...string) error {
-	if err := orm.NewOrm().Read(m, fields...); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (m *User) Update(fields ...string) error {
-	if _, err := orm.NewOrm().Update(m, fields...); err != nil {
-		return err
-	}
-	return nil
 }

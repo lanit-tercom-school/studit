@@ -10,7 +10,7 @@ import (
 )
 
 type Variant struct {
-	Id            int          `orm:"column(id);pk;auto"`
+	Id            int          `orm:"column(id);pk"`
 	Text          string       `orm:"column(text)"`
 	CorrectAnswer bool         `orm:"column(correct_answer)"`
 	TaskForTestId *TaskForTest `orm:"column(task_for_test_id);rel(fk)"`
@@ -53,7 +53,11 @@ func GetAllVariant(query map[string]string, fields []string, sortby []string, or
 	for k, v := range query {
 		// rewrite dot-notation to Object__Attribute
 		k = strings.Replace(k, ".", "__", -1)
-		qs = qs.Filter(k, v)
+		if strings.Contains(k, "isnull") {
+			qs = qs.Filter(k, (v == "true" || v == "1"))
+		} else {
+			qs = qs.Filter(k, v)
+		}
 	}
 	// order by:
 	var sortFields []string

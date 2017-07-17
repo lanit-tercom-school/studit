@@ -6,157 +6,61 @@ import (
 	"errors"
 	"strconv"
 	"strings"
-	"sync"
 
 	"github.com/astaxie/beego"
 )
 
-// Операции с models.User, для некоторых требуется авторизация
+// UserController operations for User
 type UserController struct {
-	ControllerWithAuthorization
+	beego.Controller
 }
 
 // URLMapping ...
 func (c *UserController) URLMapping() {
+	c.Mapping("Post", c.Post)
 	c.Mapping("GetOne", c.GetOne)
 	c.Mapping("GetAll", c.GetAll)
 	c.Mapping("Put", c.Put)
 	c.Mapping("Delete", c.Delete)
 }
 
-type projectsGetter func(int) ([]*models.Project, error)
-
-// Вызывает функцию с указанным Id пользователя и отсылает в канал полученных пользователей в сокращенном виде
-// Используется для параллельного запроса к Masters, Enrolled и Users для проекта
-// Функция должна соответствовать projectsGetter прототипу
-func CallForProjectMainInfo(f projectsGetter, id int, c chan []models.MainProjectInfo, secondChan chan []models.MainProjectInfo) {
-	users, err := f(id)
-	if err != nil {
-		c <- nil
-		if secondChan != nil {
-			secondChan <- nil
+// Post ...
+// @Title Post
+// @Description create User
+// @Param	body		body 	models.User	true		"body for User content"
+// @Success 201 {int} models.User
+// @Failure 403 body is empty
+// @router / [post]
+func (c *UserController) Post() {
+	var v models.User
+	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
+		if _, err := models.AddUser(&v); err == nil {
+			c.Ctx.Output.SetStatus(201)
+			c.Data["json"] = v
+		} else {
+			c.Data["json"] = err.Error()
 		}
 	} else {
-		var mainProjectInfo []models.MainProjectInfo
-		for _, u := range users {
-			mainProjectInfo = append(mainProjectInfo, models.MainProjectInfo{
-				Id:   u.Id,
-				Logo: u.Logo,
-				Name: u.Name,
-			})
-		}
-		c <- mainProjectInfo
-		if secondChan != nil {
-			secondChan <- mainProjectInfo
-		}
+		c.Data["json"] = err.Error()
 	}
-}
-
-func CallForProjectApplications(c chan []models.ProjectApplications, projects_chan chan []models.MainProjectInfo) {
-	projects := <-projects_chan
-	if projects == nil || len(projects) == 0 {
-		c <- nil
-	} else {
-		// Создаем массив, элементы которого уже инициализированы,
-		// так возможна непоследовательная запись
-		apps := make([]models.ProjectApplications, len(projects))
-		// Группа ожидания синхронизации потоков
-		var wg sync.WaitGroup
-		for index, project := range projects {
-			t := make(chan []interface{})
-			wg.Add(1)
-			go func() {
-				// конкурентным способом получаем все заявки
-				go models.GetAllEnrolledOnProjectWithoutAuthChecking(project.Id, t)
-				apps[index].Project = project
-				apps[index].Applications = <-t
-				wg.Done()
-			}()
-		}
-		wg.Wait()
-		c <- apps
-	}
+	c.ServeJSON()
 }
 
 // GetOne ...
 // @Title Get One
 // @Description get User by id
-// @Param   id  path    string  true    "ID пользователя, о котором нужно узнать информацию"
-// @Param   cut query   bool    false   "Оставить только информацию о пользователе?"
-// @Param   Bearer-token        header      string          true    "Токен"
+// @Param	id		path 	string	true		"The key for staticblock"
 // @Success 200 {object} models.User
-// @Failure 400 :id is empty string
+// @Failure 403 :id is empty
 // @router /:id [get]
 func (c *UserController) GetOne() {
 	idStr := c.Ctx.Input.Param(":id")
-	id, err := strconv.Atoi(idStr)
-	if err == nil {
-		v, err := models.GetUserById(id)
-		if err != nil {
-			beego.Debug("GetOne user id not found", err.Error())
-			c.Data["json"] = err.Error()
-			c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
-		} else {
-			c.Data["json"] = v
-			/*beego.Trace("User founded, search for contacts")
-			U := models.FullUserInfo{
-				Id:          v.Id,
-				Nickname:    v.Nickname,
-				Description: v.Description,
-				Avatar:      v.Avatar,
-			}
-			is_master, err := models.IsProjectMasterForUserById(id, c.CurrentUser.UserId)
-			if err == nil {
-				if contact, err := models.GetAllUserContacts(id); err != nil {
-					beego.Critical("GetOne user Contacts GetAllUserContact error ", err.Error())
-					//c.Data["json"] = err.Error()
-					//c.Ctx.Output.SetStatus(500)
-				} else {
-					beego.Trace("Contacts founded")
-					if c.CurrentUser.UserId == v.Id || c.CurrentUser.PermissionLevel == ADMIN || is_master {
-						beego.Trace("Contacts pinned to response")
-						U.Contact = contact
-					}
-				}
-			} else {
-				beego.Critical("Error in IsProjectMasterForUserById in User `GetOne(ID)` ", err.Error())
-				//c.Data["json"] = err.Error()
-				//c.Ctx.Output.SetStatus(500)
-			}
-			// TODO: refactor this govnocode
-			enrolledChan := make(chan []models.MainProjectInfo)
-			membersChan := make(chan []models.MainProjectInfo)
-			mastersChan := make(chan []models.MainProjectInfo)
-			applicationsChan := make(chan []models.ProjectApplications)
-			chan_for_apps := make(chan []models.MainProjectInfo)
-			beego.Trace("Search for projects")
-			if cut_info, _ := c.GetBool("cut"); !cut_info {
-				go CallForProjectMainInfo(models.GetProjectEnrollIdByUserId, id, enrolledChan, nil)
-				go CallForProjectMainInfo(models.GetProjectUserIdByUserId, id, membersChan, nil)
-				go CallForProjectMainInfo(models.GetProjectMasterIdByUserId, id, mastersChan, chan_for_apps)
-				go CallForProjectApplications(applicationsChan, chan_for_apps)
-			} else {
-				go func() {
-					enrolledChan <- nil
-					mastersChan <- nil
-					membersChan <- nil
-					applicationsChan <- nil
-				}()
-			}
-			beego.Trace("Ready to sent response")
-			c.Data["json"] = models.AllInformationAboutUser{
-				User:           U,
-				EnrolledOn:     <-enrolledChan,
-				MasterOf:       <-mastersChan,
-				MemberOf:       <-membersChan,
-				MyApplications: <-applicationsChan,
-			}
-			beego.Trace("Get user OK")*/
-		}
-	} else {
-		beego.Debug("GetOne user `Atoi` error", err.Error())
-		c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
+	id, _ := strconv.Atoi(idStr)
+	v, err := models.GetUserById(id)
+	if err != nil {
 		c.Data["json"] = err.Error()
+	} else {
+		c.Data["json"] = v
 	}
 	c.ServeJSON()
 }
@@ -171,7 +75,7 @@ func (c *UserController) GetOne() {
 // @Param	limit	query	string	false	"Limit the size of result set. Must be an integer"
 // @Param	offset	query	string	false	"Start position of result set. Must be an integer"
 // @Success 200 {object} models.User
-// @Failure 400
+// @Failure 403
 // @router / [get]
 func (c *UserController) GetAll() {
 	var fields []string
@@ -218,7 +122,6 @@ func (c *UserController) GetAll() {
 	l, err := models.GetAllUser(query, fields, sortby, order, offset, limit)
 	if err != nil {
 		c.Data["json"] = err.Error()
-		c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
 	} else {
 		c.Data["json"] = l
 	}
@@ -230,39 +133,39 @@ func (c *UserController) GetAll() {
 // @Description update the User
 // @Param	id		path 	string	true		"The id you want to update"
 // @Param	body		body 	models.User	true		"body for User content"
-// @Param   Bearer-token        header      string          true    "Access token, Permission Level should be 2"
 // @Success 200 {object} models.User
 // @Failure 403 :id is not int
 // @router /:id [put]
 func (c *UserController) Put() {
-	if c.CurrentUser.PermissionLevel != VIEWER {
-		idStr := c.Ctx.Input.Param(":id")
-		id, err := strconv.Atoi(idStr)
-		if err != nil {
-			beego.Debug("Put user `Atoi` error", err.Error())
-			c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
+	idStr := c.Ctx.Input.Param(":id")
+	id, _ := strconv.Atoi(idStr)
+	v := models.User{Id: id}
+	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
+		if err := models.UpdateUserById(&v); err == nil {
+			c.Data["json"] = "OK"
+		} else {
 			c.Data["json"] = err.Error()
-		} else if c.CurrentUser.UserId == id {
-			v := models.User{Id: id}
-			if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
-				v.Id = id
-				if err := models.UpdateUserById(&v); err == nil {
-					beego.Trace("Put user OK")
-					c.Data["json"] = HTTP_OK_STR
-				} else {
-					beego.Debug("Put user `UpdateUserById` error", err.Error())
-					c.Data["json"] = err.Error()
-					c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
-				}
-			} else {
-				beego.Debug("Put user `Unmarshal` error", err.Error())
-				c.Data["json"] = err.Error()
-				c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
-			}
 		}
 	} else {
-		c.Ctx.Output.SetStatus(HTTP_FORBIDDEN)
-		c.Data["json"] = HTTP_FORBIDDEN_STR
+		c.Data["json"] = err.Error()
+	}
+	c.ServeJSON()
+}
+
+// Delete ...
+// @Title Delete
+// @Description delete the User
+// @Param	id		path 	string	true		"The id you want to delete"
+// @Success 200 {string} delete success!
+// @Failure 403 id is empty
+// @router /:id [delete]
+func (c *UserController) Delete() {
+	idStr := c.Ctx.Input.Param(":id")
+	id, _ := strconv.Atoi(idStr)
+	if err := models.DeleteUser(id); err == nil {
+		c.Data["json"] = "OK"
+	} else {
+		c.Data["json"] = err.Error()
 	}
 	c.ServeJSON()
 }

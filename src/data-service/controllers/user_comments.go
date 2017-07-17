@@ -1,16 +1,16 @@
 package controllers
 
 import (
+	"data-service/models"
 	"encoding/json"
 	"errors"
-	"data-service/models"
 	"strconv"
 	"strings"
 
 	"github.com/astaxie/beego"
 )
 
-// UserCommentsController oprations for UserComments
+// UserCommentsController operations for UserComments
 type UserCommentsController struct {
 	beego.Controller
 }

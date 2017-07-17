@@ -10,7 +10,7 @@ import (
 )
 
 type TasksTagsTable struct {
-	Id     int   `orm:"column(id);pk;auto"`
+	Id     int   `orm:"column(id);pk"`
 	TaskId *Task `orm:"column(task_id);rel(fk)"`
 	TagId  *Tag  `orm:"column(tag_id);rel(fk)"`
 }
@@ -52,7 +52,11 @@ func GetAllTasksTagsTable(query map[string]string, fields []string, sortby []str
 	for k, v := range query {
 		// rewrite dot-notation to Object__Attribute
 		k = strings.Replace(k, ".", "__", -1)
-		qs = qs.Filter(k, v)
+		if strings.Contains(k, "isnull") {
+			qs = qs.Filter(k, (v == "true" || v == "1"))
+		} else {
+			qs = qs.Filter(k, v)
+		}
 	}
 	// order by:
 	var sortFields []string

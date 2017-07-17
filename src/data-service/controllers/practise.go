@@ -1,16 +1,16 @@
 package controllers
 
 import (
+	"data-service/models"
 	"encoding/json"
 	"errors"
-	"data-service/models"
 	"strconv"
 	"strings"
 
 	"github.com/astaxie/beego"
 )
 
-// PractiseController oprations for Practise
+// PractiseController operations for Practise
 type PractiseController struct {
 	beego.Controller
 }

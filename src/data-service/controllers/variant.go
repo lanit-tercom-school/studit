@@ -1,16 +1,16 @@
 package controllers
 
 import (
+	"data-service/models"
 	"encoding/json"
 	"errors"
-	"data-service/models"
 	"strconv"
 	"strings"
 
 	"github.com/astaxie/beego"
 )
 
-// VariantController oprations for Variant
+// VariantController operations for Variant
 type VariantController struct {
 	beego.Controller
 }

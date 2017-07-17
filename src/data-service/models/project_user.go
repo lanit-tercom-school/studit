@@ -11,10 +11,10 @@ import (
 )
 
 type ProjectUser struct {
-	Id         int       `orm:"column(id);pk;auto"`
-	ProjectId  *Project  `orm:"column(project_id);rel(fk)"`
-	UserId     *User     `orm:"column(user_id);rel(fk)"`
-	SignedDate time.Time `orm:"column(signed_date);type(datetime)"`
+	Id         int       `orm:"column(id);pk"`
+	Project    *Project  `orm:"column(project_id);rel(fk)"`
+	User       *User     `orm:"column(user_id);rel(fk)"`
+	SignedDate time.Time `orm:"column(signed_date);type(timestamp with time zone)"`
 	Progress   int       `orm:"column(progress)"`
 }
 
@@ -26,62 +26,23 @@ func init() {
 	orm.RegisterModel(new(ProjectUser))
 }
 
-// GetProjectUserIdByUserId returns an array of projects
-// where user exists
-func GetProjectUserIdByUserId(userId int) (projects []*Project, err error) {
-	o := orm.NewOrm()
-	var project_members []ProjectUser
-	_, err = o.QueryTable(new(ProjectUser)).Filter("UserId", User{Id: userId}).RelatedSel().All(&project_members)
-	if err != nil {
-		return projects, err
-	}
-	for _, v := range project_members {
-		projects = append(projects, v.ProjectId)
-	}
-	return projects, nil
-}
-
 // AddProjectUser insert a new ProjectUser into database and returns
 // last inserted Id on success.
-func AddUserToProject(u *User, y *ProjectJson) (err error) {
-	temp := y.translate()
-	m := ProjectUser{
-		ProjectId:  &temp,
-		UserId:     u,
-		SignedDate: time.Now(),
-	}
-	o := orm.NewOrm()
-	_, err = o.QueryTable(new(ProjectEnroll)).
-		Filter("user_id", m.UserId).
-		Filter("project_id", m.ProjectId).
-		Delete()
-	if err != nil {
-		return err
-	}
-	_, err = o.Insert(&m)
-	return
-}
-
 func AddProjectUser(m *ProjectUser) (id int64, err error) {
 	o := orm.NewOrm()
 	id, err = o.Insert(m)
 	return
 }
 
-func GetUsersByProjectId(project_id int) (ml []*User, err error) {
+// GetProjectUserById retrieves ProjectUser by Id. Returns error if
+// Id doesn't exist
+func GetProjectUserById(id int) (v *ProjectUser, err error) {
 	o := orm.NewOrm()
-	var users []ProjectUser
-	_, err = o.QueryTable(new(ProjectUser)).
-		Filter("project_id", project_id).
-		RelatedSel().
-		All(&users)
-	if err != nil {
-		return nil, err
+	v = &ProjectUser{Id: id}
+	if err = o.Read(v); err == nil {
+		return v, nil
 	}
-	for _, x := range users {
-		ml = append(ml, x.UserId)
-	}
-	return ml, nil
+	return nil, err
 }
 
 // GetAllProjectUser retrieves all ProjectUser matches certain condition. Returns empty list if
@@ -94,7 +55,11 @@ func GetAllProjectUser(query map[string]string, fields []string, sortby []string
 	for k, v := range query {
 		// rewrite dot-notation to Object__Attribute
 		k = strings.Replace(k, ".", "__", -1)
-		qs = qs.Filter(k, v)
+		if strings.Contains(k, "isnull") {
+			qs = qs.Filter(k, (v == "true" || v == "1"))
+		} else {
+			qs = qs.Filter(k, v)
+		}
 	}
 	// order by:
 	var sortFields []string
@@ -137,7 +102,7 @@ func GetAllProjectUser(query map[string]string, fields []string, sortby []string
 
 	var l []ProjectUser
 	qs = qs.OrderBy(sortFields...)
-	if _, err = qs.Limit(limit, offset).All(&l, fields...); err == nil {
+	if _, err = qs.Limit(limit, offset).RelatedSel().All(&l, fields...); err == nil {
 		if len(fields) == 0 {
 			for _, v := range l {
 				ml = append(ml, v)
@@ -175,18 +140,15 @@ func UpdateProjectUserById(m *ProjectUser) (err error) {
 
 // DeleteProjectUser deletes ProjectUser by Id and returns error if
 // the record to be deleted doesn't exist
-func DeleteUserFromProject(user_id int, project_id int) (err error) {
+func DeleteProjectUser(id int) (err error) {
 	o := orm.NewOrm()
-	_, err = o.QueryTable(new(ProjectUser)).
-		Filter("UserId", user_id).
-		Filter("ProjectId", project_id).
-		Delete()
-	return
-}
-
-func IsTeacherInThisProject(user_id int, project_id int) (err error) {
-	o := orm.NewOrm()
-	var user ProjectUser
-	err = o.QueryTable(new(ProjectUser)).Filter("UserId", user_id).Filter("ProjectId", project_id).RelatedSel().One(&user)
+	v := ProjectUser{Id: id}
+	// ascertain id exists in the database
+	if err = o.Read(&v); err == nil {
+		var num int64
+		if num, err = o.Delete(&ProjectUser{Id: id}); err == nil {
+			fmt.Println("Number of records deleted in database:", num)
+		}
+	}
 	return
 }

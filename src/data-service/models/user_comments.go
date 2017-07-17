@@ -11,10 +11,10 @@ import (
 )
 
 type UserComments struct {
-	Id        int       `orm:"column(id);pk;auto" json:"-"`
-	UserId    *User     `orm:"column(user_id);rel(fk)" json:"user_id"`
-	CommentId *Comment  `orm:"column(comment_id);rel(fk)" json:"msg_id"`
-	Date      time.Time `orm:"column(date);type(date)" json:"date"`
+	Id        int       `orm:"column(id);pk"`
+	UserId    *User     `orm:"column(user_id);rel(fk)"`
+	CommentId *Comment  `orm:"column(comment_id);rel(fk)"`
+	Date      time.Time `orm:"column(date);type(timestamp with time zone)"`
 }
 
 func (t *UserComments) TableName() string {
@@ -54,7 +54,11 @@ func GetAllUserComments(query map[string]string, fields []string, sortby []strin
 	for k, v := range query {
 		// rewrite dot-notation to Object__Attribute
 		k = strings.Replace(k, ".", "__", -1)
-		qs = qs.Filter(k, v)
+		if strings.Contains(k, "isnull") {
+			qs = qs.Filter(k, (v == "true" || v == "1"))
+		} else {
+			qs = qs.Filter(k, v)
+		}
 	}
 	// order by:
 	var sortFields []string

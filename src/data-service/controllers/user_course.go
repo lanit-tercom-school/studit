@@ -1,16 +1,16 @@
 package controllers
 
 import (
+	"data-service/models"
 	"encoding/json"
 	"errors"
-	"data-service/models"
 	"strconv"
 	"strings"
 
 	"github.com/astaxie/beego"
 )
 
-// UserCourseController oprations for UserCourse
+// UserCourseController operations for UserCourse
 type UserCourseController struct {
 	beego.Controller
 }

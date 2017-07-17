@@ -1,16 +1,16 @@
 package controllers
 
 import (
+	"data-service/models"
 	"encoding/json"
 	"errors"
-	"data-service/models"
 	"strconv"
 	"strings"
 
 	"github.com/astaxie/beego"
 )
 
-// TasksTagsTableController oprations for TasksTagsTable
+// TasksTagsTableController operations for TasksTagsTable
 type TasksTagsTableController struct {
 	beego.Controller
 }

@@ -1,16 +1,18 @@
 package controllers
-/*
+
 import (
+	"data-service/models"
 	"encoding/json"
 	"errors"
-	"service/models"
 	"strconv"
 	"strings"
+
+	"github.com/astaxie/beego"
 )
 
-// CommentController oprations for Comment
+// CommentController operations for Comment
 type CommentController struct {
-	ControllerWithAuthorization
+	beego.Controller
 }
 
 // URLMapping ...
@@ -30,22 +32,16 @@ func (c *CommentController) URLMapping() {
 // @Failure 403 body is empty
 // @router / [post]
 func (c *CommentController) Post() {
-	if c.Ctx.Output.IsOk() {
-		token := c.GetString("token")
-		claims, _ := jwtManager.Decode(token)
-		_, _ = claims.Get("user_id")
-
-		var v models.Comment
-		if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
-			if _, err := models.AddComment(&v); err == nil {
-				c.Ctx.Output.SetStatus(201)
-				c.Data["json"] = v
-			} else {
-				c.Data["json"] = err.Error()
-			}
+	var v models.Comment
+	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
+		if _, err := models.AddComment(&v); err == nil {
+			c.Ctx.Output.SetStatus(201)
+			c.Data["json"] = v
 		} else {
 			c.Data["json"] = err.Error()
 		}
+	} else {
+		c.Data["json"] = err.Error()
 	}
 	c.ServeJSON()
 }
@@ -173,4 +169,3 @@ func (c *CommentController) Delete() {
 	}
 	c.ServeJSON()
 }
-*/
