@@ -157,3 +157,20 @@ func ResolveGetProjectOnByUser(p gql.ResolveParams) (interface{}, error) {
 	}
 	return nil, errors.New("Access is denied")
 }
+func ResolvePostProject(p gql.ResolveParams) (interface{}, error) {
+	c := p.Context.Value("CurrentUser").(CurrentClient)
+	projectToGet := Project{}
+	if c.PermissionLevel >= LEADER {
+		projectToSend := Project{
+			DateOfCreation: time.Now(),
+			Name:           p.Args["Name"].(string),
+			Description:    p.Args["Description"].(string),
+			Logo:           p.Args["Logo"].(string),
+			Status:         p.Args["Status"].(string),
+			Tags:           p.Args["Tags"].(string),
+		}
+		err := helpers.HttpPost(conf.Configuration.DataServiceURL+"v1/project/", projectToSend, &projectToGet)
+		return projectToGet, err
+	}
+	return nil, errors.New("Access is denied")
+}

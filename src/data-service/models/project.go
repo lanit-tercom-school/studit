@@ -11,7 +11,7 @@ import (
 )
 
 type Project struct {
-	Id             int       `orm:"column(id);pk"`
+	Id             int       `orm:"column(id);pk;auto"`
 	Name           string    `orm:"column(name)"`
 	Description    string    `orm:"column(description)"`
 	DateOfCreation time.Time `orm:"column(date_of_creation);type(timestamp with time zone)"`

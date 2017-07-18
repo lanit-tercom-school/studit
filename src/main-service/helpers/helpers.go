@@ -47,7 +47,7 @@ func HttpGet(url string, o interface{}) (err error) {
 	}
 	LogGet(url, "Received "+resp.Status)
 	if resp.StatusCode != 200 {
-		err = errors.New("status code is not 200 Ok")
+		err = errors.New("status code is not Ok")
 		LogErrorGet(url, err)
 		return
 	}
@@ -77,9 +77,9 @@ func HttpPost(url string, send interface{}, get interface{}) (err error) {
 		return
 	}
 	LogPost(url, "Received "+resp.Status)
-	if resp.StatusCode != 200 {
-		err = errors.New("status code is not 200 Ok")
-		LogErrorPost(url, err)
+	if !(resp.StatusCode == 200 || resp.StatusCode == 201) {
+		err = errors.New("status code is not Ok")
+		LogErrorGet(url, err)
 		return
 	}
 	body, err := ioutil.ReadAll(resp.Body)
@@ -87,6 +87,7 @@ func HttpPost(url string, send interface{}, get interface{}) (err error) {
 		LogErrorPost(url, err)
 		return
 	}
+
 	err = json.Unmarshal(body, get)
 	if err != nil {
 		LogErrorPost(url, err)

@@ -19,7 +19,8 @@ var Schema gql.Schema
 func init() {
 	helpers.LogServer("Schema initialization")
 	schema, err := gql.NewSchema(gql.SchemaConfig{
-		Query: root.RootQuery,
+		Query:    root.RootQuery,
+		Mutation: root.RootMutation,
 	})
 	if err != nil {
 		helpers.LogErrorServer(err)
