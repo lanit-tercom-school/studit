@@ -17,6 +17,12 @@ func LogErrorGet(url string, err error) {
 func LogGet(url string, str string) {
 	log.Printf("Get: %s %s", url, str)
 }
+func LogAccesAllowed(str string) {
+	LogAuth("Access is allowed to " + str)
+}
+func LogAccesDenied(str string) {
+	LogAuth("Access is denied to " + str)
+}
 func LogErrorPost(url string, err error) {
 	log.Printf("Post: %s Error %s", url, err)
 }

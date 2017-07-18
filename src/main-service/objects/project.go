@@ -126,11 +126,13 @@ func ResolveGetProjectById(p gql.ResolveParams) (interface{}, error) {
 }
 func ResolveGetEnrollsByProjectOn(p gql.ResolveParams) (interface{}, error) {
 	if p.Context.Value("CurrentUser").(CurrentClient).PermissionLevel >= LEADER {
+		helpers.LogAccesAllowed("GetEnrollsByProjectOn")
 		projectOn := p.Source.(ProjectOn)
 		var projectEnrolls []ProjectEnroll
 		err := helpers.HttpGet(conf.Configuration.DataServiceURL+"v1/project_enroll/?query=Project:"+strconv.Itoa(projectOn.Project.Id), &projectEnrolls)
 		return projectEnrolls, err
 	}
+	helpers.LogAccesDenied("GetEnrollsByProjectOn")
 	return nil, errors.New("Access is denied")
 }
 func ResolveGetEnrollsByUser(p gql.ResolveParams) (interface{}, error) {
@@ -144,6 +146,7 @@ func ResolveGetProjectOnByUser(p gql.ResolveParams) (interface{}, error) {
 	c := p.Context.Value("CurrentUser").(CurrentClient)
 	u := p.Source.(User)
 	if c.PermissionLevel == ADMIN || c.UserId == u.Id {
+		helpers.LogAccesAllowed("GetProjectOnByUser")
 		var projectUsers []ProjectUser
 		var projectOn ProjectOn
 		var projectOns []ProjectOn
@@ -155,12 +158,14 @@ func ResolveGetProjectOnByUser(p gql.ResolveParams) (interface{}, error) {
 
 		return projectOns, err
 	}
+	helpers.LogAccesDenied("GetProjectOnByUser")
 	return nil, errors.New("Access is denied")
 }
 func ResolvePostProject(p gql.ResolveParams) (interface{}, error) {
 	c := p.Context.Value("CurrentUser").(CurrentClient)
 	projectToGet := Project{}
 	if c.PermissionLevel >= LEADER {
+		helpers.LogAccesAllowed("PostProject")
 		projectToSend := Project{
 			DateOfCreation: time.Now(),
 			Name:           p.Args["Name"].(string),
@@ -172,5 +177,6 @@ func ResolvePostProject(p gql.ResolveParams) (interface{}, error) {
 		err := helpers.HttpPost(conf.Configuration.DataServiceURL+"v1/project/", projectToSend, &projectToGet)
 		return projectToGet, err
 	}
+	helpers.LogAccesDenied("PostProject")
 	return nil, errors.New("Access is denied")
 }
