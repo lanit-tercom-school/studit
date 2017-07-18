@@ -23,6 +23,12 @@ func (t *User) TableName() string {
 func init() {
 	orm.RegisterModel(new(User))
 }
+func (m *User) Insert() error {
+	if _, err := orm.NewOrm().Insert(m); err != nil {
+		return err
+	}
+	return nil
+}
 
 // AddUser insert a new User into database and returns
 // last inserted Id on success.

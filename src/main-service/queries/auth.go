@@ -6,19 +6,61 @@ import (
 	gql "github.com/graphql-go/graphql"
 )
 
-var Auth gql.Field
+var AuthQuery gql.Field
 
-func init() {
-	Auth = gql.Field{
-		Type: objects.AuthDataType,
-		Args: gql.FieldConfigArgument{
-			"Login": &gql.ArgumentConfig{
-				Type: gql.String,
+type AuthData struct {
+	Signin     objects.SigninDataToGet
+	Signup     objects.SignupDataToGet
+	Activation objects.ActivationDataToGet
+}
+
+var AuthQueryType = gql.NewObject(
+	gql.ObjectConfig{
+		Name: "AuthQuery",
+		Fields: gql.Fields{
+			"Signin": &gql.Field{
+				Type: objects.SigninDataType,
+				Args: gql.FieldConfigArgument{
+					"Login": &gql.ArgumentConfig{
+						Type: gql.String,
+					},
+					"Password": &gql.ArgumentConfig{
+						Type: gql.String,
+					},
+				},
+				Resolve: objects.ResolveGetSigninDataByLoginAndPassword,
 			},
-			"Password": &gql.ArgumentConfig{
-				Type: gql.String,
+			"Signup": &gql.Field{
+				Type: objects.SignupDataType,
+				Args: gql.FieldConfigArgument{
+					"Login": &gql.ArgumentConfig{
+						Type: gql.String,
+					},
+					"Password": &gql.ArgumentConfig{
+						Type: gql.String,
+					},
+					"Nickname": &gql.ArgumentConfig{
+						Type: gql.String,
+					},
+				},
+				Resolve: objects.ResolveGetSignupDataByLoginPasswordNickname,
+			},
+			"Activation": &gql.Field{
+				Type: objects.ActivationDataType,
+				Args: gql.FieldConfigArgument{
+					"ActivationCode": &gql.ArgumentConfig{
+						Type: gql.String,
+					},
+				},
+				Resolve: objects.ResolveGetActivationDataByCode,
 			},
 		},
-		Resolve: objects.ResolveGetAuthDataByLoginAndPassword,
+	},
+)
+
+func init() {
+	AuthQuery = gql.Field{
+		Type:    AuthQueryType,
+		Resolve: func(p gql.ResolveParams) (interface{}, error) { return AuthData{}, nil },
 	}
 }

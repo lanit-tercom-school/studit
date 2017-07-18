@@ -13,27 +13,60 @@ import (
 	"github.com/robbert229/jwt"
 )
 
-type AuthDataToSend struct {
+type SigninDataToSend struct {
 	Login    string `json:"login"`
 	Password string `json:"password"`
 }
-type AuthDataToGet struct {
+type SigninDataToGet struct {
 	Token            string    `json:"bearer_token"`
 	User             User      `json:"user"`
 	DataOfExpiration time.Time `json:"exp"`
 	PermissionLevel  int       `json:"perm_lvl"`
 }
+type SignupDataToSend struct {
+	Login    string `json:"login"`
+	Nickname string `json:"nickname"`
+	Password string `json:"password"`
+}
+type SignupDataToGet struct {
+	ActivationCode string `json:"code"`
+}
 
-var AuthDataType = gql.NewObject(
+type ActivationDataToGet struct {
+	Message string `json:"message"`
+}
+
+var ActivationDataType = gql.NewObject(
 	gql.ObjectConfig{
-		Name: "Auth",
+		Name: "Activation",
+		Fields: gql.Fields{
+			"Message": &gql.Field{
+				Type: gql.String,
+			},
+		},
+	},
+)
+var SignupDataType = gql.NewObject(
+	gql.ObjectConfig{
+		Name: "LogUp",
+		Fields: gql.Fields{
+			"ActivationCode": &gql.Field{
+				Type: gql.String,
+			},
+		},
+	},
+)
+
+var SigninDataType = gql.NewObject(
+	gql.ObjectConfig{
+		Name: "Signin",
 		Fields: gql.Fields{
 			"Token": &gql.Field{
 				Type: gql.String,
 			},
 			"User": &gql.Field{
 				Type:    UserType,
-				Resolve: ResolveGetUserByAuthData,
+				Resolve: ResolveGetUserBySigninData,
 			},
 			"DataOfExpiration": &gql.Field{
 				Type: gql.String,
@@ -45,31 +78,73 @@ var AuthDataType = gql.NewObject(
 	},
 )
 
-func ResolveGetAuthDataByLoginAndPassword(p gql.ResolveParams) (interface{}, error) {
-	var login, pass string
+func ResolveGetSignupDataByLoginPasswordNickname(p gql.ResolveParams) (interface{}, error) {
+	var login, pass, nick string
 	var ok bool
 	login, ok = p.Args["Login"].(string)
 	if !ok {
-		err := errors.New("missed id")
+		err := errors.New("missed login")
 		return nil, err
 	}
 	pass, ok = p.Args["Password"].(string)
 	if !ok {
-		err := errors.New("missed id")
+		err := errors.New("missed password")
 		return nil, err
 	}
-	sendData := AuthDataToSend{
+	nick, ok = p.Args["Nickname"].(string)
+	if !ok {
+		err := errors.New("missed nickname")
+		return nil, err
+	}
+	sendData := SignupDataToSend{
+		Login:    login,
+		Password: pass,
+		Nickname: nick,
+	}
+	getData := SignupDataToGet{}
+
+	err := helpers.HttpPost(conf.Configuration.AuthServiceURL+"v1/signup/", sendData, &getData)
+	return getData, err
+}
+func ResolveGetActivationDataByCode(p gql.ResolveParams) (interface{}, error) {
+	var code string
+	var ok bool
+	code, ok = p.Args["ActivationCode"].(string)
+	if !ok {
+		err := errors.New("missed code")
+		return nil, err
+	}
+	getData := ActivationDataToGet{}
+
+	err := helpers.HttpGet(conf.Configuration.AuthServiceURL+"v1/signup/?pass="+code, &getData)
+	return getData, err
+}
+
+func ResolveGetSigninDataByLoginAndPassword(p gql.ResolveParams) (interface{}, error) {
+	var login, pass string
+	var ok bool
+	login, ok = p.Args["Login"].(string)
+	if !ok {
+		err := errors.New("missed login")
+		return nil, err
+	}
+	pass, ok = p.Args["Password"].(string)
+	if !ok {
+		err := errors.New("missed password")
+		return nil, err
+	}
+	sendData := SigninDataToSend{
 		Login:    login,
 		Password: pass,
 	}
-	getData := AuthDataToGet{}
+	getData := SigninDataToGet{}
 
 	err := helpers.HttpPost(conf.Configuration.AuthServiceURL+"v1/signin", sendData, &getData)
 	return getData, err
 }
 
-func ResolveGetUserByAuthData(p gql.ResolveParams) (interface{}, error) {
-	id := p.Source.(AuthDataToGet).User.Id
+func ResolveGetUserBySigninData(p gql.ResolveParams) (interface{}, error) {
+	id := p.Source.(SigninDataToGet).User.Id
 	var user User
 	err := helpers.HttpGet(conf.Configuration.DataServiceURL+"v1/user/"+strconv.Itoa(id), &user)
 	return user, err

@@ -13,7 +13,7 @@ var RootQuery = gql.NewObject(
 			"News":    &queries.GetNewsById,
 			"User":    &queries.GetUserById,
 			"Project": &queries.GetProjectById,
-			"Auth":    &queries.Auth,
+			"Auth":    &queries.AuthQuery,
 		},
 	},
 )
