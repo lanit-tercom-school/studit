@@ -1,5 +1,7 @@
 {
     "FileServiceURL": "http://localhost:8084/",
     "AuthServiceURL": "http://localhost:8082/",
-    "DataServiceURL": "http://localhost:8081/"
+    "DataServiceURL": "http://localhost:8081/",
+    "JwtSecret" : "this_is_my_dirty_little_secret",
+    "HttpPort" : "8080"
 }

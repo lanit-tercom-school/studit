@@ -2,12 +2,12 @@ package objects
 
 import (
 	"errors"
-	"log"
 	"main-service/helpers"
 	"strconv"
 	"strings"
 
-	"github.com/astaxie/beego/config"
+	"main-service/conf"
+
 	"github.com/robbert229/jwt"
 )
 
@@ -32,18 +32,11 @@ var jwtManager jwt.Algorithm
 
 func init() {
 	helpers.LogAuth("Configuration")
-	auth_config, err := config.NewConfig("ini", "conf/auth.conf")
-	var r string
-	if err != nil {
-		log.Panic(err)
-	} else {
-		// Пробует считать из конфига
-		r = auth_config.String("jwt_secret")
-	}
-	if r == "" {
+
+	if conf.Configuration.JwtSecret == "" {
 		helpers.LogErrorAuth(errors.New("Empty secure token"))
 	} else {
-		jwtManager = jwt.HmacSha256(r)
+		jwtManager = jwt.HmacSha256(conf.Configuration.JwtSecret)
 		helpers.LogAuth("Configuration successfully")
 	}
 }

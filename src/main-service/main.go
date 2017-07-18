@@ -9,6 +9,8 @@ import (
 
 	"log"
 
+	"main-service/conf"
+
 	gql "github.com/graphql-go/graphql"
 )
 
@@ -27,13 +29,13 @@ func init() {
 }
 
 func main() {
-	helpers.LogServer("Started")
+	helpers.LogServer("Start on " + conf.Configuration.HttpPort)
 	h := handler.New(&handler.Config{
 		Schema: &Schema,
 		Pretty: true,
 	})
 	http.Handle("/graphql", h)
-	err := http.ListenAndServe(":8080", nil)
+	err := http.ListenAndServe(":"+conf.Configuration.HttpPort, nil)
 	if err != nil {
 		log.Fatal(err)
 	}
