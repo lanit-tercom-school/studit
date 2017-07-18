@@ -5,16 +5,79 @@ import (
 	"main-service/helpers"
 	"strconv"
 	"strings"
+	"time"
 
 	"main-service/conf"
 
+	gql "github.com/graphql-go/graphql"
 	"github.com/robbert229/jwt"
 )
 
-//********************************************
-//Дальше идёт код необходимый для аутенфикации
-//********************************************
+type AuthDataToSend struct {
+	Login    string `json:"login"`
+	Password string `json:"password"`
+}
+type AuthDataToGet struct {
+	Token            string    `json:"bearer_token"`
+	User             User      `json:"user"`
+	DataOfExpiration time.Time `json:"exp"`
+	PermissionLevel  int       `json:"perm_lvl"`
+}
 
+var AuthDataType = gql.NewObject(
+	gql.ObjectConfig{
+		Name: "Auth",
+		Fields: gql.Fields{
+			"Token": &gql.Field{
+				Type: gql.String,
+			},
+			"User": &gql.Field{
+				Type:    UserType,
+				Resolve: ResolveGetUserByAuthData,
+			},
+			"DataOfExpiration": &gql.Field{
+				Type: gql.String,
+			},
+			"PermissionLevel": &gql.Field{
+				Type: gql.Int,
+			},
+		},
+	},
+)
+
+func ResolveGetAuthDataByLoginAndPassword(p gql.ResolveParams) (interface{}, error) {
+	var login, pass string
+	var ok bool
+	login, ok = p.Args["Login"].(string)
+	if !ok {
+		err := errors.New("missed id")
+		return nil, err
+	}
+	pass, ok = p.Args["Password"].(string)
+	if !ok {
+		err := errors.New("missed id")
+		return nil, err
+	}
+	sendData := AuthDataToSend{
+		Login:    login,
+		Password: pass,
+	}
+	getData := AuthDataToGet{}
+
+	err := helpers.HttpPost(conf.Configuration.AuthServiceURL+"v1/signin", sendData, &getData)
+	return getData, err
+}
+
+func ResolveGetUserByAuthData(p gql.ResolveParams) (interface{}, error) {
+	id := p.Source.(AuthDataToGet).User.Id
+	var user User
+	err := helpers.HttpGet(conf.Configuration.DataServiceURL+"v1/user/"+strconv.Itoa(id), &user)
+	return user, err
+}
+
+//********************************************
+//Дальше идёт код необходимый для проверки токена
+//********************************************
 type CurrentClient struct {
 	UserId          int
 	PermissionLevel int

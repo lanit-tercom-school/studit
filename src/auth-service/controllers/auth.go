@@ -14,7 +14,7 @@ import (
 type LoginResponse struct {
 	Token           string               `json:"bearer_token"`
 	User            *models.MainUserInfo `json:"user"`
-	ExpiresIn       string               `json:"exp"`
+	ExpiresIn       time.Time            `json:"exp"`
 	PermissionLevel int                  `json:"perm_lvl"`
 }
 
@@ -103,8 +103,8 @@ func (c *AuthController) Login() {
 			// Прикрепляем токен, уровень, время истечения и базовую информацию о пользователе
 			sessionResponse := LoginResponse{
 				Token:           token,
-				User:            models.GetMainUserInfo(user.Id),
-				ExpiresIn:       f.Format(time.UnixDate),
+				ExpiresIn:       f,
+				User:            &models.MainUserInfo{Id: user.Id},
 				PermissionLevel: user.PermissionLevel,
 			}
 			beego.Trace(user.Login, "Sent token")

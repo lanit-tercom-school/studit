@@ -1,6 +1,7 @@
 package helpers
 
 import (
+	"bytes"
 	"encoding/json"
 	"errors"
 	"io/ioutil"
@@ -15,6 +16,13 @@ func LogErrorGet(url string, err error) {
 
 func LogGet(url string, str string) {
 	log.Printf("Get: %s %s", url, str)
+}
+func LogErrorPost(url string, err error) {
+	log.Printf("Post: %s Error %s", url, err)
+}
+
+func LogPost(url string, str string) {
+	log.Printf("Post: %s %s", url, str)
 }
 func LogServer(str string) {
 	log.Printf("Server: %s", str)
@@ -54,5 +62,36 @@ func HttpGet(url string, o interface{}) (err error) {
 		return
 	}
 	LogGet(url, "Success")
+	return
+}
+
+//Post запрос с логами
+func HttpPost(url string, send interface{}, get interface{}) (err error) {
+	LogPost(url, "Sending")
+	var resp *http.Response
+	jsonToSend, err := json.Marshal(send)
+	bodyToSend := bytes.NewBuffer(jsonToSend)
+
+	if resp, err = http.Post(url, "application/json", bodyToSend); err != nil {
+		LogErrorPost(url, err)
+		return
+	}
+	LogPost(url, "Received "+resp.Status)
+	if resp.StatusCode != 200 {
+		err = errors.New("status code is not 200 Ok")
+		LogErrorPost(url, err)
+		return
+	}
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		LogErrorPost(url, err)
+		return
+	}
+	err = json.Unmarshal(body, get)
+	if err != nil {
+		LogErrorPost(url, err)
+		return
+	}
+	LogPost(url, "Success")
 	return
 }
