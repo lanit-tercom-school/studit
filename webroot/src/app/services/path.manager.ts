@@ -50,13 +50,13 @@ export class PathManager implements CanActivate {
         }
         else if (next.url[0].path === 'home') {
             if (window.localStorage.getItem('current_user')) {
-                if (JSON.parse(localStorage.getItem('current_user')).perm_lvl === 0) {
+                if (JSON.parse(localStorage.getItem('current_user')).PermissionLevel === 0) {
                     this.router.navigate(['student/home']);
                 }
-                else if (JSON.parse(localStorage.getItem('current_user')).perm_lvl === 1) {
+                else if (JSON.parse(localStorage.getItem('current_user')).PermissionLevel === 1) {
                     this.router.navigate(['teacher/home']);
                 }
-                else if (JSON.parse(localStorage.getItem('current_user')).perm_lvl === 2) {
+                else if (JSON.parse(localStorage.getItem('current_user')).PermissionLevel === 2) {
                     this.router.navigate(['admin/home']);
                 }
             }
@@ -69,10 +69,10 @@ export class PathManager implements CanActivate {
 
         else if (next.url[0].path === 'project') {
             if (window.localStorage.getItem('current_user')) {
-                if (JSON.parse(localStorage.getItem('current_user')).perm_lvl === 0) {
+                if (JSON.parse(localStorage.getItem('current_user')).PermissionLevel === 0) {
                     this.router.navigate(['student/project/' + next.url[1].path]);
                 }
-                else if (JSON.parse(localStorage.getItem('current_user')).perm_lvl === 1) {
+                else if (JSON.parse(localStorage.getItem('current_user')).PermissionLevel === 1) {
                     this.router.navigate(['teacher/project/' + next.url[1].path]);
                 }
             }
@@ -83,14 +83,14 @@ export class PathManager implements CanActivate {
 
         else if (next.url[0].path === 'user') {
             if (window.localStorage.getItem('current_user')) {
-                if (JSON.parse(localStorage.getItem('current_user')).user.id === +next.url[1].path) {
-                    if (JSON.parse(localStorage.getItem('current_user')).perm_lvl === 0) {
+                if (JSON.parse(localStorage.getItem('current_user')).User.Id === +next.url[1].path) {
+                    if (JSON.parse(localStorage.getItem('current_user')).PermissionLevel === 0) {
                         this.router.navigate(['student/profile/']);
                     }
-                    else if (JSON.parse(localStorage.getItem('current_user')).perm_lvl === 1) {
+                    else if (JSON.parse(localStorage.getItem('current_user')).PermissionLevel === 1) {
                         this.router.navigate(['teacher/profile/']);
                     }
-                    else if (JSON.parse(localStorage.getItem('current_user')).perm_lvl === 2) {
+                    else if (JSON.parse(localStorage.getItem('current_user')).PermissionLevel === 2) {
                         this.router.navigate(['admin/profile/']);
                     }
                 }
@@ -99,7 +99,7 @@ export class PathManager implements CanActivate {
 
         else if (next.url[0].path === 'student') {
             if (window.localStorage.getItem('current_user')) {
-                if (JSON.parse(localStorage.getItem('current_user')).perm_lvl === 0) {
+                if (JSON.parse(localStorage.getItem('current_user')).PermissionLevel === 0) {
                     return true;
                 }
             }
@@ -108,7 +108,7 @@ export class PathManager implements CanActivate {
 
         else if (next.url[0].path === 'teacher') {
             if (window.localStorage.getItem('current_user')) {
-                if (JSON.parse(localStorage.getItem('current_user')).perm_lvl === 1) {
+                if (JSON.parse(localStorage.getItem('current_user')).PermissionLevel === 1) {
                     return true;
                 }
             }
@@ -117,7 +117,7 @@ export class PathManager implements CanActivate {
 
         else if (next.url[0].path === 'admin') {
             if (window.localStorage.getItem('current_user')) {
-                if (JSON.parse(localStorage.getItem('current_user')).perm_lvl === 2) {
+                if (JSON.parse(localStorage.getItem('current_user')).PermissionLevel === 2) {
                     return true;
                 }
             }

@@ -26,7 +26,7 @@ export class HomeTeacherProjectViewComponent implements OnInit {
   ngOnDestroy() {
   }
   accept(user_id: number, project_id: number) {
-    this.teacherService.postUserToProject(user_id, project_id, JSON.parse(localStorage.getItem('current_user')).bearer_token).subscribe(res => {
+    this.teacherService.postUserToProject(user_id, project_id, JSON.parse(localStorage.getItem('current_user')).Token).subscribe(res => {
        this.data.loadEnrollsForTeacher();
       });
   }

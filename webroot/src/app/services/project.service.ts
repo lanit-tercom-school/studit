@@ -14,9 +14,11 @@ export class ProjectService {
   }
 
   getMainPageProjects() {
-    return this.http.get(environment.apiUrl + '/v1/main/projects/')
+      var query = '{ ProjectList(Limit: "3" Offset: "0")';
+      query += '{ Description DateOfCreation Logo Tags Id  Name }}';
+      return this.http.get(environment.apiUrl + '/graphql?query=' + query)
       .map((response: Response) => {
-        let res = response.json();
+        let res = response.json().data.ProjectList;
         res.forEach(element => {
           element.Logo = environment.apiUrl + element.Logo;
         });
@@ -27,10 +29,22 @@ export class ProjectService {
 
 // получить все проекты
   getProjectItems() {
-    return this.http.get(environment.apiUrl + '/v1/project/id/').map((response: Response) => response.json());
+  var query = '{ ProjectList(Limit: "3" Offset: "0")';
+      query += '{ Description DateOfCreation Logo Tags Id  Name }}';
+      return this.http.get(environment.apiUrl + '/graphql?query=' + query)
+      .map((response: Response) => {
+        let res = response.json().data.ProjectList;
+        res.forEach(element => {
+          element.Logo = environment.apiUrl + element.Logo;
+        });
+        return res;
+      });
   }
+  
   getProjectById(id: number) {
-    return this.http.get(environment.apiUrl + '/v1/project/id/' + id);
+   var query ='{Project(Id:"' + id +'")';
+    query += '{ Logo Tags Status Id Name Description DateOfCreation   }}';
+    return this.http.get(environment.apiUrl + '/graphql?query=' + query);
   }
     getMaterialsItems(id: number) {
     return [

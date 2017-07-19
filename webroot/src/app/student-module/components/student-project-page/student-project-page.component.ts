@@ -49,8 +49,8 @@ export class StudentProjectPageComponent implements OnInit {
 
   getProjectInfo() {
     this.data.Projects.subscribe(projects => {
-      if (projects.find(res => res.id == this.projectId)) {
-        this.projectObs.next(projects.find(res => res.id == this.projectId));
+      if (projects.find(res => res.Id == this.projectId)) {
+        this.projectObs.next(projects.find(res => res.Id == this.projectId));
       }
       else {
       }
@@ -73,7 +73,7 @@ export class StudentProjectPageComponent implements OnInit {
   enroll() {
     this.isSuccess = false;
     this.studentService.enrollToProject(this.projectId,
-      JSON.parse(localStorage.getItem('current_user')).bearer_token, this.message).subscribe(res => {
+      JSON.parse(localStorage.getItem('current_user')).Token, this.message).subscribe(res => {
         this.enrollButtonStatus = "Unenrolling";
         this.data.loadEnrolledUsersProject();
       });
@@ -82,7 +82,7 @@ export class StudentProjectPageComponent implements OnInit {
   unenroll() {
     this.isSuccess = false;
     this.studentService.unenrollToProject(this.projectId,
-      JSON.parse(localStorage.getItem('current_user')).bearer_token).subscribe(res => {
+      JSON.parse(localStorage.getItem('current_user')).Token).subscribe(res => {
         this.enrollButtonStatus = "Enrolling";
         this.data.loadEnrolledUsersProject();
       });
@@ -91,12 +91,12 @@ export class StudentProjectPageComponent implements OnInit {
   choseButtonStatus() {
     this.enrollButtonStatus = "Enrolling";
     this.data.UserProjects.subscribe(res => {
-      if (res != null && res.find(pr => pr.id == this.projectId)) {
+      if (res != null && res.find(pr => pr.Id == this.projectId)) {
         this.enrollButtonStatus = "InProject";
       }
     })
     this.data.UserEnrolledProjects.subscribe(res => {
-      if (res != null && res.find(pr => pr.id == this.projectId)) {
+      if (res != null && res.find(pr => pr.Id == this.projectId)) {
         this.enrollButtonStatus = "Unenrolling";
       }
     });

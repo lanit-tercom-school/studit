@@ -21,7 +21,7 @@ export class CreateProjectPageComponent implements OnInit {
     }
 
     makeProject(){
-      this.teacherService.postProject(this.createdProject, JSON.parse(localStorage.getItem('current_user')).bearer_token)
+      this.teacherService.postProject(this.createdProject, JSON.parse(localStorage.getItem('current_user')).Token)
       .subscribe(()  => {
       console.log('Project was added');
       this.isCreated = true;

@@ -53,8 +53,8 @@ export class TeacherProjectPageComponent implements OnInit, OnDestroy {
 
   getProjectInfo() {
     this.data.Projects.subscribe(projects => {
-      if (projects.find(res => res.id == this.projectId)) {
-        this.projectObs.next(projects.find(res => res.id == this.projectId));
+      if (projects.find(res => res.Id == this.projectId)) {
+        this.projectObs.next(projects.find(res => res.Id == this.projectId));
       }
       else {
       }
@@ -78,7 +78,7 @@ export class TeacherProjectPageComponent implements OnInit, OnDestroy {
   choseButtonStatus() {
     this.enrollButtonStatus = 'Enrolling';
     this.data.UserProjects.subscribe(res => {
-      if (res != null && res.find(pr => pr.id == this.projectId)) {
+      if (res != null && res.find(pr => pr.Id == this.projectId)) {
         this.enrollButtonStatus = 'InProject';
       }
     })

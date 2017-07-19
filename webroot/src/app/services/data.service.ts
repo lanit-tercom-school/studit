@@ -82,11 +82,11 @@ constructor(
   }
   
   loadAll() {
-    /*console.log('Data.service ->loadAll');
+    console.log('Data.service ->loadAll');
     this.loadProjects();
     this.loadProjectsForMainPage();
-    if (localStorage.getItem('current_user')) {
-      this.userToken = JSON.parse(localStorage.getItem('current_user')).bearer_token;
+    /*if (localStorage.getItem('current_user')) {
+      this.userToken = JSON.parse(localStorage.getItem('current_user')).Token;
       this.userId = JSON.parse(localStorage.getItem('current_user')).user.id;
       this.userPermLvl = JSON.parse(localStorage.getItem('current_user')).perm_lvl;
       this.loadUsersProjects();
@@ -103,7 +103,7 @@ constructor(
     this.projectService.getProjectItems().subscribe(res => {
       if (res != null) {
         this.dataStore.projects = res;
-        this.dataStore.projects.forEach(a => { a.logo = this.addApiUrl(a.logo); })
+        this.dataStore.projects.forEach(a => { a.Logo = this.addApiUrl(a.Logo); })
         this.projects.next(Object.assign({}, this.dataStore).projects);
       }
     });
@@ -112,7 +112,7 @@ constructor(
   loadProjectsForMainPage() {
     this.projectService.getMainPageProjects().subscribe(res => {
       this.dataStore.projectsForMainPage = res;
-      this.dataStore.projectsForMainPage.forEach(a => { a.logo = this.addApiUrl(a.logo); })
+      this.dataStore.projectsForMainPage.forEach(a => { a.Logo = this.addApiUrl(a.Logo); })
       this.projectsForMainPage.next(Object.assign({}, this.dataStore).projectsForMainPage);
     })
   }
@@ -122,7 +122,7 @@ constructor(
       this.userService.getProjectsOfUser(this.userId).subscribe(res => {
         if (res != null) {
           this.dataStore.userProjects = res;
-          this.dataStore.userProjects.forEach(a => { a.logo = this.addApiUrl(a.logo); })
+          this.dataStore.userProjects.forEach(a => { a.Logo = this.addApiUrl(a.Logo); })
           this.userProjects.next(Object.assign({}, this.dataStore).userProjects);
         }
 
