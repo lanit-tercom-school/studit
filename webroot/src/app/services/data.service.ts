@@ -20,6 +20,7 @@ import 'rxjs/add/operator/filter';
 export class DataService {
   private userId: number;
   private numberOfNewsOnPage: number;
+  private numberOfProjectsOnPage: number;
   private userToken: string;
   private userPermLvl: PermLevel;
   private news: BehaviorSubject<NewsItem[]> = <BehaviorSubject<NewsItem[]>>new BehaviorSubject([]);
@@ -31,6 +32,10 @@ export class DataService {
 
   private newsCount: number;
   private newsCountObs: BehaviorSubject<number> = new BehaviorSubject<number>(0);
+
+  private projectsCount: number;
+  private projectsCountObs: BehaviorSubject<number> = new BehaviorSubject<number>(0);
+
   private dataStore: {
     news: NewsItem[];
     projects: ProjectItem[];
@@ -60,6 +65,9 @@ constructor(
   public get Projects() {
     return this.projects.asObservable();
   }
+  public get ProjectCountObs() {
+    return this.projectsCountObs.asObservable();
+  }
   public get UserProjects() {
     return this.userProjects.asObservable();
   }
@@ -76,6 +84,10 @@ constructor(
   public set NumberOfNewsOnPage(value: number) {
     this.numberOfNewsOnPage = value;
   }
+
+  public set NumberOfProjectsOnPage(value: number) {
+    this.numberOfProjectsOnPage = value;
+  }
   public get PermLvl()
   {
     return this.userPermLvl;
@@ -83,7 +95,7 @@ constructor(
   
   loadAll() {
     console.log('Data.service ->loadAll');
-    this.loadProjects();
+    //this.loadProjects();
     this.loadProjectsForMainPage();
     /*if (localStorage.getItem('current_user')) {
       this.userToken = JSON.parse(localStorage.getItem('current_user')).Token;
@@ -99,8 +111,9 @@ constructor(
     }*/
   }
 
-  loadProjects() {
-    this.projectService.getProjectItems().subscribe(res => {
+  loadProjects(offset: number) {
+    this.projectService.getProjectItems(this.numberOfProjectsOnPage, offset)
+    .subscribe(res => {
       if (res != null) {
         this.dataStore.projects = res;
         this.dataStore.projects.forEach(a => { a.Logo = this.addApiUrl(a.Logo); })
@@ -121,6 +134,9 @@ constructor(
     if (localStorage.getItem('current_user')) {
       this.userService.getProjectsOfUser(this.userId).subscribe(res => {
         if (res != null) {
+          this.projectsCount = 4; // заглушка
+          //this.newsCount = res.total_count;
+          this.newsCountObs.next(Object.assign({},this.projectsCount));
           this.dataStore.userProjects = res;
           this.dataStore.userProjects.forEach(a => { a.Logo = this.addApiUrl(a.Logo); })
           this.userProjects.next(Object.assign({}, this.dataStore).userProjects);

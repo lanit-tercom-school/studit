@@ -1,5 +1,12 @@
-<div class="card-deck row">
-  <div *ngFor="let project of ProjectList| async" class="project-card col-sm-12 col-md-6 col-lg-4">
-    <app-project-item [ProjectItem]="project"></app-project-item>
-  </div>
+<div class="row card-deck">
+    <div *ngFor="let project of ProjectList | async | paginate: { id: 'projects-pagination',
+     itemsPerPage: limit,  totalItems: totalObs | async, currentPage: p}">
+         <app-project-item [ProjectItem]="project" ></app-project-item>
+    </div>
+</div>
+
+<div class="has-text-centered">
+    <div class="spinner" [ngClass]="{ 'hidden': !loading }"></div>
+    <pagination-controls (pageChange)="getPage($event)" id="projects-pagination" 
+    previousLabel="Предыдущая" nextLabel="Следующая"></pagination-controls>
 </div>

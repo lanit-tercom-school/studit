@@ -1,5 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Observable } from "rxjs/Observable";
+
+import { DataService } from 'services/data.service';
 import { ProjectItem } from 'models/project-item';
 
 @Component({
@@ -9,11 +11,29 @@ import { ProjectItem } from 'models/project-item';
 })
 export class ProjectListComponent implements OnInit {
 
-  @Input() public ProjectList: Observable<ProjectItem[]>;
+   public ProjectList: Observable<ProjectItem[]>;
+   private p: number = 1;
+  private limit: number = 1;
+  private totalObs: Observable<number>;
 
-  constructor() { }
+  private loading: boolean;
+  constructor(private data: DataService) { }
 
   ngOnInit() {
+    this.data.NumberOfProjectsOnPage = 3;
+    this.getPage(1);
   }
 
+  getPage(page: number) {
+    this.loading = true;
+    let offset = 0;
+    if (page > 1)
+      offset = (page - 1) * this.limit;
+    this.data.loadProjects(offset);
+    this.ProjectList = this.data.Projects;
+    this.totalObs = this.data.NewsCountObs;
+    this.p = page;
+    this.loading = false;
+    window.scrollTo(0, 0);
+  }
 }

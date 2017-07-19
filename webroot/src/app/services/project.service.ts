@@ -28,8 +28,8 @@ export class ProjectService {
   }
 
 // получить все проекты
-  getProjectItems() {
-  var query = '{ ProjectList(Limit: "3" Offset: "0")';
+  getProjectItems(limit: number, offset: number) {
+   var query ='{ProjectList(Offset:"' + offset + '" Limit: "' + limit + '")';
       query += '{ Description DateOfCreation Logo Tags Id  Name }}';
       return this.http.get(environment.apiUrl + '/graphql?query=' + query)
       .map((response: Response) => {
@@ -40,7 +40,7 @@ export class ProjectService {
         return res;
       });
   }
-  
+
   getProjectById(id: number) {
    var query ='{Project(Id:"' + id +'")';
     query += '{ Logo Tags Status Id Name Description DateOfCreation   }}';
