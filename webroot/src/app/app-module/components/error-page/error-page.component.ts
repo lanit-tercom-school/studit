@@ -1,7 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Params } from '@angular/router';
-
-import { ApiService } from "services/api.service";
 
 @Component({
   selector: 'error-page',

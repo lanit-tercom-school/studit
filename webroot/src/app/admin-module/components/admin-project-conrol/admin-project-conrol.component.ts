@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from "rxjs/Observable";
 
-import { ApiService } from "services/api.service";
+import { TeacherService } from "services/teacher.service";
 
 @Component({
   selector: 'app-admin-project-conrol',
@@ -18,13 +18,13 @@ export class AdminProjectConrolComponent implements OnInit {
   };
   private projectId: number;
   private isCreated = false;
-  constructor(private router: Router, private api: ApiService) { }
+  constructor(private router: Router, private teacherService: TeacherService) { }
 
   ngOnInit() {
   }
 
   makeProject() {
-    this.api.postProject(this.createdProject, JSON.parse(localStorage.getItem('current_user')).bearer_token)
+    this.teacherService.postProject(this.createdProject, JSON.parse(localStorage.getItem('current_user')).bearer_token)
       .subscribe(() => {
         console.log('Project was added');
         this.isCreated = true;

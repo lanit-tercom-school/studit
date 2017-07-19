@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { User } from 'models/user';
-import { Http, Headers, Response } from '@angular/http';
+import { Http, Headers, RequestOptions, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
@@ -25,26 +25,35 @@ export class AuthService {
                 }
             });
     }
+
     unauthentificatenow() {
         localStorage.removeItem("current_user");
     }
-      validate(key: string) {
-    return this.http.get(environment.authUrl + '/v1/auth/signup/?pass=' + key)
-      .catch((error: any) => { return Observable.throw(error) });
-  }
 
-  register(user) {
-    var headers = new Headers();
+    validate(key: string) {
+        return this.http.get(environment.authUrl + '/v1/auth/signup/?pass=' + key)
+            .catch((error: any) => { return Observable.throw(error) });
+    }
 
-    headers.append('Content-Type', 'application/json');
+    register(user) {
+        var headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+        return this.http.post(environment.authUrl + '/v1/auth/signup/', JSON.stringify(user), { headers: headers })
+            .map((res: Response) => {
+                if (res.json().code)
+                    localStorage.setItem('validation_code', res.json().code);
+                else
+                    return Observable.throw('no code');
+            })
+            .catch((error: any) => { return Observable.throw(error) });
+    }
 
-    return this.http.post(environment.authUrl + '/v1/auth/signup/', JSON.stringify(user), { headers: headers })
-      .map((res: Response) => {
-        if (res.json().code)
-          localStorage.setItem('validation_code', res.json().code);
-        else
-          return Observable.throw('no code');
-      })
-      .catch((error: any) => { return Observable.throw(error) });
-  }
+    private jwt() {
+        // create authorization-page header with jwt token
+        let currentUser = JSON.parse(localStorage.getItem('current_user'));
+        if (currentUser && currentUser.token) {
+            let headers = new Headers({ 'authorization': 'Bearer ' + currentUser.token });
+            return new RequestOptions({ headers: headers });
+        }
+    }
 }
