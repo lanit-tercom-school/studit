@@ -1,6 +1,7 @@
 package models
 
 import (
+	"main-service/sql"
 	"strconv"
 	"time"
 
@@ -94,6 +95,7 @@ type ProjectApplications struct {
 func GetAllEnrolledOnProject(master_id int) (pa []ProjectApplication, err error) {
 	o := orm.NewOrm()
 	var maps []orm.Params
+<<<<<<< HEAD
 
 	n, err := o.Raw("Select pe.enrolling_message,p.id as project_id, "+
 		"p.name as project_name, p.tags as project_tags,p.status as project_status, "+
@@ -106,6 +108,10 @@ func GetAllEnrolledOnProject(master_id int) (pa []ProjectApplication, err error)
 		"inner join public.project p on p.id=pe.project_id "+
 		"where pu.user_id=?", master_id).Values(&maps)
 
+=======
+	var n int64
+	n, err = o.Raw(sql.QueriesMap["GetAllEnrolledOnProject"], master_id).Values(&maps)
+>>>>>>> 22e6a1c18a1bf3a965b6ce8f633aac90cc542712
 	if err != nil {
 		beego.Debug("Something wrong with database request")
 		return

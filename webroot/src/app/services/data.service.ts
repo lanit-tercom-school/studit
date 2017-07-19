@@ -2,23 +2,32 @@ import { Injectable, EventEmitter } from '@angular/core';
 import { Observable } from "rxjs/Observable";
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
-import { ApiService } from 'services/api.service';
+import { TeacherService } from 'services/teacher.service';
+import { StudentService } from 'services/student.service';
+import { ProjectService } from 'services/project.service';
+import { NewsService } from 'services/news.service';
+import { UserService } from 'services/user.service';
+
 import { NewsItem } from "models/news-item";
 import { ProjectItem } from 'models/project-item';
-import { environment } from '../../environments/environment'
+import { EnrollItem } from 'models/enroll-item';
+import { environment } from '../../environments/environment';
+import { PermLevel } from 'models/permission-level.enum';
 
 import 'rxjs/add/operator/filter';
 
 @Injectable()
 export class DataService {
   private userId: number;
+  private numberOfNewsOnPage: number;
   private userToken: string;
-  //private news: BehaviorSubject<NewsItem[]> = <BehaviorSubject<NewsItem[]>>new BehaviorSubject([]);
+  private userPermLvl: PermLevel;
+  private news: BehaviorSubject<NewsItem[]> = <BehaviorSubject<NewsItem[]>>new BehaviorSubject([]);
   private projects: BehaviorSubject<ProjectItem[]> = <BehaviorSubject<ProjectItem[]>>new BehaviorSubject([]);
   private userProjects: BehaviorSubject<ProjectItem[]> = <BehaviorSubject<ProjectItem[]>>new BehaviorSubject([]);
   private userEnrolledProjects: BehaviorSubject<ProjectItem[]> = <BehaviorSubject<ProjectItem[]>>new BehaviorSubject([]);
   private projectsForMainPage: BehaviorSubject<ProjectItem[]> = <BehaviorSubject<ProjectItem[]>>new BehaviorSubject([]);
-  private news: BehaviorSubject<NewsItem[]> = <BehaviorSubject<NewsItem[]>>new BehaviorSubject([]);
+  private enrollsForTeacher: BehaviorSubject<EnrollItem[]> = <BehaviorSubject<EnrollItem[]>>new BehaviorSubject([]);
 
   private newsCount: number;
   private newsCountObs: BehaviorSubject<number> = new BehaviorSubject<number>(0);
@@ -28,7 +37,19 @@ export class DataService {
     userProjects: ProjectItem[];
     userEnrolledProjects: ProjectItem[];
     projectsForMainPage: ProjectItem[];
-  } = { news: [], projects: [], userProjects: [], userEnrolledProjects: [], projectsForMainPage: [], };
+    enrollsForTeacher: EnrollItem[];
+  } = {
+    news: [], projects: [], userProjects: [],
+    userEnrolledProjects: [], projectsForMainPage: [], enrollsForTeacher: []
+  };
+
+constructor(
+   private teacherService: TeacherService,
+   private studentService: StudentService,
+   private newsService: NewsService,
+   private projectService: ProjectService,
+   private userService: UserService
+   ) { }
 
   public get News() {
     return this.news.asObservable();
@@ -45,25 +66,41 @@ export class DataService {
   public get UserEnrolledProjects() {
     return this.userEnrolledProjects.asObservable();
   }
+  public get EnrollsForTeacher() {
+    return this.enrollsForTeacher.asObservable();
+  }
+
   public get ProjectsForMainPage() {
     return this.projectsForMainPage.asObservable();
   }
-  constructor(private api: ApiService) { }
-
+  public set NumberOfNewsOnPage(value: number) {
+    this.numberOfNewsOnPage = value;
+  }
+  public get PermLvl()
+  {
+    return this.userPermLvl;
+  }
+  
   loadAll() {
     console.log('Data.service ->loadAll');
     this.loadProjects();
-    //this.loadNews(3, 0);    //для первого запуска. Сюда передать limit и offset
     this.loadProjectsForMainPage();
     if (localStorage.getItem('current_user')) {
+      this.userToken = JSON.parse(localStorage.getItem('current_user')).bearer_token;
       this.userId = JSON.parse(localStorage.getItem('current_user')).user.id;
+      this.userPermLvl = JSON.parse(localStorage.getItem('current_user')).perm_lvl;
       this.loadUsersProjects();
-      this.loadEnrolledUsersProject();
+      if (this.userPermLvl === PermLevel.Student) {
+        this.loadEnrolledUsersProject();
+      }
+      if (this.userPermLvl === PermLevel.Teacher) {
+        this.loadEnrollsForTeacher();
+      }
     }
   }
 
   loadProjects() {
-    this.api.getProjectItems().subscribe(res => {
+    this.projectService.getProjectItems().subscribe(res => {
       if (res != null) {
         this.dataStore.projects = res;
         this.dataStore.projects.forEach(a => { a.logo = this.addApiUrl(a.logo); })
@@ -73,7 +110,7 @@ export class DataService {
   }
 
   loadProjectsForMainPage() {
-    this.api.getMainPageProjects().subscribe(res => {
+    this.projectService.getMainPageProjects().subscribe(res => {
       this.dataStore.projectsForMainPage = res;
       this.dataStore.projectsForMainPage.forEach(a => { a.logo = this.addApiUrl(a.logo); })
       this.projectsForMainPage.next(Object.assign({}, this.dataStore).projectsForMainPage);
@@ -82,7 +119,7 @@ export class DataService {
 
   loadUsersProjects() {
     if (localStorage.getItem('current_user')) {
-      this.api.getProjectsOfUser(this.userId).subscribe(res => {
+      this.userService.getProjectsOfUser(this.userId).subscribe(res => {
         if (res != null) {
           this.dataStore.userProjects = res;
           this.dataStore.userProjects.forEach(a => { a.logo = this.addApiUrl(a.logo); })
@@ -97,7 +134,7 @@ export class DataService {
 
   loadEnrolledUsersProject() {
     if (localStorage.getItem('current_user')) {
-      this.api.getEnrolledUsersProject(this.userId, this.userToken).subscribe(res => {
+      this.studentService.getEnrolledUsersProject(this.userId, this.userToken).subscribe(res => {
         this.dataStore.userEnrolledProjects = res;
         this.userEnrolledProjects.next(Object.assign({}, this.dataStore).userEnrolledProjects);
       })
@@ -107,17 +144,22 @@ export class DataService {
   }
 
 // значения по умолчанию
-  loadNews(limit: number = 3, offset: number) {
-    this.api.getNewsPage(limit, offset).subscribe(res => {
+  loadNews(offset: number) {
+    this.newsService.getNewsPage(this.numberOfNewsOnPage, offset).subscribe(res => {
       this.newsCount = res.total_count;
       this.newsCountObs.next(Object.assign(res.total_count));
       this.dataStore.news = res.news_list;
-      console.log(res.news_list);
       this.news.next(Object.assign({}, this.dataStore).news);
 
     });
   }
 
+  loadEnrollsForTeacher() {
+    this.teacherService.getEnrollsForTeacher(this.userToken).subscribe(res => {
+      this.dataStore.enrollsForTeacher = res;
+      this.enrollsForTeacher.next(Object.assign({}, this.dataStore).enrollsForTeacher);
+    });
+  }
 
   // TODO: сделать метод для проверки наличия новости в dataService
 

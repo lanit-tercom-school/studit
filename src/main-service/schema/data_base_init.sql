@@ -1,6 +1,7 @@
 -- table order convention - new entities as late as possible
 CREATE TYPE status AS ENUM ('opened', 'started', 'ended');
 
+<<<<<<< HEAD
 CREATE TABLE project (
 	id                SERIAL                                ,
 	created           TIMESTAMP                     NOT NULL,
@@ -9,6 +10,111 @@ CREATE TABLE project (
 	name              TEXT                          NOT NULL,
 	status            status                        NOT NULL,
 	tags              TEXT[]           NOT NULL DEFAULT '{}',
+=======
+/*Проект*/
+CREATE TABLE "project" (
+	"id"               SERIAL                   NOT NULL,
+	"name"             VARCHAR(100)             NOT NULL,
+	"description"      TEXT                     NOT NULL,
+	"date_of_creation" TIMESTAMP WITH TIME ZONE NOT NULL,
+	"logo"             VARCHAR(1000)            NOT NULL,
+	"tags"             VARCHAR(1000)            NOT NULL,
+	"status"           STATE                    NOT NULL,
+	CONSTRAINT project_pk PRIMARY KEY ("id")
+) WITH (
+OIDS = FALSE
+);
+
+/*Пользователь*/
+CREATE TABLE "user" (
+	"id"          SERIAL        NOT NULL,
+	"nickname"    VARCHAR(100)  NOT NULL,
+	"description" TEXT          NOT NULL,
+	"avatar"      VARCHAR(1000) NOT NULL,
+	CONSTRAINT user_pk PRIMARY KEY ("id")
+) WITH (
+OIDS = FALSE
+);
+
+
+/*Связь пользователя и проекта, в котором участвует пользователь*/
+CREATE TABLE "project_user" (
+	"id"          SERIAL                   NOT NULL,
+	"project_id"  BIGINT                   NOT NULL,
+	"user_id"     BIGINT                   NOT NULL,
+	"signed_date" TIMESTAMP WITH TIME ZONE NOT NULL,
+	"progress"    INT                      NOT NULL,
+	UNIQUE ("project_id", "user_id"),
+	CONSTRAINT project_user_pk PRIMARY KEY ("id")
+) WITH (
+OIDS = FALSE
+);
+
+
+
+/*Связь пользователя и проекта, на который пользователь записан*/
+CREATE TABLE "project_enroll" (
+	"id"                SERIAL                   NOT NULL,
+	"project_id"        BIGINT                   NOT NULL,
+	"user_id"           BIGINT                   NOT NULL,
+	"enrolling_message" TEXT                     NOT NULL, /*Сообщение для мастеров проекта, небольшое сопроводительное письмо*/
+	"time"              TIMESTAMP WITH TIME ZONE NOT NULL, /*Дата, когда была подана заявка*/
+
+	CONSTRAINT project_user_application_pk PRIMARY KEY ("id"),
+	CONSTRAINT project_user_application_fk0 FOREIGN KEY ("project_id") REFERENCES "project" ("id"),
+	CONSTRAINT project_user_application_fk1 FOREIGN KEY ("user_id") REFERENCES "user" ("id"),
+	CONSTRAINT unique_pair_of_columns_for_project_sign_up UNIQUE ("project_id", "user_id")
+) WITH (
+OIDS = FALSE
+);
+
+
+/*Запись контакта пользователя*/
+CREATE TABLE "user_contact" (
+	"id"           SERIAL       NOT NULL,
+	"contact"      VARCHAR(255) NOT NULL,
+	"contact_type" VARCHAR(255) NOT NULL,
+	"user_id"      BIGINT       NOT NULL,
+	CONSTRAINT user_contact_pk PRIMARY KEY ("id")
+) WITH (
+OIDS = FALSE
+);
+CREATE TABLE file (
+	id                SERIAL                        NOT NULL,
+	user_id           INT                           NOT NULL,
+	name              VARCHAR(100)                  NOT NULL,
+	path              VARCHAR(255)                  NOT NULL,
+	date_of_creation  TIMESTAMP WITH TIME ZONE      NOT NULL,
+
+	CONSTRAINT file_pk PRIMARY KEY (id),
+	CONSTRAINT file_fk0 FOREIGN KEY (user_id) REFERENCES "user"(id)
+) WITH (
+OIDS = FALSE
+);
+
+/*Тип контакта: телефон, мыло, vk, одноклассники и т.д.*/
+CREATE TABLE "contact_type" (
+	"id"   SERIAL       NOT NULL,
+	"type" VARCHAR(100) NOT NULL,
+	CONSTRAINT contact_type_pk PRIMARY KEY ("id")
+) WITH (
+OIDS = FALSE
+);
+
+/*Новость*/
+CREATE TABLE "news" (
+	"id"               SERIAL                   NOT NULL,
+	"title"            VARCHAR(255)             NOT NULL,
+	"description"      TEXT                     NOT NULL,
+	"image"            VARCHAR(255)             NOT NULL,
+	"date_of_creation" TIMESTAMP WITH TIME ZONE NOT NULL,
+	"last_edit"        TIMESTAMP                NOT NULL,
+	"tags"             VARCHAR(1000)            NOT NULL,
+	CONSTRAINT news_pk PRIMARY KEY ("id")
+) WITH (
+OIDS = FALSE
+);
+>>>>>>> 22e6a1c18a1bf3a965b6ce8f633aac90cc542712
 
 	CONSTRAINT project_pk PRIMARY KEY (id)
 );

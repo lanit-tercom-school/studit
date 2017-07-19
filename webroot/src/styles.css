@@ -84,13 +84,13 @@ nav.navbar, .footer {
 .btn-warning
 {
   background-color: var(--accent-color);
-  border-color: var(--accent-color);  
+  border-color: var(--accent-color);
   color: var(--section-color);
 }
 
 .btn-warning:hover
 {
   background-color: var(--dark-accent-color);
-  border-color: var(--dark-accent-color); 
-  color: var(--section-color); 
+  border-color: var(--dark-accent-color);
+  color: var(--section-color);
 }

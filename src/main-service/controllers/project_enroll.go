@@ -111,7 +111,7 @@ func (c *UserEnrollOnProjectController) GetOne() {
 // @Title Get All
 // @Description Получение информации по заявкам на проекты учителя
 // @Param   Bearer-token    header  string  true    "Токен доступа мастера проекта"
-// @Success 200 {object} []models.ObjectOfListOfEnrolledUsersOnProject "desc"
+// @Success 200 {object} []models.ProjectApplication "Проекты с заявками"
 // @Failure 403
 // @router / [get]
 func (c *UserEnrollOnProjectController) GetAll() {

@@ -4,9 +4,12 @@ import { CommonModule } from '@angular/common';
 import { StudentRoutingModule } from './student-routing.module';
 
 import { HomePageStudentComponent } from './components/home-page-student/home-page-student.component'
-import { HomeProjectsViewComponent } from 'shared-components/home-projects-view/home-projects-view.component';
-
-
+import { HomeStudentProjectsViewComponent } from './components/home-student-projects-view/home-student-projects-view.component'
+import { StudentProjectPageComponent } from './components/student-project-page/student-project-page.component';
+import { StudentPublicPageComponent } from './components/student-public-page/student-public-page.component';
+//import { ProjectTaskItemComponent } from './components/student-project-page/project-task-list/project-task-item/project-task-item.component';
+//import { ProjectTaskListComponent } from './components/student-project-page/project-task-list/project-task-list.component';
+import { StudentSettingsPageComponent } from './components/student-settings-page/student-settings-page.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -14,8 +17,13 @@ import { HomeProjectsViewComponent } from 'shared-components/home-projects-view/
     FormsModule,
   ],
   declarations: [
-    HomeProjectsViewComponent,
+    HomeStudentProjectsViewComponent,
     HomePageStudentComponent,
+    StudentProjectPageComponent,
+    StudentPublicPageComponent,
+    /*ProjectTaskListComponent,
+    ProjectTaskItemComponent,*/
+    StudentSettingsPageComponent
   ]
 })
 export class StudentModule { }
