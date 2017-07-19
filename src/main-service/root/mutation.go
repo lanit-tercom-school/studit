@@ -9,6 +9,7 @@ import (
 var RootMutation = gql.NewObject(gql.ObjectConfig{
 	Name: "RootMutation",
 	Fields: gql.Fields{
+		"PostNews":    &mutations.PostNews,
 		"PostProject": &mutations.PostProject,
 		"Auth":        &mutations.AuthQuery,
 	},

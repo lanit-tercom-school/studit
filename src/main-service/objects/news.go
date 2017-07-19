@@ -11,13 +11,13 @@ import (
 )
 
 type News struct {
-	Id             int       `json:"id"`
-	Title          string    `json:"title"`
-	Description    string    `json:"description"`
-	DateOfCreation time.Time `json:"created"`
-	LastEdit       time.Time `json:"edited"`
-	Tags           string    `json:"tags"`
-	Image          string    `json:"image"`
+	Id             int
+	Title          string
+	Description    string
+	DateOfCreation time.Time
+	LastEdit       time.Time
+	Tags           string
+	Image          string
 }
 
 var NewsType = gql.NewObject(
@@ -59,4 +59,23 @@ func ResolveGetNews(p gql.ResolveParams) (interface{}, error) {
 	var news News
 	err := helpers.HttpGet(conf.Configuration.DataServiceURL+"v1/news/"+id, &news)
 	return news, err
+}
+
+func ResolvePostNews(p gql.ResolveParams) (interface{}, error) {
+	c := p.Context.Value("CurrentUser").(CurrentClient)
+	newsToGet := News{}
+	if c.PermissionLevel >= LEADER {
+		helpers.LogAccesAllowed("PostNews")
+		newsToSend := News{
+			DateOfCreation: time.Now(),
+			Title:          helpers.InterfaceToString(p.Args["Title"]),
+			Description:    helpers.InterfaceToString(p.Args["Description"]),
+			Image:          helpers.InterfaceToString(p.Args["Image"]),
+			LastEdit:       time.Now(),
+		}
+		err := helpers.HttpPost(conf.Configuration.DataServiceURL+"v1/news/", newsToSend, &newsToGet)
+		return newsToGet, err
+	}
+	helpers.LogAccesDenied("PostNews")
+	return nil, errors.New("Access is denied")
 }
