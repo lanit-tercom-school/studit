@@ -77,12 +77,12 @@
             <a class="lanit-nav-link" id="sign-in" routerLink="/auth" routerLinkActive="active" [queryParams]="{'ReturnUrl':url}">Вход</a>
           </li>
         </div>
-        <div *ngIf="currentUser">
+        <!--<div *ngIf="currentUser">
           <li class="nav-item dropdown">
             <a class="lanit-nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
               <i class="fa fa-user-circle fa-lg" aria-hidden="true"></i> {{currentUser.login.split("@", 1)}}
             </a>
-            <div class="dropdown-menu">
+         <div class="dropdown-menu">
               <a class="dropdown-item" routerLink="/user/{{currentUser.user.id}}"><i class="fa fa-address-card fa-fw" aria-hidden="true"></i> Мой профиль</a>
               <div *ngIf='currentUser.perm_lvl==0'><a class="dropdown-item" routerLink="/student/profile/settings"><i class="fa fa-cog fa-fw" aria-hidden="true"></i> Настройки</a></div>
               <div *ngIf='currentUser.perm_lvl==1'><a class="dropdown-item" routerLink="/teacher/profile/settings"><i class="fa fa-cog fa-fw" aria-hidden="true"></i> Настройки</a></div>
@@ -93,7 +93,7 @@
                 <i class="fa fa-times-circle fa=fw" aria-hidden="true"></i> Выход</a>
             </div>
           </li>
-        </div>
+        </div>-->
       </ul>
     </div>
   </div>

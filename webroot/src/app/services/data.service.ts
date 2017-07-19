@@ -146,9 +146,10 @@ constructor(
 // значения по умолчанию
   loadNews(offset: number) {
     this.newsService.getNewsPage(this.numberOfNewsOnPage, offset).subscribe(res => {
-      this.newsCount = res.total_count;
-      this.newsCountObs.next(Object.assign(res.total_count));
-      this.dataStore.news = res.news_list;
+      this.newsCount = 4; // заглушка
+      //this.newsCount = res.total_count;
+      this.newsCountObs.next(Object.assign({},this.newsCount));
+      this.dataStore.news = res.NewsList;
       this.news.next(Object.assign({}, this.dataStore).news);
 
     });

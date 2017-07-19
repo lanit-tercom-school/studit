@@ -1,12 +1,14 @@
 
 	<div class = "newscard">
-		<p class="newscard-text">{{ NewsItem.edited| date: 'short'}}</p>
-		<h4 class="newscard-title">{{ NewsItem.title}}</h4>
-		<p class="newscard-text">{{NewsItem.description.split(".", 1)}}...</p>
+		<p class="newscard-text">{{ NewsItem.LastEdit| date: 'short'}}</p>
+		<h4 class="newscard-title">{{ NewsItem.Title}}</h4>
+		<p class="newscard-text">{{NewsItem.Description.split(".", 1)}}...</p>
 		<p>Теги:
-			<span *ngFor="let tag of NewsItem.tags; let i = index">
+			<!--<span *ngFor="let tag of NewsItem.Tags; let i = index">
 			<a href = "#" class = "blacktag">{{tag}}</a>
-			<span *ngIf="i!=NewsItem.tags.length-1">,</span>
- </span></p>
-		<a [routerLink]="['/news',  NewsItem.id]">Читать далее</a>
+			<span *ngIf="i!=NewsItem.tags.length-1">,</span>		
+ </span>-->
+ 	<a href = "#" class = "blacktag">{{NewsItem.Tags}}</a>
+ </p>
+		<a [routerLink]="['/news',  NewsItem.Id]">Читать далее</a>
 </div>
