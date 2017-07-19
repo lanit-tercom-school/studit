@@ -79,3 +79,19 @@ func ResolvePostNews(p gql.ResolveParams) (interface{}, error) {
 	helpers.LogAccesDenied("PostNews")
 	return nil, errors.New("Access is denied")
 }
+func ResolveGetNewsList(p gql.ResolveParams) (interface{}, error) {
+	var limit, offset string
+	limit, ok := p.Args["Limit"].(string)
+	if !ok {
+		err := errors.New("missed Limit")
+		return nil, err
+	}
+	offset, ok = p.Args["Offset"].(string)
+	if !ok {
+		err := errors.New("missed Offset")
+		return nil, err
+	}
+	var news []News
+	err := helpers.HttpGet(conf.Configuration.DataServiceURL+"v1/news/?limit="+limit+"&offset="+offset, &news)
+	return news, err
+}
