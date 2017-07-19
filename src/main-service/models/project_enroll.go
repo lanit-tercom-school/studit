@@ -41,11 +41,10 @@ func GetProjectEnrollIdByUserId(userId int) (projects []*Project, err error) {
 
 // AddProjectAuthor insert a new ProjectEnroll into database and returns
 // last inserted Id on success.
-func AddApplicationFromUserForProject(u *User, p *ProjectJson, message string) (id int64, err error) {
-	temp := p.translate()
+func AddApplicationFromUserForProject(u *User, p *Project, message string) (id int64, err error) {
 	m := ProjectEnroll{
 		UserId:    u,
-		ProjectId: &temp,
+		ProjectId: p,
 		Message:   message,
 		Time:      time.Now(),
 	}
@@ -95,8 +94,18 @@ type ProjectApplications struct {
 func GetAllEnrolledOnProject(master_id int) (pa []ProjectApplication, err error) {
 	o := orm.NewOrm()
 	var maps []orm.Params
-	var n int64
-	n, err = o.Raw("Select  pe.enrolling_message,p.id as project_id,p.name as project_name, p.tags as project_tags,p.status as project_status,p.logo as project_logo,p.description as project_description, p.date_of_creation as project_date,u.id as user_id,u.nickname as user_name, u.avatar as user_avatar, u.description as user_description from public.project_user pu inner join public.project_enroll pe on pu.project_id=pe.project_id inner join public.user u on pe.user_id=u.id inner join public.project p on p.id=pe.project_id where pu.user_id=?", master_id).Values(&maps)
+
+	n, err := o.Raw("Select pe.enrolling_message,p.id as project_id, "+
+		"p.name as project_name, p.tags as project_tags,p.status as project_status, "+
+		"p.logo as project_logo,p.description as project_description, "+
+		"p.created as project_date,u.id as user_id,u.nickname as user_name, "+
+		"u.avatar as user_avatar, u.description as user_description"+
+		"from public.project_user pu "+
+		"inner join public.project_enroll pe on pu.project_id=pe.project_id "+
+		"inner join public.user u on pe.user_id=u.id "+
+		"inner join public.project p on p.id=pe.project_id "+
+		"where pu.user_id=?", master_id).Values(&maps)
+
 	if err != nil {
 		beego.Debug("Something wrong with database request")
 		return
@@ -119,14 +128,14 @@ func GetAllEnrolledOnProject(master_id int) (pa []ProjectApplication, err error)
 			pa[i].Project.Name = v["project_name"].(string)
 			pa[i].Project.Description = v["project_description"].(string)
 			pa[i].Project.Logo = v["project_logo"].(string)
-			pa[i].Project.Status, err = strconv.Atoi(v["project_status"].(string))
+			pa[i].Project.Status = v["project_status"].(string)
 			if err != nil {
 				beego.Debug("Error converting to int")
 				return
 			}
-			pa[i].Project.Tags = v["project_tags"].(string)
+			//pa[i].Project.Tags = v["project_tags"].([]string)
 			pa[i].Message = v["enrolling_message"].(string)
-			pa[i].Project.DateOfCreation, err = time.Parse(time.RFC3339, v["project_date"].(string))
+			pa[i].Project.Created, err = time.Parse(time.RFC3339, v["project_date"].(string))
 			if err != nil {
 				beego.Debug("Error converting to time")
 				return

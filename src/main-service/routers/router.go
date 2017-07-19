@@ -34,9 +34,9 @@ func init() {
 				),
 			),
 
-			beego.NSNamespace("/task_for_test",
+			beego.NSNamespace("/tests_task",
 				beego.NSInclude(
-					&controllers.TaskForTestController{},
+					&controllers.TestsTaskController{},
 				),
 			),
 

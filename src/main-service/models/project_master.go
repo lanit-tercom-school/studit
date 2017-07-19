@@ -63,11 +63,10 @@ func IsProjectMasterForUserById(userId int, masterId int) (masterOfUser bool, er
 
 // AddProjectUser insert a new ProjectMaster into database and returns
 // last inserted Id on success.
-func AddMasterToProject(user *User, project *ProjectJson) (err error) {
-	temp := project.translate()
+func AddMasterToProject(user *User, p *Project) (err error) {
 	m := ProjectMaster{
 		MasterId:   user,
-		ProjectId:  &temp,
+		ProjectId:  p,
 		SignedDate: time.Now(),
 	}
 	_, err = orm.NewOrm().Insert(&m)

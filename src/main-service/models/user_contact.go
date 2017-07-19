@@ -11,54 +11,18 @@ import (
 )
 
 type UserContact struct {
-	Id          int          `orm:"column(id);pk;auto" json:"id,omitempty"`
-	Contact     string       `orm:"column(contact)" json:"value"`
-	Type string `orm:"column(contact_type)" json:"type"`
-	UserId      *User        `orm:"column(user_id);rel(fk)" json:"-"`
+	Id       int          `orm:"column(id);pk;auto"              json:"id,omitempty"`
+	Contact  string       `orm:"column(contact)"                 json:"value"`
+	Type     *ContactType `orm:"column(contact_type_id);rel(fk)" json:"type"`
+	UserId   *User        `orm:"column(user_id);rel(fk)"         json:"-"`
 }
 
-type UserContactInput struct {
-	Contact     	string	`json:"value"`
-	Type 	string	`json:"type"`
-}
-
-func  ContactTranslate(t* UserContactInput) UserContact{
-	return UserContact{
-		Contact:     t.Contact,
-		Type: t.Type,
-	}
-}
-
-func IsValidContactType(category string) bool {
-	switch category {
-	case
-		"skype",
-		"telegram",
-		"vk.com",
-		"viber",
-		"phone",
-		"mobile phone",
-		"email":
-		return true
-	}
-	return false
-}
-
-func (t *UserContact) TableName() string {
-	return "user_contact"
-}
+//func (t *UserContact) TableName() string {
+//	return "user_contacts"
+//}
 
 func init() {
 	orm.RegisterModel(new(UserContact))
-}
-
-
-// AddUserContact insert a new UserContact into database and returns
-// last inserted Id on success.
-func AddUserContact(m *UserContact) (id int64, err error) {
-	o := orm.NewOrm()
-	id, err = o.Insert(m)
-	return
 }
 
 // GetUserContactById retrieves UserContact by Id. Returns error if

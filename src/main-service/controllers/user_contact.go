@@ -3,9 +3,8 @@ package controllers
 import (
 	"main-service/models"
 	"strconv"
-
 	//"github.com/astaxie/beego"
-	"encoding/json"
+	//"encoding/json"
 	"github.com/astaxie/beego"
 )
 
@@ -31,42 +30,41 @@ func (c *UserContactController) URLMapping() {
 // @Success 201 {int} models.UserContact
 // @Failure 403 body is empty
 // @router / [post]
-func (c *UserContactController) Post() {
-	if c.CurrentUser.UserId != models.VIEWER {
-		cUser := models.User{Id: c.CurrentUser.UserId, }
-		v := []models.UserContactInput{}
-		if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
-			ContId := []string{} // Artem skazal array
-			for _, element := range v {
-				if models.IsValidContactType(element.Type) {
-					in := models.ContactTranslate(&element)
-					in.UserId = &cUser
-					if _, err := models.AddUserContact(&in); err == nil {
-						c.Ctx.Output.SetStatus(HTTP_CREATED)
-						ContId = append(ContId, element.Type+": "+element.Contact+" was added.")
-					} else {
-						ContId = append(ContId, "Fail to add "+element.Type+": "+element.Contact)
-					}
-				} else {
-					ContId = append(ContId, "Fail to add "+element.Type+": "+element.Contact)
-				}
-			}
-			c.Data["json"] = ContId
-			beego.Trace("Post user contact OK")
-		} else {
-			beego.Debug("Unmarshal error for user contact `Post`", err.Error())
-			c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
-			c.Data["json"] = err.Error()
-		}
-	} else {
-		beego.Debug("Access denied for user contact `Post`")
-		c.Ctx.Output.SetStatus(HTTP_FORBIDDEN)
-		c.Data["json"] = HTTP_FORBIDDEN_STR
-	}
-	c.ServeJSON()
-}
+//func (c *UserContactController) Post() {
+//	if c.CurrentUser.UserId != models.VIEWER {
+//		cUser := models.User{Id: c.CurrentUser.UserId, }
+//		v := []models.UserContactInput{}
+//		if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
+//			ContId := []string{} // Artem skazal array
+//			for _, element := range v {
+//				if models.IsValidContactType(element.Type) {
+//					in := models.ContactTranslate(&element)
+//					in.UserId = &cUser
+//					if _, err := models.AddUserContact(&in); err == nil {
+//						c.Ctx.Output.SetStatus(HTTP_CREATED)
+//						ContId = append(ContId, element.Type+": "+element.Contact+" was added.")
+//					} else {
+//						ContId = append(ContId, "Fail to add "+element.Type+": "+element.Contact)
+//					}
+//				} else {
+//					ContId = append(ContId, "Fail to add "+element.Type+": "+element.Contact)
+//				}
+//			}
+//			c.Data["json"] = ContId
+//			beego.Trace("Post user contact OK")
+//		} else {
+//			beego.Debug("Unmarshal error for user contact `Post`", err.Error())
+//			c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
+//			c.Data["json"] = err.Error()
+//		}
+//	} else {
+//		beego.Debug("Access denied for user contact `Post`")
+//		c.Ctx.Output.SetStatus(HTTP_FORBIDDEN)
+//		c.Data["json"] = HTTP_FORBIDDEN_STR
+//	}
+//	c.ServeJSON()
+//}
 func (c *UserContactController) GetOne() {}
-
 
 // GetAll ...
 // @Title Get One
@@ -121,6 +119,7 @@ func (c *UserContactController) GetAll() {
 	}
 	c.ServeJSON()
 }
+
 /*
 // Put ...
 // @Title Put
@@ -154,41 +153,41 @@ func (c *UserContactController) Put() {
 // @Success 200 {string} delete success!
 // @Failure 403 id is empty
 // @router /:id [delete]
-func (c *UserContactController) Delete() {
-	if c.CurrentUser.PermissionLevel != models.VIEWER {
-		idStr := c.Ctx.Input.Param(":id")
-		id, err := strconv.Atoi(idStr)
-		if err == nil {
-			v, err := models.GetUserContactById(id)
-			if err != nil {
-				beego.Debug("Delete user contact `GetUserNyId` error")
-				c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
-				c.Data["json"] = err.Error()
-			} else {
-				if v.UserId.Id == c.CurrentUser.UserId {
-					if err := models.DeleteUserContact(v.Id); err == nil {
-						beego.Trace("Delete user contact OK")
-						c.Data["json"] = HTTP_OK_STR
-					} else {
-						beego.Debug("Delete user contact error", err.Error())
-						c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
-						c.Data["json"] = err.Error()
-					}
-				} else {
-					beego.Debug("Access denied for user contact `Delete`")
-					c.Ctx.Output.SetStatus(HTTP_FORBIDDEN)
-					c.Data["json"] = HTTP_FORBIDDEN_STR
-				}
-			}
-		} else {
-			beego.Debug("Delete user contact `Atoi` error", err.Error())
-			c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
-			c.Data["json"] = err.Error()
-		}
-	} else {
-		beego.Debug("Unauthorized user in user contact `Delete`")
-		c.Ctx.Output.SetStatus(HTTP_FORBIDDEN)
-		c.Data["json"] = HTTP_FORBIDDEN_STR
-	}
-	c.ServeJSON()
-}
+//func (c *UserContactController) Delete() {
+//	if c.CurrentUser.PermissionLevel != models.VIEWER {
+//		idStr := c.Ctx.Input.Param(":id")
+//		id, err := strconv.Atoi(idStr)
+//		if err == nil {
+//			v, err := models.GetUserContactById(id)
+//			if err != nil {
+//				beego.Debug("Delete user contact `GetUserNyId` error")
+//				c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
+//				c.Data["json"] = err.Error()
+//			} else {
+//				if v.UserId.Id == c.CurrentUser.UserId {
+//					if err := models.DeleteUserContact(v.Id); err == nil {
+//						beego.Trace("Delete user contact OK")
+//						c.Data["json"] = HTTP_OK_STR
+//					} else {
+//						beego.Debug("Delete user contact error", err.Error())
+//						c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
+//						c.Data["json"] = err.Error()
+//					}
+//				} else {
+//					beego.Debug("Access denied for user contact `Delete`")
+//					c.Ctx.Output.SetStatus(HTTP_FORBIDDEN)
+//					c.Data["json"] = HTTP_FORBIDDEN_STR
+//				}
+//			}
+//		} else {
+//			beego.Debug("Delete user contact `Atoi` error", err.Error())
+//			c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
+//			c.Data["json"] = err.Error()
+//		}
+//	} else {
+//		beego.Debug("Unauthorized user in user contact `Delete`")
+//		c.Ctx.Output.SetStatus(HTTP_FORBIDDEN)
+//		c.Data["json"] = HTTP_FORBIDDEN_STR
+//	}
+//	c.ServeJSON()
+//}

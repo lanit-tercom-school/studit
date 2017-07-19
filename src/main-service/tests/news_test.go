@@ -16,7 +16,7 @@ func TestNewsModel(t *testing.T) {
 		Description: "Description of TestNews1",
 		Tags: []string{"Test", "Other"},
 	}
-	id, err := models.AddNews(&t_news)
+	id, err = orm.NewOrm().Insert(&t_news)
 	if err != nil {
 		t.Error(err.Error())
 	}

@@ -1,5 +1,8 @@
 @echo off
 
+title Database
+chcp 1251
+
 set postgres64=C:\Program Files\PostgreSQL\9.6\bin
 set postgres32=C:\Program Files (x86)\PostgreSQL\9.6\bin
 

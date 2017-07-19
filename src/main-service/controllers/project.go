@@ -26,15 +26,15 @@ func (c *ProjectController) URLMapping() {
 // Post ...
 // @Title Post
 // @Description Создать новый проект, автоматически создателя делает мастером
-// @Param   body            body        models.ProjectJson     true    "Тело запроса, см. пример"
-// @Param   Bearer-token    header  string          true    "Токен доступа, пользователь должен быть не ниже куратора"
+// @Param   body         body   models.Project true "Тело запроса, см. пример"
+// @Param   Bearer-token header string         true "Токен доступа, пользователь должен быть не ниже куратора"
 // @Success 201 {int} Created
 // @Failure 403 body is empty
 // @router / [post]
 func (c *ProjectController) Post() {
 	beego.Trace("Try to POST project")
 	if c.CurrentUser.PermissionLevel == models.ADMIN || c.CurrentUser.PermissionLevel == models.LEADER {
-		var v models.ProjectJson
+		var v models.Project
 		if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
 			if id, err := models.AddProject(&v); err == nil {
 				beego.Trace("Project with id", id, "created")
@@ -265,7 +265,7 @@ func (c *ProjectController) Put() {
 			c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
 			c.Data["json"] = err.Error()
 		}
-		v := models.ProjectJson{Id: id}
+		v := models.Project{Id: id}
 		if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
 			if err := models.UpdateProjectById(&v); err == nil {
 				beego.Trace("Put project OK")

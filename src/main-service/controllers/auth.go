@@ -1,12 +1,12 @@
 package controllers
 
 import (
-	"github.com/astaxie/beego"
-	"github.com/robbert229/jwt"
 	"main-service/models"
-	"github.com/astaxie/beego/config"
-)
 
+	"github.com/astaxie/beego"
+	"github.com/astaxie/beego/config"
+	"github.com/robbert229/jwt"
+)
 
 type CurrentClient struct {
 	UserId          int

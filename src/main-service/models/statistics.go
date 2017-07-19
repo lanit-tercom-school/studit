@@ -9,45 +9,41 @@ import (
 	"github.com/astaxie/beego/orm"
 )
 
-type TasksTagsTable struct {
-	Id     int   `orm:"column(id);pk;auto"`
-	TaskId *Task `orm:"column(task_id);rel(fk)"`
-	TagId  *Tag  `orm:"column(tag_id);rel(fk)"`
-}
-
-func (t *TasksTagsTable) TableName() string {
-	return "tasks_tags_table"
+type Statistics struct {
+	Id       int     `orm:"column(id);pk;auto"`
+	Hours    int64   `orm:"column(hours)"`
+	CourseId *Course `orm:"column(course_id);rel(fk)"`
 }
 
 func init() {
-	orm.RegisterModel(new(TasksTagsTable))
+	orm.RegisterModel(new(Statistics))
 }
 
-// AddTasksTagsTable insert a new TasksTagsTable into database and returns
+// AddStatistics insert a new Statistics into database and returns
 // last inserted Id on success.
-func AddTasksTagsTable(m *TasksTagsTable) (id int64, err error) {
+func AddStatistics(m *Statistics) (id int64, err error) {
 	o := orm.NewOrm()
 	id, err = o.Insert(m)
 	return
 }
 
-// GetTasksTagsTableById retrieves TasksTagsTable by Id. Returns error if
+// GetStatisticsById retrieves Statistics by Id. Returns error if
 // Id doesn't exist
-func GetTasksTagsTableById(id int) (v *TasksTagsTable, err error) {
+func GetStatisticsById(id int) (v *Statistics, err error) {
 	o := orm.NewOrm()
-	v = &TasksTagsTable{Id: id}
+	v = &Statistics{Id: id}
 	if err = o.Read(v); err == nil {
 		return v, nil
 	}
 	return nil, err
 }
 
-// GetAllTasksTagsTable retrieves all TasksTagsTable matches certain condition. Returns empty list if
+// GetAllStatistics retrieves all Statistics matches certain condition. Returns empty list if
 // no records exist
-func GetAllTasksTagsTable(query map[string]string, fields []string, sortby []string, order []string,
+func GetAllStatistics(query map[string]string, fields []string, sortby []string, order []string,
 	offset int64, limit int64) (ml []interface{}, err error) {
 	o := orm.NewOrm()
-	qs := o.QueryTable(new(TasksTagsTable))
+	qs := o.QueryTable(new(Statistics))
 	// query k=v
 	for k, v := range query {
 		// rewrite dot-notation to Object__Attribute
@@ -93,7 +89,7 @@ func GetAllTasksTagsTable(query map[string]string, fields []string, sortby []str
 		}
 	}
 
-	var l []TasksTagsTable
+	var l []Statistics
 	qs = qs.OrderBy(sortFields...)
 	if _, err = qs.Limit(limit, offset).All(&l, fields...); err == nil {
 		if len(fields) == 0 {
@@ -116,11 +112,11 @@ func GetAllTasksTagsTable(query map[string]string, fields []string, sortby []str
 	return nil, err
 }
 
-// UpdateTasksTagsTable updates TasksTagsTable by Id and returns error if
+// UpdateStatistics updates Statistics by Id and returns error if
 // the record to be updated doesn't exist
-func UpdateTasksTagsTableById(m *TasksTagsTable) (err error) {
+func UpdateStatisticsById(m *Statistics) (err error) {
 	o := orm.NewOrm()
-	v := TasksTagsTable{Id: m.Id}
+	v := Statistics{Id: m.Id}
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
 		var num int64
@@ -131,15 +127,15 @@ func UpdateTasksTagsTableById(m *TasksTagsTable) (err error) {
 	return
 }
 
-// DeleteTasksTagsTable deletes TasksTagsTable by Id and returns error if
+// DeleteStatistics deletes Statistics by Id and returns error if
 // the record to be deleted doesn't exist
-func DeleteTasksTagsTable(id int) (err error) {
+func DeleteStatistics(id int) (err error) {
 	o := orm.NewOrm()
-	v := TasksTagsTable{Id: id}
+	v := Statistics{Id: id}
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
 		var num int64
-		if num, err = o.Delete(&TasksTagsTable{Id: id}); err == nil {
+		if num, err = o.Delete(&Statistics{Id: id}); err == nil {
 			fmt.Println("Number of records deleted in database:", num)
 		}
 	}

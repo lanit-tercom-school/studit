@@ -5,49 +5,51 @@ import (
 	"fmt"
 	"reflect"
 	"strings"
+	"time"
 
 	"github.com/astaxie/beego/orm"
 )
 
-type TaskForTest struct {
-	Id       int    `orm:"column(id);pk;auto"`
-	Question string `orm:"column(question)"`
-	TestId   *Test  `orm:"column(test_id);rel(fk)"`
+type UserComment struct {
+	Id        int       `orm:"column(id);pk;auto"         json:"-"`
+	UserId    *User     `orm:"column(user_id);rel(fk)"    json:"user_id"`
+	CommentId *Comment  `orm:"column(comment_id);rel(fk)" json:"msg_id"`
+	Date      time.Time `orm:"column(date);auto_now_add"  json:"date"`
 }
 
-func (t *TaskForTest) TableName() string {
-	return "task_for_test"
-}
+//func (t *UserComment) TableName() string {
+//	return "user_comment"
+//}
 
 func init() {
-	orm.RegisterModel(new(TaskForTest))
+	orm.RegisterModel(new(UserComment))
 }
 
-// AddTaskForTest insert a new TaskForTest into database and returns
+// AddUserComment insert a new UserComment into database and returns
 // last inserted Id on success.
-func AddTaskForTest(m *TaskForTest) (id int64, err error) {
+func AddUserComment(m *UserComment) (id int64, err error) {
 	o := orm.NewOrm()
 	id, err = o.Insert(m)
 	return
 }
 
-// GetTaskForTestById retrieves TaskForTest by Id. Returns error if
+// GetUserCommentById retrieves UserComment by Id. Returns error if
 // Id doesn't exist
-func GetTaskForTestById(id int) (v *TaskForTest, err error) {
+func GetUserCommentById(id int) (v *UserComment, err error) {
 	o := orm.NewOrm()
-	v = &TaskForTest{Id: id}
+	v = &UserComment{Id: id}
 	if err = o.Read(v); err == nil {
 		return v, nil
 	}
 	return nil, err
 }
 
-// GetAllTaskForTest retrieves all TaskForTest matches certain condition. Returns empty list if
+// GetAllUserComment retrieves all UserComment matches certain condition. Returns empty list if
 // no records exist
-func GetAllTaskForTest(query map[string]string, fields []string, sortby []string, order []string,
+func GetAllUserComment(query map[string]string, fields []string, sortby []string, order []string,
 	offset int64, limit int64) (ml []interface{}, err error) {
 	o := orm.NewOrm()
-	qs := o.QueryTable(new(TaskForTest))
+	qs := o.QueryTable(new(UserComment))
 	// query k=v
 	for k, v := range query {
 		// rewrite dot-notation to Object__Attribute
@@ -93,7 +95,7 @@ func GetAllTaskForTest(query map[string]string, fields []string, sortby []string
 		}
 	}
 
-	var l []TaskForTest
+	var l []UserComment
 	qs = qs.OrderBy(sortFields...)
 	if _, err = qs.Limit(limit, offset).All(&l, fields...); err == nil {
 		if len(fields) == 0 {
@@ -116,11 +118,11 @@ func GetAllTaskForTest(query map[string]string, fields []string, sortby []string
 	return nil, err
 }
 
-// UpdateTaskForTest updates TaskForTest by Id and returns error if
+// UpdateUserComment updates UserComment by Id and returns error if
 // the record to be updated doesn't exist
-func UpdateTaskForTestById(m *TaskForTest) (err error) {
+func UpdateUserCommentById(m *UserComment) (err error) {
 	o := orm.NewOrm()
-	v := TaskForTest{Id: m.Id}
+	v := UserComment{Id: m.Id}
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
 		var num int64
@@ -131,15 +133,15 @@ func UpdateTaskForTestById(m *TaskForTest) (err error) {
 	return
 }
 
-// DeleteTaskForTest deletes TaskForTest by Id and returns error if
+// DeleteUserComment deletes UserComment by Id and returns error if
 // the record to be deleted doesn't exist
-func DeleteTaskForTest(id int) (err error) {
+func DeleteUserComment(id int) (err error) {
 	o := orm.NewOrm()
-	v := TaskForTest{Id: id}
+	v := UserComment{Id: id}
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
 		var num int64
-		if num, err = o.Delete(&TaskForTest{Id: id}); err == nil {
+		if num, err = o.Delete(&UserComment{Id: id}); err == nil {
 			fmt.Println("Number of records deleted in database:", num)
 		}
 	}

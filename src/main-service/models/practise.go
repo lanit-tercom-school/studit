@@ -15,9 +15,9 @@ type Practise struct {
 	Description string  `orm:"column(description)"`
 }
 
-func (t *Practise) TableName() string {
-	return "practise"
-}
+// func (t *Practise) TableName() string {
+// 	return "practise"
+// }
 
 func init() {
 	orm.RegisterModel(new(Practise))

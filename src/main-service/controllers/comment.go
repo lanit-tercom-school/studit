@@ -1,9 +1,9 @@
 package controllers
-/*
+
 import (
 	"encoding/json"
 	"errors"
-	"service/models"
+	"main-service/models"
 	"strconv"
 	"strings"
 )
@@ -173,4 +173,3 @@ func (c *CommentController) Delete() {
 	}
 	c.ServeJSON()
 }
-*/

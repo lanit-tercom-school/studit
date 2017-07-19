@@ -10,13 +10,13 @@ import (
 	"github.com/astaxie/beego"
 )
 
-// TaskForTestController oprations for TaskForTest
-type TaskForTestController struct {
+// UserCommentController oprations for UserComment
+type UserCommentController struct {
 	beego.Controller
 }
 
 // URLMapping ...
-func (c *TaskForTestController) URLMapping() {
+func (c *UserCommentController) URLMapping() {
 	c.Mapping("Post", c.Post)
 	c.Mapping("GetOne", c.GetOne)
 	c.Mapping("GetAll", c.GetAll)
@@ -26,15 +26,15 @@ func (c *TaskForTestController) URLMapping() {
 
 // Post ...
 // @Title Post
-// @Description create TaskForTest
-// @Param	body		body 	models.TaskForTest	true		"body for TaskForTest content"
-// @Success 201 {int} models.TaskForTest
+// @Description create UserComment
+// @Param	body		body 	models.UserComment	true		"body for UserComment content"
+// @Success 201 {int} models.UserComment
 // @Failure 403 body is empty
 // @router / [post]
-func (c *TaskForTestController) Post() {
-	var v models.TaskForTest
+func (c *UserCommentController) Post() {
+	var v models.UserComment
 	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
-		if _, err := models.AddTaskForTest(&v); err == nil {
+		if _, err := models.AddUserComment(&v); err == nil {
 			c.Ctx.Output.SetStatus(201)
 			c.Data["json"] = v
 		} else {
@@ -48,15 +48,15 @@ func (c *TaskForTestController) Post() {
 
 // GetOne ...
 // @Title Get One
-// @Description get TaskForTest by id
+// @Description get UserComment by id
 // @Param	id		path 	string	true		"The key for staticblock"
-// @Success 200 {object} models.TaskForTest
+// @Success 200 {object} models.UserComment
 // @Failure 403 :id is empty
 // @router /:id [get]
-func (c *TaskForTestController) GetOne() {
+func (c *UserCommentController) GetOne() {
 	idStr := c.Ctx.Input.Param(":id")
 	id, _ := strconv.Atoi(idStr)
-	v, err := models.GetTaskForTestById(id)
+	v, err := models.GetUserCommentById(id)
 	if err != nil {
 		c.Data["json"] = err.Error()
 	} else {
@@ -67,17 +67,17 @@ func (c *TaskForTestController) GetOne() {
 
 // GetAll ...
 // @Title Get All
-// @Description get TaskForTest
+// @Description get UserComment
 // @Param	query	query	string	false	"Filter. e.g. col1:v1,col2:v2 ..."
 // @Param	fields	query	string	false	"Fields returned. e.g. col1,col2 ..."
 // @Param	sortby	query	string	false	"Sorted-by fields. e.g. col1,col2 ..."
 // @Param	order	query	string	false	"Order corresponding to each sortby field, if single value, apply to all sortby fields. e.g. desc,asc ..."
 // @Param	limit	query	string	false	"Limit the size of result set. Must be an integer"
 // @Param	offset	query	string	false	"Start position of result set. Must be an integer"
-// @Success 200 {object} models.TaskForTest
+// @Success 200 {object} models.UserComment
 // @Failure 403
 // @router / [get]
-func (c *TaskForTestController) GetAll() {
+func (c *UserCommentController) GetAll() {
 	var fields []string
 	var sortby []string
 	var order []string
@@ -119,7 +119,7 @@ func (c *TaskForTestController) GetAll() {
 		}
 	}
 
-	l, err := models.GetAllTaskForTest(query, fields, sortby, order, offset, limit)
+	l, err := models.GetAllUserComment(query, fields, sortby, order, offset, limit)
 	if err != nil {
 		c.Data["json"] = err.Error()
 	} else {
@@ -130,18 +130,18 @@ func (c *TaskForTestController) GetAll() {
 
 // Put ...
 // @Title Put
-// @Description update the TaskForTest
+// @Description update the UserComment
 // @Param	id		path 	string	true		"The id you want to update"
-// @Param	body		body 	models.TaskForTest	true		"body for TaskForTest content"
-// @Success 200 {object} models.TaskForTest
+// @Param	body		body 	models.UserComment	true		"body for UserComment content"
+// @Success 200 {object} models.UserComment
 // @Failure 403 :id is not int
 // @router /:id [put]
-func (c *TaskForTestController) Put() {
+func (c *UserCommentController) Put() {
 	idStr := c.Ctx.Input.Param(":id")
 	id, _ := strconv.Atoi(idStr)
-	v := models.TaskForTest{Id: id}
+	v := models.UserComment{Id: id}
 	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
-		if err := models.UpdateTaskForTestById(&v); err == nil {
+		if err := models.UpdateUserCommentById(&v); err == nil {
 			c.Data["json"] = "OK"
 		} else {
 			c.Data["json"] = err.Error()
@@ -154,15 +154,15 @@ func (c *TaskForTestController) Put() {
 
 // Delete ...
 // @Title Delete
-// @Description delete the TaskForTest
+// @Description delete the UserComment
 // @Param	id		path 	string	true		"The id you want to delete"
 // @Success 200 {string} delete success!
 // @Failure 403 id is empty
 // @router /:id [delete]
-func (c *TaskForTestController) Delete() {
+func (c *UserCommentController) Delete() {
 	idStr := c.Ctx.Input.Param(":id")
 	id, _ := strconv.Atoi(idStr)
-	if err := models.DeleteTaskForTest(id); err == nil {
+	if err := models.DeleteUserComment(id); err == nil {
 		c.Data["json"] = "OK"
 	} else {
 		c.Data["json"] = err.Error()

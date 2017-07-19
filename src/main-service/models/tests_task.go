@@ -9,44 +9,45 @@ import (
 	"github.com/astaxie/beego/orm"
 )
 
-type Tag struct {
-	Id   int    `orm:"column(id);pk;auto"`
-	Name string `orm:"column(name)"`
+type TestsTask struct {
+	Id       int    `orm:"column(id);pk;auto"`
+	Question string `orm:"column(question)"`
+	TestId   *Test  `orm:"column(test_id);rel(fk)"`
 }
 
-func (t *Tag) TableName() string {
-	return "tag"
-}
+// func (t *TestsTask) TableName() string {
+// 	return "tests_task"
+// }
 
 func init() {
-	orm.RegisterModel(new(Tag))
+	orm.RegisterModel(new(TestsTask))
 }
 
-// AddTag insert a new Tag into database and returns
+// AddTestsTask insert a new TestsTask into database and returns
 // last inserted Id on success.
-func AddTag(m *Tag) (id int64, err error) {
+func AddTestsTask(m *TestsTask) (id int64, err error) {
 	o := orm.NewOrm()
 	id, err = o.Insert(m)
 	return
 }
 
-// GetTagById retrieves Tag by Id. Returns error if
+// GetTestsTaskById retrieves TestsTask by Id. Returns error if
 // Id doesn't exist
-func GetTagById(id int) (v *Tag, err error) {
+func GetTestsTaskById(id int) (v *TestsTask, err error) {
 	o := orm.NewOrm()
-	v = &Tag{Id: id}
+	v = &TestsTask{Id: id}
 	if err = o.Read(v); err == nil {
 		return v, nil
 	}
 	return nil, err
 }
 
-// GetAllTag retrieves all Tag matches certain condition. Returns empty list if
+// GetAllTestsTask retrieves all TestsTask matches certain condition. Returns empty list if
 // no records exist
-func GetAllTag(query map[string]string, fields []string, sortby []string, order []string,
+func GetAllTestsTask(query map[string]string, fields []string, sortby []string, order []string,
 	offset int64, limit int64) (ml []interface{}, err error) {
 	o := orm.NewOrm()
-	qs := o.QueryTable(new(Tag))
+	qs := o.QueryTable(new(TestsTask))
 	// query k=v
 	for k, v := range query {
 		// rewrite dot-notation to Object__Attribute
@@ -92,7 +93,7 @@ func GetAllTag(query map[string]string, fields []string, sortby []string, order 
 		}
 	}
 
-	var l []Tag
+	var l []TestsTask
 	qs = qs.OrderBy(sortFields...)
 	if _, err = qs.Limit(limit, offset).All(&l, fields...); err == nil {
 		if len(fields) == 0 {
@@ -115,11 +116,11 @@ func GetAllTag(query map[string]string, fields []string, sortby []string, order 
 	return nil, err
 }
 
-// UpdateTag updates Tag by Id and returns error if
+// UpdateTestsTask updates TestsTask by Id and returns error if
 // the record to be updated doesn't exist
-func UpdateTagById(m *Tag) (err error) {
+func UpdateTestsTaskById(m *TestsTask) (err error) {
 	o := orm.NewOrm()
-	v := Tag{Id: m.Id}
+	v := TestsTask{Id: m.Id}
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
 		var num int64
@@ -130,15 +131,15 @@ func UpdateTagById(m *Tag) (err error) {
 	return
 }
 
-// DeleteTag deletes Tag by Id and returns error if
+// DeleteTestsTask deletes TestsTask by Id and returns error if
 // the record to be deleted doesn't exist
-func DeleteTag(id int) (err error) {
+func DeleteTestsTask(id int) (err error) {
 	o := orm.NewOrm()
-	v := Tag{Id: id}
+	v := TestsTask{Id: id}
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
 		var num int64
-		if num, err = o.Delete(&Tag{Id: id}); err == nil {
+		if num, err = o.Delete(&TestsTask{Id: id}); err == nil {
 			fmt.Println("Number of records deleted in database:", num)
 		}
 	}

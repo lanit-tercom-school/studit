@@ -10,13 +10,13 @@ import (
 	"github.com/astaxie/beego"
 )
 
-// RecomendCoursesController oprations for RecomendCourses
-type RecomendCoursesController struct {
+// RecommendedCourseController oprations for RecommendedCourse
+type RecommendedCourseController struct {
 	beego.Controller
 }
 
 // URLMapping ...
-func (c *RecomendCoursesController) URLMapping() {
+func (c *RecommendedCourseController) URLMapping() {
 	c.Mapping("Post", c.Post)
 	c.Mapping("GetOne", c.GetOne)
 	c.Mapping("GetAll", c.GetAll)
@@ -26,15 +26,15 @@ func (c *RecomendCoursesController) URLMapping() {
 
 // Post ...
 // @Title Post
-// @Description create RecomendCourses
-// @Param	body		body 	models.RecomendCourses	true		"body for RecomendCourses content"
-// @Success 201 {int} models.RecomendCourses
+// @Description create RecommendedCourse
+// @Param	body		body 	models.RecommendedCourse	true		"body for RecommendedCourse content"
+// @Success 201 {int} models.RecommendedCourse
 // @Failure 403 body is empty
 // @router / [post]
-func (c *RecomendCoursesController) Post() {
-	var v models.RecomendCourses
+func (c *RecommendedCourseController) Post() {
+	var v models.RecommendedCourse
 	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
-		if _, err := models.AddRecomendCourses(&v); err == nil {
+		if _, err := models.AddRecommendedCourse(&v); err == nil {
 			c.Ctx.Output.SetStatus(201)
 			c.Data["json"] = v
 		} else {
@@ -48,15 +48,15 @@ func (c *RecomendCoursesController) Post() {
 
 // GetOne ...
 // @Title Get One
-// @Description get RecomendCourses by id
+// @Description get RecommendedCourse by id
 // @Param	id		path 	string	true		"The key for staticblock"
-// @Success 200 {object} models.RecomendCourses
+// @Success 200 {object} models.RecommendedCourse
 // @Failure 403 :id is empty
 // @router /:id [get]
-func (c *RecomendCoursesController) GetOne() {
+func (c *RecommendedCourseController) GetOne() {
 	idStr := c.Ctx.Input.Param(":id")
 	id, _ := strconv.Atoi(idStr)
-	v, err := models.GetRecomendCoursesById(id)
+	v, err := models.GetRecommendedCourseById(id)
 	if err != nil {
 		c.Data["json"] = err.Error()
 	} else {
@@ -67,17 +67,17 @@ func (c *RecomendCoursesController) GetOne() {
 
 // GetAll ...
 // @Title Get All
-// @Description get RecomendCourses
+// @Description get RecommendedCourse
 // @Param	query	query	string	false	"Filter. e.g. col1:v1,col2:v2 ..."
 // @Param	fields	query	string	false	"Fields returned. e.g. col1,col2 ..."
 // @Param	sortby	query	string	false	"Sorted-by fields. e.g. col1,col2 ..."
 // @Param	order	query	string	false	"Order corresponding to each sortby field, if single value, apply to all sortby fields. e.g. desc,asc ..."
 // @Param	limit	query	string	false	"Limit the size of result set. Must be an integer"
 // @Param	offset	query	string	false	"Start position of result set. Must be an integer"
-// @Success 200 {object} models.RecomendCourses
+// @Success 200 {object} models.RecommendedCourse
 // @Failure 403
 // @router / [get]
-func (c *RecomendCoursesController) GetAll() {
+func (c *RecommendedCourseController) GetAll() {
 	var fields []string
 	var sortby []string
 	var order []string
@@ -119,7 +119,7 @@ func (c *RecomendCoursesController) GetAll() {
 		}
 	}
 
-	l, err := models.GetAllRecomendCourses(query, fields, sortby, order, offset, limit)
+	l, err := models.GetAllRecommendedCourse(query, fields, sortby, order, offset, limit)
 	if err != nil {
 		c.Data["json"] = err.Error()
 	} else {
@@ -130,18 +130,18 @@ func (c *RecomendCoursesController) GetAll() {
 
 // Put ...
 // @Title Put
-// @Description update the RecomendCourses
+// @Description update the RecommendedCourse
 // @Param	id		path 	string	true		"The id you want to update"
-// @Param	body		body 	models.RecomendCourses	true		"body for RecomendCourses content"
-// @Success 200 {object} models.RecomendCourses
+// @Param	body		body 	models.RecommendedCourse	true		"body for RecommendedCourse content"
+// @Success 200 {object} models.RecommendedCourse
 // @Failure 403 :id is not int
 // @router /:id [put]
-func (c *RecomendCoursesController) Put() {
+func (c *RecommendedCourseController) Put() {
 	idStr := c.Ctx.Input.Param(":id")
 	id, _ := strconv.Atoi(idStr)
-	v := models.RecomendCourses{Id: id}
+	v := models.RecommendedCourse{Id: id}
 	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
-		if err := models.UpdateRecomendCoursesById(&v); err == nil {
+		if err := models.UpdateRecommendedCourseById(&v); err == nil {
 			c.Data["json"] = "OK"
 		} else {
 			c.Data["json"] = err.Error()
@@ -154,15 +154,15 @@ func (c *RecomendCoursesController) Put() {
 
 // Delete ...
 // @Title Delete
-// @Description delete the RecomendCourses
+// @Description delete the RecommendedCourse
 // @Param	id		path 	string	true		"The id you want to delete"
 // @Success 200 {string} delete success!
 // @Failure 403 id is empty
 // @router /:id [delete]
-func (c *RecomendCoursesController) Delete() {
+func (c *RecommendedCourseController) Delete() {
 	idStr := c.Ctx.Input.Param(":id")
 	id, _ := strconv.Atoi(idStr)
-	if err := models.DeleteRecomendCourses(id); err == nil {
+	if err := models.DeleteRecommendedCourse(id); err == nil {
 		c.Data["json"] = "OK"
 	} else {
 		c.Data["json"] = err.Error()
