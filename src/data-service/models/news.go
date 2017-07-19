@@ -11,7 +11,7 @@ import (
 )
 
 type News struct {
-	Id             int       `orm:"column(id);pk"`
+	Id             int       `orm:"column(id);pk;auto"`
 	Title          string    `orm:"column(title)"`
 	Description    string    `orm:"column(description)"`
 	Image          string    `orm:"column(image)"`
