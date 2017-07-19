@@ -14,13 +14,28 @@ export class AuthService {
     constructor(private http: Http) { }
 
     authenticatenow(user: User) {
-        return this.http.post(environment.authUrl + '/v1/auth/signin/', JSON.stringify(user))
+       /* return this.http.post(environment.authUrl + '/v1/auth/signin/', JSON.stringify(user))
             .map((response: Response) => {
                 // successful login => getting jwt
                 let res = response.json();
                 if (res && res.bearer_token) {
                     // save data for keeping user logged in
                     res.login = user.login;
+                    localStorage.setItem('current_user', JSON.stringify(res));
+                }
+            });*/
+        var query: String = 'mutation{';
+        query += 'Auth{ Signin(Login:"'+ user.login;
+        query += '" Password:"'+ user.password + '")';
+        query += '{ DataOfExpiration PermissionLevel Token ';
+        query += 'User { Id Avatar Nickname Description }}}}';
+        return this.http.get(environment.authUrl + '/graphql?query=' + query)
+            .map((response: Response) => {
+                // successful login => getting jwt
+                let res = response.json().data.Auth.Signin;
+                if (res && res.Token) {
+                    // save data for keeping user logged in
+                    res.User.Login = user.login;
                     localStorage.setItem('current_user', JSON.stringify(res));
                 }
             });

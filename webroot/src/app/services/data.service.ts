@@ -72,7 +72,7 @@ export class DataService {
    ) { }
 
   loadAll() {
-    console.log('Data.service ->loadAll');
+    /*console.log('Data.service ->loadAll');
     this.loadProjects();
     this.loadNews();
     this.loadProjectsForMainPage();
@@ -87,7 +87,7 @@ export class DataService {
       if (this.userPermLvl === PermLevel.Teacher) {
         this.loadEnrollsForTeacher();
       }
-    }
+    }*/
   }
 
   loadProjects() {

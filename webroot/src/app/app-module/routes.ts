@@ -17,19 +17,19 @@ import { ErrorPageComponent } from './components/error-page/error-page.component
 
 export const routes: Routes = [
   { path: '', redirectTo: 'main', pathMatch: 'full', canActivate: [PathManager] },
-  { path: 'home',  component: UserPublicPageComponent, canActivate: [PathManager] },
+  //{ path: 'home',  component: UserPublicPageComponent, canActivate: [PathManager] },
   { path: 'main', component: MainComponent, canActivate: [PathManager] },
-  { path: 'projects', component: ProjectListPageComponent },
-  { path: 'project/:id', component: ProjectPageComponent, canActivate: [PathManager] },
+  //{ path: 'projects', component: ProjectListPageComponent },
+  //{ path: 'project/:id', component: ProjectPageComponent, canActivate: [PathManager] },
   { path: 'auth', component: AuthorizationPageComponent, canActivate: [PathManager] },
-  { path: 'student', loadChildren: 'student-module/student.module#StudentModule',canActivate: [PathManager] },
+  /*{ path: 'student', loadChildren: 'student-module/student.module#StudentModule',canActivate: [PathManager] },
   { path: 'teacher', loadChildren: 'teacher-module/teacher.module#TeacherModule',canActivate: [PathManager] },
   { path: 'admin', loadChildren: 'admin-module/admin.module#AdminModule',canActivate: [PathManager] },
   { path: 'registration', component: RegistrationPageComponent, canActivate: [PathManager] },
   { path: 'registration/validate', component: ValidationPageComponent, canActivate: [PathManager] },
   { path: 'user/:id', component: UserPublicPageComponent,  canActivate: [PathManager] },
   { path: 'news', component: MainNewsPageComponent },
-  { path: 'news/:id', component: MainFullNewsPageComponent },
+  { path: 'news/:id', component: MainFullNewsPageComponent },*/
   { path: '**', component: ErrorPageComponent },
 ];
 
