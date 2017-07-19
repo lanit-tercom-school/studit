@@ -9,6 +9,15 @@ import (
 	"net/http"
 )
 
+func InterfaceToString(i interface{}) (s string) {
+	if i == nil {
+		s = ""
+	} else {
+		s = i.(string)
+	}
+	return
+}
+
 //Вывод ошибки в Get запросе
 func LogErrorGet(url string, err error) {
 	log.Printf("Get: %s Error %s", url, err)
@@ -93,7 +102,6 @@ func HttpPost(url string, send interface{}, get interface{}) (err error) {
 		LogErrorPost(url, err)
 		return
 	}
-
 	err = json.Unmarshal(body, get)
 	if err != nil {
 		LogErrorPost(url, err)

@@ -7,6 +7,7 @@ import (
 )
 
 var GetProjectById gql.Field
+var GetProjectList gql.Field
 
 func init() {
 	GetProjectById = gql.Field{
@@ -17,5 +18,17 @@ func init() {
 			},
 		},
 		Resolve: objects.ResolveGetProjectById,
+	}
+	GetProjectList = gql.Field{
+		Type: gql.NewList(objects.ProjectType),
+		Args: gql.FieldConfigArgument{
+			"Limit": &gql.ArgumentConfig{
+				Type: gql.String,
+			},
+			"Offset": &gql.ArgumentConfig{
+				Type: gql.String,
+			},
+		},
+		Resolve: objects.ResolveGetProjectList,
 	}
 }

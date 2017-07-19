@@ -48,7 +48,7 @@ var ActivationDataType = gql.NewObject(
 )
 var SignupDataType = gql.NewObject(
 	gql.ObjectConfig{
-		Name: "LogUp",
+		Name: "Singup",
 		Fields: gql.Fields{
 			"ActivationCode": &gql.Field{
 				Type: gql.String,

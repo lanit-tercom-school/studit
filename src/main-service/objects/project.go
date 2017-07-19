@@ -168,15 +168,31 @@ func ResolvePostProject(p gql.ResolveParams) (interface{}, error) {
 		helpers.LogAccesAllowed("PostProject")
 		projectToSend := Project{
 			DateOfCreation: time.Now(),
-			Name:           p.Args["Name"].(string),
-			Description:    p.Args["Description"].(string),
-			Logo:           p.Args["Logo"].(string),
-			Status:         p.Args["Status"].(string),
-			Tags:           p.Args["Tags"].(string),
+			Name:           helpers.InterfaceToString(p.Args["Name"]),
+			Description:    helpers.InterfaceToString(p.Args["Description"]),
+			Logo:           helpers.InterfaceToString(p.Args["Logo"]),
+			Status:         helpers.InterfaceToString(p.Args["Status"]),
+			Tags:           helpers.InterfaceToString(p.Args["Tags"]),
 		}
 		err := helpers.HttpPost(conf.Configuration.DataServiceURL+"v1/project/", projectToSend, &projectToGet)
 		return projectToGet, err
 	}
 	helpers.LogAccesDenied("PostProject")
 	return nil, errors.New("Access is denied")
+}
+func ResolveGetProjectList(p gql.ResolveParams) (interface{}, error) {
+	var limit, offset string
+	limit, ok := p.Args["Limit"].(string)
+	if !ok {
+		err := errors.New("missed Limit")
+		return nil, err
+	}
+	offset, ok = p.Args["Offset"].(string)
+	if !ok {
+		err := errors.New("missed Offset")
+		return nil, err
+	}
+	var project []Project
+	err := helpers.HttpGet(conf.Configuration.DataServiceURL+"v1/project/?limit="+limit+"&offset="+offset, &project)
+	return project, err
 }

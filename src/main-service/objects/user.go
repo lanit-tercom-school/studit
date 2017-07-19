@@ -16,10 +16,10 @@ func init() {
 
 //User - используется для получения пользователя с data-service
 type User struct {
-	Id          int    `json:"id"`
-	Nickname    string `json:"nickname"`
-	Description string `json:"description,omitempty"`
-	Avatar      string `json:"avatar,omitempty"`
+	Id          int
+	Nickname    string
+	Description string
+	Avatar      string
 }
 
 //UserType - grqphql объект пользователя
