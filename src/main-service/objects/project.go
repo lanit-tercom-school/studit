@@ -168,11 +168,11 @@ func ResolvePostProject(p gql.ResolveParams) (interface{}, error) {
 		helpers.LogAccesAllowed("PostProject")
 		projectToSend := Project{
 			DateOfCreation: time.Now(),
-			Name:           p.Args["Name"].(string),
-			Description:    p.Args["Description"].(string),
-			Logo:           p.Args["Logo"].(string),
-			Status:         p.Args["Status"].(string),
-			Tags:           p.Args["Tags"].(string),
+			Name:           helpers.InterfaceToString(p.Args["Name"]),
+			Description:    helpers.InterfaceToString(p.Args["Description"]),
+			Logo:           helpers.InterfaceToString(p.Args["Logo"]),
+			Status:         helpers.InterfaceToString(p.Args["Status"]),
+			Tags:           helpers.InterfaceToString(p.Args["Tags"]),
 		}
 		err := helpers.HttpPost(conf.Configuration.DataServiceURL+"v1/project/", projectToSend, &projectToGet)
 		return projectToGet, err

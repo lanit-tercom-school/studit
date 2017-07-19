@@ -13,10 +13,10 @@ func init() {
 		Type: objects.ProjectType,
 		Args: gql.FieldConfigArgument{
 			"Name": &gql.ArgumentConfig{
-				Type: gql.String,
+				Type: gql.NewNonNull(gql.String),
 			},
 			"Description": &gql.ArgumentConfig{
-				Type: gql.String,
+				Type: gql.NewNonNull(gql.String),
 			},
 			"Logo": &gql.ArgumentConfig{
 				Type: gql.String,
@@ -25,7 +25,8 @@ func init() {
 				Type: gql.String,
 			},
 			"Status": &gql.ArgumentConfig{
-				Type: gql.String,
+				Type:         gql.String,
+				DefaultValue: "0",
 			},
 		},
 		Resolve: objects.ResolvePostProject,
