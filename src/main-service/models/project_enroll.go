@@ -1,20 +1,21 @@
 package models
 
 import (
-	"main-service/sql"
-	"strconv"
+	"errors"
+	"fmt"
+	"reflect"
+	"strings"
 	"time"
 
-	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
 )
 
 type ProjectEnroll struct {
-	Id        int       `orm:"column(id);pk;auto"`
-	UserId    *User     `orm:"column(user_id);rel(fk)"`
-	ProjectId *Project  `orm:"column(project_id);rel(fk)"`
-	Message   string    `orm:"column(enrolling_message)"`
-	Time      time.Time `orm:"column(time);type(datetime)"`
+	Id               int       `orm:"column(id);pk"`
+	Project          *Project  `orm:"column(project_id);rel(fk)"`
+	User             *User     `orm:"column(user_id);rel(fk)"`
+	EnrollingMessage string    `orm:"column(enrolling_message)"`
+	Time             time.Time `orm:"column(time);type(timestamp with time zone)"`
 }
 
 func (t *ProjectEnroll) TableName() string {
@@ -25,181 +26,129 @@ func init() {
 	orm.RegisterModel(new(ProjectEnroll))
 }
 
-// GetProjectEnrollIdByUserId returns an array of projects
-// where user enrolls
-func GetProjectEnrollIdByUserId(userId int) (projects []*Project, err error) {
-	o := orm.NewOrm()
-	var project_enrolled []ProjectEnroll
-	_, err = o.QueryTable(new(ProjectEnroll)).Filter("UserId", User{Id: userId}).RelatedSel().All(&project_enrolled)
-	if err != nil {
-		return projects, err
-	}
-	for _, v := range project_enrolled {
-		projects = append(projects, v.ProjectId)
-	}
-	return projects, nil
-}
-
-// AddProjectAuthor insert a new ProjectEnroll into database and returns
+// AddProjectEnroll insert a new ProjectEnroll into database and returns
 // last inserted Id on success.
-func AddApplicationFromUserForProject(u *User, p *Project, message string) (id int64, err error) {
-	m := ProjectEnroll{
-		UserId:    u,
-		ProjectId: p,
-		Message:   message,
-		Time:      time.Now(),
-	}
-	id, err = orm.NewOrm().Insert(&m)
+func AddProjectEnroll(m *ProjectEnroll) (id int64, err error) {
+	o := orm.NewOrm()
+	id, err = o.Insert(m)
 	return
 }
 
-// Получить список всех пользователей, подавших заявку на проект
-func GetAllSignedUpOnProject(project_id int) (ml []*User, err error) {
+// GetProjectEnrollById retrieves ProjectEnroll by Id. Returns error if
+// Id doesn't exist
+func GetProjectEnrollById(id int) (v *ProjectEnroll, err error) {
 	o := orm.NewOrm()
-	var singed_up []ProjectEnroll
-	_, err = o.QueryTable(new(ProjectEnroll)).
-		Filter("ProjectId", project_id).
-		RelatedSel().
-		All(&singed_up)
-	if err != nil {
-		return nil, err
+	v = &ProjectEnroll{Id: id}
+	if err = o.Read(v); err == nil {
+		return v, nil
 	}
-	for _, x := range singed_up {
-		ml = append(ml, x.UserId)
-	}
-	return ml, nil
+	return nil, err
 }
 
-// Объект списка для пользователя, подавшего заявку
-// для удобного просмотра списка пользователей, кто подал заявку
-// туда добавляются контакты, текст и небольшое сообщение от самого пользователя
-type ObjectOfListOfEnrolledUsersOnProject struct {
-	User     MainUserInfo   `json:"user"`
-	Contacts []*UserContact `json:"contacts"`
-	Message  string         `json:"message"`
-	Time     time.Time      `json:"date"`
-}
-
-// Для выдачи мастеру проекту, содержит информацию о проекте и список заявок
-type ProjectApplication struct {
-	Project Project `json:"project,omitempty"`
-	User    User    `json:"user,omitempty"`
-	Message string  `json:"message"`
-}
-type ProjectApplications struct {
-	Project      MainProjectInfo `json:"project,omitempty"`
-	Applications []interface{}   `json:"apps,omitempty"`
-}
-
-// Получить информацию о пользователях, подавших заявку на проект. Запрос исходит от конкретного пользователя.
-func GetAllEnrolledOnProject(master_id int) (pa []ProjectApplication, err error) {
+// GetAllProjectEnroll retrieves all ProjectEnroll matches certain condition. Returns empty list if
+// no records exist
+func GetAllProjectEnroll(query map[string]string, fields []string, sortby []string, order []string,
+	offset int64, limit int64) (ml []interface{}, err error) {
 	o := orm.NewOrm()
-	var maps []orm.Params
-<<<<<<< HEAD
-
-	n, err := o.Raw("Select pe.enrolling_message,p.id as project_id, "+
-		"p.name as project_name, p.tags as project_tags,p.status as project_status, "+
-		"p.logo as project_logo,p.description as project_description, "+
-		"p.created as project_date,u.id as user_id,u.nickname as user_name, "+
-		"u.avatar as user_avatar, u.description as user_description"+
-		"from public.project_user pu "+
-		"inner join public.project_enroll pe on pu.project_id=pe.project_id "+
-		"inner join public.user u on pe.user_id=u.id "+
-		"inner join public.project p on p.id=pe.project_id "+
-		"where pu.user_id=?", master_id).Values(&maps)
-
-=======
-	var n int64
-	n, err = o.Raw(sql.QueriesMap["GetAllEnrolledOnProject"], master_id).Values(&maps)
->>>>>>> 22e6a1c18a1bf3a965b6ce8f633aac90cc542712
-	if err != nil {
-		beego.Debug("Something wrong with database request")
-		return
-	} else {
-		pa = make([]ProjectApplication, n)
-		for i, v := range maps {
-			pa[i].User.Id, err = strconv.Atoi(v["user_id"].(string))
-			if err != nil {
-				beego.Debug("Error converting to int")
-				return
-			}
-			pa[i].User.Nickname = v["user_name"].(string)
-			pa[i].User.Avatar = v["user_avatar"].(string)
-			pa[i].User.Description = v["user_description"].(string)
-			pa[i].Project.Id, err = strconv.Atoi(v["project_id"].(string))
-			if err != nil {
-				beego.Debug("Error converting to int")
-				return
-			}
-			pa[i].Project.Name = v["project_name"].(string)
-			pa[i].Project.Description = v["project_description"].(string)
-			pa[i].Project.Logo = v["project_logo"].(string)
-			pa[i].Project.Status = v["project_status"].(string)
-			if err != nil {
-				beego.Debug("Error converting to int")
-				return
-			}
-			//pa[i].Project.Tags = v["project_tags"].([]string)
-			pa[i].Message = v["enrolling_message"].(string)
-			pa[i].Project.Created, err = time.Parse(time.RFC3339, v["project_date"].(string))
-			if err != nil {
-				beego.Debug("Error converting to time")
-				return
-			}
+	qs := o.QueryTable(new(ProjectEnroll))
+	// query k=v
+	for k, v := range query {
+		// rewrite dot-notation to Object__Attribute
+		k = strings.Replace(k, ".", "__", -1)
+		if strings.Contains(k, "isnull") {
+			qs = qs.Filter(k, (v == "true" || v == "1"))
+		} else {
+			qs = qs.Filter(k, v)
 		}
 	}
-	return
-}
-
-// Получает записанных без проверки на то, что пользователь является мастером проекта конкурентным способом
-func GetAllEnrolledOnProjectWithoutAuthChecking(project_id int, c chan []interface{}) {
-	o := orm.NewOrm()
-	var wtf []ProjectEnroll
-	_, err := o.QueryTable(new(ProjectEnroll)).Filter("ProjectId", project_id).RelatedSel().All(&wtf)
-	if err != nil {
-		c <- nil
-	} else {
-		var ml []interface{}
-		for _, r := range wtf {
-			contacts, err := GetAllUserContacts(r.UserId.Id)
-			if err != nil {
-				contacts = nil
+	// order by:
+	var sortFields []string
+	if len(sortby) != 0 {
+		if len(sortby) == len(order) {
+			// 1) for each sort field, there is an associated order
+			for i, v := range sortby {
+				orderby := ""
+				if order[i] == "desc" {
+					orderby = "-" + v
+				} else if order[i] == "asc" {
+					orderby = v
+				} else {
+					return nil, errors.New("Error: Invalid order. Must be either [asc|desc]")
+				}
+				sortFields = append(sortFields, orderby)
 			}
-			ml = append(ml, ObjectOfListOfEnrolledUsersOnProject{
-				User: MainUserInfo{
-					Id:       r.UserId.Id,
-					Avatar:   r.UserId.Avatar,
-					Nickname: r.UserId.Nickname,
-				},
-				Message:  r.Message,
-				Time:     r.Time,
-				Contacts: contacts,
-			})
+			qs = qs.OrderBy(sortFields...)
+		} else if len(sortby) != len(order) && len(order) == 1 {
+			// 2) there is exactly one order, all the sorted fields will be sorted by this order
+			for _, v := range sortby {
+				orderby := ""
+				if order[0] == "desc" {
+					orderby = "-" + v
+				} else if order[0] == "asc" {
+					orderby = v
+				} else {
+					return nil, errors.New("Error: Invalid order. Must be either [asc|desc]")
+				}
+				sortFields = append(sortFields, orderby)
+			}
+		} else if len(sortby) != len(order) && len(order) != 1 {
+			return nil, errors.New("Error: 'sortby', 'order' sizes mismatch or 'order' size is not 1")
 		}
-		c <- ml
+	} else {
+		if len(order) != 0 {
+			return nil, errors.New("Error: unused 'order' fields")
+		}
 	}
+
+	var l []ProjectEnroll
+	qs = qs.OrderBy(sortFields...)
+	if _, err = qs.Limit(limit, offset).RelatedSel().All(&l, fields...); err == nil {
+		if len(fields) == 0 {
+			for _, v := range l {
+				ml = append(ml, v)
+			}
+		} else {
+			// trim unused fields
+			for _, v := range l {
+				m := make(map[string]interface{})
+				val := reflect.ValueOf(v)
+				for _, fname := range fields {
+					m[fname] = val.FieldByName(fname).Interface()
+				}
+				ml = append(ml, m)
+			}
+		}
+		return ml, nil
+	}
+	return nil, err
 }
 
-// UpdateProjectAuthor updates ProjectEnroll by Id and returns error if
+// UpdateProjectEnroll updates ProjectEnroll by Id and returns error if
 // the record to be updated doesn't exist
-func UpdateProjectAuthorById(m *ProjectEnroll) (err error) {
+func UpdateProjectEnrollById(m *ProjectEnroll) (err error) {
 	o := orm.NewOrm()
 	v := ProjectEnroll{Id: m.Id}
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
-		_, err = o.Update(m)
+		var num int64
+		if num, err = o.Update(m); err == nil {
+			fmt.Println("Number of records updated in database:", num)
+		}
 	}
 	return
 }
 
-// DeleteProjectSignUp deletes ProjectEnroll by Project Id and returns error if
+// DeleteProjectEnroll deletes ProjectEnroll by Id and returns error if
 // the record to be deleted doesn't exist
-func DeleteProjectSignUp(user_id, project_id int) (err error) {
+func DeleteProjectEnroll(id int) (err error) {
 	o := orm.NewOrm()
-
-	_, err = o.QueryTable(new(ProjectEnroll)).
-		Filter("UserId", user_id).
-		Filter("ProjectId", project_id).
-		Delete()
+	v := ProjectEnroll{Id: id}
+	// ascertain id exists in the database
+	if err = o.Read(&v); err == nil {
+		var num int64
+		if num, err = o.Delete(&ProjectEnroll{Id: id}); err == nil {
+			fmt.Println("Number of records deleted in database:", num)
+		}
+	}
 	return
 }

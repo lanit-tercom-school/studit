@@ -3,10 +3,10 @@ package controllers
 import (
 	"encoding/json"
 	"errors"
+	"github.com/astaxie/beego"
 	"main-service/models"
 	"strconv"
 	"strings"
-	"github.com/astaxie/beego"
 	"sync"
 )
 
@@ -39,7 +39,7 @@ func CallForProjectMainInfo(f projectsGetter, id int, c chan []models.MainProjec
 		var mainProjectInfo []models.MainProjectInfo
 		for _, u := range users {
 			mainProjectInfo = append(mainProjectInfo, models.MainProjectInfo{
-				Id: u.Id,
+				Id:   u.Id,
 				Logo: u.Logo,
 				Name: u.Name,
 			})
@@ -98,10 +98,10 @@ func (c *UserController) GetOne() {
 		} else {
 			beego.Trace("User founded, search for contacts")
 			U := models.FullUserInfo{
-				Id:              v.Id,
-				Nickname:        v.Nickname,
-				Description:     v.Description,
-				Avatar:          v.Avatar,
+				Id:          v.Id,
+				Nickname:    v.Nickname,
+				Description: v.Description,
+				Avatar:      v.Avatar,
 			}
 			is_master, err := models.IsProjectMasterForUserById(id, c.CurrentUser.UserId)
 			if err == nil {
@@ -143,10 +143,10 @@ func (c *UserController) GetOne() {
 			}
 			beego.Trace("Ready to sent response")
 			c.Data["json"] = models.AllInformationAboutUser{
-				User:       U,
-				EnrolledOn: <-enrolledChan,
-				MasterOf:   <-mastersChan,
-				MemberOf:   <-membersChan,
+				User:           U,
+				EnrolledOn:     <-enrolledChan,
+				MasterOf:       <-mastersChan,
+				MemberOf:       <-membersChan,
 				MyApplications: <-applicationsChan,
 			}
 			beego.Trace("Get user OK")
@@ -158,6 +158,7 @@ func (c *UserController) GetOne() {
 	}
 	c.ServeJSON()
 }
+
 // GetAll ...
 // @Title Get All
 // @Description get User
