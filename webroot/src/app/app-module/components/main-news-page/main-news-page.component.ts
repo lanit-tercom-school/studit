@@ -11,15 +11,10 @@ import { DataService } from 'services/data.service';
 })
 export class MainNewsPageComponent implements OnInit {
 
-  news: Observable<NewsItem[]>;
-  constructor(private data: DataService) { }
+   constructor() { }
 
   ngOnInit() {
-    this.getNewsList();
+    window.scrollTo(0,0);
   }
-
-  getNewsList() {
-    this.news = this.data.News;
-  }
-
+ 
 }

@@ -2,29 +2,34 @@ package models
 
 import (
 	"errors"
-	"time"
 	"github.com/astaxie/beego/orm"
 	"strings"
+	"time"
 )
 
 type news struct {
-	Id             int         `orm:"column(id);pk;auto"`
-	Title          string      `orm:"column(title)"`
-	Description    string      `orm:"column(description)"`
-	DateOfCreation time.Time   `orm:"column(date_of_creation);type(datetime)"`
-	LastEdit       time.Time   `orm:"column(last_edit);type(datetime)"`
-	Tags           string      `orm:"column(tags)"`
-	Image          string      `orm:"columt(image)"`
+	Id             int       `orm:"column(id);pk;auto"`
+	Title          string    `orm:"column(title)"`
+	Description    string    `orm:"column(description)"`
+	DateOfCreation time.Time `orm:"column(date_of_creation);type(datetime)"`
+	LastEdit       time.Time `orm:"column(last_edit);type(datetime)"`
+	Tags           string    `orm:"column(tags)"`
+	Image          string    `orm:"column(image)"`
 }
 
 type NewsJson struct {
-	Id          int         `json:"id"`
-	Title       string      `json:"title"`
-	Description string      `json:"description"`
-	Created     time.Time   `json:"created"`
-	Edited      time.Time   `json:"edited"`
-	Tags        []string    `json:"tags"`
-	Image       string      `json:"image"`
+	Id          int       `json:"id"`
+	Title       string    `json:"title"`
+	Description string    `json:"description"`
+	Created     time.Time `json:"created"`
+	Edited      time.Time `json:"edited"`
+	Tags        []string  `json:"tags"`
+	Image       string    `json:"image"`
+}
+
+type NewsSetJson struct {
+	TotalCount   int        `json:"total_count"`
+	NewsJsonList []NewsJson `json:"news_list"`
 }
 
 func (t *news) translate() NewsJson {
@@ -77,7 +82,7 @@ func GetNewsById(id int) (m *NewsJson, err error) {
 	o := orm.NewOrm()
 	v := &news{Id: id}
 	if err = o.Read(v); err == nil {
-		m_temp := v.translate()  // need a temp variable
+		m_temp := v.translate() // need a temp variable
 		m = &m_temp
 		return m, nil
 	}
@@ -105,12 +110,15 @@ func TagInString(tag string, tags string) bool {
 
 // GetAllNews retrieves all News matches certain condition. Returns empty list if
 // no records exist
-func GetAllNews(sortBy []string, order []string, offset int64, limit int64, tag string) (ml []interface{}, err error) {
+func GetAllNews(sortBy []string, order []string, offset int64, limit int64, tag string) (
+	result interface{}, err error) {
 	o := orm.NewOrm()
 	qs := o.QueryTable(new(news))
 
-	// Step 1: parse input args to SQL syntax
+	totalCount, _ := qs.Count()
+	//result = append(result, NewsSetJson{Count: count} )
 
+	// Step 1: parse input args to SQL syntax
 	// order by:
 	var sortFields []string
 	if len(sortBy) != 0 {
@@ -151,26 +159,32 @@ func GetAllNews(sortBy []string, order []string, offset int64, limit int64, tag 
 	}
 
 	// Step 2: Select items from table with params
-
-	var l []news
+	var newsList []news
 	qs = qs.OrderBy(sortFields...)
-	if _, err = qs.Limit(limit, offset).All(&l); err == nil {
-		if tag == "" {
-			for _, v := range l {
-				ml = append(ml, v.translate())
+	if _, err = qs.Limit(limit, offset).All(&newsList); err != nil {
+		return nil, err
+	}
+
+	var jsonNewsList []NewsJson
+
+	if tag == "" {
+		for _, v := range newsList {
+			jsonNewsList = append(jsonNewsList, v.translate())
+		}
+	} else {
+		for _, v := range newsList {
+			r := v.translate()
+			if TagInArrayOfStrings(tag, r.Tags) {
+				jsonNewsList = append(jsonNewsList, r)
 			}
-			return ml, nil
-		} else {
-			for _, v := range l {
-				r := v.translate()
-				if TagInArrayOfStrings(tag, r.Tags) {
-					ml = append(ml, r)
-				}
-			}
-			return ml, nil
 		}
 	}
-	return nil, err
+
+	set := NewsSetJson{
+		TotalCount:   int(totalCount),
+		NewsJsonList: jsonNewsList}
+
+	return set, nil
 }
 
 // UpdateNews updates News by Id and returns error if

@@ -13,7 +13,6 @@ import { ProjectItem } from 'models/project-item';
 import { ProjectNewsItem } from 'models/proj-news-item';
 import { TasksItem } from 'models/tasks-item';
 
-import 'rxjs/add/operator/filter';
 
 type StatusEnroll = "Enrolling" | "InProject" | "Unenrolling";
 

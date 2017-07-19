@@ -19,6 +19,7 @@ import 'rxjs/add/operator/filter';
 @Injectable()
 export class DataService {
   private userId: number;
+  private numberOfNewsOnPage: number;
   private userToken: string;
   private userPermLvl: PermLevel;
   private news: BehaviorSubject<NewsItem[]> = <BehaviorSubject<NewsItem[]>>new BehaviorSubject([]);
@@ -28,6 +29,8 @@ export class DataService {
   private projectsForMainPage: BehaviorSubject<ProjectItem[]> = <BehaviorSubject<ProjectItem[]>>new BehaviorSubject([]);
   private enrollsForTeacher: BehaviorSubject<EnrollItem[]> = <BehaviorSubject<EnrollItem[]>>new BehaviorSubject([]);
 
+  private newsCount: number;
+  private newsCountObs: BehaviorSubject<number> = new BehaviorSubject<number>(0);
   private dataStore: {
     news: NewsItem[];
     projects: ProjectItem[];
@@ -40,8 +43,19 @@ export class DataService {
     userEnrolledProjects: [], projectsForMainPage: [], enrollsForTeacher: []
   };
 
+constructor(
+   private teacherService: TeacherService,
+   private studentService: StudentService,
+   private newsService: NewsService,
+   private projectService: ProjectService,
+   private userService: UserService
+   ) { }
+
   public get News() {
     return this.news.asObservable();
+  }
+  public get NewsCountObs() {
+    return this.newsCountObs.asObservable();
   }
   public get Projects() {
     return this.projects.asObservable();
@@ -59,22 +73,17 @@ export class DataService {
   public get ProjectsForMainPage() {
     return this.projectsForMainPage.asObservable();
   }
+  public set NumberOfNewsOnPage(value: number) {
+    this.numberOfNewsOnPage = value;
+  }
   public get PermLvl()
   {
     return this.userPermLvl;
   }
-  constructor(
-   private teacherService: TeacherService,
-   private studentService: StudentService,
-   private newsService: NewsService,
-   private projectService: ProjectService,
-   private userService: UserService
-   ) { }
-
+  
   loadAll() {
     /*console.log('Data.service ->loadAll');
     this.loadProjects();
-    this.loadNews();
     this.loadProjectsForMainPage();
     if (localStorage.getItem('current_user')) {
       this.userToken = JSON.parse(localStorage.getItem('current_user')).bearer_token;
@@ -134,6 +143,17 @@ export class DataService {
     }
   }
 
+// значения по умолчанию
+  loadNews(offset: number) {
+    this.newsService.getNewsPage(this.numberOfNewsOnPage, offset).subscribe(res => {
+      this.newsCount = res.total_count;
+      this.newsCountObs.next(Object.assign(res.total_count));
+      this.dataStore.news = res.news_list;
+      this.news.next(Object.assign({}, this.dataStore).news);
+
+    });
+  }
+
   loadEnrollsForTeacher() {
     this.teacherService.getEnrollsForTeacher(this.userToken).subscribe(res => {
       this.dataStore.enrollsForTeacher = res;
@@ -141,12 +161,8 @@ export class DataService {
     });
   }
 
-  loadNews() {
-    this.newsService.getNewsPage().subscribe(res => {
-      this.dataStore.news = res;
-      this.news.next(Object.assign({}, this.dataStore).news);
-    });
-  }
+  // TODO: сделать метод для проверки наличия новости в dataService
+
 
   addApiUrl(url: string): string {
     //return environment.apiUrl + url;
