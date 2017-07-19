@@ -1,4 +1,4 @@
-package queries
+package mutations
 
 import (
 	"main-service/objects"
