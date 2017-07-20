@@ -1,4 +1,5 @@
 @echo off
+title DATA
 cd ..
 cd ..
 set GOPATH=%cd%
