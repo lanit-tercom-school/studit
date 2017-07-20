@@ -15,21 +15,44 @@ export class NewsService {
   }
 
   // необязательные параметры
-  getNewsPage(limit: number, offset: number) {
-    if (limit > 0 && offset >= 0)
+  getNewsPage(limit_: number, offset_: number) {
+    if (limit_ > 0 && offset_ >= 0) {
+      var variables = { limit: limit_, offset: offset_ }
+      var query = `query($limit:String, $offset: String)
+      {
+      NewsList(Offset: $offset Limit: $limit)
     {
-      var query ='{NewsList(Offset:"' + offset + '" Limit: "' + limit + '")';
-      query += '{Title Description DateOfCreation LastEdit Tags Image Id }}';
-      return this.http.get(environment.apiUrl + '/graphql?query=' + query)
-      .map((response: Response) => {return response.json().data});
+      Title
+      Description
+      DateOfCreation
+      LastEdit
+      Tags
+      Image
+      Id
    }
+  }&variables=`+ JSON.stringify(variables);
+      return this.http.get(environment.apiUrl + '/graphql?query=' + query)
+        .map((response: Response) =>  response.json().data );
+    }
   }
 
   getNewsById(id_: number) {
     if (id_ >= 0 )
     {
-      var query = '{News(Id: "' + id_ +'")';
-      query +='{ Title Description DateOfCreation LastEdit Tags Image Id }}';
+      var variable = {id: id_};
+      var query = `query($id: String)
+      {
+        News(Id: $id)
+      {
+        Title
+        Description
+        DateOfCreation
+        LastEdit
+        Tags
+        Image
+        Id
+      }
+    }&variables=`+ JSON.stringify(variable);
     return this.http.get(environment.apiUrl + '/graphql?query=' + query)
       .map((response: Response) => {return response.json().data.News});
     }

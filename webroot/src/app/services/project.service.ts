@@ -14,9 +14,18 @@ export class ProjectService {
   }
 
   getMainPageProjects() {
-      var query = '{ ProjectList(Limit: "3" Offset: "0")';
-      query += '{ Description DateOfCreation Logo Tags Id  Name }}';
-      return this.http.get(environment.apiUrl + '/graphql?query=' + query)
+    var query = `{ 
+      ProjectList(Limit: "3" Offset: "0")
+      {
+        Description
+        DateOfCreation
+        Logo
+        Tags
+        Id
+        Name
+      }
+    }`;
+    return this.http.get(environment.apiUrl + '/graphql?query=' + query)
       .map((response: Response) => {
         let res = response.json().data.ProjectList;
         res.forEach(element => {
@@ -28,9 +37,20 @@ export class ProjectService {
   }
 
 // получить все проекты
-  getProjectItems(limit: number, offset: number) {
-   var query ='{ProjectList(Offset:"' + offset + '" Limit: "' + limit + '")';
-      query += '{ Description DateOfCreation Logo Tags Id  Name }}';
+  getProjectItems(limit_: number, offset_: number) {
+    var variables = {limit: limit_, offset: offset_}
+   var query =`query($limit:String, $offset: String)
+   {
+     ProjectList(Offset: $offset Limit: $limit)
+    {
+      Description
+      DateOfCreation
+      Logo
+      Tags
+      Id
+      Name
+    }
+  }&variables=`+ JSON.stringify(variables);
       return this.http.get(environment.apiUrl + '/graphql?query=' + query)
       .map((response: Response) => {
         let res = response.json().data.ProjectList;
@@ -41,9 +61,21 @@ export class ProjectService {
       });
   }
 
-  getProjectById(id: number) {
-   var query ='{Project(Id:"' + id +'")';
-    query += '{ Logo Tags Status Id Name Description DateOfCreation   }}';
+  getProjectById(id_: number) {
+  var variable = { id: id_};
+   var query = `query($id:ID)
+   {
+    Project(id: $id)
+    {
+      Logo
+      Tags
+      Status
+      Id
+      Name
+      Description
+      DateOfCreation
+    }
+  }&variables=`+ JSON.stringify(variable);
     return this.http.get(environment.apiUrl + '/graphql?query=' + query);
   }
     getMaterialsItems(id: number) {

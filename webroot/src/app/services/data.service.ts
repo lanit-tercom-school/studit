@@ -116,8 +116,8 @@ constructor(
     .subscribe(res => {
       if (res != null) {
         this.dataStore.projects = res;
-        this.projectsCount = 4; //заглушка
-        this.projectsCountObs.next(Object.assign({},this.projectsCount));
+        //this.projectsCount = 4; //заглушка
+        //this.projectsCountObs.next(Object.assign({},this.projectsCount));
         this.dataStore.projects.forEach(a => { a.Logo = this.addApiUrl(a.Logo); })
         this.projects.next(Object.assign({}, this.dataStore).projects);
       }
