@@ -13,6 +13,7 @@ var RootMutation = gql.NewObject(
 			"PostNews":            &mutations.PostNews,
 			"PostProject":         &mutations.PostProject,
 			"PostProjectEnroll":   &mutations.PostProjectEnroll,
+			"PostProjectOn":       &mutations.PostProjectOn,
 			"DeleteProjectEnroll": &mutations.DeleteProjectEnroll,
 			"Auth":                &mutations.AuthQuery,
 		},

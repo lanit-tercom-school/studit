@@ -11,7 +11,7 @@ import (
 )
 
 type ProjectUser struct {
-	Id         int       `orm:"column(id);pk"`
+	Id         int       `orm:"column(id);pk;auto"`
 	Project    *Project  `orm:"column(project_id);rel(fk)"`
 	User       *User     `orm:"column(user_id);rel(fk)"`
 	SignedDate time.Time `orm:"column(signed_date);type(timestamp with time zone)"`
@@ -39,7 +39,7 @@ func AddProjectUser(m *ProjectUser) (id int64, err error) {
 func GetProjectUserById(id int) (v *ProjectUser, err error) {
 	o := orm.NewOrm()
 	v = &ProjectUser{Id: id}
-	if err = o.Read(v); err == nil {
+	if err = o.QueryTable(v).Filter("Id", id).RelatedSel().One(v); err == nil {
 		return v, nil
 	}
 	return nil, err

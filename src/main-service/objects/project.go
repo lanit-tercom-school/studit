@@ -4,7 +4,6 @@ import (
 	"errors"
 	"main-service/conf"
 	"main-service/helpers"
-	"strconv"
 	"time"
 
 	gql "github.com/graphql-go/graphql"
@@ -19,31 +18,6 @@ type Project struct {
 	Logo           string    `json:"Logo"`
 	Tags           string    `json:"Tags"`
 	Status         string    `json:"Status"`
-}
-
-//ProjectEnroll - используется для получения заявок с data-service
-type ProjectEnroll struct {
-	Id             int       `json:"Id"`
-	Project        Project   `json:"Project"`
-	User           User      `json:"User"`
-	Message        string    `json:"EnrollingMessage"`
-	DateOfCreation time.Time `json:"Time"`
-}
-
-//ProjectUser - используется для получения связи пользователей и проектов с data-service
-type ProjectUser struct {
-	Id         int       `json:"Id"`
-	Project    Project   `json:"Project"`
-	User       User      `json:"User"`
-	SignedDate time.Time `json:"SignedDate"`
-	Progress   int       `json:"Progress"`
-}
-
-//ProjectOn - используется при получении поля ProjectOn пользователя
-type ProjectOn struct {
-	Id      int
-	Project Project
-	Enrolls []ProjectEnroll
 }
 
 //ProjectType - grqphql объект проекта
@@ -76,49 +50,6 @@ var ProjectType = gql.NewObject(
 	},
 )
 
-//ProjectEnrollType - grqphql объект заявки на проект
-var ProjectEnrollType = gql.NewObject(
-	gql.ObjectConfig{
-		Name: "ProjectEnroll",
-		Fields: gql.Fields{
-			"Id": &gql.Field{
-				Type: gql.String,
-			},
-			"Project": &gql.Field{
-				Type: ProjectType,
-			},
-			"User": &gql.Field{
-				Type: UserType,
-			},
-			"Message": &gql.Field{
-				Type: gql.String,
-			},
-			"DateOfCreation": &gql.Field{
-				Type: gql.String,
-			},
-		},
-	},
-)
-
-//ProjectOnType - grqphql объект связи пользователя и проекта
-var ProjectOnType = gql.NewObject(
-	gql.ObjectConfig{
-		Name: "ProjectOnType",
-		Fields: gql.Fields{
-			"Id": &gql.Field{
-				Type: gql.String,
-			},
-			"Project": &gql.Field{
-				Type: ProjectType,
-			},
-			"Enrolls": &gql.Field{
-				Type:    gql.NewList(ProjectEnrollType),
-				Resolve: ResolveGetEnrollsByProjectOn,
-			},
-		},
-	},
-)
-
 //ResolveGetProjectById - получение проета по Id с data-service
 func ResolveGetProjectById(p gql.ResolveParams) (interface{}, error) {
 	var id string
@@ -131,44 +62,7 @@ func ResolveGetProjectById(p gql.ResolveParams) (interface{}, error) {
 	err := helpers.HttpGet(conf.Configuration.DataServiceURL+"v1/project/"+id, &project)
 	return project, err
 }
-func ResolveGetEnrollsByProjectOn(p gql.ResolveParams) (interface{}, error) {
-	if p.Context.Value("CurrentUser").(CurrentClient).PermissionLevel >= LEADER {
-		helpers.LogAccesAllowed("GetEnrollsByProjectOn")
-		projectOn := p.Source.(ProjectOn)
-		var projectEnrolls []ProjectEnroll
-		err := helpers.HttpGet(conf.Configuration.DataServiceURL+"v1/project_enroll/?query=Project:"+strconv.Itoa(projectOn.Project.Id), &projectEnrolls)
-		return projectEnrolls, err
-	}
-	helpers.LogAccesDenied("GetEnrollsByProjectOn")
-	return nil, errors.New("Access is denied")
-}
-func ResolveGetEnrollsByUser(p gql.ResolveParams) (interface{}, error) {
-	u := p.Source.(User)
-	var projectEnrolls []ProjectEnroll
-	err := helpers.HttpGet(conf.Configuration.DataServiceURL+"v1/project_enroll/?query=User:"+strconv.Itoa(u.Id), &projectEnrolls)
-	return projectEnrolls, err
-}
 
-func ResolveGetProjectOnByUser(p gql.ResolveParams) (interface{}, error) {
-	c := p.Context.Value("CurrentUser").(CurrentClient)
-	u := p.Source.(User)
-	if c.PermissionLevel == ADMIN || c.UserId == u.Id {
-		helpers.LogAccesAllowed("GetProjectOnByUser")
-		var projectUsers []ProjectUser
-		var projectOn ProjectOn
-		var projectOns []ProjectOn
-		err := helpers.HttpGet(conf.Configuration.DataServiceURL+"v1/project_user/?query=User:"+strconv.Itoa(u.Id), &projectUsers)
-		for _, v := range projectUsers {
-			projectOn.Project = v.Project
-			projectOn.Id = v.Id
-			projectOns = append(projectOns, projectOn)
-		}
-
-		return projectOns, err
-	}
-	helpers.LogAccesDenied("GetProjectOnByUser")
-	return nil, errors.New("Access is denied")
-}
 func ResolvePostProject(p gql.ResolveParams) (interface{}, error) {
 	c := p.Context.Value("CurrentUser").(CurrentClient)
 	projectToGet := Project{}
@@ -204,50 +98,4 @@ func ResolveGetProjectList(p gql.ResolveParams) (interface{}, error) {
 	var project []Project
 	err := helpers.HttpGet(conf.Configuration.DataServiceURL+"v1/project/?limit="+limit+"&offset="+offset, &project)
 	return project, err
-}
-
-func ResolvePostProjectEnroll(p gql.ResolveParams) (interface{}, error) {
-	c := p.Context.Value("CurrentUser").(CurrentClient)
-	user := User{
-		Id: p.Args["User"].(int),
-	}
-	project := Project{
-		Id: p.Args["Project"].(int),
-	}
-	projectEnrollToGet := ProjectEnroll{}
-	if c.UserId == user.Id || c.PermissionLevel == ADMIN {
-		helpers.LogAccesAllowed("PostProjectEnroll")
-		projectEnrollToSend := ProjectEnroll{
-			Project:        project,
-			User:           user,
-			Message:        helpers.InterfaceToString(p.Args["Message"]),
-			DateOfCreation: time.Now(),
-		}
-		err := helpers.HttpPost(conf.Configuration.DataServiceURL+"v1/project_enroll/", projectEnrollToSend, &projectEnrollToGet)
-		return projectEnrollToGet, err
-	}
-	helpers.LogAccesDenied("PostProjectEnroll")
-	return nil, errors.New("Access is denied")
-}
-
-func ResolveDeleteProjectEnroll(p gql.ResolveParams) (interface{}, error) {
-	c := p.Context.Value("CurrentUser").(CurrentClient)
-	id, ok := p.Args["Id"].(int)
-	if !ok {
-		return nil, errors.New("Missed Id")
-	}
-	projectEnrollToGet := ProjectEnroll{}
-	err := helpers.HttpGet(conf.Configuration.DataServiceURL+"v1/project_enroll/"+strconv.Itoa(id), &projectEnrollToGet)
-	if err != nil {
-		return nil, err
-	}
-	messageToGet := Message{}
-	if c.UserId == projectEnrollToGet.User.Id || c.PermissionLevel == ADMIN {
-		helpers.LogAccesAllowed("DeleteProjectEnroll")
-		err := helpers.HttpDelete(conf.Configuration.DataServiceURL+"v1/project_enroll/"+strconv.Itoa(id), nil, &messageToGet)
-		return messageToGet, err
-	}
-
-	helpers.LogAccesDenied("DeleteProjectEnroll")
-	return nil, errors.New("Access is denied")
 }
