@@ -171,9 +171,13 @@ func (c *ProjectUserController) Delete() {
 	idStr := c.Ctx.Input.Param(":id")
 	id, _ := strconv.Atoi(idStr)
 	if err := models.DeleteProjectUser(id); err == nil {
-		c.Data["json"] = "OK"
+		c.Data["json"] = struct {
+			Message string
+		}{Message: "Ok"}
 	} else {
-		c.Data["json"] = err.Error()
+		c.Data["json"] = struct {
+			Message string
+		}{Message: err.Error()}
 	}
 	c.ServeJSON()
 }

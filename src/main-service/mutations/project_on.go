@@ -22,4 +22,13 @@ func init() {
 		},
 		Resolve: objects.ResolvePostProjectOn,
 	}
+	DeleteProjectOn = gql.Field{
+		Type: objects.MessageType,
+		Args: gql.FieldConfigArgument{
+			"Id": &gql.ArgumentConfig{
+				Type: gql.NewNonNull(gql.Int),
+			},
+		},
+		Resolve: objects.ResolveDeleteProjectOn,
+	}
 }

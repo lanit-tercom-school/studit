@@ -123,3 +123,37 @@ func ResolvePostProjectOn(p gql.ResolveParams) (interface{}, error) {
 	helpers.LogAccesDenied("PostProjectOn")
 	return nil, errors.New("Access is denied")
 }
+
+func ResolveDeleteProjectOn(p gql.ResolveParams) (interface{}, error) {
+	c := p.Context.Value("CurrentUser").(CurrentClient)
+	id, ok := p.Args["Id"].(int)
+	if !ok {
+		return nil, errors.New("Missed Id")
+	}
+
+	projectUserToGet := ProjectUser{}
+	err := helpers.HttpGet(conf.Configuration.DataServiceURL+"v1/project_user/"+strconv.Itoa(id), &projectUserToGet)
+	if err != nil {
+		return nil, err
+	}
+	messageToGet := Message{}
+	var projectUsersOfRequesting []ProjectUser
+	err = helpers.HttpGet(conf.Configuration.DataServiceURL+"v1/project_user/?query=User:"+strconv.Itoa(c.UserId), &projectUsersOfRequesting)
+	if err != nil {
+		return nil, err
+	}
+	for _, v := range projectUsersOfRequesting {
+		if v.User.Id == c.UserId {
+			ok = true
+			break
+		}
+	}
+	if c.UserId == projectUserToGet.User.Id || c.PermissionLevel == ADMIN || (c.PermissionLevel == LEADER && ok) {
+		helpers.LogAccesAllowed("DeleteProjectOn")
+		err := helpers.HttpDelete(conf.Configuration.DataServiceURL+"v1/project_user/"+strconv.Itoa(id), nil, &messageToGet)
+		return messageToGet, err
+	}
+
+	helpers.LogAccesDenied("DeleteProjectOn")
+	return nil, errors.New("Access is denied")
+}
