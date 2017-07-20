@@ -47,16 +47,6 @@ export class AuthService {
     }
 
     register(user: UserRegister) {
-        /*var headers = new Headers();
-        headers.append('Content-Type', 'application/json');
-        return this.http.post(environment.authUrl + '/v1/auth/signup/', JSON.stringify(user), { headers: headers })
-            .map((res: Response) => {
-                if (res.json().code)
-                    localStorage.setItem('validation_code', res.json().code);
-                else
-                    return Observable.throw('no code');
-            })
-            .catch((error: any) => { return Observable.throw(error) });*/
         var query = 'mutation{Auth{Signup';
         query += '(Login:"' + user.login + '" ';
         query += 'Password: "' + user.password + '" ';
@@ -73,12 +63,4 @@ export class AuthService {
             .catch((error: any) => { return Observable.throw(error) });
     }
 
-    private jwt() {
-    // create authorization-page header with jwt token
-    let currentUser = JSON.parse(localStorage.getItem('current_user'));
-    if (currentUser && currentUser.token) {
-        let headers = new Headers({ 'authorization': 'Bearer ' + currentUser.token });
-        return new RequestOptions({ headers: headers });
-    }
-}
 }

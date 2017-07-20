@@ -17,7 +17,7 @@ import { ErrorPageComponent } from './components/error-page/error-page.component
 
 export const routes: Routes = [
   { path: '', redirectTo: 'main', pathMatch: 'full', canActivate: [PathManager] },
-  //{ path: 'home',  component: UserPublicPageComponent, canActivate: [PathManager] },
+  { path: 'home',  component: UserPublicPageComponent, canActivate: [PathManager] },
   { path: 'main', component: MainComponent, canActivate: [PathManager] },
   { path: 'projects', component: ProjectListPageComponent },
   { path: 'project/:id', component: ProjectPageComponent, canActivate: [PathManager] },

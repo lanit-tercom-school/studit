@@ -97,18 +97,18 @@ constructor(
     console.log('Data.service ->loadAll');
     //this.loadProjects();
     this.loadProjectsForMainPage();
-    /*if (localStorage.getItem('current_user')) {
+    if (localStorage.getItem('current_user')) {
       this.userToken = JSON.parse(localStorage.getItem('current_user')).Token;
-      this.userId = JSON.parse(localStorage.getItem('current_user')).user.id;
-      this.userPermLvl = JSON.parse(localStorage.getItem('current_user')).perm_lvl;
+      this.userId = JSON.parse(localStorage.getItem('current_user')).User.Id;
+      this.userPermLvl = JSON.parse(localStorage.getItem('current_user')).PermissionLevel;
       this.loadUsersProjects();
-      if (this.userPermLvl === PermLevel.Student) {
+      /*if (this.userPermLvl === PermLevel.Student) {
         this.loadEnrolledUsersProject();
       }
       if (this.userPermLvl === PermLevel.Teacher) {
         this.loadEnrollsForTeacher();
-      }
-    }*/
+      }*/
+    }
   }
 
   loadProjects(offset: number) {
@@ -132,7 +132,7 @@ constructor(
 
   loadUsersProjects() {
     if (localStorage.getItem('current_user')) {
-      this.userService.getProjectsOfUser(this.userId).subscribe(res => {
+      this.userService.getProjectsOfUser(this.userToken, this.userId).subscribe(res => {
         if (res != null) {
           this.projectsCount = 4; // заглушка
           //this.newsCount = res.total_count;
