@@ -10,15 +10,15 @@ import (
 )
 
 type Variant struct {
-	Id            int          `orm:"column(id);pk;auto"`
-	Text          string       `orm:"column(text)"`
-	CorrectAnswer bool         `orm:"column(correct_answer)"`
-	TaskForTestId *TaskForTest `orm:"column(task_for_test_id);rel(fk)"`
+	Id            int        `orm:"column(id);pk;auto"`
+	Text          string     `orm:"column(text)"`
+	CorrectAnswer bool       `orm:"column(correct_answer)"`
+	TestsTaskId   *TestsTask `orm:"column(tests_task_id);rel(fk)"`
 }
 
-func (t *Variant) TableName() string {
-	return "variant"
-}
+// func (t *Variant) TableName() string {
+// 	return "variant"
+// }
 
 func init() {
 	orm.RegisterModel(new(Variant))

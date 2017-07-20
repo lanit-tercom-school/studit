@@ -1,7 +1,7 @@
 package endpointTests
 
 import (
-	"data-service/models"
+	"data-service-old/models"
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"

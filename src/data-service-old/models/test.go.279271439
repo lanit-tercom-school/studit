@@ -9,45 +9,45 @@ import (
 	"github.com/astaxie/beego/orm"
 )
 
-type TaskForTest struct {
-	Id       int    `orm:"column(id);pk;auto"`
-	Question string `orm:"column(question)"`
-	TestId   *Test  `orm:"column(test_id);rel(fk)"`
+type Test struct {
+	Id       int     `orm:"column(id);pk;auto"`
+	Title    string  `orm:"column(title)"`
+	LessonId *Lesson `orm:"column(lesson_id);rel(fk)"`
 }
 
-func (t *TaskForTest) TableName() string {
-	return "task_for_test"
+func (t *Test) TableName() string {
+	return "test"
 }
 
 func init() {
-	orm.RegisterModel(new(TaskForTest))
+	orm.RegisterModel(new(Test))
 }
 
-// AddTaskForTest insert a new TaskForTest into database and returns
+// AddTest insert a new Test into database and returns
 // last inserted Id on success.
-func AddTaskForTest(m *TaskForTest) (id int64, err error) {
+func AddTest(m *Test) (id int64, err error) {
 	o := orm.NewOrm()
 	id, err = o.Insert(m)
 	return
 }
 
-// GetTaskForTestById retrieves TaskForTest by Id. Returns error if
+// GetTestById retrieves Test by Id. Returns error if
 // Id doesn't exist
-func GetTaskForTestById(id int) (v *TaskForTest, err error) {
+func GetTestById(id int) (v *Test, err error) {
 	o := orm.NewOrm()
-	v = &TaskForTest{Id: id}
+	v = &Test{Id: id}
 	if err = o.Read(v); err == nil {
 		return v, nil
 	}
 	return nil, err
 }
 
-// GetAllTaskForTest retrieves all TaskForTest matches certain condition. Returns empty list if
+// GetAllTest retrieves all Test matches certain condition. Returns empty list if
 // no records exist
-func GetAllTaskForTest(query map[string]string, fields []string, sortby []string, order []string,
+func GetAllTest(query map[string]string, fields []string, sortby []string, order []string,
 	offset int64, limit int64) (ml []interface{}, err error) {
 	o := orm.NewOrm()
-	qs := o.QueryTable(new(TaskForTest))
+	qs := o.QueryTable(new(Test))
 	// query k=v
 	for k, v := range query {
 		// rewrite dot-notation to Object__Attribute
@@ -93,7 +93,7 @@ func GetAllTaskForTest(query map[string]string, fields []string, sortby []string
 		}
 	}
 
-	var l []TaskForTest
+	var l []Test
 	qs = qs.OrderBy(sortFields...)
 	if _, err = qs.Limit(limit, offset).All(&l, fields...); err == nil {
 		if len(fields) == 0 {
@@ -116,11 +116,11 @@ func GetAllTaskForTest(query map[string]string, fields []string, sortby []string
 	return nil, err
 }
 
-// UpdateTaskForTest updates TaskForTest by Id and returns error if
+// UpdateTest updates Test by Id and returns error if
 // the record to be updated doesn't exist
-func UpdateTaskForTestById(m *TaskForTest) (err error) {
+func UpdateTestById(m *Test) (err error) {
 	o := orm.NewOrm()
-	v := TaskForTest{Id: m.Id}
+	v := Test{Id: m.Id}
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
 		var num int64
@@ -131,15 +131,15 @@ func UpdateTaskForTestById(m *TaskForTest) (err error) {
 	return
 }
 
-// DeleteTaskForTest deletes TaskForTest by Id and returns error if
+// DeleteTest deletes Test by Id and returns error if
 // the record to be deleted doesn't exist
-func DeleteTaskForTest(id int) (err error) {
+func DeleteTest(id int) (err error) {
 	o := orm.NewOrm()
-	v := TaskForTest{Id: id}
+	v := Test{Id: id}
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
 		var num int64
-		if num, err = o.Delete(&TaskForTest{Id: id}); err == nil {
+		if num, err = o.Delete(&Test{Id: id}); err == nil {
 			fmt.Println("Number of records deleted in database:", num)
 		}
 	}

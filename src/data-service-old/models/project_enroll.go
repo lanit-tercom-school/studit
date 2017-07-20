@@ -1,7 +1,7 @@
 package models
 
 import (
-	"data-service/sql"
+	"data-service-old/sql"
 	"strconv"
 	"time"
 
@@ -42,11 +42,10 @@ func GetProjectEnrollIdByUserId(userId int) (projects []*Project, err error) {
 
 // AddProjectAuthor insert a new ProjectEnroll into database and returns
 // last inserted Id on success.
-func AddApplicationFromUserForProject(u *User, p *ProjectJson, message string) (id int64, err error) {
-	temp := p.translate()
+func AddApplicationFromUserForProject(u *User, p *Project, message string) (id int64, err error) {
 	m := ProjectEnroll{
 		UserId:    u,
-		ProjectId: &temp,
+		ProjectId: p,
 		Message:   message,
 		Time:      time.Now(),
 	}
@@ -120,14 +119,14 @@ func GetAllEnrolledOnProject(master_id int) (pa []ProjectApplication, err error)
 			pa[i].Project.Name = v["project_name"].(string)
 			pa[i].Project.Description = v["project_description"].(string)
 			pa[i].Project.Logo = v["project_logo"].(string)
-			pa[i].Project.Status, err = strconv.Atoi(v["project_status"].(string))
+			pa[i].Project.Status = v["project_status"].(string)
 			if err != nil {
 				beego.Debug("Error converting to int")
 				return
 			}
-			pa[i].Project.Tags = v["project_tags"].(string)
+			//pa[i].Project.Tags = v["project_tags"].([]string)
 			pa[i].Message = v["enrolling_message"].(string)
-			pa[i].Project.DateOfCreation, err = time.Parse(time.RFC3339, v["project_date"].(string))
+			pa[i].Project.Created, err = time.Parse(time.RFC3339, v["project_date"].(string))
 			if err != nil {
 				beego.Debug("Error converting to time")
 				return
