@@ -1,19 +1,32 @@
 package controllers
 
 import (
-	"encoding/json"
-	"github.com/astaxie/beego"
 	"auth-service/models"
+	"encoding/json"
 	"errors"
+
+	"github.com/astaxie/beego"
 )
 
+func init() {
+	reset_passwords = make(map[string]struct {
+		int
+		string
+	})
+}
 
 // 					   ["login"]struct{"userId", "pass"}
-var reset_passwords map[string]struct{int; string}
+var reset_passwords map[string]struct {
+	int
+	string
+}
 
 func RequestToResetPassword(pass string, usr models.User) error {
 	if user, err := models.GetUserByLogin(usr.Login); err == nil {
-		reset_passwords[user.Login] = struct {int; string}{user.Id, pass}
+		reset_passwords[user.Login] = struct {
+			int
+			string
+		}{user.Id, pass}
 		return nil
 	} else {
 		return err
@@ -27,6 +40,10 @@ func ResetPassword(login, pass, newPassword string) error {
 		if err == nil && u.Login == login {
 			u.Password = newPassword
 			u.Update()
+			reset_passwords[login] = struct {
+				int
+				string
+			}{tuple.int, GenerateNewToken(6)}
 			return nil
 		} else {
 			if err != nil {
@@ -70,9 +87,9 @@ func (c *ResetPasswordController) ResetPasswordRequest() {
 }
 
 type ResetPasswordActionJson struct {
-	Login       string  `json:"login"`
-	Pass        string  `json:"pass"` // activation token from email
-	NewPassword string  `json:"password"`
+	Login       string `json:"login"`
+	Pass        string `json:"pass"` // activation token from email
+	NewPassword string `json:"password"`
 }
 
 func (c *ResetPasswordController) ResetPasswordAction() {
