@@ -34,13 +34,21 @@ func (c *ProjectEnrollController) URLMapping() {
 func (c *ProjectEnrollController) Post() {
 	var v models.ProjectEnroll
 	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
-		if _, err := models.AddProjectEnroll(&v); err == nil {
+		if id, err := models.AddProjectEnroll(&v); err == nil {
 			c.Ctx.Output.SetStatus(201)
-			c.Data["json"] = v
+			p, err := models.GetProjectEnrollById(int(id))
+			if err == nil {
+				c.Data["json"] = p
+			} else {
+				c.Ctx.Output.SetStatus(500)
+				c.Data["json"] = err.Error()
+			}
 		} else {
+			c.Ctx.Output.SetStatus(500)
 			c.Data["json"] = err.Error()
 		}
 	} else {
+		c.Ctx.Output.SetStatus(500)
 		c.Data["json"] = err.Error()
 	}
 	c.ServeJSON()

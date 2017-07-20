@@ -180,6 +180,7 @@ func ResolvePostProject(p gql.ResolveParams) (interface{}, error) {
 	helpers.LogAccesDenied("PostProject")
 	return nil, errors.New("Access is denied")
 }
+
 func ResolveGetProjectList(p gql.ResolveParams) (interface{}, error) {
 	var limit, offset string
 	limit, ok := p.Args["Limit"].(string)
@@ -195,4 +196,28 @@ func ResolveGetProjectList(p gql.ResolveParams) (interface{}, error) {
 	var project []Project
 	err := helpers.HttpGet(conf.Configuration.DataServiceURL+"v1/project/?limit="+limit+"&offset="+offset, &project)
 	return project, err
+}
+
+func ResolvePostProjectEnroll(p gql.ResolveParams) (interface{}, error) {
+	c := p.Context.Value("CurrentUser").(CurrentClient)
+	user := User{
+		Id: p.Args["User"].(int),
+	}
+	project := Project{
+		Id: p.Args["Project"].(int),
+	}
+	projectEnrollToGet := ProjectEnroll{}
+	if c.UserId == user.Id || c.PermissionLevel == ADMIN {
+		helpers.LogAccesAllowed("PostProjectEnroll")
+		projectEnrollToSend := ProjectEnroll{
+			Project:        project,
+			User:           user,
+			Message:        helpers.InterfaceToString(p.Args["Message"]),
+			DateOfCreation: time.Now(),
+		}
+		err := helpers.HttpPost(conf.Configuration.DataServiceURL+"v1/project_enroll/", projectEnrollToSend, &projectEnrollToGet)
+		return projectEnrollToGet, err
+	}
+	helpers.LogAccesDenied("PostProjectEnroll")
+	return nil, errors.New("Access is denied")
 }
