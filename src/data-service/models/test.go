@@ -10,7 +10,7 @@ import (
 )
 
 type Test struct {
-	Id       int     `orm:"column(id);pk"`
+	Id       int     `orm:"column(id);pk;auto"`
 	Title    string  `orm:"column(title)"`
 	LessonId *Lesson `orm:"column(lesson_id);rel(fk)"`
 }

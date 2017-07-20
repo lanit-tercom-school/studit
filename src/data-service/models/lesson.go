@@ -10,7 +10,7 @@ import (
 )
 
 type Lesson struct {
-	Id          int     `orm:"column(id);pk"`
+	Id          int     `orm:"column(id);pk;auto"`
 	Title       string  `orm:"column(title)"`
 	CourseId    *Course `orm:"column(course_id);rel(fk)"`
 	Description string  `orm:"column(description)"`

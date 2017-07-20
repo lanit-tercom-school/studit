@@ -10,7 +10,7 @@ import (
 )
 
 type Video struct {
-	Id       int     `orm:"column(id);pk"`
+	Id       int     `orm:"column(id);pk;auto"`
 	LessonId *Lesson `orm:"column(lesson_id);rel(fk)"`
 	Link     string  `orm:"column(link)"`
 }

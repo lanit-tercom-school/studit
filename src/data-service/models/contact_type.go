@@ -10,7 +10,7 @@ import (
 )
 
 type ContactType struct {
-	Id   int    `orm:"column(id);pk"`
+	Id   int    `orm:"column(id);pk;auto"`
 	Type string `orm:"column(type)"`
 }
 

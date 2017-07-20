@@ -10,7 +10,7 @@ import (
 )
 
 type TaskForTest struct {
-	Id       int    `orm:"column(id);pk"`
+	Id       int    `orm:"column(id);pk;auto"`
 	Question string `orm:"column(question)"`
 	TestId   *Test  `orm:"column(test_id);rel(fk)"`
 }
