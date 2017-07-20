@@ -32,20 +32,6 @@ type SignupDataToGet struct {
 	ActivationCode string `json:"code"`
 }
 
-type ActivationDataToGet struct {
-	Message string `json:"message"`
-}
-
-var ActivationDataType = gql.NewObject(
-	gql.ObjectConfig{
-		Name: "Activation",
-		Fields: gql.Fields{
-			"Message": &gql.Field{
-				Type: gql.String,
-			},
-		},
-	},
-)
 var SignupDataType = gql.NewObject(
 	gql.ObjectConfig{
 		Name: "Singup",
@@ -114,7 +100,7 @@ func ResolveGetActivationDataByCode(p gql.ResolveParams) (interface{}, error) {
 		err := errors.New("missed code")
 		return nil, err
 	}
-	getData := ActivationDataToGet{}
+	getData := Message{}
 
 	err := helpers.HttpGet(conf.Configuration.AuthServiceURL+"v1/signup/?pass="+code, &getData)
 	return getData, err

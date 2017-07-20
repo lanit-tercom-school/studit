@@ -10,8 +10,10 @@ var RootMutation = gql.NewObject(
 	gql.ObjectConfig{
 		Name: "RootMutation",
 		Fields: gql.Fields{
-			"PostNews":    &mutations.PostNews,
-			"PostProject": &mutations.PostProject,
-			"Auth":        &mutations.AuthQuery,
+			"PostNews":            &mutations.PostNews,
+			"PostProject":         &mutations.PostProject,
+			"PostProjectEnroll":   &mutations.PostProjectEnroll,
+			"DeleteProjectEnroll": &mutations.DeleteProjectEnroll,
+			"Auth":                &mutations.AuthQuery,
 		},
 	})

@@ -11,7 +11,7 @@ import (
 )
 
 type ProjectEnroll struct {
-	Id               int       `orm:"column(id);pk"`
+	Id               int       `orm:"column(id);pk;auto"`
 	Project          *Project  `orm:"column(project_id);rel(fk)"`
 	User             *User     `orm:"column(user_id);rel(fk)"`
 	EnrollingMessage string    `orm:"column(enrolling_message)"`
@@ -39,7 +39,7 @@ func AddProjectEnroll(m *ProjectEnroll) (id int64, err error) {
 func GetProjectEnrollById(id int) (v *ProjectEnroll, err error) {
 	o := orm.NewOrm()
 	v = &ProjectEnroll{Id: id}
-	if err = o.Read(v); err == nil {
+	if err = o.QueryTable(v).Filter("Id", v.Id).RelatedSel().One(v); err == nil {
 		return v, nil
 	}
 	return nil, err
