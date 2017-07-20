@@ -120,6 +120,7 @@ func NewRequestOptions(r *http.Request) *RequestOptions {
 func (h *Handler) ContextHandler(ctx context.Context, w http.ResponseWriter, r *http.Request) {
 	//Allow CORS
 	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Headers", "Authorization")
 	// get query
 	opts := NewRequestOptions(r)
 	//Авторизация
