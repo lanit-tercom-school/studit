@@ -41,6 +41,7 @@ type ProjectUser struct {
 
 //ProjectOn - используется при получении поля ProjectOn пользователя
 type ProjectOn struct {
+	Id      int
 	Project Project
 	Enrolls []ProjectEnroll
 }
@@ -80,6 +81,9 @@ var ProjectEnrollType = gql.NewObject(
 	gql.ObjectConfig{
 		Name: "ProjectEnroll",
 		Fields: gql.Fields{
+			"Id": &gql.Field{
+				Type: gql.String,
+			},
 			"Project": &gql.Field{
 				Type: ProjectType,
 			},
@@ -101,6 +105,9 @@ var ProjectOnType = gql.NewObject(
 	gql.ObjectConfig{
 		Name: "ProjectOnType",
 		Fields: gql.Fields{
+			"Id": &gql.Field{
+				Type: gql.String,
+			},
 			"Project": &gql.Field{
 				Type: ProjectType,
 			},
@@ -153,6 +160,7 @@ func ResolveGetProjectOnByUser(p gql.ResolveParams) (interface{}, error) {
 		err := helpers.HttpGet(conf.Configuration.DataServiceURL+"v1/project_user/?query=User:"+strconv.Itoa(u.Id), &projectUsers)
 		for _, v := range projectUsers {
 			projectOn.Project = v.Project
+			projectOn.Id = v.Id
 			projectOns = append(projectOns, projectOn)
 		}
 
@@ -219,5 +227,27 @@ func ResolvePostProjectEnroll(p gql.ResolveParams) (interface{}, error) {
 		return projectEnrollToGet, err
 	}
 	helpers.LogAccesDenied("PostProjectEnroll")
+	return nil, errors.New("Access is denied")
+}
+
+func ResolveDeleteProjectEnroll(p gql.ResolveParams) (interface{}, error) {
+	c := p.Context.Value("CurrentUser").(CurrentClient)
+	id, ok := p.Args["Id"].(int)
+	if !ok {
+		return nil, errors.New("Missed Id")
+	}
+	projectEnrollToGet := ProjectEnroll{}
+	err := helpers.HttpGet(conf.Configuration.DataServiceURL+"v1/project_enroll/"+strconv.Itoa(id), &projectEnrollToGet)
+	if err != nil {
+		return nil, err
+	}
+	messageToGet := Message{}
+	if c.UserId == projectEnrollToGet.User.Id || c.PermissionLevel == ADMIN {
+		helpers.LogAccesAllowed("DeleteProjectEnroll")
+		err := helpers.HttpDelete(conf.Configuration.DataServiceURL+"v1/project_enroll/"+strconv.Itoa(id), nil, &messageToGet)
+		return messageToGet, err
+	}
+
+	helpers.LogAccesDenied("DeleteProjectEnroll")
 	return nil, errors.New("Access is denied")
 }

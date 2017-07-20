@@ -22,31 +22,40 @@ func InterfaceToString(i interface{}) (s string) {
 func LogErrorGet(url string, err error) {
 	log.Printf("Get: %s Error %s", url, err)
 }
-
 func LogGet(url string, str string) {
 	log.Printf("Get: %s %s", url, str)
 }
+
 func LogAccesAllowed(str string) {
 	LogAuth("Access is allowed to " + str)
 }
 func LogAccesDenied(str string) {
 	LogAuth("Access is denied to " + str)
 }
+
 func LogErrorPost(url string, err error) {
 	log.Printf("Post: %s Error %s", url, err)
 }
-
 func LogPost(url string, str string) {
 	log.Printf("Post: %s %s", url, str)
 }
+
+func LogErrorDelete(url string, err error) {
+	log.Printf("Delete: %s Error %s", url, err)
+}
+func LogDelete(url string, str string) {
+	log.Printf("Delete: %s %s", url, str)
+}
+
 func LogServer(str string) {
 	log.Printf("Server: %s", str)
 }
-func LogErrorAuth(err error) {
-	log.Printf("Auth: Error %s", err)
-}
 func LogErrorServer(err error) {
 	log.Printf("Server: Error %s", err)
+}
+
+func LogErrorAuth(err error) {
+	log.Printf("Auth: Error %s", err)
 }
 func LogAuth(str string) {
 	log.Printf("Auth: %s", str)
@@ -61,7 +70,7 @@ func HttpGet(url string, o interface{}) (err error) {
 		return
 	}
 	LogGet(url, "Received "+resp.Status)
-	if resp.StatusCode != 200 {
+	if !(resp.StatusCode >= 200 && resp.StatusCode < 300) {
 		err = errors.New("status code is not Ok")
 		LogErrorGet(url, err)
 		return
@@ -92,9 +101,9 @@ func HttpPost(url string, send interface{}, get interface{}) (err error) {
 		return
 	}
 	LogPost(url, "Received "+resp.Status)
-	if !(resp.StatusCode == 200 || resp.StatusCode == 201) {
+	if !(resp.StatusCode >= 200 && resp.StatusCode < 300) {
 		err = errors.New("status code is not Ok")
-		LogErrorGet(url, err)
+		LogErrorPost(url, err)
 		return
 	}
 	body, err := ioutil.ReadAll(resp.Body)
@@ -108,5 +117,40 @@ func HttpPost(url string, send interface{}, get interface{}) (err error) {
 		return
 	}
 	LogPost(url, "Success")
+	return
+}
+func HttpDelete(url string, send interface{}, get interface{}) (err error) {
+	LogDelete(url, "Sending")
+	var resp *http.Response
+	jsonToSend, err := json.Marshal(send)
+	bodyToSend := bytes.NewBuffer(jsonToSend)
+	c := &http.Client{}
+	req, err := http.NewRequest("DELETE", url, bodyToSend)
+	if err != nil {
+		LogErrorDelete(url, err)
+		return
+	}
+	resp, err = c.Do(req)
+	if err != nil {
+		LogErrorDelete(url, err)
+		return
+	}
+	LogDelete(url, "Received "+resp.Status)
+	if !(resp.StatusCode >= 200 && resp.StatusCode < 300) {
+		err = errors.New("status code is not Ok")
+		LogErrorDelete(url, err)
+		return
+	}
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		LogErrorDelete(url, err)
+		return
+	}
+	err = json.Unmarshal(body, get)
+	if err != nil {
+		LogErrorDelete(url, err)
+		return
+	}
+	LogDelete(url, "Success")
 	return
 }

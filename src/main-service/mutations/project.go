@@ -8,6 +8,7 @@ import (
 
 var PostProject gql.Field
 var PostProjectEnroll gql.Field
+var DeleteProjectEnroll gql.Field
 
 func init() {
 	PostProject = gql.Field{
@@ -47,5 +48,14 @@ func init() {
 			},
 		},
 		Resolve: objects.ResolvePostProjectEnroll,
+	}
+	DeleteProjectEnroll = gql.Field{
+		Type: objects.MessageType,
+		Args: gql.FieldConfigArgument{
+			"Id": &gql.ArgumentConfig{
+				Type: gql.NewNonNull(gql.Int),
+			},
+		},
+		Resolve: objects.ResolveDeleteProjectEnroll,
 	}
 }
