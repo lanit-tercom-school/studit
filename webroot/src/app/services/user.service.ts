@@ -44,23 +44,24 @@ export class UserService {
   // метод общий для студента и руководителя
   getProjectsOfUser(token: string, id_: number) {
   var variable = { id: id_ };
-  var query = `{
-   User($id:ID)
+  var query = `query($id:ID){
+   User(Id:$id)
    {
      ProjectOn
      {
        Project
         {
           Id
+          Description
           Name
           Logo
         }
       }
-    }
-  }&variables=`+ JSON.stringify(variable);
+  }
+} &variables=`+ JSON.stringify(variable);
     let headers = new Headers();
     headers.append('Authorization', 'Bearer ' + token);
     return this.http.get(environment.apiUrl + '/graphql?query=' + query, { headers: headers })
-      .map((response: Response) => response.json());
+      .map((response: Response) => response.json().data.User.ProjectOn);
   }
 }

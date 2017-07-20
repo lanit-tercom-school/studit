@@ -4,10 +4,10 @@
       <img class="card-img" src="https://bosch-club.ru/upload/medialibrary/533/5330efab6c8a3426c2b96db7127a88ef.jpg" alt="Card image cap">
     </div>
     <div class="col-sm-8 project-info">
-      <p class="lead">{{Project.name}}</p>
-      <p>{{Project.description}}</p>
+      <p class="lead">{{Project.Project.Name}}</p>
+      <p>{{Project.Project.Description}}</p>
       <div class="read-more">
-        <a routerLink="/project/{{Project.id}}" routerLinkActive="active">
+        <a routerLink="/project/{{Project.Project.Id}}" routerLinkActive="active">
           <p>Подробнее <i class="fa fa-angle-double-right" aria-hidden="true"></i></p>
         </a>
       </div>
@@ -15,7 +15,7 @@
   </div>
 </div>
 
-<h3>Заявки на ваши проекты</h3>
+<!--<h3>Заявки на ваши проекты</h3>
 <div *ngFor="let Enroll of EnrollList | async" class="card col-lg-12 col-sm-12">
   <div class="row">
     <div class="col-sm-4">
@@ -29,6 +29,6 @@
       </div>
     </div>
   </div>
-</div>
+</div>-->
 
 <!--  <div><a class="nav-link" routerLink="/projects/tasks" routerLinkActive="active">Список задач</a> -->
