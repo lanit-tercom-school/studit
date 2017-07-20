@@ -10,7 +10,7 @@ import (
 )
 
 type Statistic struct {
-	Id       int     `orm:"column(id);pk"`
+	Id       int     `orm:"column(id);pk;auto"`
 	Hours    int64   `orm:"column(hours)"`
 	CourseId *Course `orm:"column(course_id);rel(fk)"`
 }

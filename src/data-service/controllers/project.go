@@ -38,9 +38,11 @@ func (c *ProjectController) Post() {
 			c.Ctx.Output.SetStatus(201)
 			c.Data["json"] = v
 		} else {
+			c.Ctx.Output.SetStatus(500)
 			c.Data["json"] = err.Error()
 		}
 	} else {
+		c.Ctx.Output.SetStatus(500)
 		c.Data["json"] = err.Error()
 	}
 	c.ServeJSON()
@@ -58,8 +60,10 @@ func (c *ProjectController) GetOne() {
 	id, _ := strconv.Atoi(idStr)
 	v, err := models.GetProjectById(id)
 	if err != nil {
+		c.Ctx.Output.SetStatus(500)
 		c.Data["json"] = err.Error()
 	} else {
+		c.Ctx.Output.SetStatus(200)
 		c.Data["json"] = v
 	}
 	c.ServeJSON()
@@ -110,6 +114,7 @@ func (c *ProjectController) GetAll() {
 		for _, cond := range strings.Split(v, ",") {
 			kv := strings.SplitN(cond, ":", 2)
 			if len(kv) != 2 {
+				c.Ctx.Output.SetStatus(500)
 				c.Data["json"] = errors.New("Error: invalid query key/value pair")
 				c.ServeJSON()
 				return
@@ -121,8 +126,10 @@ func (c *ProjectController) GetAll() {
 
 	l, err := models.GetAllProject(query, fields, sortby, order, offset, limit)
 	if err != nil {
+		c.Ctx.Output.SetStatus(500)
 		c.Data["json"] = err.Error()
 	} else {
+		c.Ctx.Output.SetStatus(200)
 		c.Data["json"] = l
 	}
 	c.ServeJSON()
@@ -142,12 +149,15 @@ func (c *ProjectController) Put() {
 	v := models.Project{Id: id}
 	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
 		if err := models.UpdateProjectById(&v); err == nil {
-			c.Data["json"] = "OK"
+			c.Ctx.Output.SetStatus(200)
+			c.Data["json"] = MakeMessageForSending("Ok")
 		} else {
-			c.Data["json"] = err.Error()
+			c.Ctx.Output.SetStatus(500)
+			c.Data["json"] = MakeMessageForSending(err.Error())
 		}
 	} else {
-		c.Data["json"] = err.Error()
+		c.Ctx.Output.SetStatus(500)
+		c.Data["json"] = MakeMessageForSending(err.Error())
 	}
 	c.ServeJSON()
 }
@@ -163,9 +173,11 @@ func (c *ProjectController) Delete() {
 	idStr := c.Ctx.Input.Param(":id")
 	id, _ := strconv.Atoi(idStr)
 	if err := models.DeleteProject(id); err == nil {
-		c.Data["json"] = "OK"
+		c.Ctx.Output.SetStatus(200)
+		c.Data["json"] = MakeMessageForSending("Ok")
 	} else {
-		c.Data["json"] = err.Error()
+		c.Ctx.Output.SetStatus(500)
+		MakeMessageForSending(err.Error())
 	}
 	c.ServeJSON()
 }

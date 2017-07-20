@@ -66,8 +66,10 @@ func (c *ProjectUserController) GetOne() {
 	id, _ := strconv.Atoi(idStr)
 	v, err := models.GetProjectUserById(id)
 	if err != nil {
+		c.Ctx.Output.SetStatus(500)
 		c.Data["json"] = err.Error()
 	} else {
+		c.Ctx.Output.SetStatus(200)
 		c.Data["json"] = v
 	}
 	c.ServeJSON()
@@ -118,6 +120,7 @@ func (c *ProjectUserController) GetAll() {
 		for _, cond := range strings.Split(v, ",") {
 			kv := strings.SplitN(cond, ":", 2)
 			if len(kv) != 2 {
+				c.Ctx.Output.SetStatus(500)
 				c.Data["json"] = errors.New("Error: invalid query key/value pair")
 				c.ServeJSON()
 				return
@@ -129,8 +132,10 @@ func (c *ProjectUserController) GetAll() {
 
 	l, err := models.GetAllProjectUser(query, fields, sortby, order, offset, limit)
 	if err != nil {
+		c.Ctx.Output.SetStatus(500)
 		c.Data["json"] = err.Error()
 	} else {
+		c.Ctx.Output.SetStatus(200)
 		c.Data["json"] = l
 	}
 	c.ServeJSON()
@@ -150,11 +155,14 @@ func (c *ProjectUserController) Put() {
 	v := models.ProjectUser{Id: id}
 	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
 		if err := models.UpdateProjectUserById(&v); err == nil {
-			c.Data["json"] = "OK"
+			c.Ctx.Output.SetStatus(200)
+			c.Data["json"] = MakeMessageForSending("Ok")
 		} else {
-			c.Data["json"] = err.Error()
+			c.Ctx.Output.SetStatus(500)
+			c.Data["json"] = MakeMessageForSending(err.Error())
 		}
 	} else {
+		c.Ctx.Output.SetStatus(500)
 		c.Data["json"] = err.Error()
 	}
 	c.ServeJSON()
@@ -171,13 +179,11 @@ func (c *ProjectUserController) Delete() {
 	idStr := c.Ctx.Input.Param(":id")
 	id, _ := strconv.Atoi(idStr)
 	if err := models.DeleteProjectUser(id); err == nil {
-		c.Data["json"] = struct {
-			Message string
-		}{Message: "Ok"}
+		c.Ctx.Output.SetStatus(200)
+		c.Data["json"] = MakeMessageForSending("Ok")
 	} else {
-		c.Data["json"] = struct {
-			Message string
-		}{Message: err.Error()}
+		c.Ctx.Output.SetStatus(500)
+		c.Data["json"] = MakeMessageForSending(err.Error())
 	}
 	c.ServeJSON()
 }

@@ -10,7 +10,7 @@ import (
 )
 
 type TasksTagsTable struct {
-	Id     int   `orm:"column(id);pk"`
+	Id     int   `orm:"column(id);pk;auto"`
 	TaskId *Task `orm:"column(task_id);rel(fk)"`
 	TagId  *Tag  `orm:"column(tag_id);rel(fk)"`
 }

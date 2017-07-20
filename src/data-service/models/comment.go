@@ -10,7 +10,7 @@ import (
 )
 
 type Comment struct {
-	Id   int    `orm:"column(id);pk"`
+	Id   int    `orm:"column(id);pk;auto"`
 	Text string `orm:"column(text)"`
 }
 
