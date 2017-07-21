@@ -34,6 +34,8 @@ export class DataService {
 
   private projectsCount: number = 7; //заглушка
   private projectsCountObs: BehaviorSubject<number> = new BehaviorSubject<number>(7);
+  private missedProject: BehaviorSubject<ProjectItem> = new BehaviorSubject<ProjectItem>(null);
+  private missedNews: BehaviorSubject<NewsItem> = new BehaviorSubject<NewsItem>(null);
 
   private dataStore: {
     news: NewsItem[];
@@ -67,6 +69,16 @@ constructor(
   public get ProjectCountObs() {
     return this.projectsCountObs.asObservable();
   }
+
+
+public get MissedProject() {
+    return this.missedProject.asObservable();
+  }
+
+ public get MissedNews() {
+    return this.missedNews.asObservable();
+  }
+
   public get UserProjects() {
     return this.userProjects.asObservable();
   }
@@ -123,6 +135,32 @@ constructor(
     });
   }
 
+  // для подгрузки проекта
+  loadProjectByID(id: number) {
+    console.debug('data: load Project by ID');
+    console.log(id);
+    let foundproject =  this.dataStore.projects.find(item => item.Id == id);
+    console.log('foundproject' + foundproject);
+    console.log(this.dataStore.projects);
+        if (foundproject) {
+          this.missedProject.next(foundproject);
+          console.debug('load from data');
+        }
+        else {
+          console.log('can not find');
+          this.projectService.getProjectById(id).subscribe(res => {
+            if (res != null) {
+              console.log('NEW PROJECT');
+              // дописываем в конец массива            
+              this.dataStore.projects.push(res);
+              console.log(this.dataStore.projects);
+              this.missedProject.next(res);
+            }
+          });
+      }
+   
+  }
+  
   loadProjectsForMainPage() {
     this.projectService.getMainPageProjects().subscribe(res => {
       this.dataStore.projectsForMainPage = res;
@@ -147,7 +185,6 @@ constructor(
   }
 
   loadEnrolledUsersProject() {
-    console.log('Bla');
     if (localStorage.getItem('current_user')) {
       this.studentService.getEnrolledUsersProject(this.userId, this.userToken).subscribe(res => {
         
@@ -181,6 +218,34 @@ constructor(
 
   // TODO: сделать метод для проверки наличия новости в dataService
 
+
+
+  // для подгрузки новости
+  loadNewsByID(id: number) {
+    console.debug('data: load News by ID');
+    console.log(id);
+    let foundnews =  this.dataStore.news.find(item => item.Id == id);
+    console.log(foundnews);
+    console.log(this.dataStore.news);
+        if (foundnews) {
+          this.missedNews.next(foundnews);
+          console.debug('load from data');
+        }
+        else {
+          console.debug('can not find');
+          this.newsService.getNewsById(id).subscribe(res => {
+            if (res != null) {
+              console.log(res);
+              console.debug('NEW NEWS');
+              // дописываем в конец массива            
+              this.dataStore.news.push(res);
+              console.log(this.dataStore.news);
+              this.missedNews.next(res);
+            }
+          });
+      }
+   
+  }
 
   addApiUrl(url: string): string {
     //return environment.apiUrl + url;

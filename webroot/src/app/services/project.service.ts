@@ -63,7 +63,7 @@ export class ProjectService {
   var variable = { id: id_};
    var query = `query($id:ID)
    {
-    Project(id: $id)
+    Project(Id: $id)
     {
       Logo
       Tags
@@ -74,7 +74,8 @@ export class ProjectService {
       DateOfCreation
     }
   }&variables=`+ JSON.stringify(variable);
-    return this.http.get(environment.apiUrl + '/graphql?query=' + query);
+    return this.http.get(environment.apiUrl + '/graphql?query=' + query)
+    .map(response => response.json().data.Project);
   }
     getMaterialsItems(id: number) {
     return [

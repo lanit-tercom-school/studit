@@ -23,7 +23,15 @@ type StatusEnroll = "Enrolling" | "InProject" | "Unenrolling";
 })
 export class TeacherProjectPageComponent implements OnInit, OnDestroy {
 
-  private projectObs: BehaviorSubject<ProjectItem> = new BehaviorSubject(null);
+ private projectObs: BehaviorSubject<ProjectItem> = new BehaviorSubject({
+    Description: 'string',
+    DateOfCreation: 'string',
+    Logo: 'string',
+    Tags: {},
+    Id: 0,
+    Name: 'string'
+  });
+  
   private projectId;
   private isSuccess = false;
   private tasks = [];
@@ -52,13 +60,14 @@ export class TeacherProjectPageComponent implements OnInit, OnDestroy {
   }
 
   getProjectInfo() {
-    this.data.Projects.subscribe(projects => {
-      if (projects.find(res => res.Id == this.projectId)) {
-        this.projectObs.next(projects.find(res => res.Id == this.projectId));
-      }
-      else {
-      }
+    this.data.loadProjectByID(this.projectId);
+    console.log('page: getProjectInfo');
+    this.data.MissedProject.subscribe(res => {
+      console.log(res);
+      if (res != null)
+        this.projectObs.next(res);
     });
+
   }
 
   /*getMaterialsItems(): MaterialsItem[] {
