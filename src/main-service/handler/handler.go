@@ -126,6 +126,9 @@ func (h *Handler) ContextHandler(ctx context.Context, w http.ResponseWriter, r *
 	//Авторизация
 	tokenStr := r.Header.Get("Authorization")
 	c := context.WithValue(ctx, "CurrentUser", objects.Auth(tokenStr))
+	if len(tokenStr) > 7 {
+		c = context.WithValue(c, "Token", tokenStr[7:])
+	}
 	// execute graphql query
 	params := graphql.Params{
 		Schema:         *h.Schema,
