@@ -13,14 +13,12 @@ import { EnrollItem } from 'models/enroll-item';
 })
 export class HomeTeacherProjectViewComponent implements OnInit {
   private ProjectList: Observable<ProjectItem[]>;
-  private ProjectEnrollList: Observable<ProjectItem[]>;
   private EnrollList: Observable<EnrollItem[]>;
 
   constructor(private teacherService: TeacherService, private data: DataService) { }
 
   ngOnInit() {
     this.ProjectList = this.data.UserProjects;
-    this.ProjectEnrollList = this.data.UserEnrolledProjects;
     this.EnrollList = this.data.EnrollsForTeacher;
   }
   ngOnDestroy() {

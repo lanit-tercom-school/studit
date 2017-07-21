@@ -61,6 +61,7 @@ export class UserService {
 } &variables=`+ JSON.stringify(variable);
     let headers = new Headers();
     headers.append('Authorization', 'Bearer ' + token);
+    console.log(headers);
     return this.http.get(environment.apiUrl + '/graphql?query=' + query, { headers: headers })
       .map((response: Response) => response.json().data.User.ProjectOn);
   }

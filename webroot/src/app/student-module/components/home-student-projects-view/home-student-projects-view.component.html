@@ -15,21 +15,21 @@
   </div>
 </div>
 
-<!--<h3>Мои заявки</h3>
+<h3>Мои заявки</h3>
 <div *ngFor="let Enroll of ProjectEnrollList | async" class="card card-outline">
   <div class="row">
     <div class="col-sm-4">
       <img class="card-img" src="https://bosch-club.ru/upload/medialibrary/533/5330efab6c8a3426c2b96db7127a88ef.jpg" alt="Card image cap">
     </div>
     <div class="col-sm-8 project-info">
-      <p class="lead">{{Enroll.name}}</p>
-      <p>{{Enroll.description}}</p>
+      <p class="lead">{{Enroll.Project.Name}}</p>
+      <p>{{Enroll.Message}}</p>
       <div class="read-more">
-        <a routerLink="/project/{{Enroll.id}}" routerLinkActive="active">
+        <a routerLink="/project/{{Enroll.Project.Id}}" routerLinkActive="active">
           <p>Подробнее <i class="fa fa-angle-double-right" aria-hidden="true"></i></p>
         </a>
       </div>
     </div>
   </div>
-</div>-->
+</div>
 <!--  <div><a class="nav-link" routerLink="/projects/tasks" routerLinkActive="active">Список задач</a> -->

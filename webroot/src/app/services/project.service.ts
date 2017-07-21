@@ -54,9 +54,7 @@ export class ProjectService {
       return this.http.get(environment.apiUrl + '/graphql?query=' + query)
       .map((response: Response) => {
         let res = response.json().data.ProjectList;
-        res.forEach(element => {
-          element.Logo = environment.apiUrl + element.Logo;
-        });
+        console.log(res);
         return res;
       });
   }

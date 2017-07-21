@@ -9,6 +9,7 @@ import { StudentService } from 'services/student.service';
 import { DataService } from 'services/data.service';
 
 import { ProjectItem } from 'models/project-item';
+//import { EnrollItem } from 'models/enroll-item';
 import { ProjectTaskItem } from "models/project-task-item";
 
 type StatusEnroll = "Enrolling" | "InProject" | "Unenrolling";
@@ -72,7 +73,7 @@ export class StudentProjectPageComponent implements OnInit {
   }*/
   enroll() {
     this.isSuccess = false;
-    this.studentService.enrollToProject(this.projectId,
+    this.studentService.enrollToProject(this.data.UserId, this.projectId,
       JSON.parse(localStorage.getItem('current_user')).Token, this.message).subscribe(res => {
         this.enrollButtonStatus = "Unenrolling";
         this.data.loadEnrolledUsersProject();
@@ -96,7 +97,7 @@ export class StudentProjectPageComponent implements OnInit {
       }
     })
     this.data.UserEnrolledProjects.subscribe(res => {
-      if (res != null && res.find(pr => pr.Id == this.projectId)) {
+      if (res != null && res.find(enroll => enroll.Project.Id == this.projectId)) {
         this.enrollButtonStatus = "Unenrolling";
       }
     });

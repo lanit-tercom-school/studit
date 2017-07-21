@@ -20,13 +20,13 @@ import 'rxjs/add/operator/filter';
 export class DataService {
   private userId: number;
   private numberOfNewsOnPage: number;
-  private numberOfProjectsOnPage: number;
+  private numberOfProjectsOnPage: number = 7;  // заглушка
   private userToken: string;
   private userPermLvl: PermLevel;
   private news: BehaviorSubject<NewsItem[]> = <BehaviorSubject<NewsItem[]>>new BehaviorSubject([]);
   private projects: BehaviorSubject<ProjectItem[]> = <BehaviorSubject<ProjectItem[]>>new BehaviorSubject([]);
   private userProjects: BehaviorSubject<ProjectItem[]> = <BehaviorSubject<ProjectItem[]>>new BehaviorSubject([]);
-  private userEnrolledProjects: BehaviorSubject<ProjectItem[]> = <BehaviorSubject<ProjectItem[]>>new BehaviorSubject([]);
+  private userEnrolledProjects: BehaviorSubject<EnrollItem[]> = <BehaviorSubject<EnrollItem[]>>new BehaviorSubject([]);
   private projectsForMainPage: BehaviorSubject<ProjectItem[]> = <BehaviorSubject<ProjectItem[]>>new BehaviorSubject([]);
   private enrollsForTeacher: BehaviorSubject<EnrollItem[]> = <BehaviorSubject<EnrollItem[]>>new BehaviorSubject([]);
 
@@ -40,7 +40,7 @@ export class DataService {
     news: NewsItem[];
     projects: ProjectItem[];
     userProjects: ProjectItem[];
-    userEnrolledProjects: ProjectItem[];
+    userEnrolledProjects: EnrollItem[];
     projectsForMainPage: ProjectItem[];
     enrollsForTeacher: EnrollItem[];
   } = {
@@ -92,20 +92,23 @@ constructor(
   {
     return this.userPermLvl;
   }
-  
+   public get UserId()
+  {
+    return this.userId;
+  }
   loadAll() {
     console.log('Data.service ->loadAll');
-    //this.loadProjects();
+    this.loadProjects(0);
     this.loadProjectsForMainPage();
     if (localStorage.getItem('current_user')) {
       this.userToken = JSON.parse(localStorage.getItem('current_user')).Token;
       this.userId = JSON.parse(localStorage.getItem('current_user')).User.Id;
       this.userPermLvl = JSON.parse(localStorage.getItem('current_user')).PermissionLevel;
       this.loadUsersProjects();
-      /*if (this.userPermLvl === PermLevel.Student) {
+      if (this.userPermLvl === PermLevel.Student) {
         this.loadEnrolledUsersProject();
       }
-      if (this.userPermLvl === PermLevel.Teacher) {
+      /*if (this.userPermLvl === PermLevel.Teacher) {
         this.loadEnrollsForTeacher();
       }*/
     }
@@ -115,9 +118,10 @@ constructor(
     this.projectService.getProjectItems(this.numberOfProjectsOnPage, offset)
     .subscribe(res => {
       if (res != null) {
+        console.log(this.numberOfProjectsOnPage);
         this.dataStore.projects = res;
-        //this.projectsCount = 4; //заглушка
-        //this.projectsCountObs.next(Object.assign({},this.projectsCount));
+        this.projectsCount = 7; //заглушка
+        this.projectsCountObs.next(Object.assign({},this.projectsCount));
         this.dataStore.projects.forEach(a => { a.Logo = this.addApiUrl(a.Logo); })
         this.projects.next(Object.assign({}, this.dataStore).projects);
       }
@@ -148,9 +152,12 @@ constructor(
   }
 
   loadEnrolledUsersProject() {
+    console.log('Bla');
     if (localStorage.getItem('current_user')) {
       this.studentService.getEnrolledUsersProject(this.userId, this.userToken).subscribe(res => {
+        
         this.dataStore.userEnrolledProjects = res;
+        //console.log(this.dataStore.userEnrolledProjects);
         this.userEnrolledProjects.next(Object.assign({}, this.dataStore).userEnrolledProjects);
       })
     } else {
