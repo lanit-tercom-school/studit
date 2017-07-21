@@ -3,7 +3,6 @@ package controllers
 import (
 	"data-service/models"
 	"encoding/json"
-	"errors"
 	"strconv"
 	"strings"
 
@@ -35,13 +34,15 @@ func (c *TaskForTestController) Post() {
 	var v models.TaskForTest
 	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
 		if _, err := models.AddTaskForTest(&v); err == nil {
-			c.Ctx.Output.SetStatus(201)
+			c.Ctx.Output.SetStatus(HTTP_CREATED)
 			c.Data["json"] = v
 		} else {
-			c.Data["json"] = err.Error()
+			c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
+			c.Data["json"] = MakeMessageForSending(err.Error())
 		}
 	} else {
-		c.Data["json"] = err.Error()
+		c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
+		c.Data["json"] = MakeMessageForSending(err.Error())
 	}
 	c.ServeJSON()
 }
@@ -58,7 +59,8 @@ func (c *TaskForTestController) GetOne() {
 	id, _ := strconv.Atoi(idStr)
 	v, err := models.GetTaskForTestById(id)
 	if err != nil {
-		c.Data["json"] = err.Error()
+		c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
+		c.Data["json"] = MakeMessageForSending(err.Error())
 	} else {
 		c.Data["json"] = v
 	}
@@ -110,7 +112,8 @@ func (c *TaskForTestController) GetAll() {
 		for _, cond := range strings.Split(v, ",") {
 			kv := strings.SplitN(cond, ":", 2)
 			if len(kv) != 2 {
-				c.Data["json"] = errors.New("Error: invalid query key/value pair")
+				c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
+				c.Data["json"] = MakeMessageForSending("Error: invalid query key/value pair")
 				c.ServeJSON()
 				return
 			}
@@ -121,7 +124,8 @@ func (c *TaskForTestController) GetAll() {
 
 	l, err := models.GetAllTaskForTest(query, fields, sortby, order, offset, limit)
 	if err != nil {
-		c.Data["json"] = err.Error()
+		c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
+		c.Data["json"] = MakeMessageForSending(err.Error())
 	} else {
 		c.Data["json"] = l
 	}
@@ -142,12 +146,14 @@ func (c *TaskForTestController) Put() {
 	v := models.TaskForTest{Id: id}
 	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
 		if err := models.UpdateTaskForTestById(&v); err == nil {
-			c.Data["json"] = "OK"
+			c.Data["json"] = MakeMessageForSending(HTTP_OK_STR)
 		} else {
-			c.Data["json"] = err.Error()
+			c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
+			c.Data["json"] = MakeMessageForSending(err.Error())
 		}
 	} else {
-		c.Data["json"] = err.Error()
+		c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
+		c.Data["json"] = MakeMessageForSending(err.Error())
 	}
 	c.ServeJSON()
 }
@@ -163,9 +169,10 @@ func (c *TaskForTestController) Delete() {
 	idStr := c.Ctx.Input.Param(":id")
 	id, _ := strconv.Atoi(idStr)
 	if err := models.DeleteTaskForTest(id); err == nil {
-		c.Data["json"] = "OK"
+		c.Data["json"] = MakeMessageForSending(HTTP_OK_STR)
 	} else {
-		c.Data["json"] = err.Error()
+		c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
+		c.Data["json"] = MakeMessageForSending(err.Error())
 	}
 	c.ServeJSON()
 }

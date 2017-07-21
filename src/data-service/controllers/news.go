@@ -3,7 +3,6 @@ package controllers
 import (
 	"data-service/models"
 	"encoding/json"
-	//"errors"
 	"strconv"
 	"strings"
 
@@ -38,9 +37,11 @@ func (c *NewsController) Post() {
 			c.Ctx.Output.SetStatus(HTTP_CREATED)
 			c.Data["json"] = v
 		} else {
+			c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
 			c.Data["json"] = MakeMessageForSending(err.Error())
 		}
 	} else {
+		c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
 		c.Data["json"] = MakeMessageForSending(err.Error())
 	}
 	c.ServeJSON()
@@ -58,6 +59,7 @@ func (c *NewsController) GetOne() {
 	id, _ := strconv.Atoi(idStr)
 	v, err := models.GetNewsById(id)
 	if err != nil {
+		c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
 		c.Data["json"] = MakeMessageForSending(err.Error())
 	} else {
 		c.Data["json"] = v
@@ -73,7 +75,7 @@ func (c *NewsController) GetOne() {
 // @Param  limit          query  string  false  "Limit the size of result set. Must be an integer"
 // @Param  offset         query  string  false  "Start position of result set. Must be an integer"
 // @Param  tags           query  string  false  "Tags, e.g. "World" or "World,Other"
-// @Param  tagsOperation  query  string  false  "Tags operation, only &quot;and&quot; or &quot;or&quot;, default &quot;and&quot;
+// @Param  tagsOperator  query  string  false  "Tags operator, only &quot;and&quot; or &quot;or&quot;, default &quot;and&quot;
 // @Success 200 {object} models.News
 // @Failure 403
 // @router / [get]
@@ -81,7 +83,7 @@ func (c *NewsController) GetAll() {
 	var sortCols, orders []string
 	var offset, limit int = 0, 10
 	var tags string
-	var tagsOperation string = "and"
+	var tagsOperator string = "and"
 	beego.Trace("Parce request params for News")
 
 	// limit: 10 (default is 10)
@@ -102,12 +104,12 @@ func (c *NewsController) GetAll() {
 	}
 	// tags: World,Other
 	tags = c.GetString("tags")
-	// tagsOperation: and,or
-	if v := c.GetString("tagsOperation"); v != "" {
-		tagsOperation = v
+	// tagsOperator: and,or
+	if v := c.GetString("tagsOperator"); v != "" {
+		tagsOperator = v
 	}
 
-	l, err := models.GetAllNews(sortCols, orders, offset, limit, tags, tagsOperation)
+	l, err := models.GetAllNews(sortCols, orders, offset, limit, tags, tagsOperator)
 	if err != nil {
 		c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
 		c.Data["json"] = MakeMessageForSending(err.Error())
