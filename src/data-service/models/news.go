@@ -117,11 +117,21 @@ func GetOrderByClause(sortCols, orders []string) (string, error) {
 	return result, nil
 }
 
+func GetSqlTagsOperation(tagsOperation string) (string, error) {
+
+	switch tagsOperation {
+	case "and":
+		return "@>", nil
+	case "or":
+		return "&&", nil
+	default:
+		return "", errors.New("Error: `" + string(tagsOperation) + "` is an invalid tags operation. Must be either [and|or]")
+	}
+}
+
 // GetAllNews retrieves all News matches certain condition. Returns empty list if
 // no records exist
-func GetAllNews(query map[string]string, fields, sortCols, orders []string, offset, limit int, tags string) (
-	interface{}, error) {
-
+func GetAllNews(sortCols, orders []string, offset, limit int, tags, tagsOperation string) (interface{}, error) {
 	orm.Debug = true
 	o := orm.NewOrm()
 
@@ -131,18 +141,27 @@ func GetAllNews(query map[string]string, fields, sortCols, orders []string, offs
 		return nil, err
 	}
 
+	sqlTagsOperation, err := GetSqlTagsOperation(tagsOperation)
+	if err != nil {
+		fmt.Println(err)
+		return nil, err
+	}
+
 	var set NewsJSONSet
+
 	err = o.Raw(`
 SELECT row_to_json(t) arr
   FROM (SELECT COUNT(*) "TotalCount"
      , (SELECT COUNT(*) "FilteredCount"
-          FROM news  WHERE tags @> string_to_array($1, ','))
+          FROM news  WHERE tags `+sqlTagsOperation+` string_to_array($1, ','))
      , (SELECT array_to_json(array_agg(row_to_json(d))) "NewsList"
           FROM (SELECT id "Id", title "Title", description "Description", created "Created"
               , edited "Edited", tags "Tags", image "Image"
                   FROM news
-                 WHERE tags @> string_to_array($1, ',') `+orderClause+` ) d)
-          FROM news) t`, tags).QueryRow(&set)
+                 WHERE tags `+sqlTagsOperation+` string_to_array($1, ',')
+              `+orderClause+`
+                OFFSET $2 LIMIT $3 ) d)
+          FROM news) t`, tags, offset, limit).QueryRow(&set)
 	if err != nil {
 		fmt.Println(err)
 		return nil, err
