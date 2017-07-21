@@ -35,13 +35,15 @@ func (c *CourseController) Post() {
 	var v models.Course
 	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
 		if _, err := models.AddCourse(&v); err == nil {
-			c.Ctx.Output.SetStatus(201)
+			c.Ctx.Output.SetStatus(HTTP_CREATED)
 			c.Data["json"] = v
 		} else {
-			c.Data["json"] = err.Error()
+			c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
+			c.Data["json"] = MakeMessageForSending(err.Error())
 		}
 	} else {
-		c.Data["json"] = err.Error()
+		c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
+		c.Data["json"] = MakeMessageForSending(err.Error())
 	}
 	c.ServeJSON()
 }
@@ -58,7 +60,8 @@ func (c *CourseController) GetOne() {
 	id, _ := strconv.Atoi(idStr)
 	v, err := models.GetCourseById(id)
 	if err != nil {
-		c.Data["json"] = err.Error()
+		c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
+		c.Data["json"] = MakeMessageForSending(err.Error())
 	} else {
 		c.Data["json"] = v
 	}
@@ -110,7 +113,8 @@ func (c *CourseController) GetAll() {
 		for _, cond := range strings.Split(v, ",") {
 			kv := strings.SplitN(cond, ":", 2)
 			if len(kv) != 2 {
-				c.Data["json"] = errors.New("Error: invalid query key/value pair")
+				c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
+				c.Data["json"] = MakeMessageForSending("Error: invalid query key/value pair")
 				c.ServeJSON()
 				return
 			}
@@ -121,7 +125,8 @@ func (c *CourseController) GetAll() {
 
 	l, err := models.GetAllCourse(query, fields, sortby, order, offset, limit)
 	if err != nil {
-		c.Data["json"] = err.Error()
+		c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
+		c.Data["json"] = MakeMessageForSending(err.Error())
 	} else {
 		c.Data["json"] = l
 	}
@@ -142,12 +147,14 @@ func (c *CourseController) Put() {
 	v := models.Course{Id: id}
 	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
 		if err := models.UpdateCourseById(&v); err == nil {
-			c.Data["json"] = "OK"
+			c.Data["json"] = MakeMessageForSending(HTTP_OK_STR)
 		} else {
-			c.Data["json"] = err.Error()
+			c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
+			c.Data["json"] = MakeMessageForSending(err.Error())
 		}
 	} else {
-		c.Data["json"] = err.Error()
+		c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
+		c.Data["json"] = MakeMessageForSending(err.Error())
 	}
 	c.ServeJSON()
 }
@@ -163,9 +170,10 @@ func (c *CourseController) Delete() {
 	idStr := c.Ctx.Input.Param(":id")
 	id, _ := strconv.Atoi(idStr)
 	if err := models.DeleteCourse(id); err == nil {
-		c.Data["json"] = "OK"
+		c.Data["json"] = MakeMessageForSending(HTTP_OK_STR)
 	} else {
-		c.Data["json"] = err.Error()
+		c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
+		c.Data["json"] = MakeMessageForSending(err.Error())
 	}
 	c.ServeJSON()
 }

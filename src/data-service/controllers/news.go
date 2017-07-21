@@ -37,9 +37,11 @@ func (c *NewsController) Post() {
 			c.Ctx.Output.SetStatus(HTTP_CREATED)
 			c.Data["json"] = v
 		} else {
+			c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
 			c.Data["json"] = MakeMessageForSending(err.Error())
 		}
 	} else {
+		c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
 		c.Data["json"] = MakeMessageForSending(err.Error())
 	}
 	c.ServeJSON()
@@ -57,6 +59,7 @@ func (c *NewsController) GetOne() {
 	id, _ := strconv.Atoi(idStr)
 	v, err := models.GetNewsById(id)
 	if err != nil {
+		c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
 		c.Data["json"] = MakeMessageForSending(err.Error())
 	} else {
 		c.Data["json"] = v
