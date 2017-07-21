@@ -9,12 +9,24 @@ import (
 	"net/http"
 )
 
+type Message struct {
+	Message string `json:"message"`
+}
+
 func InterfaceToString(i interface{}) (s string) {
 	if i == nil {
 		s = ""
 	} else {
 		s = i.(string)
 	}
+	return
+}
+
+func GetErrorMessageFromResponse(url string, resp *http.Response) (message string) {
+	body, _ := ioutil.ReadAll(resp.Body)
+	messageObj := Message{}
+	json.Unmarshal(body, &messageObj)
+	message = messageObj.Message
 	return
 }
 
@@ -71,7 +83,7 @@ func HttpGet(url string, o interface{}) (err error) {
 	}
 	LogGet(url, "Received "+resp.Status)
 	if !(resp.StatusCode >= 200 && resp.StatusCode < 300) {
-		err = errors.New("status code is not Ok")
+		err = errors.New(GetErrorMessageFromResponse(url, resp))
 		LogErrorGet(url, err)
 		return
 	}
@@ -81,6 +93,43 @@ func HttpGet(url string, o interface{}) (err error) {
 		return
 	}
 	err = json.Unmarshal(body, o)
+	if err != nil {
+		LogErrorGet(url, err)
+		return
+	}
+	LogGet(url, "Success")
+	return
+}
+
+func HttpPutWithToken(url string, token string, send interface{}, get interface{}) (err error) {
+	LogGet(url, "Sending")
+	var resp *http.Response
+	client := &http.Client{}
+	jsonToSend, err := json.Marshal(send)
+	bodyToSend := bytes.NewBuffer(jsonToSend)
+	req, err := http.NewRequest("PUT", url, bodyToSend)
+	if err != nil {
+		LogErrorGet(url, err)
+		return
+	}
+	req.Header.Set("Bearer-Token", token)
+	resp, err = client.Do(req)
+	if err != nil {
+		LogErrorGet(url, err)
+		return
+	}
+	LogGet(url, "Received "+resp.Status)
+	if !(resp.StatusCode >= 200 && resp.StatusCode < 300) {
+		err = errors.New(GetErrorMessageFromResponse(url, resp))
+		LogErrorGet(url, err)
+		return
+	}
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		LogErrorGet(url, err)
+		return
+	}
+	err = json.Unmarshal(body, get)
 	if err != nil {
 		LogErrorGet(url, err)
 		return
@@ -102,7 +151,7 @@ func HttpPost(url string, send interface{}, get interface{}) (err error) {
 	}
 	LogPost(url, "Received "+resp.Status)
 	if !(resp.StatusCode >= 200 && resp.StatusCode < 300) {
-		err = errors.New("status code is not Ok")
+		err = errors.New(GetErrorMessageFromResponse(url, resp))
 		LogErrorPost(url, err)
 		return
 	}
@@ -137,7 +186,7 @@ func HttpDelete(url string, send interface{}, get interface{}) (err error) {
 	}
 	LogDelete(url, "Received "+resp.Status)
 	if !(resp.StatusCode >= 200 && resp.StatusCode < 300) {
-		err = errors.New("status code is not Ok")
+		err = errors.New(GetErrorMessageFromResponse(url, resp))
 		LogErrorDelete(url, err)
 		return
 	}

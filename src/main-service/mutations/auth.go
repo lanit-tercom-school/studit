@@ -12,6 +12,7 @@ type AuthData struct {
 	Signin     objects.SigninDataToGet
 	Signup     objects.SignupDataToGet
 	Activation objects.Message
+	ChangePass objects.Message
 }
 
 var AuthQueryType = gql.NewObject(
@@ -53,6 +54,18 @@ var AuthQueryType = gql.NewObject(
 					},
 				},
 				Resolve: objects.ResolveGetActivationDataByCode,
+			},
+			"ChangePass": &gql.Field{
+				Type: objects.MessageType,
+				Args: gql.FieldConfigArgument{
+					"Old": &gql.ArgumentConfig{
+						Type: gql.String,
+					},
+					"New": &gql.ArgumentConfig{
+						Type: gql.String,
+					},
+				},
+				Resolve: objects.ResolvePutNewPassword,
 			},
 		},
 	},
