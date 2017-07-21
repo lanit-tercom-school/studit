@@ -131,7 +131,7 @@ func GetSqlTagsOperation(tagsOperation string) (string, error) {
 
 // GetAllNews retrieves all News matches certain condition. Returns empty list if
 // no records exist
-func GetAllNews(sortCols, orders []string, offset, limit int, tags, tagsOperation string) (interface{}, error) {
+func GetAllNews(query map[string]string, fields, sortCols, orders []string, offset, limit int, tags, tagsOperation string) (interface{}, error) {
 	orm.Debug = true
 	o := orm.NewOrm()
 

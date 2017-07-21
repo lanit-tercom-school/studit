@@ -3,11 +3,9 @@ package controllers
 import (
 	"data-service/models"
 	"encoding/json"
-	//"errors"
+	"github.com/astaxie/beego"
 	"strconv"
 	"strings"
-
-	"github.com/astaxie/beego"
 )
 
 // NewsController operations for News
@@ -110,7 +108,7 @@ func (c *NewsController) GetAll() {
 	l, err := models.GetAllNews(sortCols, orders, offset, limit, tags, tagsOperation)
 	if err != nil {
 		c.Ctx.Output.SetStatus(500)
-		c.Data["json"] = err.Error()
+		c.Data["json"] = MakeMessageForSending(err.Error())
 	} else {
 		c.Ctx.Output.SetStatus(200)
 		c.Data["json"] = l
