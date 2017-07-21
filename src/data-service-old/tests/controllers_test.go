@@ -7,23 +7,23 @@ import (
 
 	"encoding/json"
 
-	"data-service/models"
+	"data-service-old/models"
 
-	"github.com/astaxie/beego"
-	. "github.com/smartystreets/goconvey/convey"
-	"runtime"
-	"path/filepath"
 	_ "data-service/routers"
+	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
 	_ "github.com/lib/pq"
+	. "github.com/smartystreets/goconvey/convey"
 	"github.com/vetcher/jwt"
+	"path/filepath"
+	"runtime"
 	"time"
 )
 
 func init() {
 	jwt.GlobalStorage = jwt.NewStorage(time.Hour)
 	_, file, _, _ := runtime.Caller(1)
-	path, _ := filepath.Abs(filepath.Dir(filepath.Join(file, ".." + string(filepath.Separator))))
+	path, _ := filepath.Abs(filepath.Dir(filepath.Join(file, ".."+string(filepath.Separator))))
 	beego.TestBeegoInit(path)
 	orm.RegisterDataBase("default", "postgres", "postgres://postgres:postgres@localhost:5432/studit?sslmode=disable")
 }
@@ -73,7 +73,7 @@ func TestLandingPagePut(t *testing.T) {
 	w := httptest.NewRecorder()
 	beego.BeeApp.Handlers.ServeHTTP(w, r)
 
-	Convey("Subject: Landing page PUT method\n" + r.URL.String(), t, func() {
+	Convey("Subject: Landing page PUT method\n"+r.URL.String(), t, func() {
 		Convey("Status code should be 404", func() {
 			So(w.Code, ShouldEqual, 404)
 			So(w.Body.String(), ShouldEqual, "\"Not Found\"")

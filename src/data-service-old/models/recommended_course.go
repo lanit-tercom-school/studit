@@ -5,51 +5,49 @@ import (
 	"fmt"
 	"reflect"
 	"strings"
-	"time"
 
 	"github.com/astaxie/beego/orm"
 )
 
-type UserComments struct {
-	Id        int       `orm:"column(id);pk;auto" json:"-"`
-	UserId    *User     `orm:"column(user_id);rel(fk)" json:"user_id"`
-	CommentId *Comment  `orm:"column(comment_id);rel(fk)" json:"msg_id"`
-	Date      time.Time `orm:"column(date);type(date)" json:"date"`
+type RecommendedCourse struct {
+	Id       int     `orm:"column(id);pk;auto"`
+	CourseId *Course `orm:"column(course_id);rel(fk)"`
+	Link     string  `orm:"column(link)"`
 }
 
-func (t *UserComments) TableName() string {
-	return "user_comments"
-}
+//func (t *RecommendedCourse) TableName() string {
+//	return "recommended_course"
+//}
 
 func init() {
-	orm.RegisterModel(new(UserComments))
+	orm.RegisterModel(new(RecommendedCourse))
 }
 
-// AddUserComments insert a new UserComments into database and returns
+// AddRecommendedCourse insert a new RecommendedCourse into database and returns
 // last inserted Id on success.
-func AddUserComments(m *UserComments) (id int64, err error) {
+func AddRecommendedCourse(m *RecommendedCourse) (id int64, err error) {
 	o := orm.NewOrm()
 	id, err = o.Insert(m)
 	return
 }
 
-// GetUserCommentsById retrieves UserComments by Id. Returns error if
+// GetRecommendedCourseById retrieves RecommendedCourse by Id. Returns error if
 // Id doesn't exist
-func GetUserCommentsById(id int) (v *UserComments, err error) {
+func GetRecommendedCourseById(id int) (v *RecommendedCourse, err error) {
 	o := orm.NewOrm()
-	v = &UserComments{Id: id}
+	v = &RecommendedCourse{Id: id}
 	if err = o.Read(v); err == nil {
 		return v, nil
 	}
 	return nil, err
 }
 
-// GetAllUserComments retrieves all UserComments matches certain condition. Returns empty list if
+// GetAllRecommendedCourse retrieves all RecommendedCourse matches certain condition. Returns empty list if
 // no records exist
-func GetAllUserComments(query map[string]string, fields []string, sortby []string, order []string,
+func GetAllRecommendedCourse(query map[string]string, fields []string, sortby []string, order []string,
 	offset int64, limit int64) (ml []interface{}, err error) {
 	o := orm.NewOrm()
-	qs := o.QueryTable(new(UserComments))
+	qs := o.QueryTable(new(RecommendedCourse))
 	// query k=v
 	for k, v := range query {
 		// rewrite dot-notation to Object__Attribute
@@ -95,7 +93,7 @@ func GetAllUserComments(query map[string]string, fields []string, sortby []strin
 		}
 	}
 
-	var l []UserComments
+	var l []RecommendedCourse
 	qs = qs.OrderBy(sortFields...)
 	if _, err = qs.Limit(limit, offset).All(&l, fields...); err == nil {
 		if len(fields) == 0 {
@@ -118,11 +116,11 @@ func GetAllUserComments(query map[string]string, fields []string, sortby []strin
 	return nil, err
 }
 
-// UpdateUserComments updates UserComments by Id and returns error if
+// UpdateRecommendedCourse updates RecommendedCourse by Id and returns error if
 // the record to be updated doesn't exist
-func UpdateUserCommentsById(m *UserComments) (err error) {
+func UpdateRecommendedCourseById(m *RecommendedCourse) (err error) {
 	o := orm.NewOrm()
-	v := UserComments{Id: m.Id}
+	v := RecommendedCourse{Id: m.Id}
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
 		var num int64
@@ -133,15 +131,15 @@ func UpdateUserCommentsById(m *UserComments) (err error) {
 	return
 }
 
-// DeleteUserComments deletes UserComments by Id and returns error if
+// DeleteRecommendedCourse deletes RecommendedCourse by Id and returns error if
 // the record to be deleted doesn't exist
-func DeleteUserComments(id int) (err error) {
+func DeleteRecommendedCourse(id int) (err error) {
 	o := orm.NewOrm()
-	v := UserComments{Id: id}
+	v := RecommendedCourse{Id: id}
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
 		var num int64
-		if num, err = o.Delete(&UserComments{Id: id}); err == nil {
+		if num, err = o.Delete(&RecommendedCourse{Id: id}); err == nil {
 			fmt.Println("Number of records deleted in database:", num)
 		}
 	}

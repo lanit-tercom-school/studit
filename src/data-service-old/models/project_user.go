@@ -18,9 +18,9 @@ type ProjectUser struct {
 	Progress   int       `orm:"column(progress)"`
 }
 
-func (t *ProjectUser) TableName() string {
-	return "project_user"
-}
+// func (t *ProjectUser) TableName() string {
+// 	return "project_user"
+// }
 
 func init() {
 	orm.RegisterModel(new(ProjectUser))
@@ -43,10 +43,9 @@ func GetProjectUserIdByUserId(userId int) (projects []*Project, err error) {
 
 // AddProjectUser insert a new ProjectUser into database and returns
 // last inserted Id on success.
-func AddUserToProject(u *User, y *ProjectJson) (err error) {
-	temp := y.translate()
+func AddUserToProject(u *User, p *Project) (err error) {
 	m := ProjectUser{
-		ProjectId:  &temp,
+		ProjectId:  p,
 		UserId:     u,
 		SignedDate: time.Now(),
 	}

@@ -2,8 +2,8 @@ package auth
 
 import (
 	"crypto/rand"
+	"data-service-old/models"
 	"fmt"
-	"data-service/models"
 
 	"github.com/astaxie/beego"
 )

@@ -1,20 +1,20 @@
 package endpointTests
 
 import (
-	"testing"
+	"bytes"
 	"data-service/auth"
+	"encoding/json"
+	"github.com/astaxie/beego"
 	. "github.com/smartystreets/goconvey/convey"
 	"io/ioutil"
-	"encoding/json"
-	"strconv"
 	"net/http"
 	"net/http/httptest"
-	"github.com/astaxie/beego"
-	"bytes"
+	"strconv"
+	"testing"
 )
 
 type testPairInt struct {
-	input int
+	input  int
 	output int
 }
 
@@ -37,9 +37,8 @@ func TestGenerateNewToken(t *testing.T) {
 	}
 }
 
-
 func TestLoginAndLogout(t *testing.T) {
-	f, _ := json.Marshal(auth.Usr{Login:"a@a", Password:"a"})
+	f, _ := json.Marshal(auth.Usr{Login: "a@a", Password: "a"})
 	r, _ := http.NewRequest("POST", "http://localhost:8080/v1/auth/login", bytes.NewReader(f))
 	w := httptest.NewRecorder()
 	beego.BeeApp.Handlers.ServeHTTP(w, r)
@@ -54,7 +53,7 @@ func TestLoginAndLogout(t *testing.T) {
 		})
 	})
 
-	r, _ = http.NewRequest("GET", "http://localhost:8080/v1/auth/logout/?token=" + response.Token, nil)
+	r, _ = http.NewRequest("GET", "http://localhost:8080/v1/auth/logout/?token="+response.Token, nil)
 	w = httptest.NewRecorder()
 	beego.BeeApp.Handlers.ServeHTTP(w, r)
 
@@ -103,7 +102,7 @@ func TestWrongTokenLogout(t *testing.T) {
 		i := i
 		str := str // capture range variable (from example on https://golang.org/pkg/testing/)
 
-		Convey("String number " + strconv.Itoa(i) + " Sent wrong token " + str, t, func() {
+		Convey("String number "+strconv.Itoa(i)+" Sent wrong token "+str, t, func() {
 			requestURL := "http://localhost:8080/v1/auth/logout/?token=" + str
 			r, err := http.NewRequest("GET", requestURL, nil)
 			if err != nil {

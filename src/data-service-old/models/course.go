@@ -10,16 +10,16 @@ import (
 )
 
 type Course struct {
-	Id          int     `orm:"column(id);pk;auto" json:"-"`
-	Title       string  `orm:"column(title)" json:"title"`
+	Id          int     `orm:"column(id);pk;auto"  json:"-"`
+	Title       string  `orm:"column(title)"       json:"title"`
 	Description string  `orm:"column(description)" json:"desc"`
-	Logo        string  `orm:"column(logo)" json:"logo"`
-	Rating      float32 `orm:"column(rating)" json:"rate"`
+	Logo        string  `orm:"column(logo)"        json:"logo"`
+	Rating      float32 `orm:"column(rating)"      json:"rate"`
 }
 
-func (t *Course) TableName() string {
-	return "course"
-}
+// func (t *Course) TableName() string {
+// 	return "course"
+// }
 
 func init() {
 	orm.RegisterModel(new(Course))

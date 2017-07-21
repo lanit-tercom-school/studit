@@ -1,7 +1,7 @@
 package controllers
 
 import (
-	"data-service/models"
+	"data-service-old/models"
 	"encoding/json"
 	"errors"
 	"strconv"

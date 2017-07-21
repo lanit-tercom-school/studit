@@ -10,14 +10,14 @@ import (
 )
 
 type Task struct {
-	Id              int            `orm:"column(id);pk;auto"`
-	Title           string         `orm:"column(title)"`
-	Description     string         `orm:"column(description)"`
-	NumberOfTask    int            `orm:"column(numberOfTask)"`
-	Tags            string         `orm:"column(tags)"`
-	Priority        int            `orm:"column(priority)"`
-	ProjectId       *Project       `orm:"column(project_id);rel(fk)"`
-	ProjectUserId   *ProjectUser   `orm:"column(project_user_id);rel(fk)"`
+	Id            int          `orm:"column(id);pk;auto"`
+	Title         string       `orm:"column(title)"`
+	Description   string       `orm:"column(description)"`
+	NumberOfTask  int          `orm:"column(numberOfTask)"`
+	Tags          string       `orm:"column(tags)"`
+	Priority      int          `orm:"column(priority)"`
+	ProjectId     *Project     `orm:"column(project_id);rel(fk)"`
+	ProjectUserId *ProjectUser `orm:"column(project_user_id);rel(fk)"`
 }
 
 func (t *Task) TableName() string {
