@@ -1,25 +1,26 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Observable } from "rxjs/Observable";
 
 import { DataService } from 'services/data.service';
 import { ProjectItem } from 'models/project-item';
 
 @Component({
-  selector: 'app-project-list',
-  templateUrl: './project-list.component.html',
-  styleUrls: ['./project-list.component.css']
+  selector: 'app-slider',
+  templateUrl: './slider.component.html',
+  styleUrls: ['./slider.component.css']
 })
-export class ProjectListComponent implements OnInit {
+export class SliderComponent implements OnInit {
 
-   public ProjectList: Observable<ProjectItem[]>;
+    public ProjectList: Observable<ProjectItem[]>;
    private p: number = 1;
-  private limit: number = 3;
-  private totalObs: Observable<number>;
+  private limit: number = 1;
+  private total: number = 3;
 
   private loading: boolean;
   constructor(private data: DataService) { }
 
   ngOnInit() {
+    this.ProjectList = this.data.ProjectsForMainPage;
     this.data.NumberOfProjectsOnPage = 3;
     this.getPage(1);
   }
@@ -29,11 +30,8 @@ export class ProjectListComponent implements OnInit {
     let offset = 0;
     if (page > 1)
       offset = (page - 1) * this.limit;
-    this.data.loadProjects(offset);
-    this.ProjectList = this.data.Projects;
-    this.totalObs = this.data.NewsCountObs;
     this.p = page;
     this.loading = false;
-    window.scrollTo(0, 0);
   }
+
 }

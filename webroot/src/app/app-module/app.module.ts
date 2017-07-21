@@ -23,6 +23,7 @@ import { EnrolmentComponent } from './components/main-page/enrolment/enrolment.c
 import { FeaturesComponent } from './components/main-page/features/features.component';
 import { PartnersComponent } from './components/main-page/partners/partners.component';
 import { PartnerItemComponent } from './components/main-page/partners/partner-item/partner-item.component';
+import { SliderComponent } from './components/main-page/slider/slider.component';
 
 import { TopPanelComponent } from './components/top-panel/top-panel.component';
 import { FooterComponent } from "./components/footer/footer.component";
@@ -69,6 +70,7 @@ import { ErrorPageComponent } from './components/error-page/error-page.component
     FeaturesComponent,
     PartnersComponent,
     PartnerItemComponent,
+    SliderComponent,
     TopPanelComponent,
     FooterComponent,
     ProjectListPageComponent,

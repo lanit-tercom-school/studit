@@ -20,7 +20,7 @@ import 'rxjs/add/operator/filter';
 export class DataService {
   private userId: number;
   private numberOfNewsOnPage: number;
-  private numberOfProjectsOnPage: number = 7;  // заглушка
+  private numberOfProjectsOnPage: number;
   private userToken: string;
   private userPermLvl: PermLevel;
   private news: BehaviorSubject<NewsItem[]> = <BehaviorSubject<NewsItem[]>>new BehaviorSubject([]);
