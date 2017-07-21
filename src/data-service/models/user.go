@@ -10,7 +10,7 @@ import (
 )
 
 type User struct {
-	Id          int    `orm:"column(id);pk"`
+	Id          int    `orm:"column(id);pk;auto"`
 	Nickname    string `orm:"column(nickname)"`
 	Description string `orm:"column(description)"`
 	Avatar      string `orm:"column(avatar)"`

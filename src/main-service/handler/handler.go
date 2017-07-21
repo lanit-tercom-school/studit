@@ -42,9 +42,9 @@ func getFromForm(values url.Values) *RequestOptions {
 	query := values.Get("query")
 	if query != "" {
 		// get variables map
-		var variables map[string]interface{}
+		variables := make(map[string]interface{})
 		variablesStr := values.Get("variables")
-		json.Unmarshal([]byte(variablesStr), variables)
+		json.Unmarshal([]byte(variablesStr), &variables)
 
 		return &RequestOptions{
 			Query:         query,
@@ -120,6 +120,7 @@ func NewRequestOptions(r *http.Request) *RequestOptions {
 func (h *Handler) ContextHandler(ctx context.Context, w http.ResponseWriter, r *http.Request) {
 	//Allow CORS
 	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Headers", "Authorization")
 	// get query
 	opts := NewRequestOptions(r)
 	//Авторизация

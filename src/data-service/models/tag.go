@@ -10,7 +10,7 @@ import (
 )
 
 type Tag struct {
-	Id   int    `orm:"column(id);pk"`
+	Id   int    `orm:"column(id);pk;auto"`
 	Name string `orm:"column(name)"`
 }
 

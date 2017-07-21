@@ -11,7 +11,7 @@ var AuthQuery gql.Field
 type AuthData struct {
 	Signin     objects.SigninDataToGet
 	Signup     objects.SignupDataToGet
-	Activation objects.ActivationDataToGet
+	Activation objects.Message
 }
 
 var AuthQueryType = gql.NewObject(
@@ -46,7 +46,7 @@ var AuthQueryType = gql.NewObject(
 				Resolve: objects.ResolveGetSignupDataByLoginPasswordNickname,
 			},
 			"Activation": &gql.Field{
-				Type: objects.ActivationDataType,
+				Type: objects.MessageType,
 				Args: gql.FieldConfigArgument{
 					"ActivationCode": &gql.ArgumentConfig{
 						Type: gql.String,

@@ -3,7 +3,6 @@ package controllers
 import (
 	"data-service/models"
 	"encoding/json"
-	"errors"
 	"strconv"
 	"strings"
 
@@ -34,13 +33,21 @@ func (c *ProjectEnrollController) URLMapping() {
 func (c *ProjectEnrollController) Post() {
 	var v models.ProjectEnroll
 	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
-		if _, err := models.AddProjectEnroll(&v); err == nil {
+		if id, err := models.AddProjectEnroll(&v); err == nil {
 			c.Ctx.Output.SetStatus(201)
-			c.Data["json"] = v
+			p, err := models.GetProjectEnrollById(int(id))
+			if err == nil {
+				c.Data["json"] = p
+			} else {
+				c.Ctx.Output.SetStatus(500)
+				c.Data["json"] = err.Error()
+			}
 		} else {
+			c.Ctx.Output.SetStatus(500)
 			c.Data["json"] = err.Error()
 		}
 	} else {
+		c.Ctx.Output.SetStatus(500)
 		c.Data["json"] = err.Error()
 	}
 	c.ServeJSON()
@@ -58,8 +65,10 @@ func (c *ProjectEnrollController) GetOne() {
 	id, _ := strconv.Atoi(idStr)
 	v, err := models.GetProjectEnrollById(id)
 	if err != nil {
+		c.Ctx.Output.SetStatus(500)
 		c.Data["json"] = err.Error()
 	} else {
+		c.Ctx.Output.SetStatus(200)
 		c.Data["json"] = v
 	}
 	c.ServeJSON()
@@ -110,7 +119,8 @@ func (c *ProjectEnrollController) GetAll() {
 		for _, cond := range strings.Split(v, ",") {
 			kv := strings.SplitN(cond, ":", 2)
 			if len(kv) != 2 {
-				c.Data["json"] = errors.New("Error: invalid query key/value pair")
+				c.Ctx.Output.SetStatus(500)
+				c.Data["json"] = MakeMessageForSending("Error: invalid query key/value pair")
 				c.ServeJSON()
 				return
 			}
@@ -121,8 +131,10 @@ func (c *ProjectEnrollController) GetAll() {
 
 	l, err := models.GetAllProjectEnroll(query, fields, sortby, order, offset, limit)
 	if err != nil {
-		c.Data["json"] = err.Error()
+		c.Ctx.Output.SetStatus(500)
+		c.Data["json"] = MakeMessageForSending(err.Error())
 	} else {
+		c.Ctx.Output.SetStatus(200)
 		c.Data["json"] = l
 	}
 	c.ServeJSON()
@@ -142,12 +154,15 @@ func (c *ProjectEnrollController) Put() {
 	v := models.ProjectEnroll{Id: id}
 	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
 		if err := models.UpdateProjectEnrollById(&v); err == nil {
-			c.Data["json"] = "OK"
+			c.Ctx.Output.SetStatus(200)
+			c.Data["json"] = MakeMessageForSending("Ok")
 		} else {
-			c.Data["json"] = err.Error()
+			c.Ctx.Output.SetStatus(500)
+			c.Data["json"] = MakeMessageForSending(err.Error())
 		}
 	} else {
-		c.Data["json"] = err.Error()
+		c.Ctx.Output.SetStatus(500)
+		c.Data["json"] = MakeMessageForSending(err.Error())
 	}
 	c.ServeJSON()
 }
@@ -163,9 +178,11 @@ func (c *ProjectEnrollController) Delete() {
 	idStr := c.Ctx.Input.Param(":id")
 	id, _ := strconv.Atoi(idStr)
 	if err := models.DeleteProjectEnroll(id); err == nil {
-		c.Data["json"] = "OK"
+		c.Ctx.Output.SetStatus(200)
+		c.Data["json"] = MakeMessageForSending("Ok")
 	} else {
-		c.Data["json"] = err.Error()
+		c.Ctx.Output.SetStatus(500)
+		c.Data["json"] = MakeMessageForSending(err.Error())
 	}
 	c.ServeJSON()
 }

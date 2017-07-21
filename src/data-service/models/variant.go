@@ -10,7 +10,7 @@ import (
 )
 
 type Variant struct {
-	Id            int          `orm:"column(id);pk"`
+	Id            int          `orm:"column(id);pk;auto"`
 	Text          string       `orm:"column(text)"`
 	CorrectAnswer bool         `orm:"column(correct_answer)"`
 	TaskForTestId *TaskForTest `orm:"column(task_for_test_id);rel(fk)"`
