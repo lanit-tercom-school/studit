@@ -38,7 +38,7 @@ func ResetPassword(login, pass, newPassword string) error {
 	if err && pass == tuple.string {
 		u, err := models.GetUserById(tuple.int)
 		if err == nil && u.Login == login {
-			u.Password = newPassword
+			u.Password = CustomStr(newPassword).ToSHA1()
 			u.Update()
 			reset_passwords[login] = struct {
 				int
