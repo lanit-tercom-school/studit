@@ -21,7 +21,6 @@ export class SliderComponent implements OnInit {
 
   ngOnInit() {
     this.ProjectList = this.data.ProjectsForMainPage;
-    this.data.NumberOfProjectsOnPage = 3;
     this.getPage(1);
   }
 

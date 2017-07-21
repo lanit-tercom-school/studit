@@ -54,6 +54,7 @@ export class StudentProjectPageComponent implements OnInit {
         this.projectObs.next(projects.find(res => res.Id == this.projectId));
       }
       else {
+        
       }
     });
   }

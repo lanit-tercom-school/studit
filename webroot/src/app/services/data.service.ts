@@ -20,7 +20,6 @@ import 'rxjs/add/operator/filter';
 export class DataService {
   private userId: number;
   private numberOfNewsOnPage: number;
-  private numberOfProjectsOnPage: number;
   private userToken: string;
   private userPermLvl: PermLevel;
   private news: BehaviorSubject<NewsItem[]> = <BehaviorSubject<NewsItem[]>>new BehaviorSubject([]);
@@ -33,8 +32,8 @@ export class DataService {
   private newsCount: number;
   private newsCountObs: BehaviorSubject<number> = new BehaviorSubject<number>(0);
 
-  private projectsCount: number;
-  private projectsCountObs: BehaviorSubject<number> = new BehaviorSubject<number>(0);
+  private projectsCount: number = 7; //заглушка
+  private projectsCountObs: BehaviorSubject<number> = new BehaviorSubject<number>(7);
 
   private dataStore: {
     news: NewsItem[];
@@ -85,9 +84,6 @@ constructor(
     this.numberOfNewsOnPage = value;
   }
 
-  public set NumberOfProjectsOnPage(value: number) {
-    this.numberOfProjectsOnPage = value;
-  }
   public get PermLvl()
   {
     return this.userPermLvl;
@@ -98,7 +94,7 @@ constructor(
   }
   loadAll() {
     console.log('Data.service ->loadAll');
-    this.loadProjects(0);
+    //this.loadProjects(this.projectsCount, 0);
     this.loadProjectsForMainPage();
     if (localStorage.getItem('current_user')) {
       this.userToken = JSON.parse(localStorage.getItem('current_user')).Token;
@@ -114,14 +110,13 @@ constructor(
     }
   }
 
-  loadProjects(offset: number) {
-    this.projectService.getProjectItems(this.numberOfProjectsOnPage, offset)
+  loadProjects(limit: number, offset: number) {
+    this.projectService.getProjectItems(limit, offset)
     .subscribe(res => {
       if (res != null) {
-        console.log(this.numberOfProjectsOnPage);
         this.dataStore.projects = res;
-        this.projectsCount = 7; //заглушка
-        this.projectsCountObs.next(Object.assign({},this.projectsCount));
+        console.log(res);
+        //this.projectsCountObs.next(Object.assign({},this.projectsCount));
         this.dataStore.projects.forEach(a => { a.Logo = this.addApiUrl(a.Logo); })
         this.projects.next(Object.assign({}, this.dataStore).projects);
       }
