@@ -3,7 +3,6 @@ package controllers
 import (
 	"data-service/models"
 	"encoding/json"
-	"errors"
 	"strconv"
 	"strings"
 
@@ -115,7 +114,7 @@ func (c *ProjectController) GetAll() {
 			kv := strings.SplitN(cond, ":", 2)
 			if len(kv) != 2 {
 				c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
-				c.Data["json"] = errors.New("Error: invalid query key/value pair")
+				c.Data["json"] = MakeMessageForSending("Error: invalid query key/value pair")
 				c.ServeJSON()
 				return
 			}
