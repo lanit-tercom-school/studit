@@ -77,10 +77,10 @@ func (c *ResetPasswordController) ResetPasswordRequest() {
 	if err := RequestToResetPassword(pass, u); err == nil {
 		// TODO: sent email with `pass` to reset password
 		beego.Info("Pass for reset password was sent to", login)
-		c.Data["json"] = pass // TODO:! CHANGE TO "OK" !
+		c.Data["json"] = MakeMessageForSending(pass) // TODO:! CHANGE TO "OK" !
 	} else {
 		beego.Info("Wrong resetRequest for", login, ":", err.Error())
-		c.Data["json"] = err.Error()
+		c.Data["json"] = MakeMessageForSending(err.Error())
 		c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
 	}
 	c.ServeJSON()
@@ -97,18 +97,18 @@ func (c *ResetPasswordController) ResetPasswordAction() {
 	beego.Trace("New password reset")
 	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err != nil {
 		beego.Debug("Reset error:", err.Error())
-		c.Data["json"] = err.Error()
+		c.Data["json"] = MakeMessageForSending(err.Error())
 		c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
 	} else {
 		beego.Trace("Try to reset for", v.Login)
 		err := ResetPassword(v.Login, v.Pass, v.NewPassword)
 		if err != nil {
 			beego.Debug(err.Error())
-			c.Data["json"] = err.Error()
+			c.Data["json"] = MakeMessageForSending(err.Error())
 			c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
 		} else {
 			beego.Trace("Password was reset for", v.Login)
-			c.Data["json"] = HTTP_OK_STR
+			c.Data["json"] = MakeMessageForSending("Ok")
 		}
 	}
 	c.ServeJSON()
