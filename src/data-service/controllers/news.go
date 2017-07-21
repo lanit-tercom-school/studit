@@ -3,9 +3,10 @@ package controllers
 import (
 	"data-service/models"
 	"encoding/json"
-	"github.com/astaxie/beego"
 	"strconv"
 	"strings"
+
+	"github.com/astaxie/beego"
 )
 
 // NewsController operations for News
@@ -33,13 +34,13 @@ func (c *NewsController) Post() {
 	var v models.News
 	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
 		if _, err := models.AddNews(&v); err == nil {
-			c.Ctx.Output.SetStatus(201)
+			c.Ctx.Output.SetStatus(HTTP_CREATED)
 			c.Data["json"] = v
 		} else {
-			c.Data["json"] = err.Error()
+			c.Data["json"] = MakeMessageForSending(err.Error())
 		}
 	} else {
-		c.Data["json"] = err.Error()
+		c.Data["json"] = MakeMessageForSending(err.Error())
 	}
 	c.ServeJSON()
 }
@@ -56,7 +57,7 @@ func (c *NewsController) GetOne() {
 	id, _ := strconv.Atoi(idStr)
 	v, err := models.GetNewsById(id)
 	if err != nil {
-		c.Data["json"] = err.Error()
+		c.Data["json"] = MakeMessageForSending(err.Error())
 	} else {
 		c.Data["json"] = v
 	}
@@ -107,10 +108,10 @@ func (c *NewsController) GetAll() {
 
 	l, err := models.GetAllNews(sortCols, orders, offset, limit, tags, tagsOperation)
 	if err != nil {
-		c.Ctx.Output.SetStatus(500)
+		c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
 		c.Data["json"] = MakeMessageForSending(err.Error())
 	} else {
-		c.Ctx.Output.SetStatus(200)
+		c.Ctx.Output.SetStatus(HTTP_OK)
 		c.Data["json"] = l
 	}
 	c.ServeJSON()
@@ -130,14 +131,14 @@ func (c *NewsController) Put() {
 	v := models.News{Id: id}
 	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
 		if err := models.UpdateNewsById(&v); err == nil {
-			c.Ctx.Output.SetStatus(200)
-			c.Data["json"] = MakeMessageForSending("Ok")
+			c.Ctx.Output.SetStatus(HTTP_OK)
+			c.Data["json"] = MakeMessageForSending(HTTP_OK_STR)
 		} else {
-			c.Ctx.Output.SetStatus(500)
+			c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
 			c.Data["json"] = MakeMessageForSending(err.Error())
 		}
 	} else {
-		c.Ctx.Output.SetStatus(500)
+		c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
 		c.Data["json"] = MakeMessageForSending(err.Error())
 	}
 	c.ServeJSON()
@@ -154,10 +155,10 @@ func (c *NewsController) Delete() {
 	idStr := c.Ctx.Input.Param(":id")
 	id, _ := strconv.Atoi(idStr)
 	if err := models.DeleteNews(id); err == nil {
-		c.Ctx.Output.SetStatus(200)
-		c.Data["json"] = MakeMessageForSending("Ok")
+		c.Ctx.Output.SetStatus(HTTP_OK)
+		c.Data["json"] = MakeMessageForSending(HTTP_OK_STR)
 	} else {
-		c.Ctx.Output.SetStatus(500)
+		c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
 		c.Data["json"] = MakeMessageForSending(err.Error())
 	}
 	c.ServeJSON()

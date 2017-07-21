@@ -35,14 +35,14 @@ func (c *UserController) Post() {
 	var v models.User
 	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
 		if _, err := models.AddUser(&v); err == nil {
-			c.Ctx.Output.SetStatus(201)
+			c.Ctx.Output.SetStatus(HTTP_CREATED)
 			c.Data["json"] = v
 		} else {
-			c.Ctx.Output.SetStatus(500)
+			c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
 			c.Data["json"] = MakeMessageForSending(err.Error())
 		}
 	} else {
-		c.Ctx.Output.SetStatus(500)
+		c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
 		c.Data["json"] = MakeMessageForSending(err.Error())
 	}
 	c.ServeJSON()
@@ -60,10 +60,10 @@ func (c *UserController) GetOne() {
 	id, _ := strconv.Atoi(idStr)
 	v, err := models.GetUserById(id)
 	if err != nil {
-		c.Ctx.Output.SetStatus(500)
+		c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
 		c.Data["json"] = MakeMessageForSending(err.Error())
 	} else {
-		c.Ctx.Output.SetStatus(200)
+		c.Ctx.Output.SetStatus(HTTP_OK)
 		c.Data["json"] = v
 	}
 	c.ServeJSON()
@@ -116,7 +116,7 @@ func (c *UserController) GetAll() {
 			if len(kv) != 2 {
 				err := errors.New("Error: invalid query key/value pair")
 				c.Data["json"] = MakeMessageForSending(err.Error())
-				c.Ctx.Output.SetStatus(500)
+				c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
 				c.ServeJSON()
 				return
 			}
@@ -127,10 +127,10 @@ func (c *UserController) GetAll() {
 
 	l, err := models.GetAllUser(query, fields, sortby, order, offset, limit)
 	if err != nil {
-		c.Ctx.Output.SetStatus(500)
+		c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
 		MakeMessageForSending(err.Error())
 	} else {
-		c.Ctx.Output.SetStatus(200)
+		c.Ctx.Output.SetStatus(HTTP_OK)
 		c.Data["json"] = l
 	}
 	c.ServeJSON()
@@ -150,14 +150,14 @@ func (c *UserController) Put() {
 	v := models.User{Id: id}
 	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
 		if err := models.UpdateUserById(&v); err == nil {
-			c.Ctx.Output.SetStatus(200)
-			c.Data["json"] = MakeMessageForSending("Ok")
+			c.Ctx.Output.SetStatus(HTTP_OK)
+			c.Data["json"] = MakeMessageForSending(HTTP_OK_STR)
 		} else {
-			c.Ctx.Output.SetStatus(500)
+			c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
 			c.Data["json"] = MakeMessageForSending(err.Error())
 		}
 	} else {
-		c.Ctx.Output.SetStatus(500)
+		c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
 		c.Data["json"] = MakeMessageForSending(err.Error())
 	}
 	c.ServeJSON()
@@ -174,10 +174,10 @@ func (c *UserController) Delete() {
 	idStr := c.Ctx.Input.Param(":id")
 	id, _ := strconv.Atoi(idStr)
 	if err := models.DeleteUser(id); err == nil {
-		c.Ctx.Output.SetStatus(200)
-		c.Data["json"] = MakeMessageForSending("Ok")
+		c.Ctx.Output.SetStatus(HTTP_OK)
+		c.Data["json"] = MakeMessageForSending(HTTP_OK_STR)
 	} else {
-		c.Ctx.Output.SetStatus(500)
+		c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
 		c.Data["json"] = MakeMessageForSending(err.Error())
 	}
 	c.ServeJSON()

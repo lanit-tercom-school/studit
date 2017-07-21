@@ -3,7 +3,6 @@ package controllers
 import (
 	"data-service/models"
 	"encoding/json"
-	"errors"
 	"strconv"
 	"strings"
 
@@ -35,15 +34,15 @@ func (c *ProjectController) Post() {
 	var v models.Project
 	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
 		if _, err := models.AddProject(&v); err == nil {
-			c.Ctx.Output.SetStatus(201)
+			c.Ctx.Output.SetStatus(HTTP_CREATED)
 			c.Data["json"] = v
 		} else {
-			c.Ctx.Output.SetStatus(500)
-			c.Data["json"] = err.Error()
+			c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
+			c.Data["json"] = MakeMessageForSending(err.Error())
 		}
 	} else {
-		c.Ctx.Output.SetStatus(500)
-		c.Data["json"] = err.Error()
+		c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
+		c.Data["json"] = MakeMessageForSending(err.Error())
 	}
 	c.ServeJSON()
 }
@@ -60,10 +59,10 @@ func (c *ProjectController) GetOne() {
 	id, _ := strconv.Atoi(idStr)
 	v, err := models.GetProjectById(id)
 	if err != nil {
-		c.Ctx.Output.SetStatus(500)
-		c.Data["json"] = err.Error()
+		c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
+		c.Data["json"] = MakeMessageForSending(err.Error())
 	} else {
-		c.Ctx.Output.SetStatus(200)
+		c.Ctx.Output.SetStatus(HTTP_OK)
 		c.Data["json"] = v
 	}
 	c.ServeJSON()
@@ -114,8 +113,8 @@ func (c *ProjectController) GetAll() {
 		for _, cond := range strings.Split(v, ",") {
 			kv := strings.SplitN(cond, ":", 2)
 			if len(kv) != 2 {
-				c.Ctx.Output.SetStatus(500)
-				c.Data["json"] = errors.New("Error: invalid query key/value pair")
+				c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
+				c.Data["json"] = MakeMessageForSending("Error: invalid query key/value pair")
 				c.ServeJSON()
 				return
 			}
@@ -126,10 +125,10 @@ func (c *ProjectController) GetAll() {
 
 	l, err := models.GetAllProject(query, fields, sortby, order, offset, limit)
 	if err != nil {
-		c.Ctx.Output.SetStatus(500)
-		c.Data["json"] = err.Error()
+		c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
+		c.Data["json"] = MakeMessageForSending(err.Error())
 	} else {
-		c.Ctx.Output.SetStatus(200)
+		c.Ctx.Output.SetStatus(HTTP_OK)
 		c.Data["json"] = l
 	}
 	c.ServeJSON()
@@ -149,14 +148,14 @@ func (c *ProjectController) Put() {
 	v := models.Project{Id: id}
 	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
 		if err := models.UpdateProjectById(&v); err == nil {
-			c.Ctx.Output.SetStatus(200)
-			c.Data["json"] = MakeMessageForSending("Ok")
+			c.Ctx.Output.SetStatus(HTTP_OK)
+			c.Data["json"] = MakeMessageForSending(HTTP_OK_STR)
 		} else {
-			c.Ctx.Output.SetStatus(500)
+			c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
 			c.Data["json"] = MakeMessageForSending(err.Error())
 		}
 	} else {
-		c.Ctx.Output.SetStatus(500)
+		c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
 		c.Data["json"] = MakeMessageForSending(err.Error())
 	}
 	c.ServeJSON()
@@ -173,10 +172,10 @@ func (c *ProjectController) Delete() {
 	idStr := c.Ctx.Input.Param(":id")
 	id, _ := strconv.Atoi(idStr)
 	if err := models.DeleteProject(id); err == nil {
-		c.Ctx.Output.SetStatus(200)
-		c.Data["json"] = MakeMessageForSending("Ok")
+		c.Ctx.Output.SetStatus(HTTP_OK)
+		c.Data["json"] = MakeMessageForSending(HTTP_OK_STR)
 	} else {
-		c.Ctx.Output.SetStatus(500)
+		c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
 		MakeMessageForSending(err.Error())
 	}
 	c.ServeJSON()
