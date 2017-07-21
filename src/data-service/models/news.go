@@ -6,8 +6,6 @@ import (
 	"time"
 
 	"github.com/astaxie/beego/orm"
-	"reflect"
-	"strings"
 )
 
 type News struct {
@@ -24,8 +22,8 @@ type NewsJSONSet struct {
 	Arr string `orm:"type(json)"`
 }
 
-func (j NewsJSONSet) MarshalJSON() ([]byte, error) {
-	return []byte(j.Arr), nil
+func (set NewsJSONSet) MarshalJSON() ([]byte, error) {
+	return []byte(set.Arr), nil
 }
 
 func init() {
@@ -52,11 +50,11 @@ func GetNewsById(id int) (v *News, err error) {
 }
 
 // GetAllNews retrieves all News matches certain condition. Returns empty list if no records exist
-func GetAllNews(sortCols, orders []string, offset, limit int, tags, tagsOperation string) (interface{}, error) {
+func GetAllNews(sortCols, orders []string, offset, limit int, tags, tagsOperator string) (interface{}, error) {
 	orm.Debug = true
 	o := orm.NewOrm()
 
-	sqlTagsOperation, err := GetSqlTagsOperation(tagsOperation)
+	sqlTagsOperator, err := GetSqlTagsOperator(tagsOperator)
 	if err != nil {
 		fmt.Println(err)
 		return nil, err
@@ -74,12 +72,13 @@ func GetAllNews(sortCols, orders []string, offset, limit int, tags, tagsOperatio
 SELECT row_to_json(t) arr
   FROM (SELECT COUNT(*) "TotalCount"
      , (SELECT COUNT(*) "FilteredCount"
-          FROM news  WHERE tags `+sqlTagsOperation+` string_to_array($1, ','))
+          FROM news
+         WHERE tags `+sqlTagsOperator+` string_to_array($1, ','))
      , (SELECT array_to_json(array_agg(row_to_json(d))) "NewsList"
           FROM (SELECT id "Id", title "Title", description "Description", created "Created"
               , edited "Edited", tags "Tags", image "Image"
                   FROM news
-                 WHERE tags `+sqlTagsOperation+` string_to_array($1, ',')
+                 WHERE tags `+sqlTagsOperator+` string_to_array($1, ',')
               `+orderClause+`
                 OFFSET $2 LIMIT $3 ) d)
           FROM news) t`, tags, offset, limit).QueryRow(&set)
@@ -91,25 +90,23 @@ SELECT row_to_json(t) arr
 	return set, nil
 }
 
-func GetSqlTagsOperation(tagsOperation string) (string, error) {
-
-	switch tagsOperation {
+func GetSqlTagsOperator(tagsOperator string) (string, error) {
+	switch tagsOperator {
 	case "and":
 		return "@>", nil
 	case "or":
 		return "&&", nil
 	default:
-		return "", errors.New("Error: `" + tagsOperation + "` is an invalid tags operation. Must be either [and|or]")
+		return "", errors.New("Error: `" + tagsOperator + "` is an invalid tags operation. Must be either [and|or]")
 	}
 }
 
 func GetOrderByClause(sortCols, orders []string) (string, error) {
-	var result string
-
 	if err := Check(sortCols); err != nil {
 		return "", err
 	}
 
+	var result string
 	switch len(orders) {
 	case 0:
 		if len(sortCols) != 0 {
@@ -139,7 +136,7 @@ func GetOrderByClause(sortCols, orders []string) (string, error) {
 		if len(sortCols) == 0 {
 			return "", errors.New("Error: Unused 'orders' fields")
 		}
-		return "", errors.New("Error: 'sortby', 'orders' sizes mismatch or 'orders' size is not 1")
+		return "", errors.New("Error: 'sortCols' and 'orders' sizes mismatch or 'orders' size is not 1")
 	}
 
 	if len(result) > 0 {
