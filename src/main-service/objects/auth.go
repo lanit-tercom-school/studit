@@ -32,6 +32,11 @@ type SignupDataToGet struct {
 	ActivationCode string `json:"code"`
 }
 
+type PasswordDataToSend struct {
+	Old string `json:"old"`
+	New string `json:"new"`
+}
+
 var SignupDataType = gql.NewObject(
 	gql.ObjectConfig{
 		Name: "Singup",
@@ -134,6 +139,18 @@ func ResolveGetUserBySigninData(p gql.ResolveParams) (interface{}, error) {
 	var user User
 	err := helpers.HttpGet(conf.Configuration.DataServiceURL+"v1/user/"+strconv.Itoa(id), &user)
 	return user, err
+}
+func ResolvePutNewPassword(p gql.ResolveParams) (interface{}, error) {
+	token := helpers.InterfaceToString(p.Context.Value("Token"))
+	new := helpers.InterfaceToString(p.Args["New"])
+	old := helpers.InterfaceToString(p.Args["Old"])
+	passwordDataToSend := PasswordDataToSend{
+		New: new,
+		Old: old,
+	}
+	message := Message{}
+	err := helpers.HttpPutWithToken(conf.Configuration.AuthServiceURL+"v1/change/", token, passwordDataToSend, &message)
+	return message, err
 }
 
 //********************************************

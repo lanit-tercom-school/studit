@@ -39,11 +39,11 @@ func (c *UserController) Post() {
 			c.Data["json"] = v
 		} else {
 			c.Ctx.Output.SetStatus(500)
-			c.Data["json"] = err.Error()
+			c.Data["json"] = MakeMessageForSending(err.Error())
 		}
 	} else {
 		c.Ctx.Output.SetStatus(500)
-		c.Data["json"] = err.Error()
+		c.Data["json"] = MakeMessageForSending(err.Error())
 	}
 	c.ServeJSON()
 }
@@ -61,7 +61,7 @@ func (c *UserController) GetOne() {
 	v, err := models.GetUserById(id)
 	if err != nil {
 		c.Ctx.Output.SetStatus(500)
-		c.Data["json"] = err.Error()
+		c.Data["json"] = MakeMessageForSending(err.Error())
 	} else {
 		c.Ctx.Output.SetStatus(200)
 		c.Data["json"] = v
@@ -114,8 +114,9 @@ func (c *UserController) GetAll() {
 		for _, cond := range strings.Split(v, ",") {
 			kv := strings.SplitN(cond, ":", 2)
 			if len(kv) != 2 {
+				err := errors.New("Error: invalid query key/value pair")
+				c.Data["json"] = MakeMessageForSending(err.Error())
 				c.Ctx.Output.SetStatus(500)
-				c.Data["json"] = errors.New("Error: invalid query key/value pair")
 				c.ServeJSON()
 				return
 			}
@@ -127,7 +128,7 @@ func (c *UserController) GetAll() {
 	l, err := models.GetAllUser(query, fields, sortby, order, offset, limit)
 	if err != nil {
 		c.Ctx.Output.SetStatus(500)
-		c.Data["json"] = err.Error()
+		MakeMessageForSending(err.Error())
 	} else {
 		c.Ctx.Output.SetStatus(200)
 		c.Data["json"] = l
