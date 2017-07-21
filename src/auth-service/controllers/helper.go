@@ -1,7 +1,7 @@
 package controllers
 
 type MessageType struct {
-	Message string
+	Message string `json:"Message"`
 }
 
 func MakeMessageForSending(str string) MessageType {
