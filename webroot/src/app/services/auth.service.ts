@@ -71,7 +71,7 @@ export class AuthService {
 
     register(user: UserRegister) {
         var variables = { login: user.login, nickname: user.nickname, password: user.password };
-        var query = `mutation ($login: String $password: String)
+        var query = `mutation ($login: String $nickname: String $password: String)
     {
       Auth
       {
@@ -88,7 +88,7 @@ export class AuthService {
         query += '{ ActivationCode }}}';
         return this.http.get(environment.authUrl + '/graphql?query=' + query)
             .map((res: Response) => {
-                var code = res.json().data.Auth.ActivationCode;
+                var code = res.json().data.Auth.Signup.ActivationCode;
                 if (code)
                     localStorage.setItem('validation_code', code);
                 else
