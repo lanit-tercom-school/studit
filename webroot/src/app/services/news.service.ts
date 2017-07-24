@@ -21,15 +21,19 @@ export class NewsService {
       var query = `query($limit:String, $offset: String)
       {
       NewsList(Offset: $offset Limit: $limit)
-    {
-      Title
-      Description
-      DateOfCreation
-      LastEdit
-      Tags
-      Image
-      Id
-   }
+      {
+        TotalCount
+        NewsList
+        {
+          Title
+          Description
+          Created
+          LastEdit
+          Tags
+          Image
+          Id
+        }
+    }
   }&variables=`+ JSON.stringify(variables);
       return this.http.get(environment.apiUrl + '/graphql?query=' + query)
         .map((response: Response) =>  response.json().data );

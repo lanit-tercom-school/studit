@@ -14,9 +14,9 @@ import { DataService } from 'services/data.service';
 })
 export class NewsListComponent implements OnInit {
 
-  private p: number = 1;
+  private pageNumber: number = 1;
   private limit: number = 3;
-  private totalObs: Observable<number>;
+  private totalNumberOfNews: Observable<number>;
 
   private loading: boolean;
   private NewsList: Observable<NewsItem[]>;
@@ -28,14 +28,14 @@ export class NewsListComponent implements OnInit {
   }
 
   getPage(page: number) {
+    this.totalNumberOfNews = this.data.NewsCountObs;
     this.loading = true;
     let offset = 0;
     if (page > 1)
       offset = (page - 1) * this.limit;
     this.data.loadNews(offset);
     this.NewsList = this.data.News;
-    this.totalObs = this.data.NewsCountObs;
-    this.p = page;
+    this.pageNumber = page;
     this.loading = false;
     window.scrollTo(0, 0);
   }
