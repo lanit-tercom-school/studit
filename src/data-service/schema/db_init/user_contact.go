@@ -9,7 +9,7 @@ import (
 
 func InitUserContact(o orm.Ormer, users []models.User, contactTypes []models.ContactType) []models.UserContact {
 	result := []models.UserContact{
-		models.UserContact{
+		{
 			UserId:  &users[0],
 			Contact: "a@a",
 			Type:    &contactTypes[3],

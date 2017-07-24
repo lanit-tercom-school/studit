@@ -9,7 +9,7 @@ import (
 
 func InitUserComment(o orm.Ormer, users []models.User, comments []models.Comment) []models.UserComment {
 	result := []models.UserComment{
-		models.UserComment{
+		{
 			Id:        1,
 			UserId:    &users[0],
 			CommentId: &comments[0],

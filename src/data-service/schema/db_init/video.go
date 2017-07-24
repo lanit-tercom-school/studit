@@ -9,7 +9,7 @@ import (
 
 func InitVideo(o orm.Ormer, lessons []models.Lesson) []models.Video {
 	result := []models.Video{
-		models.Video{
+		{
 			Id:       1,
 			LessonId: &lessons[0],
 			Link:     "/link_to_video1/",

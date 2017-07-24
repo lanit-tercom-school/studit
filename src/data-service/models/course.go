@@ -17,10 +17,6 @@ type Course struct {
 	Rating      float32 `orm:"column(rating)"`
 }
 
-func (t *Course) TableName() string {
-	return "course"
-}
-
 func init() {
 	orm.RegisterModel(new(Course))
 }

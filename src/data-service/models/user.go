@@ -16,10 +16,6 @@ type User struct {
 	Avatar      string `orm:"column(avatar)"`
 }
 
-func (t *User) TableName() string {
-	return "user"
-}
-
 func init() {
 	orm.RegisterModel(new(User))
 }

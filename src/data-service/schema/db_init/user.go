@@ -1,7 +1,7 @@
 package db_init
 
 import (
-	"data-service-old/auth"
+	"data-service/auth"
 	"data-service/models"
 	"fmt"
 
@@ -11,7 +11,7 @@ import (
 
 func InitUser(o orm.Ormer) []models.User {
 	result := []models.User{
-		models.User{
+		{
 			Nickname:    "Admin",
 			Avatar:      InitAvatar(),
 			Description: "Главный по тарелкам",

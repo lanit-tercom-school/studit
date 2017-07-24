@@ -62,11 +62,11 @@ CREATE TABLE contact_type (
 CREATE TABLE user_contact (
     id                SERIAL                                ,
     contact           TEXT                          NOT NULL,
-    contact_type_id   INT                           NOT NULL,
+    type_id           INT                           NOT NULL,
     user_id           INT                           NOT NULL,
     
     CONSTRAINT user_contact_pk PRIMARY KEY (id),
-    CONSTRAINT user_contact_fk0 FOREIGN KEY (contact_type_id) REFERENCES contact_type(id),
+    CONSTRAINT user_contact_fk0 FOREIGN KEY (type_id) REFERENCES contact_type(id),
     CONSTRAINT user_contact_fk1 FOREIGN KEY (user_id) REFERENCES "user"(id)
 );
 

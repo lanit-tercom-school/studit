@@ -14,10 +14,6 @@ type Tag struct {
 	Name string `orm:"column(name)"`
 }
 
-func (t *Tag) TableName() string {
-	return "tag"
-}
-
 func init() {
 	orm.RegisterModel(new(Tag))
 }

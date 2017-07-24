@@ -9,7 +9,7 @@ import (
 
 func InitLesson(o orm.Ormer, courses []models.Course) []models.Lesson {
 	result := []models.Lesson{
-		models.Lesson{
+		{
 			Title:       "Урок1",
 			CourseId:    &courses[0],
 			Description: "Урок 1 курс 1",

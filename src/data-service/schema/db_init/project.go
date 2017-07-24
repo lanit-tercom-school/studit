@@ -10,7 +10,7 @@ import (
 
 func InitProject(o orm.Ormer) []models.Project {
 	result := []models.Project{
-		models.Project{
+		{
 			Name:        "Образовательный портал Studit",
 			Description: "Разработка образовательного портала для Lanit-Tercom School",
 			Logo:        "http://85.143.214.42/files/1.jpg",

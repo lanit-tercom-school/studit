@@ -9,7 +9,7 @@ import (
 
 func InitStatistics(o orm.Ormer, courses []models.Course) []models.Statistics {
 	result := []models.Statistics{
-		models.Statistics{
+		{
 			Hours:    12,
 			CourseId: &courses[0],
 		},

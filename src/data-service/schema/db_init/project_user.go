@@ -10,7 +10,7 @@ import (
 
 func InitProjectUser(o orm.Ormer, projects []models.Project, users []models.User) []models.ProjectUser {
 	result := []models.ProjectUser{
-		models.ProjectUser{
+		{
 			UserId:     &users[0],
 			ProjectId:  &projects[0],
 			SignedDate: time.Now(),

@@ -9,7 +9,7 @@ import (
 
 func InitRecommendedCourse(o orm.Ormer, courses []models.Course) []models.RecommendedCourse {
 	result := []models.RecommendedCourse{
-		models.RecommendedCourse{
+		{
 			CourseId: &courses[0],
 			Link:     "/link_to_course1/",
 		},

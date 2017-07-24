@@ -26,7 +26,7 @@ func (c *ContactTypeController) URLMapping() {
 // Post ...
 // @Title Post
 // @Description create ContactType
-// @Param	body		body 	models.ContactType	true		"body for ContactType content"
+// @Param	body		body 	models.Type	true		"body for Type content"
 // @Success 201 {int} models.ContactType
 // @Failure 403 body is empty
 // @router / [post]
@@ -136,7 +136,7 @@ func (c *ContactTypeController) GetAll() {
 // @Title Put
 // @Description update the ContactType
 // @Param	id		path 	string	true		"The id you want to update"
-// @Param	body		body 	models.ContactType	true		"body for ContactType content"
+// @Param	body		body 	models.Type	true		"body for Type content"
 // @Success 200 {object} models.ContactType
 // @Failure 403 :id is not int
 // @router /:id [put]

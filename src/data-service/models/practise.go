@@ -10,13 +10,9 @@ import (
 )
 
 type Practise struct {
-	Id          int     `orm:"column(id);pk"`
+	Id          int     `orm:"column(id);pk;auto"`
 	LessonId    *Lesson `orm:"column(lesson_id);rel(fk)"`
 	Description string  `orm:"column(description)"`
-}
-
-func (t *Practise) TableName() string {
-	return "practise"
 }
 
 func init() {

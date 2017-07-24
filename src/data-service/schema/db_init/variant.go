@@ -9,7 +9,7 @@ import (
 
 func InitVariant(o orm.Ormer, testsTasks []models.TestsTask) []models.Variant {
 	result := []models.Variant{
-		models.Variant{
+		{
 			Text:          "Вариант ответа 1",
 			CorrectAnswer: false,
 			TestsTaskId:   &testsTasks[0],

@@ -9,7 +9,7 @@ import (
 
 func InitPractise(o orm.Ormer, lessons []models.Lesson) []models.Practise {
 	result := []models.Practise{
-		models.Practise{
+		{
 			LessonId:    &lessons[0],
 			Description: "Упражнение к уроку 1 Курс 1",
 		},

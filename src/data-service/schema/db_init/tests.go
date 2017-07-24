@@ -9,7 +9,7 @@ import (
 
 func InitTest(o orm.Ormer, lessons []models.Lesson) []models.Test {
 	result := []models.Test{
-		models.Test{
+		{
 			Title:    "Тест 1 урок 1 курс 1",
 			LessonId: &lessons[0],
 		},

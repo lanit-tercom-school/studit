@@ -407,7 +407,7 @@ func init() {
 			MethodParams:     param.Make(),
 			Params:           nil})
 
-	beego.GlobalControllerRouter["data-service/controllers:StatisticController"] = append(beego.GlobalControllerRouter["data-service/controllers:StatisticController"],
+	beego.GlobalControllerRouter["data-service/controllers:StatisticsController"] = append(beego.GlobalControllerRouter["data-service/controllers:StatisticsController"],
 		beego.ControllerComments{
 			Method:           "Post",
 			Router:           `/`,
@@ -415,7 +415,7 @@ func init() {
 			MethodParams:     param.Make(),
 			Params:           nil})
 
-	beego.GlobalControllerRouter["data-service/controllers:StatisticController"] = append(beego.GlobalControllerRouter["data-service/controllers:StatisticController"],
+	beego.GlobalControllerRouter["data-service/controllers:StatisticsController"] = append(beego.GlobalControllerRouter["data-service/controllers:StatisticsController"],
 		beego.ControllerComments{
 			Method:           "GetOne",
 			Router:           `/:id`,
@@ -423,7 +423,7 @@ func init() {
 			MethodParams:     param.Make(),
 			Params:           nil})
 
-	beego.GlobalControllerRouter["data-service/controllers:StatisticController"] = append(beego.GlobalControllerRouter["data-service/controllers:StatisticController"],
+	beego.GlobalControllerRouter["data-service/controllers:StatisticsController"] = append(beego.GlobalControllerRouter["data-service/controllers:StatisticsController"],
 		beego.ControllerComments{
 			Method:           "GetAll",
 			Router:           `/`,
@@ -431,7 +431,7 @@ func init() {
 			MethodParams:     param.Make(),
 			Params:           nil})
 
-	beego.GlobalControllerRouter["data-service/controllers:StatisticController"] = append(beego.GlobalControllerRouter["data-service/controllers:StatisticController"],
+	beego.GlobalControllerRouter["data-service/controllers:StatisticsController"] = append(beego.GlobalControllerRouter["data-service/controllers:StatisticsController"],
 		beego.ControllerComments{
 			Method:           "Put",
 			Router:           `/:id`,
@@ -439,7 +439,7 @@ func init() {
 			MethodParams:     param.Make(),
 			Params:           nil})
 
-	beego.GlobalControllerRouter["data-service/controllers:StatisticController"] = append(beego.GlobalControllerRouter["data-service/controllers:StatisticController"],
+	beego.GlobalControllerRouter["data-service/controllers:StatisticsController"] = append(beego.GlobalControllerRouter["data-service/controllers:StatisticsController"],
 		beego.ControllerComments{
 			Method:           "Delete",
 			Router:           `/:id`,

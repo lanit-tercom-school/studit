@@ -9,7 +9,7 @@ import (
 
 func InitTestsTask(o orm.Ormer, tests []models.Test) []models.TestsTask {
 	result := []models.TestsTask{
-		models.TestsTask{
+		{
 			Question: "Вопрос 1 Тест 1 Урок 1 Курс 1",
 			TestId:   &tests[0],
 		},
