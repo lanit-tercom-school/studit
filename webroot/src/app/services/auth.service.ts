@@ -53,15 +53,34 @@ export class AuthService {
         localStorage.removeItem("current_user");
     }
 
-    validate(key: string) {
-        var query = 'mutation{ Auth{';
-        query += 'Activation(ActivationCode:"' + key + '")';
-        query += '{ Message}}}';
+    validate(key_: string) {
+        var variable = { key: key_ };
+        var query = `mutation ($key: String )
+    {
+      Auth
+      {
+        Activation(ActivationCode: $key)
+         {
+          Message
+         }
+      }
+    } &variables=`+ JSON.stringify(variable);
         return this.http.get(environment.authUrl + '/graphql?query=' + query)
             .catch((error: any) => { return Observable.throw(error) });
     }
 
     register(user: UserRegister) {
+        var variables = { login: user.login, nickname: user.nickname, password: user.password };
+        var query = `mutation ($login: String $password: String)
+    {
+      Auth
+      {
+        Signup(Login: $login Nickname: $nickname Password: $password)
+         {
+           ActivationCode
+         }
+    }
+    } &variables=`+ JSON.stringify(variables);
         var query = 'mutation{Auth{Signup';
         query += '(Login:"' + user.login + '" ';
         query += 'Password: "' + user.password + '" ';
