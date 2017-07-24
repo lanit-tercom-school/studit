@@ -14,10 +14,6 @@ type Comment struct {
 	Text string `orm:"column(text)"`
 }
 
-func (t *Comment) TableName() string {
-	return "comment"
-}
-
 func init() {
 	orm.RegisterModel(new(Comment))
 }

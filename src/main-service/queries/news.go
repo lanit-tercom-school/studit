@@ -20,7 +20,7 @@ func init() {
 		Resolve: objects.ResolveGetNews,
 	}
 	GetNewsList = gql.Field{
-		Type: gql.NewList(objects.NewsType),
+		Type: objects.NewsSetType,
 		Args: gql.FieldConfigArgument{
 			"Limit": &gql.ArgumentConfig{
 				Type: gql.String,

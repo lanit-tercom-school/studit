@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -97,6 +98,8 @@ func HttpGet(url string, o interface{}) (err error) {
 		LogErrorGet(url, err)
 		return
 	}
+	fmt.Println(o)
+
 	LogGet(url, "Success")
 	return
 }

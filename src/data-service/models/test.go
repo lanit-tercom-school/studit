@@ -15,10 +15,6 @@ type Test struct {
 	LessonId *Lesson `orm:"column(lesson_id);rel(fk)"`
 }
 
-func (t *Test) TableName() string {
-	return "test"
-}
-
 func init() {
 	orm.RegisterModel(new(Test))
 }

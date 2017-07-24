@@ -17,10 +17,6 @@ type Lesson struct {
 	Rating      int     `orm:"column(rating)"`
 }
 
-func (t *Lesson) TableName() string {
-	return "lesson"
-}
-
 func init() {
 	orm.RegisterModel(new(Lesson))
 }
