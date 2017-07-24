@@ -1,16 +1,19 @@
 .card
 {
+  height: 40rem;
+  width: 25rem;
   text-align: left;
   border: 0px;
 }
 
 .card-block{
-  min-height: 12rem;
+  background-color: var(--section-color);
+  height: 15rem;
 }
 
 .card-img-top{
-  height: 300;
-  width: 100%;
+  height: 25rem;
+  width: 25rem;
 }
 
 a{

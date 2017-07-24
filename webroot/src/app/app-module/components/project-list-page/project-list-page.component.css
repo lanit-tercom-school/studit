@@ -7,9 +7,9 @@
 .project-list
 {
   display: flex;
-  background: whitesmoke;
 }
 
 h1 {
+  font-family: 'Jura', sans-serif; 
   margin-bottom: 50px;
 }
