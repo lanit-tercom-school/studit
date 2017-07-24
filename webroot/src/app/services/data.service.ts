@@ -102,6 +102,7 @@ export class DataService {
   public get UserId() {
     return this.userId;
   }
+
   loadAll() {
     console.log('Data.service ->loadAll');
     //this.loadProjects(this.projectsCount, 0);
