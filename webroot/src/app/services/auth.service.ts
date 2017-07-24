@@ -81,11 +81,6 @@ export class AuthService {
          }
     }
     } &variables=`+ JSON.stringify(variables);
-        var query = 'mutation{Auth{Signup';
-        query += '(Login:"' + user.login + '" ';
-        query += 'Password: "' + user.password + '" ';
-        query += 'Nickname: "' + user.nickname + '") ';
-        query += '{ ActivationCode }}}';
         return this.http.get(environment.authUrl + '/graphql?query=' + query)
             .map((res: Response) => {
                 var code = res.json().data.Auth.Signup.ActivationCode;
