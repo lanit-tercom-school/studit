@@ -3,14 +3,13 @@ package controllers
 import (
 	"data-service/models"
 	"encoding/json"
-	"errors"
 	"strconv"
 	"strings"
 
 	"github.com/astaxie/beego"
 )
 
-// ProjectController operations for Project
+// ProjectController operations for ProjectId
 type ProjectController struct {
 	beego.Controller
 }
@@ -26,31 +25,33 @@ func (c *ProjectController) URLMapping() {
 
 // Post ...
 // @Title Post
-// @Description create Project
-// @Param	body		body 	models.Project	true		"body for Project content"
-// @Success 201 {int} models.Project
+// @Description create ProjectId
+// @Param	body		body 	models.ProjectId	true		"body for ProjectId content"
+// @Success 201 {int} models.ProjectId
 // @Failure 403 body is empty
 // @router / [post]
 func (c *ProjectController) Post() {
 	var v models.Project
 	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
 		if _, err := models.AddProject(&v); err == nil {
-			c.Ctx.Output.SetStatus(201)
+			c.Ctx.Output.SetStatus(HTTP_CREATED)
 			c.Data["json"] = v
 		} else {
-			c.Data["json"] = err.Error()
+			c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
+			c.Data["json"] = MakeMessageForSending(err.Error())
 		}
 	} else {
-		c.Data["json"] = err.Error()
+		c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
+		c.Data["json"] = MakeMessageForSending(err.Error())
 	}
 	c.ServeJSON()
 }
 
 // GetOne ...
 // @Title Get One
-// @Description get Project by id
+// @Description get ProjectId by id
 // @Param	id		path 	string	true		"The key for staticblock"
-// @Success 200 {object} models.Project
+// @Success 200 {object} models.ProjectId
 // @Failure 403 :id is empty
 // @router /:id [get]
 func (c *ProjectController) GetOne() {
@@ -58,8 +59,10 @@ func (c *ProjectController) GetOne() {
 	id, _ := strconv.Atoi(idStr)
 	v, err := models.GetProjectById(id)
 	if err != nil {
-		c.Data["json"] = err.Error()
+		c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
+		c.Data["json"] = MakeMessageForSending(err.Error())
 	} else {
+		c.Ctx.Output.SetStatus(HTTP_OK)
 		c.Data["json"] = v
 	}
 	c.ServeJSON()
@@ -67,14 +70,14 @@ func (c *ProjectController) GetOne() {
 
 // GetAll ...
 // @Title Get All
-// @Description get Project
+// @Description get ProjectId
 // @Param	query	query	string	false	"Filter. e.g. col1:v1,col2:v2 ..."
 // @Param	fields	query	string	false	"Fields returned. e.g. col1,col2 ..."
 // @Param	sortby	query	string	false	"Sorted-by fields. e.g. col1,col2 ..."
 // @Param	order	query	string	false	"Order corresponding to each sortby field, if single value, apply to all sortby fields. e.g. desc,asc ..."
 // @Param	limit	query	string	false	"Limit the size of result set. Must be an integer"
 // @Param	offset	query	string	false	"Start position of result set. Must be an integer"
-// @Success 200 {object} models.Project
+// @Success 200 {object} models.ProjectId
 // @Failure 403
 // @router / [get]
 func (c *ProjectController) GetAll() {
@@ -110,7 +113,8 @@ func (c *ProjectController) GetAll() {
 		for _, cond := range strings.Split(v, ",") {
 			kv := strings.SplitN(cond, ":", 2)
 			if len(kv) != 2 {
-				c.Data["json"] = errors.New("Error: invalid query key/value pair")
+				c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
+				c.Data["json"] = MakeMessageForSending("Error: invalid query key/value pair")
 				c.ServeJSON()
 				return
 			}
@@ -121,8 +125,10 @@ func (c *ProjectController) GetAll() {
 
 	l, err := models.GetAllProject(query, fields, sortby, order, offset, limit)
 	if err != nil {
-		c.Data["json"] = err.Error()
+		c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
+		c.Data["json"] = MakeMessageForSending(err.Error())
 	} else {
+		c.Ctx.Output.SetStatus(HTTP_OK)
 		c.Data["json"] = l
 	}
 	c.ServeJSON()
@@ -130,10 +136,10 @@ func (c *ProjectController) GetAll() {
 
 // Put ...
 // @Title Put
-// @Description update the Project
+// @Description update the ProjectId
 // @Param	id		path 	string	true		"The id you want to update"
-// @Param	body		body 	models.Project	true		"body for Project content"
-// @Success 200 {object} models.Project
+// @Param	body		body 	models.ProjectId	true		"body for ProjectId content"
+// @Success 200 {object} models.ProjectId
 // @Failure 403 :id is not int
 // @router /:id [put]
 func (c *ProjectController) Put() {
@@ -142,19 +148,22 @@ func (c *ProjectController) Put() {
 	v := models.Project{Id: id}
 	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
 		if err := models.UpdateProjectById(&v); err == nil {
-			c.Data["json"] = "OK"
+			c.Ctx.Output.SetStatus(HTTP_OK)
+			c.Data["json"] = MakeMessageForSending(HTTP_OK_STR)
 		} else {
-			c.Data["json"] = err.Error()
+			c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
+			c.Data["json"] = MakeMessageForSending(err.Error())
 		}
 	} else {
-		c.Data["json"] = err.Error()
+		c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
+		c.Data["json"] = MakeMessageForSending(err.Error())
 	}
 	c.ServeJSON()
 }
 
 // Delete ...
 // @Title Delete
-// @Description delete the Project
+// @Description delete the ProjectId
 // @Param	id		path 	string	true		"The id you want to delete"
 // @Success 200 {string} delete success!
 // @Failure 403 id is empty
@@ -163,9 +172,11 @@ func (c *ProjectController) Delete() {
 	idStr := c.Ctx.Input.Param(":id")
 	id, _ := strconv.Atoi(idStr)
 	if err := models.DeleteProject(id); err == nil {
-		c.Data["json"] = "OK"
+		c.Ctx.Output.SetStatus(HTTP_OK)
+		c.Data["json"] = MakeMessageForSending(HTTP_OK_STR)
 	} else {
-		c.Data["json"] = err.Error()
+		c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
+		MakeMessageForSending(err.Error())
 	}
 	c.ServeJSON()
 }

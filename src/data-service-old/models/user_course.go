@@ -18,9 +18,9 @@ type UserCourse struct {
 	Progress int       `orm:"column(progress)"`
 }
 
-func (t *UserCourse) TableName() string {
-	return "user_course"
-}
+// func (t *UserCourse) TableName() string {
+// 	return "user_course"
+// }
 
 func init() {
 	orm.RegisterModel(new(UserCourse))

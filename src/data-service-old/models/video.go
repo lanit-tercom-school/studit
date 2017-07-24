@@ -15,9 +15,9 @@ type Video struct {
 	Link     string  `orm:"column(link)"`
 }
 
-func (t *Video) TableName() string {
-	return "video"
-}
+// func (t *Video) TableName() string {
+// 	return "video"
+// }
 
 func init() {
 	orm.RegisterModel(new(Video))

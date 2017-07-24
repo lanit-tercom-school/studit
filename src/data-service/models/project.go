@@ -16,7 +16,7 @@ type Project struct {
 	Description    string    `orm:"column(description)"`
 	DateOfCreation time.Time `orm:"column(date_of_creation);type(timestamp with time zone)"`
 	Logo           string    `orm:"column(logo)"`
-	Tags           string    `orm:"column(tags)"`
+	Tags           []string  `orm:"-"`
 	Status         string    `orm:"column(status)"`
 }
 

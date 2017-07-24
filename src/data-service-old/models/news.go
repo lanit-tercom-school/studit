@@ -2,6 +2,7 @@ package models
 
 import (
 	"errors"
+<<<<<<< HEAD
 	"github.com/astaxie/beego/orm"
 	"strings"
 	"time"
@@ -54,146 +55,175 @@ func (t *NewsJson) translate() news {
 		Tags:           strings.Join(t.Tags, ","),
 		Image:          t.Image,
 	}
+=======
+	"fmt"
+	"time"
+
+	"github.com/astaxie/beego/orm"
+)
+
+type News struct {
+	Id          int       `orm:"column(id);pk;auto"`
+	Title       string    `orm:"column(title)"`
+	Description string    `orm:"column(description)"`
+	Created     time.Time `orm:"column(created);auto_now_add"`
+	Edited      time.Time `orm:"column(edited);auto_now"`
+	Tags        []string  `orm:"-"`
+	Image       string    `orm:"column(image)"`
+>>>>>>> fix/newsResolver
 }
 
-func (t *news) TableName() string {
-	return "news"
+type NewsSet struct {
+	TotalCount    int64
+	FilteredCount int64
+	NewsList      []News
 }
 
 func init() {
-	orm.RegisterModel(new(news))
+	orm.RegisterModel(new(News))
 }
 
-// AddNews insert a new News into database and returns
-// last inserted Id on success.
-func AddNews(m *NewsJson) (id int64, err error) {
-	v := m.translate()
-	v.Id = 0 // for auto inc
-	v.DateOfCreation = time.Now()
-	v.LastEdit = time.Now()
+// AddNews inserts a new News into database and returns last inserted id on success
+func AddNews(news *News) (id int64, err error) {
+	//If needed set news.Id = 0 for auto inc
 	o := orm.NewOrm()
-	id, err = o.Insert(&v)
+	id, err = o.Insert(&news)
 	return
 }
 
-// GetNewsById retrieves News by Id. Returns error if
-// Id doesn't exist
-func GetNewsById(id int) (m *NewsJson, err error) {
+// GetNewsById retrieves News by Id and returns error if id doesn't exist
+func GetNewsById(id int) (m *News, err error) {
 	o := orm.NewOrm()
-	v := &news{Id: id}
+	v := &News{Id: id}
 	if err = o.Read(v); err == nil {
+<<<<<<< HEAD
 		m_temp := v.translate() // need a temp variable
 		m = &m_temp
 		return m, nil
+=======
+		//m_temp := v.translate()  // need a temp variable
+		//m = &m_temp
+		//return m, nil
+		return v, nil
+>>>>>>> fix/newsResolver
 	}
 	return nil, err
 }
 
-func TagInArrayOfStrings(tag string, tags []string) bool {
-	for _, t := range tags {
-		if t == tag {
-			return true
-		}
+func Check(sortExpressions []string) error {
+	permittedKeysUsage := map[string]bool{
+		"id":      false,
+		"created": false,
+		"edited":  false,
+		"title":   false,
 	}
-	return false
+
+	for _, v := range sortExpressions {
+		used, ok := permittedKeysUsage[v]
+		if !ok {
+			return errors.New("Error: `" + v + "` is an invalid sortBy key")
+		}
+		if used {
+			return errors.New("Error: sortBy key `" + v + "` used more than once")
+		}
+		permittedKeysUsage[v] = true
+	}
+
+	return nil
 }
 
-func TagInString(tag string, tags string) bool {
-	temp_tags := strings.Split(tags, ",")
-	for _, t := range temp_tags {
-		if t == tag {
-			return true
-		}
+func GetOrderByClause(sortExpressions, orders []string) (string, error) {
+	var result string
+
+	if err := Check(sortExpressions); err != nil {
+		return "", err
 	}
-	return false
+
+	switch len(orders) {
+	case 0:
+		if len(sortExpressions) != 0 {
+			return "", errors.New("Error: Insufficient number of orders")
+		}
+	// there is exactly one orders, all the sorted fields will be sorted by this orders
+	case 1:
+		for _, v := range sortExpressions {
+			switch orders[0] {
+			case "desc", "asc":
+				result += v + " " + orders[0] + ", "
+			default:
+				return "", errors.New("Error: Invalid orders. Must be either [asc|desc]")
+			}
+		}
+	// there is an orders for each sorted fields
+	case len(sortExpressions):
+		for i, v := range sortExpressions {
+			switch orders[i] {
+			case "desc", "asc":
+				result += v + " " + orders[i] + ", "
+			default:
+				return "", errors.New("Error: Invalid orders. Must be either [asc|desc]")
+			}
+		}
+	default:
+		if len(sortExpressions) == 0 {
+			return "", errors.New("Error: Unused 'orders' fields")
+		}
+		return "", errors.New("Error: 'sortby', 'orders' sizes mismatch or 'orders' size is not 1")
+	}
+
+	if len(result) > 0 {
+		result = "ORDER BY " + result[:len(result)-2]
+	}
+
+	return result, nil
 }
 
-// GetAllNews retrieves all News matches certain condition. Returns empty list if
-// no records exist
-func GetAllNews(sortBy []string, order []string, offset int64, limit int64, tag string) (
-	result interface{}, err error) {
+type NewsJSONSet struct {
+	Arr string `orm:"type(json)"`
+}
+
+func (j NewsJSONSet) MarshalJSON() ([]byte, error) {
+	return []byte(j.Arr), nil
+}
+
+// GetAllNews returns News that match certain conditions
+func GetAllNews(sortExpressions, orders []string, offset, limit int, tags string) (interface{}, error) {
+	orm.Debug = true
 	o := orm.NewOrm()
-	qs := o.QueryTable(new(news))
 
-	totalCount, _ := qs.Count()
-	//result = append(result, NewsSetJson{Count: count} )
-
-	// Step 1: parse input args to SQL syntax
-	// order by:
-	var sortFields []string
-	if len(sortBy) != 0 {
-		if len(sortBy) == len(order) {
-			// 1) for each sort field, there is an associated order
-			for i, v := range sortBy {
-				orderBy := ""
-				if order[i] == "desc" {
-					orderBy = "-" + v
-				} else if order[i] == "asc" {
-					orderBy = v
-				} else {
-					return nil, errors.New("Error: Invalid order. Must be either [asc|desc]")
-				}
-				sortFields = append(sortFields, orderBy)
-			}
-			qs = qs.OrderBy(sortFields...)
-		} else if len(sortBy) != len(order) && len(order) == 1 {
-			// 2) there is exactly one order, all the sorted fields will be sorted by this order
-			for _, v := range sortBy {
-				orderBy := ""
-				if order[0] == "desc" {
-					orderBy = "-" + v
-				} else if order[0] == "asc" {
-					orderBy = v
-				} else {
-					return nil, errors.New("Error: Invalid order. Must be either [asc|desc]")
-				}
-				sortFields = append(sortFields, orderBy)
-			}
-		} else if len(sortBy) != len(order) && len(order) != 1 {
-			return nil, errors.New("Error: 'sortby', 'order' sizes mismatch or 'order' size is not 1")
-		}
-	} else {
-		if len(order) != 0 {
-			return nil, errors.New("Error: Unused 'order' fields")
-		}
-	}
-
-	// Step 2: Select items from table with params
-	var newsList []news
-	qs = qs.OrderBy(sortFields...)
-	if _, err = qs.Limit(limit, offset).All(&newsList); err != nil {
+	orderClause, err := GetOrderByClause(sortExpressions, orders)
+	if err != nil {
+		fmt.Println(err)
 		return nil, err
 	}
 
-	var jsonNewsList []NewsJson
-
-	if tag == "" {
-		for _, v := range newsList {
-			jsonNewsList = append(jsonNewsList, v.translate())
-		}
-	} else {
-		for _, v := range newsList {
-			r := v.translate()
-			if TagInArrayOfStrings(tag, r.Tags) {
-				jsonNewsList = append(jsonNewsList, r)
-			}
-		}
+	var set NewsJSONSet
+	err = o.Raw(`
+SELECT row_to_json(t) arr
+  FROM (SELECT COUNT(*) "TotalCount"
+     , (SELECT COUNT(*) "FilteredCount"
+          FROM news  WHERE tags @> string_to_array($1, ','))
+     , (SELECT array_to_json(array_agg(row_to_json(d))) "NewsList"
+          FROM (SELECT id "Id", title "Title", description "Description", created "Created"
+              , edited "Edited", tags "Tags", image "Image"
+                  FROM news
+                 WHERE tags @> string_to_array($1, ',') `+orderClause+` ) d)
+          FROM news) t`, tags).QueryRow(&set)
+	if err != nil {
+		fmt.Println(err)
+		return nil, err
 	}
-
-	set := NewsSetJson{
-		TotalCount:   int(totalCount),
-		NewsJsonList: jsonNewsList}
 
 	return set, nil
 }
 
 // UpdateNews updates News by Id and returns error if
 // the record to be updated doesn't exist
-func UpdateNewsById(m *NewsJson) (err error) {
-	m.Edited = time.Now()
-	t := m.translate()
+func UpdateNewsById(m *News) (err error) {
+	//m.Edited = time.Now()
+	t := m //.translate()
 	o := orm.NewOrm()
-	v := news{Id: m.Id}
+	v := News{Id: m.Id}
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
 		_, err = o.Update(&t)
@@ -205,10 +235,10 @@ func UpdateNewsById(m *NewsJson) (err error) {
 // the record to be deleted doesn't exist
 func DeleteNews(id int) (err error) {
 	o := orm.NewOrm()
-	v := news{Id: id}
+	v := News{Id: id}
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
-		_, err = o.Delete(&news{Id: id})
+		_, err = o.Delete(&News{Id: id})
 	}
 	return
 }

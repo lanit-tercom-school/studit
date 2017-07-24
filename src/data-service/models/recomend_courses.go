@@ -10,7 +10,7 @@ import (
 )
 
 type RecomendCourses struct {
-	Id       int     `orm:"column(id);pk"`
+	Id       int     `orm:"column(id);pk;auto"`
 	CourseId *Course `orm:"column(course_id);rel(fk)"`
 	Link     string  `orm:"column(link)"`
 }

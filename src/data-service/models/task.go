@@ -10,7 +10,7 @@ import (
 )
 
 type Task struct {
-	Id            int          `orm:"column(id);pk"`
+	Id            int          `orm:"column(id);pk;auto"`
 	Title         string       `orm:"column(title)"`
 	Description   string       `orm:"column(description)"`
 	NumberOfTask  int          `orm:"column(numberOfTask)"`

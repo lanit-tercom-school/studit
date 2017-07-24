@@ -8,11 +8,18 @@ import (
 	"github.com/astaxie/beego/orm"
 )
 
+const (
+	VIEWER = iota - 1 // незарегистрированный пользователь
+	USER   = 0        // обычный пользователь
+	LEADER = 1        // учитель, куратор, меет право создавать проекты
+	ADMIN  = 2        // администратор, может всё
+)
+
 type User struct {
-	Id          int    `orm:"column(id);pk;auto"                   json:"id"`
-	Nickname    string `orm:"column(nickname)"                     json:"nickname"`
-	Description string `orm:"column(description)"                  json:"description,omitempty"`
-	Avatar      string `orm:"column(avatar)"                       json:"avatar,omitempty"`
+	Id          int    `orm:"column(id);pk;auto"  json:"id"`
+	Nickname    string `orm:"column(nickname)"    json:"nickname"`
+	Description string `orm:"column(description)" json:"description,omitempty"`
+	Avatar      string `orm:"column(avatar)"      json:"avatar,omitempty"`
 }
 
 type FullUserInfo struct {
@@ -37,9 +44,9 @@ type MainUserInfo struct {
 	Avatar   string `json:"avatar"`
 }
 
-func (t *User) TableName() string {
-	return "user"
-}
+// func (t *User) TableName() string {
+// 	return "user"
+// }
 
 func init() {
 	orm.RegisterModel(new(User))

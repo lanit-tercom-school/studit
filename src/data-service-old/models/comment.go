@@ -10,15 +10,16 @@ import (
 )
 
 type Comment struct {
-	Id   int   `orm:"column(id);pk;auto" json:"-"`
-	Text string `orm:"column(text)" json:"text"`
+	Id   int    `orm:"column(id);pk;auto" json:"-"`
+	Text string `orm:"column(text)"       json:"text"`
 }
 
-func (t *Comment) TableName() string {
-	return "comment"
-}
+// func (t *Comment) TableName() string {
+// 	return "comment"
+// }
 
 func init() {
+	orm.Debug = true
 	orm.RegisterModel(new(Comment))
 }
 

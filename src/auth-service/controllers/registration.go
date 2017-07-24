@@ -221,21 +221,15 @@ func (c *RegistrationController) Activate() {
 		err := ActivateUser(pass)
 		if err != nil {
 			beego.Debug("Activation error: " + err.Error())
-			c.Data["json"] = struct {
-				Message string `json:"message"`
-			}{Message: err.Error()}
+			c.Data["json"] = MakeMessageForSending(err.Error())
 			c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
 		} else {
 			beego.Trace("Activation OK")
-			c.Data["json"] = struct {
-				Message string `json:"message"`
-			}{Message: "Registered"}
+			c.Data["json"] = MakeMessageForSending("Registered")
 		}
 	} else {
 		beego.Debug("Empty pass")
-		c.Data["json"] = struct {
-			Message string `json:"message"`
-		}{Message: HTTP_BAD_REQUEST_STR}
+		c.Data["json"] = MakeMessageForSending(HTTP_BAD_REQUEST_STR)
 		c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
 	}
 	c.ServeJSON()

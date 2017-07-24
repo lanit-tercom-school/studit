@@ -1,11 +1,11 @@
 package controllers
 
 import (
+	"data-service-old/models"
 	"encoding/json"
-	"data-service/models"
+	"github.com/astaxie/beego"
 	"strconv"
 	"strings"
-	"github.com/astaxie/beego"
 )
 
 // Создание, изменение, удаление и просмотр новостей
@@ -15,11 +15,11 @@ type NewsController struct {
 
 // URLMapping ...
 func (c *NewsController) URLMapping() {
-    c.Mapping("Post", c.Post)
-    c.Mapping("GetOne", c.GetOne)
-    c.Mapping("GetAll", c.GetAll)
-    c.Mapping("Put", c.Put)
-    c.Mapping("Delete", c.Delete)
+	c.Mapping("Post", c.Post)
+	c.Mapping("GetOne", c.GetOne)
+	c.Mapping("GetAll", c.GetAll)
+	c.Mapping("Put", c.Put)
+	c.Mapping("Delete", c.Delete)
 }
 
 // Post ...
@@ -51,9 +51,9 @@ func (c *NewsController) Post() {
 			c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
 		}
 	} else {
-        beego.Debug("Access denied for `Post`")
+		beego.Debug("Access denied for `Post`")
 		c.Ctx.Output.SetStatus(HTTP_FORBIDDEN)
-        c.Data["json"] = "Forbidden"
+		c.Data["json"] = "Forbidden"
 	}
 	c.ServeJSON()
 }
@@ -102,10 +102,11 @@ func (c *NewsController) GetAll() {
 	var order []string
 	var limit int64 = 10
 	var offset int64
-	var tag string
+	var tags string
+
 	beego.Trace("Parce request params for News")
 	// limit: 10 (default is 10)
-	if v, err := c.GetInt64("limit"); err == nil {
+	if v, err := c.GetInt("limit"); err == nil {
 		if v > 20 {
 			limit = 20
 		} else {
@@ -113,7 +114,7 @@ func (c *NewsController) GetAll() {
 		}
 	}
 	// offset: 0 (default is 0)
-	if v, err := c.GetInt64("offset"); err == nil {
+	if v, err := c.GetInt("offset"); err == nil {
 		offset = v
 	}
 	// sortBy: col1,col2
@@ -126,11 +127,11 @@ func (c *NewsController) GetAll() {
 	}
 	// tags: Other
 	if v := c.GetString("tag"); v != "" {
-		tag = v
+		tags = v
 	}
 
 	beego.Trace("Select from table")
-	l, err := models.GetAllNews(sortBy, order, offset, limit, tag)
+	l, err := models.GetAllNews(sortBy, order, offset, limit, tags)
 	if err != nil {
 		beego.Debug("News GetAll `GetAllNews` error", err.Error())
 		c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
@@ -176,9 +177,9 @@ func (c *NewsController) Put() {
 			c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
 		}
 	} else {
-        beego.Debug("Access denied for `Put`")
+		beego.Debug("Access denied for `Put`")
 		c.Ctx.Output.SetStatus(HTTP_FORBIDDEN)
-        c.Data["json"] = HTTP_FORBIDDEN_STR
+		c.Data["json"] = HTTP_FORBIDDEN_STR
 	}
 	c.ServeJSON()
 }
@@ -210,9 +211,9 @@ func (c *NewsController) Delete() {
 			c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
 		}
 	} else {
-        beego.Debug("Access denied for `Delete`")
+		beego.Debug("Access denied for `Delete`")
 		c.Ctx.Output.SetStatus(HTTP_FORBIDDEN)
-        c.Data["json"] = HTTP_FORBIDDEN_STR
+		c.Data["json"] = HTTP_FORBIDDEN_STR
 	}
 	c.ServeJSON()
 }

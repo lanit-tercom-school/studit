@@ -1,7 +1,7 @@
 package controllers
 
 import (
-	"data-service/models"
+	"data-service-old/models"
 	"strconv"
 
 	"github.com/astaxie/beego"
@@ -48,7 +48,7 @@ func (c *ProjectMasterController) Post() {
 		c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
 		c.Data["json"] = err.Error()
 
-	} else if c.CurrentUser.PermissionLevel !=ADMIN && !models.IsUserInArray(c.CurrentUser.UserId, masters_of_this_project) {
+	} else if c.CurrentUser.PermissionLevel != ADMIN && !models.IsUserInArray(c.CurrentUser.UserId, masters_of_this_project) {
 		beego.Debug("Request from not master of this project")
 		c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
 		c.Data["json"] = "You are not a master of this project"

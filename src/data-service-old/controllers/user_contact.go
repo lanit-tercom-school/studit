@@ -1,7 +1,7 @@
 package controllers
 
 import (
-	"data-service/models"
+	"data-service-old/models"
 	"strconv"
 
 	//"github.com/astaxie/beego"
@@ -33,7 +33,7 @@ func (c *UserContactController) URLMapping() {
 // @router / [post]
 func (c *UserContactController) Post() {
 	if c.CurrentUser.UserId != VIEWER {
-		cUser := models.User{Id: c.CurrentUser.UserId, }
+		cUser := models.User{Id: c.CurrentUser.UserId}
 		v := []models.UserContactInput{}
 		if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
 			ContId := []string{} // Artem skazal array
@@ -67,7 +67,6 @@ func (c *UserContactController) Post() {
 }
 func (c *UserContactController) GetOne() {}
 
-
 // GetAll ...
 // @Title Get One
 // @Description get UserContact
@@ -77,7 +76,7 @@ func (c *UserContactController) GetOne() {}
 // @Failure 403 Forbidden
 // @router /:id [get]
 func (c *UserContactController) GetAll() {
-	if c.CurrentUser.PermissionLevel !=VIEWER {
+	if c.CurrentUser.PermissionLevel != VIEWER {
 		idStr := c.Ctx.Input.Param(":id")
 		id, err := strconv.Atoi(idStr)
 		if err != nil {
@@ -121,6 +120,7 @@ func (c *UserContactController) GetAll() {
 	}
 	c.ServeJSON()
 }
+
 /*
 // Put ...
 // @Title Put
