@@ -1,1 +1,0 @@
-graphql-docs-gen http://localhost:8080/graphql documentation.html

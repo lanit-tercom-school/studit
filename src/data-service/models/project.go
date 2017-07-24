@@ -11,17 +11,13 @@ import (
 )
 
 type Project struct {
-	Id             int       `orm:"column(id);pk;auto"`
-	Name           string    `orm:"column(name)"`
-	Description    string    `orm:"column(description)"`
-	DateOfCreation time.Time `orm:"column(date_of_creation);type(timestamp with time zone)"`
-	Logo           string    `orm:"column(logo)"`
-	Tags           string    `orm:"column(tags)"`
-	Status         string    `orm:"column(status)"`
-}
-
-func (t *Project) TableName() string {
-	return "project"
+	Id          int       `orm:"column(id);pk;auto"`
+	Name        string    `orm:"column(name)"`
+	Description string    `orm:"column(description)"`
+	Created     time.Time `orm:"column(created);auto_now_add"`
+	Logo        string    `orm:"column(logo)"`
+	Tags        []string  `orm:"-"`
+	Status      string    `orm:"column(status)"`
 }
 
 func init() {

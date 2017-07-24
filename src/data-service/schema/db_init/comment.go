@@ -8,7 +8,7 @@ import (
 )
 
 func InitComment(o orm.Ormer) []models.Comment {
-	result := []models.Comment,
+	result := []models.Comment{
 		{
 			Text: "CommentCommentComment1",
 		},

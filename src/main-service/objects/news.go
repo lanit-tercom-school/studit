@@ -11,14 +11,25 @@ import (
 )
 
 type News struct {
-	Id             int
-	Title          string
-	Description    string
-	DateOfCreation time.Time
-	LastEdit       time.Time
-	Tags           string
-	Image          string
+	Id          int
+	Title       string
+	Description string
+	Created     time.Time
+	Edited      time.Time
+	Tags        []string
+	Image       string
 }
+
+type NewsSet struct {
+	TotalCount    int
+	FilteredCount int
+	NewsList      []News
+}
+
+//
+//func (set NewsJSONSet) MarshalJSON() ([]byte, error) {
+//	return []byte(set.Arr), nil
+//}
 
 var NewsType = gql.NewObject(
 	gql.ObjectConfig{
@@ -33,7 +44,7 @@ var NewsType = gql.NewObject(
 			"Description": &gql.Field{
 				Type: gql.String,
 			},
-			"DateOfCreation": &gql.Field{
+			"Created": &gql.Field{
 				Type: gql.String,
 			},
 			"LastEdit": &gql.Field{
@@ -44,6 +55,23 @@ var NewsType = gql.NewObject(
 			},
 			"Image": &gql.Field{
 				Type: gql.String,
+			},
+		},
+	},
+)
+
+var NewsSetType = gql.NewObject(
+	gql.ObjectConfig{
+		Name: "NewsSet",
+		Fields: gql.Fields{
+			"TotalCount": &gql.Field{
+				Type: gql.String,
+			},
+			"FilteredCount": &gql.Field{
+				Type: gql.String,
+			},
+			"NewsList": &gql.Field{
+				Type: gql.NewList(NewsType),
 			},
 		},
 	},
@@ -67,11 +95,9 @@ func ResolvePostNews(p gql.ResolveParams) (interface{}, error) {
 	if c.PermissionLevel >= LEADER {
 		helpers.LogAccesAllowed("PostNews")
 		newsToSend := News{
-			DateOfCreation: time.Now(),
-			Title:          helpers.InterfaceToString(p.Args["Title"]),
-			Description:    helpers.InterfaceToString(p.Args["Description"]),
-			Image:          helpers.InterfaceToString(p.Args["Image"]),
-			LastEdit:       time.Now(),
+			Title:       helpers.InterfaceToString(p.Args["Title"]),
+			Description: helpers.InterfaceToString(p.Args["Description"]),
+			Image:       helpers.InterfaceToString(p.Args["Image"]),
 		}
 		err := helpers.HttpPost(conf.Configuration.DataServiceURL+"v1/news/", newsToSend, &newsToGet)
 		return newsToGet, err
@@ -91,7 +117,7 @@ func ResolveGetNewsList(p gql.ResolveParams) (interface{}, error) {
 		err := errors.New("missed Offset")
 		return nil, err
 	}
-	var news []News
-	err := helpers.HttpGet(conf.Configuration.DataServiceURL+"v1/news/?limit="+limit+"&offset="+offset, &news)
-	return news, err
+	var set NewsSet
+	err := helpers.HttpGet(conf.Configuration.DataServiceURL+"v1/news/?limit="+limit+"&offset="+offset, &set)
+	return set, err
 }

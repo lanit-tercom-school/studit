@@ -12,14 +12,10 @@ import (
 
 type ProjectUser struct {
 	Id         int       `orm:"column(id);pk;auto"`
-	Project    *Project  `orm:"column(project_id);rel(fk)"`
-	User       *User     `orm:"column(user_id);rel(fk)"`
-	SignedDate time.Time `orm:"column(signed_date);type(timestamp with time zone)"`
+	ProjectId  *Project  `orm:"column(project_id);rel(fk)"`
+	UserId     *User     `orm:"column(user_id);rel(fk)"`
+	SignedDate time.Time `orm:"column(signed_date);auto_now_add"`
 	Progress   int       `orm:"column(progress)"`
-}
-
-func (t *ProjectUser) TableName() string {
-	return "project_user"
 }
 
 func init() {

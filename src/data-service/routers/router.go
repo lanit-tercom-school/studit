@@ -72,13 +72,13 @@ func init() {
 
 		beego.NSNamespace("/task_for_test",
 			beego.NSInclude(
-				&controllers.TaskForTestController{},
+				&controllers.TestsTaskController{},
 			),
 		),
 
-		beego.NSNamespace("/statistic",
+		beego.NSNamespace("/Statistics",
 			beego.NSInclude(
-				&controllers.StatisticController{},
+				&controllers.StatisticsController{},
 			),
 		),
 
@@ -96,7 +96,7 @@ func init() {
 
 		beego.NSNamespace("/recomend_courses",
 			beego.NSInclude(
-				&controllers.RecomendCoursesController{},
+				&controllers.RecommendedCourseController{},
 			),
 		),
 
@@ -124,12 +124,6 @@ func init() {
 			),
 		),
 
-		beego.NSNamespace("/tasks_tags_table",
-			beego.NSInclude(
-				&controllers.TasksTagsTableController{},
-			),
-		),
-
 		beego.NSNamespace("/project_user",
 			beego.NSInclude(
 				&controllers.ProjectUserController{},
@@ -138,7 +132,7 @@ func init() {
 
 		beego.NSNamespace("/user_comments",
 			beego.NSInclude(
-				&controllers.UserCommentsController{},
+				&controllers.UserCommentController{},
 			),
 		),
 

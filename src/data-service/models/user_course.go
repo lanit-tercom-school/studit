@@ -14,12 +14,8 @@ type UserCourse struct {
 	Id       int       `orm:"column(id);pk;auto"`
 	UserId   *User     `orm:"column(user_id);rel(fk)"`
 	CourseId *Course   `orm:"column(course_id);rel(fk)"`
-	Date     time.Time `orm:"column(date);type(timestamp with time zone)"`
+	Date     time.Time `orm:"column(date);auto_now_add"`
 	Progress int       `orm:"column(progress)"`
-}
-
-func (t *UserCourse) TableName() string {
-	return "user_course"
 }
 
 func init() {

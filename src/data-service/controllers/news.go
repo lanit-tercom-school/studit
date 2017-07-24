@@ -6,6 +6,7 @@ import (
 	"strconv"
 	"strings"
 
+	"fmt"
 	"github.com/astaxie/beego"
 )
 
@@ -117,6 +118,7 @@ func (c *NewsController) GetAll() {
 		c.Ctx.Output.SetStatus(HTTP_OK)
 		c.Data["json"] = l
 	}
+	fmt.Println(l)
 	c.ServeJSON()
 }
 

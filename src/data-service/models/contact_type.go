@@ -14,15 +14,11 @@ type ContactType struct {
 	Type string `orm:"column(type)"`
 }
 
-func (t *ContactType) TableName() string {
-	return "contact_type"
-}
-
 func init() {
 	orm.RegisterModel(new(ContactType))
 }
 
-// AddContactType insert a new ContactType into database and returns
+// AddContactType insert a new Type into database and returns
 // last inserted Id on success.
 func AddContactType(m *ContactType) (id int64, err error) {
 	o := orm.NewOrm()
@@ -30,7 +26,7 @@ func AddContactType(m *ContactType) (id int64, err error) {
 	return
 }
 
-// GetContactTypeById retrieves ContactType by Id. Returns error if
+// GetContactTypeById retrieves Type by Id. Returns error if
 // Id doesn't exist
 func GetContactTypeById(id int) (v *ContactType, err error) {
 	o := orm.NewOrm()
@@ -41,7 +37,7 @@ func GetContactTypeById(id int) (v *ContactType, err error) {
 	return nil, err
 }
 
-// GetAllContactType retrieves all ContactType matches certain condition. Returns empty list if
+// GetAllContactType retrieves all Type matches certain condition. Returns empty list if
 // no records exist
 func GetAllContactType(query map[string]string, fields []string, sortby []string, order []string,
 	offset int64, limit int64) (ml []interface{}, err error) {
@@ -119,7 +115,7 @@ func GetAllContactType(query map[string]string, fields []string, sortby []string
 	return nil, err
 }
 
-// UpdateContactType updates ContactType by Id and returns error if
+// UpdateContactType updates Type by Id and returns error if
 // the record to be updated doesn't exist
 func UpdateContactTypeById(m *ContactType) (err error) {
 	o := orm.NewOrm()
@@ -134,7 +130,7 @@ func UpdateContactTypeById(m *ContactType) (err error) {
 	return
 }
 
-// DeleteContactType deletes ContactType by Id and returns error if
+// DeleteContactType deletes Type by Id and returns error if
 // the record to be deleted doesn't exist
 func DeleteContactType(id int) (err error) {
 	o := orm.NewOrm()

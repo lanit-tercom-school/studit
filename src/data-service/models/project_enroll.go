@@ -15,11 +15,7 @@ type ProjectEnroll struct {
 	Project          *Project  `orm:"column(project_id);rel(fk)"`
 	User             *User     `orm:"column(user_id);rel(fk)"`
 	EnrollingMessage string    `orm:"column(enrolling_message)"`
-	Time             time.Time `orm:"column(time);type(timestamp with time zone)"`
-}
-
-func (t *ProjectEnroll) TableName() string {
-	return "project_enroll"
+	Time             time.Time `orm:"column(time);auto_now_add""`
 }
 
 func init() {

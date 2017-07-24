@@ -20,10 +20,6 @@ type Task struct {
 	ProjectUserId *ProjectUser `orm:"column(project_user_id);rel(fk)"`
 }
 
-func (t *Task) TableName() string {
-	return "task"
-}
-
 func init() {
 	orm.RegisterModel(new(Task))
 }

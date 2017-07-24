@@ -16,10 +16,6 @@ type User struct {
 	Avatar      string `orm:"column(avatar)"`
 }
 
-func (t *User) TableName() string {
-	return "user"
-}
-
 func init() {
 	orm.RegisterModel(new(User))
 }
@@ -30,7 +26,7 @@ func (m *User) Insert() error {
 	return nil
 }
 
-// AddUser insert a new User into database and returns
+// AddUser insert a new UserId into database and returns
 // last inserted Id on success.
 func AddUser(m *User) (id int64, err error) {
 	o := orm.NewOrm()
@@ -38,7 +34,7 @@ func AddUser(m *User) (id int64, err error) {
 	return
 }
 
-// GetUserById retrieves User by Id. Returns error if
+// GetUserById retrieves UserId by Id. Returns error if
 // Id doesn't exist
 func GetUserById(id int) (v *User, err error) {
 	o := orm.NewOrm()
@@ -49,7 +45,7 @@ func GetUserById(id int) (v *User, err error) {
 	return nil, err
 }
 
-// GetAllUser retrieves all User matches certain condition. Returns empty list if
+// GetAllUser retrieves all UserId matches certain condition. Returns empty list if
 // no records exist
 func GetAllUser(query map[string]string, fields []string, sortby []string, order []string,
 	offset int64, limit int64) (ml []interface{}, err error) {
@@ -127,7 +123,7 @@ func GetAllUser(query map[string]string, fields []string, sortby []string, order
 	return nil, err
 }
 
-// UpdateUser updates User by Id and returns error if
+// UpdateUser updates UserId by Id and returns error if
 // the record to be updated doesn't exist
 func UpdateUserById(m *User) (err error) {
 	o := orm.NewOrm()
@@ -142,7 +138,7 @@ func UpdateUserById(m *User) (err error) {
 	return
 }
 
-// DeleteUser deletes User by Id and returns error if
+// DeleteUser deletes UserId by Id and returns error if
 // the record to be deleted doesn't exist
 func DeleteUser(id int) (err error) {
 	o := orm.NewOrm()
