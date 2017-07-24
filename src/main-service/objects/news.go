@@ -44,7 +44,7 @@ var NewsType = gql.NewObject(
 			"Description": &gql.Field{
 				Type: gql.String,
 			},
-			"DateOfCreation": &gql.Field{
+			"Created": &gql.Field{
 				Type: gql.String,
 			},
 			"LastEdit": &gql.Field{
