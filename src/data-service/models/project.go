@@ -16,7 +16,7 @@ type Project struct {
 	Description string    `orm:"column(description)"`
 	Created     time.Time `orm:"column(created);auto_now_add"`
 	Logo        string    `orm:"column(logo)"`
-	Tags        []string  `orm:"-"`
+	Tags        string  `orm:"-"`
 	Status      string    `orm:"column(status)"`
 }
 

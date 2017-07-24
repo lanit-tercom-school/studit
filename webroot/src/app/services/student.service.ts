@@ -17,7 +17,7 @@ export class StudentService {
     var variables = { message: message_, user: user_, project: project_ };
     var query = `mutation ($message: String $user: Int! $project: Int!)
     {
-      PostProjectEnroll(Message: $message User: $user Project: $project)
+      Enroll(Message: $message User: $user Project: $project)
       {
         Project
         {
