@@ -2,7 +2,7 @@ package main
 
 import (
 	"data-service/schema/db_init"
-	_ "main-service/routers"
+	_ "data-service/routers"
 
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
