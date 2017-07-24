@@ -17,11 +17,26 @@ export class AuthService {
     constructor(private http: Http) { }
 
     authenticatenow(user: User) {
-        var query: String = 'mutation{';
-        query += 'Auth{ Signin(Login:"' + user.login;
-        query += '" Password:"' + user.password + '")';
-        query += '{ DataOfExpiration PermissionLevel Token ';
-        query += 'User { Id Avatar Nickname Description }}}}';
+        var variables = { login: user.login, password: user.password };
+        var query = `mutation ($login: String $password: String)
+    {
+      Auth
+      {
+        Signin(Login: $login Password: $password)
+         {
+           DataOfExpiration
+           PermissionLevel
+           Token
+           User
+            { 
+                Id
+                Avatar
+                Nickname
+                Description
+            }
+         }
+    }
+    } &variables=`+ JSON.stringify(variables);
         return this.http.get(environment.authUrl + '/graphql?query=' + query)
             .map((response: Response) => {
                 // successful login => getting jwt

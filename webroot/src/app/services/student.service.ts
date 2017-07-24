@@ -14,7 +14,7 @@ export class StudentService {
   }
   //Отправить заявку на участие в проекте
   enrollToProject(user_: number, project_: number, token: string, message_: string) {
-    var variables = { message: message_, user: user_, project: project_ }
+    var variables = { message: message_, user: user_, project: project_ };
     var query = `mutation ($message: String $user: Int! $project: Int!)
     {
       PostProjectEnroll(Message: $message User: $user Project: $project)
