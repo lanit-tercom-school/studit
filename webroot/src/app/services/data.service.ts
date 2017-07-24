@@ -49,13 +49,13 @@ export class DataService {
     userEnrolledProjects: [], projectsForMainPage: [], enrollsForTeacher: []
   };
 
-constructor(
-   private teacherService: TeacherService,
-   private studentService: StudentService,
-   private newsService: NewsService,
-   private projectService: ProjectService,
-   private userService: UserService
-   ) { }
+  constructor(
+    private teacherService: TeacherService,
+    private studentService: StudentService,
+    private newsService: NewsService,
+    private projectService: ProjectService,
+    private userService: UserService
+  ) { }
 
   public get News() {
     return this.news.asObservable();
@@ -71,11 +71,11 @@ constructor(
   }
 
 
-public get MissedProject() {
+  public get MissedProject() {
     return this.missedProject.asObservable();
   }
 
- public get MissedNews() {
+  public get MissedNews() {
     return this.missedNews.asObservable();
   }
 
@@ -96,12 +96,10 @@ public get MissedProject() {
     this.numberOfNewsOnPage = value;
   }
 
-  public get PermLvl()
-  {
+  public get PermLvl() {
     return this.userPermLvl;
   }
-   public get UserId()
-  {
+  public get UserId() {
     return this.userId;
   }
   loadAll() {
@@ -124,43 +122,43 @@ public get MissedProject() {
 
   loadProjects(limit: number, offset: number) {
     this.projectService.getProjectItems(limit, offset)
-    .subscribe(res => {
-      if (res != null) {
-        this.dataStore.projects = res;
-        console.log(res);
-        //this.projectsCountObs.next(Object.assign({},this.projectsCount));
-        this.dataStore.projects.forEach(a => { a.Logo = this.addApiUrl(a.Logo); })
-        this.projects.next(Object.assign({}, this.dataStore).projects);
-      }
-    });
+      .subscribe(res => {
+        if (res != null) {
+          this.dataStore.projects = res;
+          console.log(res);
+          //this.projectsCountObs.next(Object.assign({},this.projectsCount));
+          this.dataStore.projects.forEach(a => { a.Logo = this.addApiUrl(a.Logo); })
+          this.projects.next(Object.assign({}, this.dataStore).projects);
+        }
+      });
   }
 
   // для подгрузки проекта
   loadProjectByID(id: number) {
     console.debug('data: load Project by ID');
     console.log(id);
-    let foundproject =  this.dataStore.projects.find(item => item.Id == id);
+    let foundproject = this.dataStore.projects.find(item => item.Id == id);
     console.log('foundproject' + foundproject);
     console.log(this.dataStore.projects);
-        if (foundproject) {
-          this.missedProject.next(foundproject);
-          console.debug('load from data');
+    if (foundproject) {
+      this.missedProject.next(foundproject);
+      console.debug('load from data');
+    }
+    else {
+      console.log('can not find');
+      this.projectService.getProjectById(id).subscribe(res => {
+        if (res != null) {
+          console.log('NEW PROJECT');
+          // дописываем в конец массива            
+          this.dataStore.projects.push(res);
+          console.log(this.dataStore.projects);
+          this.missedProject.next(res);
         }
-        else {
-          console.log('can not find');
-          this.projectService.getProjectById(id).subscribe(res => {
-            if (res != null) {
-              console.log('NEW PROJECT');
-              // дописываем в конец массива            
-              this.dataStore.projects.push(res);
-              console.log(this.dataStore.projects);
-              this.missedProject.next(res);
-            }
-          });
-      }
-   
+      });
+    }
+
   }
-  
+
   loadProjectsForMainPage() {
     this.projectService.getMainPageProjects().subscribe(res => {
       this.dataStore.projectsForMainPage = res;
@@ -187,7 +185,7 @@ public get MissedProject() {
   loadEnrolledUsersProject() {
     if (localStorage.getItem('current_user')) {
       this.studentService.getEnrolledUsersProject(this.userId, this.userToken).subscribe(res => {
-        
+
         this.dataStore.userEnrolledProjects = res;
         //console.log(this.dataStore.userEnrolledProjects);
         this.userEnrolledProjects.next(Object.assign({}, this.dataStore).userEnrolledProjects);
@@ -197,13 +195,12 @@ public get MissedProject() {
     }
   }
 
-// значения по умолчанию
+  // значения по умолчанию
   loadNews(offset: number) {
     this.newsService.getNewsPage(this.numberOfNewsOnPage, offset).subscribe(res => {
-      this.newsCount = 4; // заглушка
-      //this.newsCount = res.total_count;
-      this.newsCountObs.next(Object.assign({},this.newsCount));
-      this.dataStore.news = res.NewsList;
+      this.newsCount = res.NewsList.TotalCount;
+      this.newsCountObs.next(this.newsCount);
+      this.dataStore.news = res.NewsList.NewsList;
       this.news.next(Object.assign({}, this.dataStore).news);
 
     });
@@ -224,27 +221,27 @@ public get MissedProject() {
   loadNewsByID(id: number) {
     console.debug('data: load News by ID');
     console.log(id);
-    let foundnews =  this.dataStore.news.find(item => item.Id == id);
+    let foundnews = this.dataStore.news.find(item => item.Id == id);
     console.log(foundnews);
     console.log(this.dataStore.news);
-        if (foundnews) {
-          this.missedNews.next(foundnews);
-          console.debug('load from data');
+    if (foundnews) {
+      this.missedNews.next(foundnews);
+      console.debug('load from data');
+    }
+    else {
+      console.debug('can not find');
+      this.newsService.getNewsById(id).subscribe(res => {
+        if (res != null) {
+          console.log(res);
+          console.debug('NEW NEWS');
+          // дописываем в конец массива            
+          this.dataStore.news.push(res);
+          console.log(this.dataStore.news);
+          this.missedNews.next(res);
         }
-        else {
-          console.debug('can not find');
-          this.newsService.getNewsById(id).subscribe(res => {
-            if (res != null) {
-              console.log(res);
-              console.debug('NEW NEWS');
-              // дописываем в конец массива            
-              this.dataStore.news.push(res);
-              console.log(this.dataStore.news);
-              this.missedNews.next(res);
-            }
-          });
-      }
-   
+      });
+    }
+
   }
 
   addApiUrl(url: string): string {
