@@ -11,8 +11,8 @@ import { ProjectItem } from 'models/project-item';
 })
 export class ProjectListComponent implements OnInit {
 
-   public ProjectList: Observable<ProjectItem[]>;
-   private p: number = 1;
+  public ProjectList: Observable<ProjectItem[]>;
+  private p: number = 1;
   private limit: number = 2;
   private totalObs: Observable<number>;
 

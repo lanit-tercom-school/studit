@@ -70,7 +70,7 @@ export class DataService {
     return this.projectsCountObs.asObservable();
   }
 
-//TODO: Change Missed to Viewed
+  //TODO: Change Missed to Viewed
   public get MissedProject() {
     return this.missedProject.asObservable();
   }
@@ -102,6 +102,9 @@ export class DataService {
   public get UserId() {
     return this.userId;
   }
+  public get UserToken() {
+    return this.userToken;
+  }
 
   loadAll() {
     console.log('Data.service ->loadAll');
@@ -115,9 +118,9 @@ export class DataService {
       if (this.userPermLvl === PermLevel.Student) {
         this.loadEnrolledUsersProject();
       }
-      /*if (this.userPermLvl === PermLevel.Teacher) {
+      if (this.userPermLvl === PermLevel.Teacher) {
         this.loadEnrollsForTeacher();
-      }*/
+      }
     }
   }
 
@@ -208,7 +211,7 @@ export class DataService {
   }
 
   loadEnrollsForTeacher() {
-    this.teacherService.getEnrollsForTeacher(this.userToken).subscribe(res => {
+    this.teacherService.getEnrollsForTeacher(this.userToken, this.userId).subscribe(res => {
       this.dataStore.enrollsForTeacher = res;
       this.enrollsForTeacher.next(Object.assign({}, this.dataStore).enrollsForTeacher);
     });

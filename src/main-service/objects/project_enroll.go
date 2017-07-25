@@ -79,7 +79,7 @@ func ResolveDeleteProjectEnroll(p gql.ResolveParams) (interface{}, error) {
 		return nil, err
 	}
 	messageToGet := Message{}
-	if c.UserId == projectEnrollToGet.User.Id || c.PermissionLevel == ADMIN {
+	if c.UserId == projectEnrollToGet.User.Id || c.PermissionLevel == LEADER {
 		helpers.LogAccesAllowed("DeleteProjectEnroll")
 		err := helpers.HttpDelete(conf.Configuration.DataServiceURL+"v1/project_enroll/"+strconv.Itoa(id), nil, &messageToGet)
 		return messageToGet, err
