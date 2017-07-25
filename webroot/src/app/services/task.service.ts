@@ -5,6 +5,7 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/observable/throw';
 
+import { TasksItem } from "models/tasks-item";
 import { environment } from '../../environments/environment';
 
 @Injectable()
@@ -13,7 +14,7 @@ export class TaskService {
     constructor(private http: Http) {
     }
 
-    gettaskItem(id: number) {
+    gettaskItem(id: number): TasksItem[] {
         return [
             {
                 "task": "Complete this exercise...",

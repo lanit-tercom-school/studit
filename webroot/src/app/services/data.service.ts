@@ -202,9 +202,9 @@ export class DataService {
   // значения по умолчанию
   loadNews(offset: number) {
     this.newsService.getNewsPage(this.numberOfNewsOnPage, offset).subscribe(res => {
-      this.newsCount = res.NewsList.TotalCount;
+      this.newsCount = res.TotalCount;
       this.newsCountObs.next(this.newsCount);
-      this.dataStore.news = res.NewsList.NewsList;
+      this.dataStore.news = res.NewsList;
       this.news.next(Object.assign({}, this.dataStore).news);
 
     });

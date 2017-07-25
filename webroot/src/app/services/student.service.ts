@@ -5,6 +5,11 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/observable/throw';
 
+import { ProjectItem } from "models/project-item";
+import { Message } from "models/message";
+import { ProjectTaskItem } from "models/project-task-item";
+import { EnrollItem } from "models/enroll-item";
+
 import { environment } from '../../environments/environment';
 
 @Injectable()
@@ -13,7 +18,7 @@ export class StudentService {
   constructor(private http: Http) {
   }
   //Отправить заявку на участие в проекте
-  enrollToProject(user_: number, project_: number, token: string, message_: string) {
+  enrollToProject(user_: number, project_: number, token: string, message_: string): Observable<ProjectItem> {
     var variables = { message: message_, user: user_, project: project_ };
     var query = `mutation ($message: String $user: Int! $project: Int!)
     {
@@ -21,17 +26,22 @@ export class StudentService {
       {
         Project
         {
+          Name
+          Description
+          DateOfCreation
           Id
         }
       }
     } &variables=`+ JSON.stringify(variables);
     let headers = new Headers();
     headers.append('Authorization', 'Bearer ' + token);
-    return this.http.get(environment.apiUrl + '/graphql?query=' + query, { headers: headers })
+    return this.http.get(environment.apiUrl + '/graphql?query=' + query, { headers: headers }).map(res => {
+      return res.json().data.Enroll.Project;
+    });
   }
 
   //Отменить заявку на участие в проекте
-  unenrollToProject(id: number, token: string) {
+  unenrollToProject(id: number, token: string): Observable<Message> {
     var variable = { id: id };
     var query = `mutation($id:Int!){
     DeleteProjectEnroll(Id:$id)
@@ -42,11 +52,11 @@ export class StudentService {
     let headers = new Headers();
     headers.append('Authorization', 'Bearer ' + token);
     return this.http.get(environment.apiUrl + '/graphql?query=' + query, { headers: headers })
-      .map((response: Response) => {return response.json().data.Message});
+      .map((response: Response) => { return response.json().data });
   }
 
   // показать заявки пользователя
-  getEnrolledUsersProject(id_: number, token: string) {
+  getEnrolledUsersProject(id_: number, token: string): Observable<EnrollItem[]> {
     var variable = { id: id_ };
     var query = `query($id:ID){
    User(Id:$id)
@@ -67,11 +77,11 @@ export class StudentService {
     let headers = new Headers();
     headers.append('Authorization', 'Bearer ' + token);
     return this.http.get(environment.apiUrl + '/graphql?query=' + query, { headers: headers })
-      .map((response: Response) => {return response.json().data.User.Enrolls});
+      .map((response: Response) => { return response.json().data.User.Enrolls });
   }
 
   // получить задачи студента по id проекта
-  getProjectStudentTaskItem(id: number) {
+  getProjectStudentTaskItem(id: number): ProjectTaskItem[] {
     return [
       {
         "number": "645",
