@@ -70,7 +70,7 @@ export class DataService {
     return this.projectsCountObs.asObservable();
   }
 
-
+//TODO: Change Missed to Viewed
   public get MissedProject() {
     return this.missedProject.asObservable();
   }
@@ -105,7 +105,7 @@ export class DataService {
 
   loadAll() {
     console.log('Data.service ->loadAll');
-    //this.loadProjects(this.projectsCount, 0);
+    this.loadProjects(2, 0);
     this.loadProjectsForMainPage();
     if (localStorage.getItem('current_user')) {
       this.userToken = JSON.parse(localStorage.getItem('current_user')).Token;
