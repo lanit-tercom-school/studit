@@ -1,7 +1,7 @@
 export interface UserInfo
 {
-    id: string;
-    nickname: string;
-    avatar: string;
-    description: string;
+    Id: string;
+    Nickname: string;
+    Avatar: string;
+    Description: string;
 }

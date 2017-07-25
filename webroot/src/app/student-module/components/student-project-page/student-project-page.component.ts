@@ -31,7 +31,8 @@ export class StudentProjectPageComponent implements OnInit, OnDestroy {
     Name: 'string'
   });
 
-  private projectId;
+  private projectId: number;
+  private projectEnrollId: number;
   private authorized = false;
   private isTeacher = false;
   private tasks = [];
@@ -70,19 +71,19 @@ export class StudentProjectPageComponent implements OnInit, OnDestroy {
 
   }
 
- /* getMaterialsItems(): MaterialsItem[] {
-    return this.projectService.getMaterialsItems(1);
-  }
-  getProjectNewsItem(): ProjectNewsItem[] {
-    return this.projectService.getProjectNewsItem(1);
-  }
-  getTaskItems() {
-    this.http.get('https://api.github.com/repos/lanit-tercom-school/studit/issues')
-      .map((response: Response) => {
-        let res = response.json().slice(0, 4);
-        return res;
-      }).subscribe(res => this.tasks = res);
-  }*/
+  /* getMaterialsItems(): MaterialsItem[] {
+     return this.projectService.getMaterialsItems(1);
+   }
+   getProjectNewsItem(): ProjectNewsItem[] {
+     return this.projectService.getProjectNewsItem(1);
+   }
+   getTaskItems() {
+     this.http.get('https://api.github.com/repos/lanit-tercom-school/studit/issues')
+       .map((response: Response) => {
+         let res = response.json().slice(0, 4);
+         return res;
+       }).subscribe(res => this.tasks = res);
+   }*/
   enroll() {
     this.studentService.enrollToProject(this.data.UserId, this.projectId,
       JSON.parse(localStorage.getItem('current_user')).Token, this.enrollMessage)
@@ -92,8 +93,8 @@ export class StudentProjectPageComponent implements OnInit, OnDestroy {
       });
   }
   unenroll() {
-    this.studentService.unenrollToProject(this.projectId,
-      JSON.parse(localStorage.getItem('current_user')).bearer_token).subscribe(res => {
+    this.studentService.unenrollToProject(this.projectEnrollId,
+      JSON.parse(localStorage.getItem('current_user')).Token).subscribe(res => {
         this.enrollButtonStatus = "Enrolling";
         this.data.loadEnrolledUsersProject();
       });
@@ -109,6 +110,11 @@ export class StudentProjectPageComponent implements OnInit, OnDestroy {
     this.data.UserEnrolledProjects.subscribe(res => {
       if (res != null && res.find(pr => pr.Project.Id == this.projectId)) {
         this.enrollButtonStatus = "Unenrolling";
+        res.forEach(p => {
+          if (p.Project.Id == this.projectId){
+            this.projectEnrollId=p.Id;
+          }
+        })
       }
     })
   }
