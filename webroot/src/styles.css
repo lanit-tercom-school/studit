@@ -39,11 +39,11 @@ body {
 }
 
 * {
-  font-family: 'Jura', sans-serif;
+  font-family: 'PT Sans Caption', sans-serif;
 }
 
 h1, h2, h3, h4 {
-  font-family: "Jura", sans-serif;
+  font-family: "PT Sans Caption", sans-serif;
   color: var(--primary-color);
 }
 
