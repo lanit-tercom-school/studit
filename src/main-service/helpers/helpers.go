@@ -8,6 +8,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"strings"
 )
 
 type Message struct {
@@ -19,6 +20,14 @@ func InterfaceToString(i interface{}) (s string) {
 		s = ""
 	} else {
 		s = i.(string)
+	}
+	return
+}
+func InterfaceToArrayStrings(i interface{}) (s []string) {
+	if i == nil {
+		s = make([]string, 0)
+	} else {
+		s = strings.Split(i.(string), ",")
 	}
 	return
 }
