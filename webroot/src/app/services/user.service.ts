@@ -6,6 +6,8 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/observable/throw';
 
+import { ProjectItem } from 'models/project-item';
+
 import { environment } from '../../environments/environment';
 
 @Injectable()
@@ -73,6 +75,12 @@ export class UserService {
     let headers = new Headers();
     headers.append('Authorization', 'Bearer ' + token);
     return this.http.get(environment.apiUrl + '/graphql?query=' + query, { headers: headers })
-      .map((response: Response) => {return response.json().data.User.ProjectOn});
+      .map((response: Response) => {
+        let projects = new Array<ProjectItem>();
+        response.json().data.User.ProjectOn.forEach(element => {
+          projects.push(element.Project)
+        });
+        return projects
+      });
   }
 }
