@@ -32,11 +32,17 @@ export class StudentService {
 
   //Отменить заявку на участие в проекте
   unenrollToProject(id: number, token: string) {
+    var variable = { id: id };
+    var query = `mutation($id:Int!){
+    DeleteProjectEnroll(Id:$id)
+    {
+      Message
+    }
+} &variables=`+ JSON.stringify(variable);
     let headers = new Headers();
-    headers.append('Content-Type', 'application/json');
-    headers.append('Accept', 'application/json');
-    headers.append('Bearer-token', token);
-    return this.http.delete(environment.apiUrl + '/v1/project/enroll/' + id, { headers: headers });
+    headers.append('Authorization', 'Bearer ' + token);
+    return this.http.get(environment.apiUrl + '/graphql?query=' + query, { headers: headers })
+      .map((response: Response) => {return response.json().data.Message});
   }
 
   // показать заявки пользователя
@@ -47,6 +53,7 @@ export class StudentService {
    {
        Enrolls
         {
+          Id
           DateOfCreation
           Message
           Project
