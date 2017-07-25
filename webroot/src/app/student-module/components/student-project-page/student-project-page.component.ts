@@ -22,14 +22,7 @@ type StatusEnroll = "Enrolling" | "InProject" | "Unenrolling";
 })
 export class StudentProjectPageComponent implements OnInit, OnDestroy {
 
-  private projectObs: BehaviorSubject<ProjectItem> = new BehaviorSubject({
-    Description: 'string',
-    DateOfCreation: 'string',
-    Logo: 'string',
-    Tags: {},
-    Id: 0,
-    Name: 'string'
-  });
+  private projectObs: BehaviorSubject<ProjectItem> = new BehaviorSubject(new ProjectItem());
 
   private projectId: number;
   private projectEnrollId: number;
