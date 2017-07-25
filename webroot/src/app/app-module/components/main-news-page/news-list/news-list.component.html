@@ -1,5 +1,5 @@
 <div class="row news-list">
-    <div *ngFor="let news of NewsList | async | paginate: { id: 'news-pagination', itemsPerPage: limit, 
+    <div class="col-12" *ngFor="let news of NewsList | async | paginate: { id: 'news-pagination', itemsPerPage: limit, 
      totalItems: totalNumberOfNews | async, currentPage: pageNumber}">
          <app-news-item [NewsItem]="news" ></app-news-item>
     </div>

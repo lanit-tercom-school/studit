@@ -1,8 +1,9 @@
 .newscard{
-  margin-left: 15px;
   margin-bottom: 40px;
   background-color: var(--section-color);
   padding: 1rem 2rem 1rem 2rem;
+  width: 100%;
+  min-width: 100%;
 }
 .blacktag{
   color: black;

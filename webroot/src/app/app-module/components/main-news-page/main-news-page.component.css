@@ -1,6 +1,7 @@
 section#page_news {
     padding-top: 30px;
     padding-bottom: 20px;
+    min-height: 100%;
 }
 
 h1 {
