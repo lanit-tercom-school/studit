@@ -25,7 +25,7 @@ export class TeacherSettingsPageComponent implements OnInit {
   ngOnInit() {
     this.route.params
       .subscribe(params => {
-        this.userService.getUserById(JSON.parse(localStorage.getItem('current_user')).user.id)
+        this.userService.getUserById(JSON.parse(localStorage.getItem('current_user')).User.Id)
           .subscribe(res => this.currentUser.next(res));
       });
   }
