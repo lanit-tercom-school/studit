@@ -12,7 +12,8 @@ export class CurrentUser {
             Login: ""
         };
         this.Token = "";
-        this.PermissionLevel = PermLevel.Student;        
+        this.PermissionLevel = PermLevel.Student;
+        this.DataOfExpiration = ""; 
     }
 
     User: {
