@@ -19,14 +19,7 @@ import { TasksItem } from 'models/tasks-item';
 })
 export class ProjectPageComponent implements OnInit, OnDestroy {
 
-  private projectObs: BehaviorSubject<ProjectItem> = new BehaviorSubject({
-    Description: 'string',
-    DateOfCreation: 'string',
-    Logo: 'string',
-    Tags: {},
-    Id: 0,
-    Name: 'string'
-  });
+  private projectObs: BehaviorSubject<ProjectItem> = new BehaviorSubject(new ProjectItem());
   private projectId;
   private tasks = [];
   private message = 'Please write back soon!';

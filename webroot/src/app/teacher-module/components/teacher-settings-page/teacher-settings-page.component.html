@@ -3,7 +3,7 @@
   <hr>
   <div class="row">
     <div class="col-sm-12 col-md-5 col-lg-3 offset-lg-2" align = "center">
-        <img id = "user-avatar" src="{{currentUser.value.user.avatar}}" alt="Student photo">
+        <img id = "user-avatar" src="{{currentUser.value.User.Avatar}}" alt="Student photo">
         <br>
         <button  role="button" class="btn btn-secondary btn-submit">Изменить...</button>
     </div>
@@ -12,7 +12,7 @@
             <legend>Личные данные</legend>
           <div class="form-inline">
             <label class="col-sm-2 col-md-3 col-lg-2 col-form-label">Nickname</label>
-            <input class="form-control" placeholder={{currentUser.value.user.nickname}}>
+            <input class="form-control" placeholder={{currentUser.value.User.Nickname}}>
           </div>
         <button type="submit" role="button" class="btn btn-secondary btn-submit">Подтвердить</button>
        </form>
@@ -41,7 +41,7 @@
           <legend>Дополнительная информация</legend>
            <form class="form-inline">
             <label class="col-sm-2 col-md-3 col-lg-2 col-form-label" for="inputDescription">О себе</label>
-            <textarea class=" form-control" id = "inputDescription">{{currentUser.value.user.description}}</textarea>
+            <textarea class=" form-control" id = "inputDescription">{{currentUser.value.User.Description}}</textarea>
           </form>
           <button type="submit" role="button" class="btn btn-secondary btn-submit">Подтвердить</button>
         </form>

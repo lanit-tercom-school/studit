@@ -26,7 +26,7 @@ export class StudentSettingsPageComponent implements OnInit {
   ngOnInit() {
     this.route.params
       .subscribe(params => {
-        this.userService.getUserById(JSON.parse(localStorage.getItem('current_user')).user.id)
+        this.userService.getUserById(JSON.parse(localStorage.getItem('current_user')).User.Id)
           .subscribe(res => this.currentUser.next(res));
       });
   }
@@ -46,7 +46,7 @@ export class StudentSettingsPageComponent implements OnInit {
       this.ClearPasswords();
     }
     else {
-      this.userService.changePasswordForUser(JSON.parse(localStorage.getItem('current_user')).token, this.passwords)
+      this.userService.changePasswordForUser(JSON.parse(localStorage.getItem('current_user')).Token, this.passwords)
         .subscribe(res => {
           this.isChanged = true;
           this.clicked = false;

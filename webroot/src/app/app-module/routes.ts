@@ -27,7 +27,7 @@ export const routes: Routes = [
   // { path: 'admin', loadChildren: 'admin-module/admin.module#AdminModule',canActivate: [PathManager] },
   { path: 'registration', component: RegistrationPageComponent, canActivate: [PathManager] },
   { path: 'registration/validate', component: ValidationPageComponent, canActivate: [PathManager] },
-  // { path: 'user/:id', component: UserPublicPageComponent,  canActivate: [PathManager] },
+   { path: 'user/:id', component: UserPublicPageComponent,  canActivate: [PathManager] },
   { path: 'news', component: MainNewsPageComponent },
   { path: 'news/:id', component: MainFullNewsPageComponent },
   { path: '**', component: ErrorPageComponent },

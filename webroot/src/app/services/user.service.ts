@@ -17,8 +17,19 @@ export class UserService {
   getUsers() {
     return this.http.get(environment.apiUrl + '/v1/user/id/').map((response: Response) => response.json());
   }
-  getUserById(id: number) {
-    return this.http.get(environment.apiUrl + '/v1/user/id/' + id).map((response: Response) => response.json());
+  getUserById(id_: number) {
+     var variable = { id: id_ };
+    var query = `query($id:ID)  {
+   User(Id:$id)
+   {
+    Nickname
+    Avatar
+    Description
+  }
+}&variables=`+ JSON.stringify(variable);
+    return this.http.get(environment.apiUrl + '/graphql?query=' + query)
+      .map((response: Response) => {return response.json().data});
+
   }
 
   deleteUserById(id: number, token: string) {

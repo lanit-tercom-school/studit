@@ -1,7 +1,7 @@
 export interface NewsItem {
   Title: string,
   Description: string,
-  DateOfCreation: string,
+  Created: string,
   LastEdit: string,
   Id: 0,
   Tags: {},

@@ -6,7 +6,7 @@
   <div class ="row">
     <div class="col-sm-12 col-md-5 col-lg-3 offset-lg-2" align = "center">
         <img id = "project-avatar"
-         src={{createdProject.logo}}
+         src={{createdProject.Logo}}
          alt="Project photo">
         <br>
         <button  role="button"
@@ -18,12 +18,12 @@
           <div class ="form-line">
             <label class="col-form-label">Название проекта:</label>
             <input class="form-control"
-            placeholder ="" [(ngModel)]="createdProject.name" name = "projectName" required>
+            placeholder ="" [(ngModel)]="createdProject.Name" name = "projectName" required>
           </div>
         <div class ="form-line">
            <label class="col-form-label" for="inputDescription">Описание проекта:</label>
            <textarea class="form-control" id = "inputProjDescription"
-           [(ngModel)]="createdProject.description" name = "projDescription" required></textarea>
+           [(ngModel)]="createdProject.Description" name = "projDescription" required></textarea>
          </div>
         <button  role="button" class="btn btn-primary btn-submit" type="submit"
          (click)="makeProject()">Создать</button>

@@ -241,7 +241,7 @@ export class DataService {
           // дописываем в конец массива            
           this.dataStore.news.push(res);
           console.log(this.dataStore.news);
-          this.missedNews.next(res);
+          this.missedNews.next(Object.assign({}, res));
         }
       });
     }

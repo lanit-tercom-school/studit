@@ -50,7 +50,7 @@ export class NewsService {
       {
         Title
         Description
-        DateOfCreation
+        Created
         LastEdit
         Tags
         Image

@@ -75,14 +75,28 @@ export class TeacherService {
     return this.http.delete(environment.apiUrl + '/v1/project/users/?user_id=' + user_id + '&project_id=' + project_id, { headers: headers });
   }
 
-  postProject(project, token: string) {
+    postProject(project, token: string) {
+    var variables = { name: project.Name,
+       description: project.Description,
+       logo: project.Logo,
+       tags: project.Tags
+     };
+    var query = `mutation ($name: String!
+     $description: String!
+     $logo: String
+     $tags: String)
+    {
+      PostProject(Name: $name
+       Description: $description
+       Logo: $logo
+       Tags: $tags)
+      {
+        Id
+      }
+    } &variables=`+ JSON.stringify(variables);
     let headers = new Headers();
-    headers.append('Content-Type', 'application/json');
-    headers.append('Accept', 'application/json')
-    headers.append('Bearer-token', token);
-    console.log(environment.apiUrl + '/v1/project/id/', JSON.stringify(project));
-    return this.http.post(environment.apiUrl + '/v1/project/id/',
-      JSON.stringify(project), { headers: headers });
+    headers.append('Authorization', 'Bearer ' + token);
+      return this.http.get(environment.apiUrl + '/graphql?query=' + query, { headers: headers })
   }
 
   deleteProject(id: string, token: string) {

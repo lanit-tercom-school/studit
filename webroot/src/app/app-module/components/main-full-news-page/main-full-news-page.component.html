@@ -2,20 +2,20 @@
 	<h1>Новости</h1>
 
 	<div *ngIf="readingNews">
-		<h4>{{ readingNews.Title}}</h4>
-		<p>{{ readingNews.LastEdit| date: 'short'}}</p>
+		<h4>{{ readingNews.value.Title}}</h4>
+		<p>{{ readingNews.value.LastEdit| date: 'short'}}</p>
 		<div class="row">
 			<div class="col-lg-4 col-sm-12">
-				<img src="{{readingNews.Image}}" alt="Waiting for picture...">
+				<img src="{{readingNews.value.Image}}" alt="Waiting for picture...">
 			</div>
 			<div class="col-lg-8 col-sm-12">
-				<p class="text">{{ readingNews.Description}}</p>
+				<p class="text">{{ readingNews.value.Description}}</p>
 				<!--<p>Теги: <span *ngFor="let tag of readingNews.Tags; let i = index">
 		  	<a href = "#" class = "blacktag">{{tag}}</a>
 		    	<span *ngIf="i!=readingNews.tags.length-1">,</span>
 					</span>
 				</p>-->
-				<a href="#" class="blacktag">Теги: {{readingNews.Tags}}</a>
+				<a href="#" class="blacktag">Теги: {{readingNews.value.Tags}}</a>
 				<p>Источник: <a class="link" href="#">ссылка</a></p>
 				<div align="right">
 					<button role="button" class="page-link" routerLink="/news">Назад</button>
