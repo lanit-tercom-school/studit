@@ -1,15 +1,18 @@
 .card
-   {
-       margin-bottom:1.5em;
-       word-wrap: break-word;
-   }
+{
+    margin-bottom:1rem;
+    word-wrap: break-word;
+}
 
-    .card-img
-    {
-        width: 100%;
-        height: 100%;
-        padding: 0;
-    }
+.row{
+    width: 100%;
+    margin: 0rem 0rem 0rem 0rem
+}
+.card-img
+{
+    width: 100%;
+    height: 100%;
+}
 
 a
 {
@@ -24,16 +27,24 @@ a:hover
    transition: color .3s;
 }
 
-   .project-info
-   {
-       padding: .3rem;
-   }
+.project-info
+{
+    padding: 1rem 2rem 0rem 2rem;
+    background-color: var(--section-color);
+}
 
-    .read-more
-    {
-        margin: 0rem;
-        width: 90%;
-        position: absolute;
-	    bottom: 0;
-        text-align: right;
-    }
+.read-more
+{
+    margin: 0rem;
+    width: 90%;
+    position: absolute;
+    bottom: 0;
+    text-align: right;
+    color: var(--dark-accent-color);
+}
+
+h3{
+    font-family: 'Jura', sans-serif;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+}

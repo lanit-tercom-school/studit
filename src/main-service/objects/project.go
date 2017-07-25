@@ -77,6 +77,21 @@ func ResolvePostProject(p gql.ResolveParams) (interface{}, error) {
 			Tags:           helpers.InterfaceToString(p.Args["Tags"]),
 		}
 		err := helpers.HttpPost(conf.Configuration.DataServiceURL+"v1/project/", projectToSend, &projectToGet)
+		user := User{
+			Id: c.UserId,
+		}
+		project := Project{
+			Id: projectToGet.Id,
+		}
+		projectUserToGet := ProjectUser{}
+			helpers.LogAccesAllowed("PostProjectOn")
+			projectUserToSend := ProjectUser{
+				Project:    project,
+				User:       user,
+				SignedDate: time.Now(),
+				Progress:   0,
+			}
+			helpers.HttpPost(conf.Configuration.DataServiceURL+"v1/project_user/", projectUserToSend, &projectUserToGet)
 		return projectToGet, err
 	}
 	helpers.LogAccesDenied("PostProject")

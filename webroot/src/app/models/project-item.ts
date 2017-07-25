@@ -1,6 +1,8 @@
 export interface ProjectItem {
-  id: number;
-  name: string;
-  description: string;
-  logo: string;
+  Description: string,
+  DateOfCreation: string,
+  Logo: string,
+  Tags: {},
+  Id: number,
+  Name: string
 }

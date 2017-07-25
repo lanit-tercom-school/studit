@@ -20,7 +20,12 @@ import { TasksItem } from 'models/tasks-item';
 export class ProjectPageComponent implements OnInit, OnDestroy {
 
   private projectObs: BehaviorSubject<ProjectItem> = new BehaviorSubject({
-    id: 0, name: "Loading...", description: "Loading...", logo: "dsasda"
+    Description: 'string',
+    DateOfCreation: 'string',
+    Logo: 'string',
+    Tags: {},
+    Id: 0,
+    Name: 'string'
   });
   private projectId;
   private tasks = [];
@@ -45,15 +50,16 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
   }
-
+  
   getProjectInfo() {
-    this.data.Projects.subscribe(projects => {
-      if (projects.find(res => res.id == this.projectId)) {
-        this.projectObs.next(projects.find(res => res.id == this.projectId));
-      }
-      else {
-      }
+    this.data.loadProjectByID(this.projectId);
+    console.log('page: getProjectInfo');
+    this.data.MissedProject.subscribe(res => {
+      console.log(res);
+      if (res != null)
+        this.projectObs.next(res);
     });
+
   }
 
   getMaterialsItems(): MaterialsItem[] {

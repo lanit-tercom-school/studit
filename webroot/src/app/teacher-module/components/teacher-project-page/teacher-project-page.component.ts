@@ -13,7 +13,6 @@ import { ProjectItem } from 'models/project-item';
 import { ProjectNewsItem } from 'models/proj-news-item';
 import { TasksItem } from 'models/tasks-item';
 
-import 'rxjs/add/operator/filter';
 
 type StatusEnroll = "Enrolling" | "InProject" | "Unenrolling";
 
@@ -24,7 +23,15 @@ type StatusEnroll = "Enrolling" | "InProject" | "Unenrolling";
 })
 export class TeacherProjectPageComponent implements OnInit, OnDestroy {
 
-  private projectObs: BehaviorSubject<ProjectItem> = new BehaviorSubject(null);
+ private projectObs: BehaviorSubject<ProjectItem> = new BehaviorSubject({
+    Description: 'string',
+    DateOfCreation: 'string',
+    Logo: 'string',
+    Tags: {},
+    Id: 0,
+    Name: 'string'
+  });
+  
   private projectId;
   private isSuccess = false;
   private tasks = [];
@@ -53,13 +60,14 @@ export class TeacherProjectPageComponent implements OnInit, OnDestroy {
   }
 
   getProjectInfo() {
-    this.data.Projects.subscribe(projects => {
-      if (projects.find(res => res.id == this.projectId)) {
-        this.projectObs.next(projects.find(res => res.id == this.projectId));
-      }
-      else {
-      }
+    this.data.loadProjectByID(this.projectId);
+    console.log('page: getProjectInfo');
+    this.data.MissedProject.subscribe(res => {
+      console.log(res);
+      if (res != null)
+        this.projectObs.next(res);
     });
+
   }
 
   /*getMaterialsItems(): MaterialsItem[] {
@@ -79,7 +87,7 @@ export class TeacherProjectPageComponent implements OnInit, OnDestroy {
   choseButtonStatus() {
     this.enrollButtonStatus = 'Enrolling';
     this.data.UserProjects.subscribe(res => {
-      if (res != null && res.find(pr => pr.id == this.projectId)) {
+      if (res != null && res.find(pr => pr.Id == this.projectId)) {
         this.enrollButtonStatus = 'InProject';
       }
     })

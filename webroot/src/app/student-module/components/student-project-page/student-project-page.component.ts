@@ -1,15 +1,17 @@
-import { Component, OnInit } from '@angular/core';
-import { Http, Headers, RequestOptions, Response } from '@angular/http';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
+import { Http, Headers, RequestOptions, Response } from '@angular/http';
 import { Observable } from "rxjs/Observable";
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
+import { DataService } from 'services/data.service';
 import { ProjectService } from 'services/project.service';
 import { StudentService } from 'services/student.service';
-import { DataService } from 'services/data.service';
 
+import { MaterialsItem } from 'models/materials-item';
 import { ProjectItem } from 'models/project-item';
-import { ProjectTaskItem } from "models/project-task-item";
+import { ProjectNewsItem } from 'models/proj-news-item';
+import { TasksItem } from 'models/tasks-item';
 
 type StatusEnroll = "Enrolling" | "InProject" | "Unenrolling";
 
@@ -18,27 +20,38 @@ type StatusEnroll = "Enrolling" | "InProject" | "Unenrolling";
   templateUrl: './student-project-page.component.html',
   styleUrls: ['./student-project-page.component.css']
 })
-export class StudentProjectPageComponent implements OnInit {
+export class StudentProjectPageComponent implements OnInit, OnDestroy {
 
-  private projectObs: BehaviorSubject<ProjectItem> = new BehaviorSubject(null);
-  private projectId;
+  private projectObs: BehaviorSubject<ProjectItem> = new BehaviorSubject({
+    Description: 'string',
+    DateOfCreation: 'string',
+    Logo: 'string',
+    Tags: {},
+    Id: 0,
+    Name: 'string'
+  });
+
+  private projectId: number;
+  private projectEnrollId: number;
+  private authorized = false;
   private isTeacher = false;
-  private isSuccess = false;
   private tasks = [];
-  private message = 'Please write back soon!';
-  //0 - enrolling,1 - you are in project, 2 - unenrolling
+  private enrollMessage = 'Please write back soon!';
   private enrollButtonStatus = "Enrolling";
   constructor(private route: ActivatedRoute,
     private http: Http,
     private data: DataService,
-    private studentService: StudentService) { }
+    private studentService: StudentService,
+    private projectService: ProjectService) { }
 
   ngOnInit() {
+    if (localStorage.getItem('current_user')) { this.authorized = true; }
     this.route.params
       .subscribe(params => {
         this.projectId = params['id'];
         this.getProjectInfo();
         this.choseButtonStatus();
+        //console.log(this.enrollButtonStatus);
       });
     //this.getTaskItems();
 
@@ -48,41 +61,40 @@ export class StudentProjectPageComponent implements OnInit {
   }
 
   getProjectInfo() {
-    this.data.Projects.subscribe(projects => {
-      if (projects.find(res => res.id == this.projectId)) {
-        this.projectObs.next(projects.find(res => res.id == this.projectId));
-      }
-      else {
-      }
+    this.data.loadProjectByID(this.projectId);
+    console.log('page: getProjectInfo');
+    this.data.MissedProject.subscribe(res => {
+      console.log(res);
+      if (res != null)
+        this.projectObs.next(res);
     });
+
   }
 
-  /*getMaterialsItems(): MaterialsItem[] {
-    return this.apiService.getMaterialsItems(1);
-  }
-  getProjectNewsItem(): ProjectNewsItem[] {
-    return this.apiService.getProjectNewsItem(1);
-  }
-  getTaskItems() {
-    this.http.get('https://api.github.com/repos/lanit-tercom-school/studit/issues')
-      .map((response: Response) => {
-        let res = response.json().slice(0, 4);
-        return res;
-      }).subscribe(res => this.tasks = res);
-  }*/
+  /* getMaterialsItems(): MaterialsItem[] {
+     return this.projectService.getMaterialsItems(1);
+   }
+   getProjectNewsItem(): ProjectNewsItem[] {
+     return this.projectService.getProjectNewsItem(1);
+   }
+   getTaskItems() {
+     this.http.get('https://api.github.com/repos/lanit-tercom-school/studit/issues')
+       .map((response: Response) => {
+         let res = response.json().slice(0, 4);
+         return res;
+       }).subscribe(res => this.tasks = res);
+   }*/
   enroll() {
-    this.isSuccess = false;
-    this.studentService.enrollToProject(this.projectId,
-      JSON.parse(localStorage.getItem('current_user')).bearer_token, this.message).subscribe(res => {
+    this.studentService.enrollToProject(this.data.UserId, this.projectId,
+      JSON.parse(localStorage.getItem('current_user')).Token, this.enrollMessage)
+      .subscribe(res => {
         this.enrollButtonStatus = "Unenrolling";
         this.data.loadEnrolledUsersProject();
       });
-    this.isSuccess = true;
   }
   unenroll() {
-    this.isSuccess = false;
-    this.studentService.unenrollToProject(this.projectId,
-      JSON.parse(localStorage.getItem('current_user')).bearer_token).subscribe(res => {
+    this.studentService.unenrollToProject(this.projectEnrollId,
+      JSON.parse(localStorage.getItem('current_user')).Token).subscribe(res => {
         this.enrollButtonStatus = "Enrolling";
         this.data.loadEnrolledUsersProject();
       });
@@ -91,14 +103,19 @@ export class StudentProjectPageComponent implements OnInit {
   choseButtonStatus() {
     this.enrollButtonStatus = "Enrolling";
     this.data.UserProjects.subscribe(res => {
-      if (res != null && res.find(pr => pr.id == this.projectId)) {
+      if (res != null && res.find(pr => pr.Id == this.projectId)) {
         this.enrollButtonStatus = "InProject";
       }
     })
     this.data.UserEnrolledProjects.subscribe(res => {
-      if (res != null && res.find(pr => pr.id == this.projectId)) {
+      if (res != null && res.find(pr => pr.Project.Id == this.projectId)) {
         this.enrollButtonStatus = "Unenrolling";
+        res.forEach(p => {
+          if (p.Project.Id == this.projectId){
+            this.projectEnrollId=p.Id;
+          }
+        })
       }
-    });
+    })
   }
 }

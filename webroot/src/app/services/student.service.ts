@@ -12,37 +12,66 @@ export class StudentService {
 
   constructor(private http: Http) {
   }
-    //Отправить заявку на участие в проекте
-    enrollToProject(id: number, token: string, message: string) {
+  //Отправить заявку на участие в проекте
+  enrollToProject(user_: number, project_: number, token: string, message_: string) {
+    var variables = { message: message_, user: user_, project: project_ };
+    var query = `mutation ($message: String $user: Int! $project: Int!)
+    {
+      Enroll(Message: $message User: $user Project: $project)
+      {
+        Project
+        {
+          Id
+        }
+      }
+    } &variables=`+ JSON.stringify(variables);
     let headers = new Headers();
-    headers.append('Content-Type', 'application/json');
-    headers.append('Accept', 'application/json');
-    headers.append('Bearer-token', token);
-    return this.http.post(environment.apiUrl + '/v1/project/enroll/' + id + '?message=' + message, JSON.stringify({}), { headers: headers });
+    headers.append('Authorization', 'Bearer ' + token);
+    return this.http.get(environment.apiUrl + '/graphql?query=' + query, { headers: headers })
   }
 
   //Отменить заявку на участие в проекте
   unenrollToProject(id: number, token: string) {
+    var variable = { id: id };
+    var query = `mutation($id:Int!){
+    DeleteProjectEnroll(Id:$id)
+    {
+      Message
+    }
+} &variables=`+ JSON.stringify(variable);
     let headers = new Headers();
-    headers.append('Content-Type', 'application/json');
-    headers.append('Accept', 'application/json');
-    headers.append('Bearer-token', token);
-    return this.http.delete(environment.apiUrl + '/v1/project/enroll/' + id, { headers: headers });
+    headers.append('Authorization', 'Bearer ' + token);
+    return this.http.get(environment.apiUrl + '/graphql?query=' + query, { headers: headers })
+      .map((response: Response) => {return response.json().data.Message});
   }
 
   // показать заявки пользователя
-  getEnrolledUsersProject(id: number, token: string) {
+  getEnrolledUsersProject(id_: number, token: string) {
+    var variable = { id: id_ };
+    var query = `query($id:ID){
+   User(Id:$id)
+   {
+       Enrolls
+        {
+          Id
+          DateOfCreation
+          Message
+          Project
+          {
+            Id
+            Name
+          }
+        }
+  }
+} &variables=`+ JSON.stringify(variable);
     let headers = new Headers();
-    headers.append('Content-Type', 'application/json');
-    headers.append('Accept', 'application/json');
-    headers.append('Bearer-token', token);
-    return this.http.get(environment.apiUrl + '/v1/user/id/' + id).map(res => {
-      return res.json().enrolled_on;
-    });
+    headers.append('Authorization', 'Bearer ' + token);
+    return this.http.get(environment.apiUrl + '/graphql?query=' + query, { headers: headers })
+      .map((response: Response) => {return response.json().data.User.Enrolls});
   }
 
-// получить задачи студента по id проекта
-    getProjectStudentTaskItem(id: number) {
+  // получить задачи студента по id проекта
+  getProjectStudentTaskItem(id: number) {
     return [
       {
         "number": "645",

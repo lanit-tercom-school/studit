@@ -12,8 +12,8 @@ import (
 
 type ProjectUser struct {
 	Id         int       `orm:"column(id);pk;auto"`
-	ProjectId  *Project  `orm:"column(project_id);rel(fk)"`
-	UserId     *User     `orm:"column(user_id);rel(fk)"`
+	Project    *Project  `orm:"column(project_id);rel(fk)"`
+	User       *User     `orm:"column(user_id);rel(fk)"`
 	SignedDate time.Time `orm:"column(signed_date);auto_now_add"`
 	Progress   int       `orm:"column(progress)"`
 }

@@ -71,7 +71,7 @@
 <div class="container">
 	<div class="row" id="main-info">
 		<div class="col-lg-3 col-md-12" id="project-img-status">
-			<img width="225px" height="225px" src="{{projectObs.value.logo}}" alt="Project image">
+			<img width="225px" height="225px" src="{{projectObs.value.Logo}}" alt="Project image">
 			<div [ngSwitch]="enrollButtonStatus">
 				<div *ngSwitchCase="'Enrolling'">
 					<button type="button" role="button" class="btn btn-large btn-block btn-primary"  data-toggle="modal" data-target="#enrollMessageModal">Подать заявку</button>
@@ -89,8 +89,8 @@
 		</div>
 
 		<div class="col-lg-9 col-md-offset-12">
-			<h2 id="project-name">{{projectObs.value.name}}</h2>
-			<p class="lead">{{projectObs.value.description}}</p>
+			<h2 id="project-name">{{projectObs.value.Name}}</h2>
+			<p class="lead">{{projectObs.value.Description}}</p>
 			<i>Теги:</i> <a class="blacktag" href="#">lorem ipsum</a>
 		</div>
 	</div>
@@ -105,7 +105,7 @@
 				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
 			</div>
 			<div class="modal-body">
-				<textarea class="form-control" id="enrollMessage" [(ngModel)]="message" name="enrollMessage" autofocus></textarea>
+				<textarea class="form-control" id="enrollMessage" [(ngModel)]="enrollMessage" name="enrollMessage" autofocus></textarea>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-primary" (click)="enroll()" data-dismiss="modal">Отправить</button>

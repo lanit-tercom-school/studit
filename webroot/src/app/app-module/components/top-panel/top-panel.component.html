@@ -80,10 +80,10 @@
         <div *ngIf="currentUser">
           <li class="nav-item dropdown">
             <a class="lanit-nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-              <i class="fa fa-user-circle fa-lg" aria-hidden="true"></i> {{currentUser.login.split("@", 1)}}
+              <i class="fa fa-user-circle fa-lg" aria-hidden="true"></i> {{currentUser.User.Nickname}}
             </a>
-            <div class="dropdown-menu">
-              <a class="dropdown-item" routerLink="/user/{{currentUser.user.id}}"><i class="fa fa-address-card fa-fw" aria-hidden="true"></i> Мой профиль</a>
+         <div class="dropdown-menu">
+              <a class="dropdown-item" routerLink="/user/{{currentUser.User.Id}}"><i class="fa fa-address-card fa-fw" aria-hidden="true"></i> Мой профиль</a>
               <div *ngIf='currentUser.perm_lvl==0'><a class="dropdown-item" routerLink="/student/profile/settings"><i class="fa fa-cog fa-fw" aria-hidden="true"></i> Настройки</a></div>
               <div *ngIf='currentUser.perm_lvl==1'><a class="dropdown-item" routerLink="/teacher/profile/settings"><i class="fa fa-cog fa-fw" aria-hidden="true"></i> Настройки</a></div>
               <div *ngIf='currentUser.perm_lvl==2'><a class="dropdown-item" routerLink="/admin/profile/settings"><i class="fa fa-cog fa-fw" aria-hidden="true"></i> Настройки</a></div>

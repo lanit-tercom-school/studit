@@ -1,7 +1,11 @@
 section#page_news {
     padding-top: 30px;
     padding-bottom: 20px;
+    min-height: 100%;
 }
+
 h1 {
-    margin-bottom: 30px;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+   font-family: 'Jura', sans-serif; 
 }

@@ -15,10 +15,10 @@ export class TeacherNotePageComponent implements OnInit, OnDestroy {
   constructor(private teacherService: TeacherService) { }
 
   ngOnInit() {
-    this.teacherService.getEnrollsForTeacher(JSON.parse(window.localStorage.getItem("current_user")).bearer_token).subscribe(res => {
+    /* this.teacherService.getEnrollsForTeacher(JSON.parse(window.localStorage.getItem("current_user")).Token).subscribe(res => {
       console.log(res);
       this.EnrollList = res;
-    });
+    }); */
   }
   ngOnDestroy() {
 

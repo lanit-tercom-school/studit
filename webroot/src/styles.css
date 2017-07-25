@@ -39,7 +39,7 @@ body {
 }
 
 * {
-  font-family: 'Roboto', sans-serif;
+  font-family: 'PT Sans Caption', sans-serif;
 }
 
 h1, h2, h3, h4 {
@@ -93,4 +93,7 @@ nav.navbar, .footer {
   background-color: var(--dark-accent-color);
   border-color: var(--dark-accent-color);
   color: var(--section-color);
+}
+.container{
+    min-height: 100%;
 }
