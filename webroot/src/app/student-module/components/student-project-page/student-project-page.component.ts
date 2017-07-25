@@ -51,7 +51,6 @@ export class StudentProjectPageComponent implements OnInit, OnDestroy {
 
   getProjectInfo() {
     this.data.loadProjectByID(this.projectId);
-    console.log('page: getProjectInfo');
     this.data.MissedProject.subscribe(res => {
       if (res != null)
         this.projectObs.next(res);
@@ -64,7 +63,6 @@ export class StudentProjectPageComponent implements OnInit, OnDestroy {
     this.studentService.enrollToProject(this.data.UserId, this.projectId,
       JSON.parse(localStorage.getItem('current_user')).Token, this.enrollMessage)
       .subscribe(res => {
-        console.log(res);
         this.enrollButtonStatus = "Unenrolling";
         this.data.loadEnrolledUsersProject();
       });

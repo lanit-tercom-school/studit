@@ -129,7 +129,6 @@ export class DataService {
       .subscribe(res => {
         if (res != null) {
           this.dataStore.projects = res;
-          console.log(res);
           //this.projectsCountObs.next(Object.assign({},this.projectsCount));
           this.dataStore.projects.forEach(a => { a.Logo = this.addApiUrl(a.Logo); })
           this.projects.next(Object.assign({}, this.dataStore).projects);
@@ -140,22 +139,16 @@ export class DataService {
   // для подгрузки проекта
   loadProjectByID(id: number) {
     console.debug('data: load Project by ID');
-    console.log(id);
     let foundproject = this.dataStore.projects.find(item => item.Id == id);
-    console.log('foundproject' + foundproject);
-    console.log(this.dataStore.projects);
     if (foundproject) {
       this.missedProject.next(foundproject);
       console.debug('load from data');
     }
     else {
-      console.log('can not find');
       this.projectService.getProjectById(id).subscribe(res => {
         if (res != null) {
-          console.log('NEW PROJECT');
           // дописываем в конец массива            
           this.dataStore.projects.push(res);
-          console.log(this.dataStore.projects);
           this.missedProject.next(res);
         }
       });
@@ -224,10 +217,7 @@ export class DataService {
   // для подгрузки новости
   loadNewsByID(id: number) {
     console.debug('data: load News by ID');
-    console.log(id);
     let foundnews = this.dataStore.news.find(item => item.Id == id);
-    console.log(foundnews);
-    console.log(this.dataStore.news);
     if (foundnews) {
       this.missedNews.next(foundnews);
       console.debug('load from data');
@@ -236,11 +226,9 @@ export class DataService {
       console.debug('can not find');
       this.newsService.getNewsById(id).subscribe(res => {
         if (res != null) {
-          console.log(res);
           console.debug('NEW NEWS');
           // дописываем в конец массива            
-          this.dataStore.news.push(res);
-          console.log(this.dataStore.news);
+          this.dataStore.news.push(res);  
           this.missedNews.next(Object.assign({}, res));
         }
       });

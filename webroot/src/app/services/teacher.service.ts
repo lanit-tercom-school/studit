@@ -55,7 +55,6 @@ export class TeacherService {
   }
 
   postUserToProject(user_id: number, project_id: number, token: string): Observable<ProjectItem> {//Добавить пользователя в проект
-    console.log(user_id);
     var variable = { user_id: user_id, project_id: project_id };
     var query = `mutation($user_id:Int! $project_id:Int!)
     {
