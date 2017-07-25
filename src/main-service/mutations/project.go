@@ -26,7 +26,7 @@ func init() {
 			},
 			"Status": &gql.ArgumentConfig{
 				Type:         gql.String,
-				DefaultValue: "0",
+				DefaultValue: "opened",
 			},
 		},
 		Resolve: objects.ResolvePostProject,
