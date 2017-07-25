@@ -94,3 +94,6 @@ nav.navbar, .footer {
   border-color: var(--dark-accent-color);
   color: var(--section-color);
 }
+.container{
+    min-height: 100%;
+}
