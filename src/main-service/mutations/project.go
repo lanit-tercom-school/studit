@@ -24,6 +24,9 @@ func init() {
 			"Tags": &gql.ArgumentConfig{
 				Type: gql.String,
 			},
+			"GitHubUrl": &gql.ArgumentConfig{
+				Type: gql.String,
+			},
 			"Status": &gql.ArgumentConfig{
 				Type:         gql.String,
 				DefaultValue: "opened",

@@ -5,6 +5,7 @@ import { Observable } from "rxjs/Observable";
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 import { DataService } from 'services/data.service';
+import { TaskService } from 'services/task.service';
 import { ProjectService } from 'services/project.service';
 import { StudentService } from 'services/student.service';
 
@@ -23,37 +24,47 @@ type StatusEnroll = "Enrolling" | "InProject" | "Unenrolling";
 export class StudentProjectPageComponent implements OnInit, OnDestroy {
 
   private projectObs: BehaviorSubject<ProjectItem> = new BehaviorSubject(new ProjectItem());
+  private tasksObs: Observable<TasksItem[]>;
+
 
   private projectId: number;
   private projectEnrollId: number;
   private authorized = false;
   private isTeacher = false;
-  private tasks = [];
   private enrollMessage = 'Please write back soon!';
   private enrollButtonStatus = "Enrolling";
   constructor(private route: ActivatedRoute,
     private http: Http,
     private data: DataService,
     private studentService: StudentService,
-    private projectService: ProjectService) { }
+    private projectService: ProjectService,
+    private taskService: TaskService,
+  ) { }
 
   ngOnInit() {
     if (localStorage.getItem('current_user')) { this.authorized = true; }
-     this.route.params.subscribe(p => {
-        this.projectId = +p['id'];
-        this.getProjectInfo();
-        this.choseButtonStatus();
-      }); 
+    this.route.params.subscribe(p => {
+      this.projectId = +p['id'];
+      this.getProjectInfo();
+      this.choseButtonStatus();
+    });
   }
- 
+
   ngOnDestroy() {
+  }
+
+  getProjectTasks(gitHubUrl: string) {
+    this.data.loadTaskByGitHubUrl(gitHubUrl);
+    this.tasksObs = this.data.TasksForViewing;
   }
 
   getProjectInfo() {
     this.data.loadProjectByID(this.projectId);
     this.data.ProjectForViewing.subscribe(res => {
-      if (res != null)
+      if (res != null) {
         this.projectObs.next(res);
+        this.getProjectTasks(res.GitHubUrl)
+      }
     });
 
   }
@@ -79,9 +90,9 @@ export class StudentProjectPageComponent implements OnInit, OnDestroy {
     this.enrollButtonStatus = "Enrolling";
     this.data.UserProjects.subscribe(res => {
       if (res != null) {
-         if (res.find(pr => pr.Id == this.projectId)) {
+        if (res.find(pr => pr.Id == this.projectId)) {
           this.enrollButtonStatus = "InProject";
-        } 
+        }
       }
     });
     this.data.UserEnrolledProjects.subscribe(res => {

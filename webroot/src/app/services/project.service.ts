@@ -28,6 +28,7 @@ export class ProjectService {
         Logo
         Tags
         Id
+        GitHubUrl
         Name
       }
     }`;
@@ -56,6 +57,7 @@ export class ProjectService {
       Tags
       Id
       Name
+      GitHubUrl
     }
   }&variables=`+ JSON.stringify(variables);
     return this.http.get(environment.apiUrl + '/graphql?query=' + query)
@@ -78,6 +80,7 @@ export class ProjectService {
       Name
       Description
       DateOfCreation
+      GitHubUrl
     }
   }&variables=`+ JSON.stringify(variable);
     return this.http.get(environment.apiUrl + '/graphql?query=' + query)

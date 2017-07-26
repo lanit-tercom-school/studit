@@ -17,16 +17,16 @@ func init() {
 
 	beego.GlobalControllerRouter["file-service/controllers:FileController"] = append(beego.GlobalControllerRouter["file-service/controllers:FileController"],
 		beego.ControllerComments{
-			Method: "GetAll",
-			Router: `/`,
+			Method: "GetOne",
+			Router: `/:id`,
 			AllowHTTPMethods: []string{"get"},
 			MethodParams: param.Make(),
 			Params: nil})
 
 	beego.GlobalControllerRouter["file-service/controllers:FileController"] = append(beego.GlobalControllerRouter["file-service/controllers:FileController"],
 		beego.ControllerComments{
-			Method: "GetOne",
-			Router: `/:id`,
+			Method: "GetAll",
+			Router: `/`,
 			AllowHTTPMethods: []string{"get"},
 			MethodParams: param.Make(),
 			Params: nil})

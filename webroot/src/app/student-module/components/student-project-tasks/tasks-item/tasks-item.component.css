@@ -9,3 +9,6 @@ li
   margin-bottom: 1rem;
   word-break: break-all;
 }
+.card{
+  background-color: var(--section-color);
+}
