@@ -56,6 +56,7 @@ export class ProjectService {
       Tags
       Id
       Name
+      GitHubUrl
     }
   }&variables=`+ JSON.stringify(variables);
     return this.http.get(environment.apiUrl + '/graphql?query=' + query)

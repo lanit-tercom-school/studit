@@ -18,6 +18,7 @@ type Project struct {
 	Logo        string    `orm:"column(logo)"`
 	Tags        []string  `orm:"-"`
 	Status      string    `orm:"column(status)"`
+	GitHubUrl   string    `orm:"column(githuburl)"`
 }
 
 func init() {
@@ -27,7 +28,7 @@ func init() {
 // AddProject insert a new Project into database and returns
 // last inserted Id on success.
 func AddProject(m *Project) (id int64, err error) {
-	m.Status="opened"
+	m.Status = "opened"
 	o := orm.NewOrm()
 	id, err = o.Insert(m)
 	return
