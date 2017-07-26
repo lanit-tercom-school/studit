@@ -46,6 +46,9 @@ export class AuthService {
                     res.User.Login = user.login;
                     localStorage.setItem('current_user', JSON.stringify(res));
                 }
+            })
+            .catch((error: any) => {
+                return Observable.throw(error);
             });
     }
 
@@ -66,7 +69,10 @@ export class AuthService {
       }
     } &variables=`+ JSON.stringify(variable);
         return this.http.get(environment.authUrl + '/graphql?query=' + query)
-            .catch((error: any) => { return Observable.throw(error) });
+            .catch((error: any) => {
+                return Observable.throw(error)
+            });
+
     }
 
     register(user: UserRegister) {
