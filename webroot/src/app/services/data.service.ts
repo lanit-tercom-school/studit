@@ -106,8 +106,13 @@ export class DataService {
     return this.userToken;
   }
 
+  private alertError(error: any, stackFunction: string) {
+    alert('Ошибка! ' + error.status + ' ' + error.statusText);
+    console.debug('ERROR: status ' + error.status + ' ' + error.statusText);
+    console.debug(stackFunction);
+  }
+
   loadAll() {
-    console.log('Data.service ->loadAll');
     this.loadProjects(2, 0);
     this.loadProjectsForMainPage();
     if (localStorage.getItem('current_user')) {
@@ -122,7 +127,9 @@ export class DataService {
         this.loadEnrollsForTeacher();
       }
     }
+    console.debug('Data.service -> loadAll');
   }
+
 
   loadProjects(limit: number, offset: number) {
     this.projectService.getProjectItems(limit, offset)
@@ -134,30 +141,34 @@ export class DataService {
           this.dataStore.projects.forEach(a => { a.Logo = this.addApiUrl(a.Logo); })
           this.projects.next(Object.assign({}, this.dataStore).projects);
         }
+      },
+      error => {
+        this.alertError(error, 'ERROR: loadProjects() -> getProjectItems()');
       });
   }
 
   // для подгрузки проекта
   loadProjectByID(id: number) {
-    console.debug('data: load Project by ID');
+    console.debug('Data: load Project by ID');
     console.log(id);
     let foundproject = this.dataStore.projects.find(item => item.Id == id);
-    console.log('foundproject' + foundproject);
-    console.log(this.dataStore.projects);
+    console.debug('Finding the project...');
     if (foundproject) {
       this.missedProject.next(foundproject);
-      console.debug('load from data');
+      console.debug('Success. Load from data');
     }
     else {
-      console.log('can not find');
+      console.debug('Can not find');
       this.projectService.getProjectById(id).subscribe(res => {
         if (res != null) {
-          console.log('NEW PROJECT');
+          console.debug('NEW PROJECT');
           // дописываем в конец массива            
           this.dataStore.projects.push(res);
-          console.log(this.dataStore.projects);
           this.missedProject.next(res);
         }
+      },
+      error => {
+        this.alertError(error, 'ERROR: loadProjectByID() -> getProjectById()');
       });
     }
 
@@ -168,7 +179,10 @@ export class DataService {
       this.dataStore.projectsForMainPage = res;
       this.dataStore.projectsForMainPage.forEach(a => { a.Logo = this.addApiUrl(a.Logo); })
       this.projectsForMainPage.next(Object.assign({}, this.dataStore).projectsForMainPage);
-    })
+    },
+      error => {
+        this.alertError(error, 'ERROR: loadProjectsForMainPage() -> getMainPageProjects()');
+      });
   }
 
   loadUsersProjects() {
@@ -180,26 +194,30 @@ export class DataService {
           this.userProjects.next(Object.assign({}, this.dataStore).userProjects);
         }
 
-      });
+      },
+        error => {
+          this.alertError(error, 'ERROR: loadUsersProjects() -> getProjectsOfUser()');
+        });
     } else {
-      console.log('Error in data.service: can not load usersProject without auth');
+      console.debug('Error in data.service: can not load usersProject without auth');
     }
   }
 
   loadEnrolledUsersProject() {
     if (localStorage.getItem('current_user')) {
       this.studentService.getEnrolledUsersProject(this.userId, this.userToken).subscribe(res => {
-
         this.dataStore.userEnrolledProjects = res;
         //console.log(this.dataStore.userEnrolledProjects);
         this.userEnrolledProjects.next(Object.assign({}, this.dataStore).userEnrolledProjects);
-      })
+      },
+        error => {
+          this.alertError(error, 'ERROR: loadEnrolledUsersProject() -> getEnrolledUsersProject()');
+        });
     } else {
       console.log('Error in data.service: can not load enrolledUsersProject without auth');
     }
   }
 
-  // значения по умолчанию
   loadNews(offset: number) {
     this.newsService.getNewsPage(this.numberOfNewsOnPage, offset).subscribe(res => {
       this.newsCount = res.NewsList.TotalCount;
@@ -207,42 +225,43 @@ export class DataService {
       this.dataStore.news = res.NewsList.NewsList;
       this.news.next(Object.assign({}, this.dataStore).news);
 
-    });
+    },
+      error => {
+        this.alertError(error, 'ERROR: loadNews() -> getNewsPage()');
+      });
   }
 
   loadEnrollsForTeacher() {
     this.teacherService.getEnrollsForTeacher(this.userToken, this.userId).subscribe(res => {
       this.dataStore.enrollsForTeacher = res;
       this.enrollsForTeacher.next(Object.assign({}, this.dataStore).enrollsForTeacher);
-    });
+    },
+      error => {
+        this.alertError(error, 'ERROR: loadEnrollsForTeacher() -> getEnrollsForTeacher()');
+      });
   }
-
-  // TODO: сделать метод для проверки наличия новости в dataService
-
-
 
   // для подгрузки новости
   loadNewsByID(id: number) {
-    console.debug('data: load News by ID');
-    console.log(id);
+    console.debug('Data: load News by ID');
     let foundnews = this.dataStore.news.find(item => item.Id == id);
-    console.log(foundnews);
-    console.log(this.dataStore.news);
+    console.debug('Finding the news...');
     if (foundnews) {
       this.missedNews.next(foundnews);
-      console.debug('load from data');
+      console.debug('Success. Load from data');
     }
     else {
-      console.debug('can not find');
+      console.debug('Can not find');
       this.newsService.getNewsById(id).subscribe(res => {
         if (res != null) {
-          console.log(res);
           console.debug('NEW NEWS');
           // дописываем в конец массива            
           this.dataStore.news.push(res);
-          console.log(this.dataStore.news);
           this.missedNews.next(Object.assign({}, res));
         }
+      },
+      error => {
+        this.alertError(error, 'ERROR: loadNewsByID() -> getNewsById()');
       });
     }
 

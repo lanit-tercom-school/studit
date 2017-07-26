@@ -52,7 +52,6 @@ export class TeacherService {
         return Enrolls
       })
       .catch((error: any) => {
-         console.log('ERROR: TeacherService -> getEnrollsForTeacher()');
          return Observable.throw(error);
        });
   }
@@ -72,7 +71,6 @@ export class TeacherService {
     headers.append('Authorization', 'Bearer ' + token);
     return this.http.get(environment.apiUrl + '/graphql?query=' + query, { headers: headers })
     .catch((error: any) => {
-         console.log('ERROR: TeacherService -> postUserToProject()');
          return Observable.throw(error);
        });
   }
@@ -107,7 +105,6 @@ export class TeacherService {
     headers.append('Authorization', 'Bearer ' + token);
     return this.http.get(environment.apiUrl + '/graphql?query=' + query, { headers: headers })
       .catch((error: any) => {
-         console.log('ERROR: TeacherService -> postProject()');
          return Observable.throw(error);
        });
   }

@@ -34,7 +34,6 @@ export class ProjectService {
         return res;
       })
       .catch((error: any) => {
-          console.log('ERROR: ProjectService -> getMainPageProjects()');
           return Observable.throw(error);
       });
 
@@ -58,11 +57,9 @@ export class ProjectService {
       return this.http.get(environment.apiUrl + '/graphql?query=' + query)
       .map((response: Response) => {
         let res = response.json().data.ProjectList;
-        console.log(res);
         return res;
       })
       .catch((error: any) => {
-         console.log('ERROR: ProjectService -> getProjectItems()');
         return Observable.throw(error);
        });
   }
@@ -85,7 +82,6 @@ export class ProjectService {
     return this.http.get(environment.apiUrl + '/graphql?query=' + query)
     .map(response => response.json().data.Project)
     .catch((error: any) => {
-         console.log('ERROR: ProjectService -> getProjectById()')
          return Observable.throw(error);
        });
   }

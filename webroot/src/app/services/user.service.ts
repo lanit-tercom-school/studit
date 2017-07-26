@@ -31,7 +31,6 @@ export class UserService {
     return this.http.get(environment.apiUrl + '/graphql?query=' + query)
       .map((response: Response) => {return response.json().data})
       .catch((error: any) => {
-         console.log('ERROR: UserService -> getUserById()');
          return Observable.throw(error);
        });
 
@@ -80,7 +79,6 @@ export class UserService {
     return this.http.get(environment.apiUrl + '/graphql?query=' + query, { headers: headers })
       .map((response: Response) => {return response.json().data.User.ProjectOn})
       .catch((error: any) => {
-         console.log('ERROR: UserService -> getProjectsOfUser()');
          return Observable.throw(error);
        });
   }

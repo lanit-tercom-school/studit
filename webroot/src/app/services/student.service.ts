@@ -29,7 +29,6 @@ export class StudentService {
     headers.append('Authorization', 'Bearer ' + token);
     return this.http.get(environment.apiUrl + '/graphql?query=' + query, { headers: headers })
     .catch((error: any) => {
-         console.log('ERROR: StudentService -> enrollToProject()');
          return Observable.throw(error);
        });
   }
@@ -48,7 +47,6 @@ export class StudentService {
     return this.http.get(environment.apiUrl + '/graphql?query=' + query, { headers: headers })
       .map((response: Response) => {return response.json().data.Message})
       .catch((error: any) => {
-         console.log('ERROR: StudentService -> unenrollToProject()');
          return Observable.throw(error);
       });
   }
@@ -78,7 +76,6 @@ export class StudentService {
     return this.http.get(environment.apiUrl + '/graphql?query=' + query, { headers: headers })
       .map((response: Response) => {return response.json().data.User.Enrolls})
       .catch((error: any) => {
-         console.log('ERROR: StudentService -> getEnrolledUsersProject()');
          return Observable.throw(error);
       });
   }
