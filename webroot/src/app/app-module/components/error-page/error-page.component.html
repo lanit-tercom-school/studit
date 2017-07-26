@@ -1,14 +1,19 @@
-<div id = "cover" class="container">
-     <h1  align = "center">Ошибка!</h1>
-     <div class ="row">
-       <div class = "col-md-5 col-sm-8" align = "right">
-        <img src=" http://2.bp.blogspot.com/-xTATnS1coU4/VMSt5DpWIQI/AAAAAAAAHlc/yYZAnJ4dndc/s1600/6-programmer-mascot.png"
-        alt ="Surprised programmer">
+<div id="cover" class="container">
+  <h1 align="center">Ошибка!</h1>
+  <div class="row">
+    <div class="col-md-5 col-sm-8" align="right">
+      <img src=" http://2.bp.blogspot.com/-xTATnS1coU4/VMSt5DpWIQI/AAAAAAAAHlc/yYZAnJ4dndc/s1600/6-programmer-mascot.png" alt="Surprised programmer">
+    </div>
+    <div class="col-md-7 col-sm-4 error-message">
+      <ul>Что произошло?</ul>
+      <div *ngIf='!isAuthorised'>
+        <li> Возможно, запрашиваемой страницы не существует. Вернуться на
+          <a href="/main">главную</a></li>
+        <li> Чтобы попасть на домашнюю страницу, <a href="/auth">войдите в аккаунт</a></li>
       </div>
-      <div class = "col-md-7 col-sm-4 error-message">
-         <ul>Что произошло?</ul>
-          <li> Возможно, запрашиваемой страницы не существует. Вернуться на
-            <a href = "/main">главную</a></li>
-          <li> Чтобы попасть на домашнюю страницу, <a href = "/auth">войдите в аккаунт</a></li>
+      <div *ngIf='isAuthorised'>
+        <p> Возможно, запрашиваемой страницы не существует. Вернуться на
+          <a href="/main">главную</a></p>
       </div>
-</div>
+    </div>
+  </div>
