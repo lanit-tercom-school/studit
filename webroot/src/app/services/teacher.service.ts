@@ -5,6 +5,8 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/observable/throw';
 
+import { AlertService } from 'services/alert.service';
+
 import { environment } from '../../environments/environment';
 import { EnrollItem } from 'models/enroll-item';
 import { ProjectItem } from "models/project-item";
@@ -12,8 +14,8 @@ import { ProjectItem } from "models/project-item";
 @Injectable()
 export class TeacherService {
 
-  constructor(private http: Http) {
-  }
+  constructor(private http: Http,
+  private alert: AlertService) { }
 
   getEnrollsForTeacher(token: string, id: number): Observable<EnrollItem[]> {
     var variable = { id: id };
@@ -42,6 +44,7 @@ export class TeacherService {
     headers.append('Authorization', 'Bearer ' + token);
     return this.http.get(environment.apiUrl + '/graphql?query=' + query, { headers: headers })
       .map((response: Response) => {
+        this.alert.checkGraphQLResponse(response);
         let Enrolls: EnrollItem[] = new Array<EnrollItem>();
         response.json().data.User.ProjectOn.forEach(element => {
           if (element.Enrolls.length != 0) {
@@ -50,7 +53,7 @@ export class TeacherService {
             });
           }
         });
-        return Enrolls
+        return Enrolls;
       })
       .catch((error: any) => {
         return Observable.throw(error);
@@ -73,8 +76,9 @@ export class TeacherService {
     let headers = new Headers();
     headers.append('Authorization', 'Bearer ' + token);
     return this.http.get(environment.apiUrl + '/graphql?query=' + query, { headers: headers })
-      .map(res => {
-        return res.json().data.Project;
+      .map((response: Response) => {
+        this.alert.checkGraphQLResponse(response);
+        return response.json().data.Project;
       })
       .catch((error: any) => {
         return Observable.throw(error);
@@ -116,8 +120,9 @@ export class TeacherService {
     let headers = new Headers();
     headers.append('Authorization', 'Bearer ' + token);
     return this.http.get(environment.apiUrl + '/graphql?query=' + query, { headers: headers })
-    .map(res => {
-      return res.json().data.PostProject;
+    .map((response: Response) => {
+      this.alert.checkGraphQLResponse(response);
+      return response.json().data.PostProject;
     })
     .catch((error: any) => {
         return Observable.throw(error);
