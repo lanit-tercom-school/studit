@@ -39,15 +39,23 @@ export class AuthService {
     } &variables=`+ JSON.stringify(variables);
         return this.http.get(environment.authUrl + '/graphql?query=' + query)
             .map((response: Response) => {
-                // successful login => getting jwt
-                let res = response.json().data.Auth.Signin;
-                if (res && res.Token) {
+                var res = response.json();
+                if (res.errors) {
+                    console.log('BAD QUERY');
+                    console.log(res.errors[0].message);
+                    var err = new Error();
+                    err.message = res.errors[0].message;
+                    throw err;
+                }
+                let signin = response.json().data.Auth.Signin;
+                if (signin && signin.Token) {
                     // save data for keeping user logged in
-                    res.User.Login = user.login;
-                    localStorage.setItem('current_user', JSON.stringify(res));
+                    signin.User.Login = user.login;
+                    localStorage.setItem('current_user', JSON.stringify(signin));
                 }
             })
             .catch((error: any) => {
+                console.log("CATCH!");
                 return Observable.throw(error);
             });
     }
@@ -70,7 +78,7 @@ export class AuthService {
     } &variables=`+ JSON.stringify(variable);
         return this.http.get(environment.authUrl + '/graphql?query=' + query)
             .catch((error: any) => {
-                return Observable.throw(error)
+                return Observable.throw(error);
             });
 
     }

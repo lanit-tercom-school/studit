@@ -107,8 +107,14 @@ export class DataService {
   }
 
   public alertError(error: any, stackFunction: string) {
-    alert('Ошибка! ' + error.status + ' ' + error.statusText);
-    console.debug('ERROR: status ' + error.status + ' ' + error.statusText);
+    if (error.status) {
+      alert('Ошибка! ' + error.status + ' ' + error.statusText);
+      console.debug('ERROR: status ' + error.status + ' ' + error.statusText);
+    }
+    if (error.message) {
+      alert('Ошибка! ' + error.message);
+      console.debug('ERROR: status ' + error.message);
+    }
     console.debug(stackFunction);
   }
 
@@ -166,9 +172,9 @@ export class DataService {
           this.missedProject.next(res);
         }
       },
-      error => {
-        this.alertError(error, 'ERROR: loadProjectByID() -> getProjectById()');
-      });
+        error => {
+          this.alertError(error, 'ERROR: loadProjectByID() -> getProjectById()');
+        });
     }
 
   }
@@ -259,9 +265,9 @@ export class DataService {
           this.missedNews.next(Object.assign({}, res));
         }
       },
-      error => {
-        this.alertError(error, 'ERROR: loadNewsByID() -> getNewsById()');
-      });
+        error => {
+          this.alertError(error, 'ERROR: loadNewsByID() -> getNewsById()');
+        });
     }
 
   }
