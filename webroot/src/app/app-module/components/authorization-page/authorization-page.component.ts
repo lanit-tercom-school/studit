@@ -15,7 +15,6 @@ import { User } from 'models/user';
 export class AuthorizationPageComponent implements OnInit {
 
   private localUser: User = { login: "", password: "" };
-  private error: any;
   private ReturnUrl: string
 
   constructor(private auth: AuthService, private router: Router, private data: DataService) { }
@@ -36,8 +35,7 @@ export class AuthorizationPageComponent implements OnInit {
          this.router.navigate(['home']);
       },
       error => {
-        console.log(error);
-        this.error = error;
+        this.data.alertError(error, 'ERROR: loadProjects() -> getProjectItems()');
       });
   }
 }

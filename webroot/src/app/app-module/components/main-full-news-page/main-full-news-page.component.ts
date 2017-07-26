@@ -35,6 +35,9 @@ constructor(
       console.log(res);
       if (res != null)
         this.readingNews.next(res);
-    });
+    },
+      error => {
+        this.data.alertError(error, 'ERROR: getReadingNews() -> MissedNews');
+      });
   }
 }

@@ -43,7 +43,7 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
   }
-  
+
   getProjectInfo() {
     this.data.loadProjectByID(this.projectId);
     console.log('page: getProjectInfo');
@@ -51,21 +51,31 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
       console.log(res);
       if (res != null)
         this.projectObs.next(res);
-    });
+    },
+      error => {
+        this.data.alertError(error, 'ERROR: getProjectInfo() -> MissedProject');
+      });
 
   }
 
   getMaterialsItems(): MaterialsItem[] {
     return this.projectService.getMaterialsItems(1);
   }
+
   getProjectNewsItem(): ProjectNewsItem[] {
     return this.projectService.getProjectNewsItem(1);
   }
+
   getTaskItems() {
     this.http.get('https://api.github.com/repos/lanit-tercom-school/studit/issues')
       .map((response: Response) => {
         let res = response.json().slice(0, 4);
         return res;
-      }).subscribe(res => this.tasks = res);
+      }).subscribe(res => {
+        this.tasks = res
+      },
+      error => {
+        this.data.alertError(error, 'ERROR: getTaskItems()');
+      });
   }
 }

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { AuthService } from 'services/auth.service';
+import { DataService } from 'services/data.service';
 
 @Component({
   selector: 'app-validation-page',
@@ -14,7 +15,8 @@ export class ValidationPageComponent implements OnInit {
   private isValidated: boolean;
 
 
-  constructor(private auth: AuthService) { }
+  constructor(private auth: AuthService,
+  private data: DataService) { }
 
   validate() {
     this.auth.validate(this.validationCode)
@@ -24,8 +26,8 @@ export class ValidationPageComponent implements OnInit {
         localStorage.removeItem("validation_code");
       },
       error => {
-        console.log(error);
         this.message = error;
+        this.data.alertError(error, 'ERROR: validate() -> auth.validate()');
       });
   }
 

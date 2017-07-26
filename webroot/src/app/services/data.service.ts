@@ -106,7 +106,7 @@ export class DataService {
     return this.userToken;
   }
 
-  private alertError(error: any, stackFunction: string) {
+  public alertError(error: any, stackFunction: string) {
     alert('Ошибка! ' + error.status + ' ' + error.statusText);
     console.debug('ERROR: status ' + error.status + ' ' + error.statusText);
     console.debug(stackFunction);
@@ -136,7 +136,6 @@ export class DataService {
       .subscribe(res => {
         if (res != null) {
           this.dataStore.projects = res;
-          console.log(res);
           //this.projectsCountObs.next(Object.assign({},this.projectsCount));
           this.dataStore.projects.forEach(a => { a.Logo = this.addApiUrl(a.Logo); })
           this.projects.next(Object.assign({}, this.dataStore).projects);

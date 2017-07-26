@@ -16,7 +16,9 @@ export class HomeTeacherProjectViewComponent implements OnInit {
   private ProjectList: Observable<ProjectItem[]>;
   private EnrollList: Observable<EnrollItem[]>;
 
-  constructor(private teacherService: TeacherService, private data: DataService, private studentService: StudentService) { }
+  constructor(private teacherService: TeacherService,
+   private data: DataService,
+   private studentService: StudentService) { }
 
   ngOnInit() {
     this.ProjectList = this.data.UserProjects;
@@ -24,12 +26,18 @@ export class HomeTeacherProjectViewComponent implements OnInit {
   }
   ngOnDestroy() {
   }
-  accept(enroll:EnrollItem) {
+  accept(enroll: EnrollItem) {
     console.log(enroll);
     this.studentService.unenrollToProject(enroll.Id, this.data.UserToken).subscribe(r => {
-        this.teacherService.postUserToProject(+enroll.User.Id, enroll.Project.Id, this.data.UserToken).subscribe(res => {
-          this.data.loadEnrollsForTeacher();
+      this.teacherService.postUserToProject(+enroll.User.Id, enroll.Project.Id, this.data.UserToken).subscribe(res => {
+        this.data.loadEnrollsForTeacher();
+      },
+        error => {
+          this.data.alertError(error, 'ERROR: accept() -> unenrollToProject() -> postUserToProject()');
         });
-    });
+    },
+      error => {
+        this.data.alertError(error, 'ERROR: accept() -> unenrollToProject()');
+      });
   }
 }

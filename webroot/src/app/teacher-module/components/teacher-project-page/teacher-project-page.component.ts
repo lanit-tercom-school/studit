@@ -59,7 +59,10 @@ export class TeacherProjectPageComponent implements OnInit, OnDestroy {
       console.log(res);
       if (res != null)
         this.projectObs.next(res);
-    });
+    },
+      error => {
+        this.data.alertError(error, 'ERROR: getProjectInfo() -> MissedProject');
+      });
 
   }
 
@@ -83,6 +86,9 @@ export class TeacherProjectPageComponent implements OnInit, OnDestroy {
       if (res != null && res.find(pr => pr.Id == this.projectId)) {
         this.enrollButtonStatus = 'InProject';
       }
-    })
+    },
+      error => {
+        this.data.alertError(error, 'ERROR: choseButtonStatus() -> UserProjects');
+      });
   }
 }

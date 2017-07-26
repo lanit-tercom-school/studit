@@ -60,7 +60,10 @@ export class StudentProjectPageComponent implements OnInit, OnDestroy {
       console.log(res);
       if (res != null)
         this.projectObs.next(res);
-    });
+    },
+      error => {
+        this.data.alertError(error, 'ERROR: getProjectInfo() -> MissedProject');
+      });
 
   }
 
@@ -83,13 +86,20 @@ export class StudentProjectPageComponent implements OnInit, OnDestroy {
       .subscribe(res => {
         this.enrollButtonStatus = "Unenrolling";
         this.data.loadEnrolledUsersProject();
+      },
+      error => {
+        this.data.alertError(error, 'ERROR: enroll() -> enrollToProject()');
       });
   }
+
   unenroll() {
     this.studentService.unenrollToProject(this.projectEnrollId,
       JSON.parse(localStorage.getItem('current_user')).Token).subscribe(res => {
         this.enrollButtonStatus = "Enrolling";
         this.data.loadEnrolledUsersProject();
+      },
+      error => {
+        this.data.alertError(error, 'ERROR: unenroll() -> unenrollToProject()');
       });
   }
 
@@ -99,16 +109,23 @@ export class StudentProjectPageComponent implements OnInit, OnDestroy {
       if (res != null && res.find(pr => pr.Id == this.projectId)) {
         this.enrollButtonStatus = "InProject";
       }
-    })
+    },
+      error => {
+        this.data.alertError(error, 'ERROR: choseButtonStatus() -> UserProjects');
+      });
+
     this.data.UserEnrolledProjects.subscribe(res => {
       if (res != null && res.find(pr => pr.Project.Id == this.projectId)) {
         this.enrollButtonStatus = "Unenrolling";
         res.forEach(p => {
-          if (p.Project.Id == this.projectId){
-            this.projectEnrollId=p.Id;
+          if (p.Project.Id == this.projectId) {
+            this.projectEnrollId = p.Id;
           }
         })
       }
-    })
+    },
+      error => {
+        this.data.alertError(error, 'ERROR: choseButtonStatus() -> UserEnrolledProjects');
+      });
   }
 }
