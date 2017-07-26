@@ -31,7 +31,7 @@ export class CreateProjectPageComponent implements OnInit {
       //this.router.navigate(['/home']);
       },
       error => {
-        this.alert.alertError(error, 'ERROR: makeProject() -> postProject()');
+        this.alert.alertError(error, 'makeProject() -> postProject()');
       });
     }
 

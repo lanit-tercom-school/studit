@@ -36,11 +36,11 @@ export class HomeTeacherProjectViewComponent implements OnInit {
         this.data.loadEnrollsForTeacher();
       },
         error => {
-          this.alert.alertError(error, 'ERROR: accept() -> unenrollToProject() -> postUserToProject()');
+          this.alert.alertError(error, 'accept() -> unenrollToProject() -> postUserToProject()');
         });
     },
       error => {
-        this.alert.alertError(error, 'ERROR: accept() -> unenrollToProject()');
+        this.alert.alertError(error, 'accept() -> unenrollToProject()');
       });
   }
 }

@@ -37,7 +37,7 @@ constructor(
         this.readingNews.next(res);
     },
       error => {
-        this.alert.alertError(error, 'ERROR: getReadingNews() -> MissedNews');
+        this.alert.alertError(error, 'getReadingNews() -> MissedNews');
       });
   }
 }

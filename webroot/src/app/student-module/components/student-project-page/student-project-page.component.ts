@@ -58,7 +58,7 @@ export class StudentProjectPageComponent implements OnInit, OnDestroy {
         this.projectObs.next(res);
     },
       error => {
-        this.alert.alertError(error, 'ERROR: getProjectInfo() -> MissedProject');
+        this.alert.alertError(error, ' getProjectInfo() -> MissedProject');
       });
 
   }
@@ -72,7 +72,7 @@ export class StudentProjectPageComponent implements OnInit, OnDestroy {
         this.data.loadEnrolledUsersProject();
       },
       error => {
-        this.alert.alertError(error, 'ERROR: enroll() -> enrollToProject()');
+        this.alert.alertError(error, ' enroll() -> enrollToProject()');
       });
   }
 
@@ -83,7 +83,7 @@ export class StudentProjectPageComponent implements OnInit, OnDestroy {
         this.data.loadEnrolledUsersProject();
       },
       error => {
-        this.alert.alertError(error, 'ERROR: unenroll() -> unenrollToProject()');
+        this.alert.alertError(error, ' unenroll() -> unenrollToProject()');
       });
   }
 
@@ -97,7 +97,7 @@ export class StudentProjectPageComponent implements OnInit, OnDestroy {
       }
     },
       error => {
-        this.alert.alertError(error, 'ERROR: choseButtonStatus() -> UserProjects');
+        this.alert.alertError(error, ' choseButtonStatus() -> UserProjects');
       });
 
     this.data.UserEnrolledProjects.subscribe(res => {
@@ -111,7 +111,7 @@ export class StudentProjectPageComponent implements OnInit, OnDestroy {
       }
     },
       error => {
-        this.alert.alertError(error, 'ERROR: choseButtonStatus() -> UserEnrolledProjects');
+        this.alert.alertError(error, 'choseButtonStatus() -> UserEnrolledProjects');
       });
   }
 } 

@@ -39,7 +39,7 @@ export class AuthorizationPageComponent implements OnInit {
          this.router.navigate(['home']);
       },
       error => {
-        this.alert.alertError(error, 'ERROR: loadProjects() -> getProjectItems()');
+        this.alert.alertError(error, 'authenticatenow()');
       });
   }
 }

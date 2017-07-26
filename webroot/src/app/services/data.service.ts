@@ -139,7 +139,7 @@ export class DataService {
         }
       },
       error => {
-        this.alert.alertError(error, 'ERROR: loadProjects() -> getProjectItems()');
+        this.alert.alertError(error, 'loadProjects() -> getProjectItems()');
       });
   }
 
@@ -160,7 +160,7 @@ export class DataService {
         }
       },
         error => {
-          this.alert.alertError(error, 'ERROR: loadProjectByID() -> getProjectById()');
+          this.alert.alertError(error, 'loadProjectByID() -> getProjectById()');
         });
     }
 
@@ -173,7 +173,7 @@ export class DataService {
       this.projectsForMainPage.next(Object.assign({}, this.dataStore).projectsForMainPage);
     },
       error => {
-        this.alert.alertError(error, 'ERROR: loadProjectsForMainPage() -> getMainPageProjects()');
+        this.alert.alertError(error, 'loadProjectsForMainPage() -> getMainPageProjects()');
       });
   }
 
@@ -188,7 +188,7 @@ export class DataService {
 
       },
         error => {
-          this.alert.alertError(error, 'ERROR: loadUsersProjects() -> getProjectsOfUser()');
+          this.alert.alertError(error, 'loadUsersProjects() -> getProjectsOfUser()');
         });
     } 
     else {
@@ -204,7 +204,7 @@ export class DataService {
         this.userEnrolledProjects.next(Object.assign({}, this.dataStore).userEnrolledProjects);
       },
         error => {
-          this.alert.alertError(error, 'ERROR: loadEnrolledUsersProject() -> getEnrolledUsersProject()');
+          this.alert.alertError(error, 'loadEnrolledUsersProject() -> getEnrolledUsersProject()');
         });
     } else {
       console.log('Error in data.service: can not load enrolledUsersProject without auth');
@@ -220,7 +220,7 @@ export class DataService {
 
     },
       error => {
-        this.alert.alertError(error, 'ERROR: loadNews() -> getNewsPage()');
+        this.alert.alertError(error, 'loadNews() -> getNewsPage()');
       });
   }
 
@@ -230,7 +230,7 @@ export class DataService {
       this.enrollsForTeacher.next(Object.assign({}, this.dataStore).enrollsForTeacher);
     },
       error => {
-        this.alert.alertError(error, 'ERROR: loadEnrollsForTeacher() -> getEnrollsForTeacher()');
+        this.alert.alertError(error, 'loadEnrollsForTeacher() -> getEnrollsForTeacher()');
       });
   }
 
@@ -257,7 +257,7 @@ export class DataService {
         }
       },
         error => {
-          this.alert.alertError(error, 'ERROR: loadNewsByID() -> getNewsById()');
+          this.alert.alertError(error, 'loadNewsByID() -> getNewsById()');
         });
     }
 

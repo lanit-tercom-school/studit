@@ -54,7 +54,7 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
         this.projectObs.next(res);
     },
       error => {
-        this.alert.alertError(error, 'ERROR: getProjectInfo() -> MissedProject');
+        this.alert.alertError(error, 'getProjectInfo() -> MissedProject');
       });
 
   }
@@ -76,7 +76,7 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
         this.tasks = res
       },
       error => {
-        this.alert.alertError(error, 'ERROR: getTaskItems()');
+        this.alert.alertError(error, 'getTaskItems()');
       });
   }
 }

@@ -40,7 +40,7 @@ export class TeacherSettingsPageComponent implements OnInit {
             this.currentUser.next(c);
           },
            error => {
-            this.alert.alertError(error, 'ERROR: ngOnInit() -> getUserById');
+            this.alert.alertError(error, ' ngOnInit() -> getUserById');
           });
       });
   }

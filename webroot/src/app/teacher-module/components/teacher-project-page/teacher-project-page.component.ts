@@ -62,7 +62,7 @@ export class TeacherProjectPageComponent implements OnInit, OnDestroy {
         this.projectObs.next(res);
     },
       error => {
-        this.alert.alertError(error, 'ERROR: getProjectInfo() -> MissedProject');
+        this.alert.alertError(error, ' getProjectInfo() -> MissedProject');
       });
 
   }
@@ -89,7 +89,7 @@ export class TeacherProjectPageComponent implements OnInit, OnDestroy {
       }
     },
       error => {
-        this.alert.alertError(error, 'ERROR: choseButtonStatus() -> UserProjects');
+        this.alert.alertError(error, 'choseButtonStatus() -> UserProjects');
       });
   }
 }
