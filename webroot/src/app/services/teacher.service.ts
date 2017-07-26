@@ -50,7 +50,11 @@ export class TeacherService {
           }
         });
         return Enrolls
-      });
+      })
+      .catch((error: any) => {
+         console.log('ERROR: TeacherService -> getEnrollsForTeacher()');
+         return Observable.throw(error);
+       });
   }
 
   postUserToProject(user_id: number, project_id: number, token: string) {//Добавить пользователя в проект
@@ -67,7 +71,12 @@ export class TeacherService {
     let headers = new Headers();
     headers.append('Authorization', 'Bearer ' + token);
     return this.http.get(environment.apiUrl + '/graphql?query=' + query, { headers: headers })
+    .catch((error: any) => {
+         console.log('ERROR: TeacherService -> postUserToProject()');
+         return Observable.throw(error);
+       });
   }
+
   deleteProjectUser(project_id: number, user_id: number, token: string) {//Удалить пользователя проекта
     let headers = new Headers();
     headers.append('Accept', 'application/json');
@@ -96,7 +105,11 @@ export class TeacherService {
     } &variables=`+ JSON.stringify(variables);
     let headers = new Headers();
     headers.append('Authorization', 'Bearer ' + token);
-      return this.http.get(environment.apiUrl + '/graphql?query=' + query, { headers: headers })
+    return this.http.get(environment.apiUrl + '/graphql?query=' + query, { headers: headers })
+      .catch((error: any) => {
+         console.log('ERROR: TeacherService -> postProject()');
+         return Observable.throw(error);
+       });
   }
 
   deleteProject(id: string, token: string) {

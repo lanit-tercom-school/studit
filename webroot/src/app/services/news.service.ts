@@ -36,7 +36,11 @@ export class NewsService {
     }
   }&variables=`+ JSON.stringify(variables);
       return this.http.get(environment.apiUrl + '/graphql?query=' + query)
-        .map((response: Response) =>  response.json().data );
+        .map((response: Response) =>  response.json().data )
+        .catch((error: any) => {
+          console.log('ERROR: NewsService -> getNewsPage()');
+          return Observable.throw(error);
+        });
     }
   }
 
@@ -58,7 +62,11 @@ export class NewsService {
       }
     }&variables=`+ JSON.stringify(variable);
     return this.http.get(environment.apiUrl + '/graphql?query=' + query)
-      .map((response: Response) => {return response.json().data.News});
+      .map((response: Response) => {return response.json().data.News})
+      .catch((error: any) => {
+          console.log('ERROR: NewsService -> getNewsById()');
+          return Observable.throw(error);
+        });
     }
   }
 }

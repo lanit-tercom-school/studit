@@ -17,6 +17,7 @@ export class UserService {
   getUsers() {
     return this.http.get(environment.apiUrl + '/v1/user/id/').map((response: Response) => response.json());
   }
+
   getUserById(id_: number) {
      var variable = { id: id_ };
     var query = `query($id:ID)  {
@@ -28,7 +29,11 @@ export class UserService {
   }
 }&variables=`+ JSON.stringify(variable);
     return this.http.get(environment.apiUrl + '/graphql?query=' + query)
-      .map((response: Response) => {return response.json().data});
+      .map((response: Response) => {return response.json().data})
+      .catch((error: any) => {
+         console.log('ERROR: UserService -> getUserById()');
+         return Observable.throw(error);
+       });
 
   }
 
@@ -73,6 +78,10 @@ export class UserService {
     let headers = new Headers();
     headers.append('Authorization', 'Bearer ' + token);
     return this.http.get(environment.apiUrl + '/graphql?query=' + query, { headers: headers })
-      .map((response: Response) => {return response.json().data.User.ProjectOn});
+      .map((response: Response) => {return response.json().data.User.ProjectOn})
+      .catch((error: any) => {
+         console.log('ERROR: UserService -> getProjectsOfUser()');
+         return Observable.throw(error);
+       });
   }
 }
