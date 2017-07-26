@@ -24,7 +24,7 @@ type StatusEnroll = "Enrolling" | "InProject" | "Unenrolling";
 export class StudentProjectPageComponent implements OnInit, OnDestroy {
 
   private projectObs: BehaviorSubject<ProjectItem> = new BehaviorSubject(new ProjectItem());
-  private tasksObs: BehaviorSubject<TasksItem[]> = new BehaviorSubject(new Array<TasksItem>());
+  private tasksObs: Observable<TasksItem[]>;
 
 
   private projectId: number;
@@ -54,9 +54,8 @@ export class StudentProjectPageComponent implements OnInit, OnDestroy {
   }
 
   getProjectTasks(gitHubUrl: string) {
-    this.taskService.getTaskItemsFromGitHub(gitHubUrl).subscribe(res => {
-      this.tasksObs.next(res);
-    });;
+    this.data.loadTaskByGitHubUrl(gitHubUrl);
+    this.tasksObs = this.data.TasksForViewing;
   }
 
   getProjectInfo() {

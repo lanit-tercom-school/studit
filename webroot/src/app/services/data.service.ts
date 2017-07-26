@@ -7,8 +7,10 @@ import { StudentService } from 'services/student.service';
 import { ProjectService } from 'services/project.service';
 import { NewsService } from 'services/news.service';
 import { UserService } from 'services/user.service';
+import { TaskService } from 'services/task.service';
 
 import { NewsItem } from "models/news-item";
+import { TasksItem } from "models/tasks-item";
 import { ProjectItem } from 'models/project-item';
 import { EnrollItem } from 'models/enroll-item';
 import { environment } from '../../environments/environment';
@@ -28,7 +30,7 @@ export class DataService {
   private userEnrolledProjects: BehaviorSubject<EnrollItem[]> = <BehaviorSubject<EnrollItem[]>>new BehaviorSubject([]);
   private projectsForMainPage: BehaviorSubject<ProjectItem[]> = <BehaviorSubject<ProjectItem[]>>new BehaviorSubject([]);
   private enrollsForTeacher: BehaviorSubject<EnrollItem[]> = <BehaviorSubject<EnrollItem[]>>new BehaviorSubject([]);
-
+  private tasksForViewing: BehaviorSubject<TasksItem[]> = <BehaviorSubject<TasksItem[]>>new BehaviorSubject([]);
   private newsCount: number;
   private newsCountObs: BehaviorSubject<number> = new BehaviorSubject<number>(0);
 
@@ -38,6 +40,7 @@ export class DataService {
   private newsForViewing: BehaviorSubject<NewsItem> = new BehaviorSubject<NewsItem>(null);
 
   private dataStore: {
+    tasks: Map<string, TasksItem[]>;
     news: NewsItem[];
     projects: ProjectItem[];
     userProjects: ProjectItem[];
@@ -46,7 +49,8 @@ export class DataService {
     enrollsForTeacher: EnrollItem[];
   } = {
     news: [], projects: [], userProjects: [],
-    userEnrolledProjects: [], projectsForMainPage: [], enrollsForTeacher: []
+    userEnrolledProjects: [], projectsForMainPage: [], enrollsForTeacher: [],
+    tasks: new Map<string, TasksItem[]>([]),
   };
 
   constructor(
@@ -54,11 +58,15 @@ export class DataService {
     private studentService: StudentService,
     private newsService: NewsService,
     private projectService: ProjectService,
-    private userService: UserService
+    private userService: UserService,
+    private taskService: TaskService,
   ) { }
 
   public get News() {
     return this.news.asObservable();
+  }
+  public get TasksForViewing() {
+    return this.tasksForViewing.asObservable();
   }
   public get NewsCountObs() {
     return this.newsCountObs.asObservable();
@@ -134,6 +142,29 @@ export class DataService {
           this.projects.next(Object.assign({}, this.dataStore).projects);
         }
       });
+  }
+
+  loadTaskByGitHubUrl(gitHubUrl: string) {
+    let url: string = gitHubUrl;
+    let tasks: TasksItem[] = this.dataStore.tasks[gitHubUrl];
+    if (tasks == null) {
+      this.taskService.getTaskItemsFromGitHub(gitHubUrl)
+        .subscribe(res => {
+          if (res != null) {
+            this.dataStore.tasks[url] = res;
+            this.tasksForViewing.next(Object.assign({}, this.dataStore).tasks[url]);
+          }
+        });
+    } else {
+      this.tasksForViewing.next(tasks);
+      this.taskService.getTaskItemsFromGitHub(gitHubUrl)
+        .subscribe(res => {
+          if (res != null && tasks != res) {
+            this.dataStore.tasks[url] = res;
+            this.tasksForViewing.next(Object.assign({}, this.dataStore).tasks[url]);
+          }
+        });
+    }
   }
 
   // для подгрузки проекта в ProjectForViewing
@@ -214,7 +245,7 @@ export class DataService {
 
 
 
-    // для подгрузки новости в NewsForViewing
+  // для подгрузки новости в NewsForViewing
   loadNewsByID(id: number) {
     console.debug('data: load News by ID');
     let foundnews = this.dataStore.news.find(item => item.Id == id);
@@ -228,7 +259,7 @@ export class DataService {
         if (res != null) {
           console.debug('NEW NEWS');
           // дописываем в конец массива            
-          this.dataStore.news.push(res);  
+          this.dataStore.news.push(res);
           this.newsForViewing.next(Object.assign({}, res));
         }
       });

@@ -18,6 +18,11 @@
 .btn
 {
   margin-top: 1rem;
+  width:100%;
+}
+
+img{
+  width:100%;
 }
 
 #enrollMessage
