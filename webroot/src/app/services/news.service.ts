@@ -6,6 +6,8 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/observable/throw';
 
+import { AlertService } from "services/alert.service";
+
 import { NewsList } from "models/news-list";
 import { NewsItem } from "models/news-item";
 import { environment } from '../../environments/environment';
@@ -13,10 +15,10 @@ import { environment } from '../../environments/environment';
 @Injectable()
 export class NewsService {
 
-  constructor(private http: Http) {
+  constructor(private http: Http,
+   private alert: AlertService) {
   }
 
-  // необязательные параметры
   getNewsPage(limit_: number, offset_: number):Observable<NewsList> {
     if (limit_ > 0 && offset_ >= 0) {
       var variables = { limit: limit_, offset: offset_ }
@@ -38,7 +40,10 @@ export class NewsService {
     }
   }&variables=`+ JSON.stringify(variables);
       return this.http.get(environment.apiUrl + '/graphql?query=' + query)
-        .map((response: Response) =>  response.json().data.NewsList)
+        .map((response: Response) =>  {
+          this.alert.checkGraphQLResponse(response);
+          return response.json().data.NewsList
+        })
         .catch((error: any) => {
           return Observable.throw(error);
         });
@@ -63,7 +68,10 @@ export class NewsService {
       }
     }&variables=`+ JSON.stringify(variable);
     return this.http.get(environment.apiUrl + '/graphql?query=' + query)
-      .map((response: Response) => {return response.json().data.News})
+      .map((response: Response) => {
+        this.alert.checkGraphQLResponse(response);
+        return response.json().data.News
+      })
       .catch((error: any) => {
           return Observable.throw(error);
         });

@@ -12,8 +12,11 @@ import { AlertService } from 'services/alert.service';
 import { NewsItem } from "models/news-item";
 import { ProjectItem } from 'models/project-item';
 import { EnrollItem } from 'models/enroll-item';
-import { environment } from '../../environments/environment';
+
 import { PermLevel } from 'models/permission-level.enum';
+
+import { environment } from '../../environments/environment';
+
 
 import 'rxjs/add/operator/filter';
 
@@ -106,7 +109,6 @@ export class DataService {
   public get UserToken() {
     return this.userToken;
   }
-
 
 
   loadAll() {
