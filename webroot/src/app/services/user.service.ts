@@ -26,7 +26,7 @@ export class UserService {
     var query = `query($id:ID)  {
    User(Id:$id)
    {
-    ID
+    Id
     Nickname
     Avatar
     Description

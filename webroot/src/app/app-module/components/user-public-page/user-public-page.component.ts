@@ -22,11 +22,11 @@ export class UserPublicPageComponent implements OnInit {
       .subscribe(params => {
         this.userService.getUserById(+params['id'])
           .subscribe(res => {
-            let c: CurrentUser = new(CurrentUser);
-            c.User.Avatar=res.Avatar;
-            c.User.Id=+res.Id;
-            c.User.Description=res.Description;
-            c.User.Nickname=res.Nickname;
+            let c: CurrentUser = new (CurrentUser);
+            c.User.Avatar = res.Avatar;
+            c.User.Id = +res.Id;
+            c.User.Description = res.Description;
+            c.User.Nickname = res.Nickname;
             this.currentUser.next(c);
           });
       });

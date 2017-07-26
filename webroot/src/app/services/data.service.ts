@@ -34,8 +34,8 @@ export class DataService {
 
   private projectsCount: number = 7; //заглушка
   private projectsCountObs: BehaviorSubject<number> = new BehaviorSubject<number>(7);
-  private missedProject: BehaviorSubject<ProjectItem> = new BehaviorSubject<ProjectItem>(null);
-  private missedNews: BehaviorSubject<NewsItem> = new BehaviorSubject<NewsItem>(null);
+  private projectForViewing: BehaviorSubject<ProjectItem> = new BehaviorSubject<ProjectItem>(null);
+  private newsForViewing: BehaviorSubject<NewsItem> = new BehaviorSubject<NewsItem>(null);
 
   private dataStore: {
     news: NewsItem[];
@@ -71,12 +71,12 @@ export class DataService {
   }
 
   //TODO: Change Missed to Viewed
-  public get MissedProject() {
-    return this.missedProject.asObservable();
+  public get ProjectForViewing() {
+    return this.projectForViewing.asObservable();
   }
 
-  public get MissedNews() {
-    return this.missedNews.asObservable();
+  public get NewsForViewing() {
+    return this.newsForViewing.asObservable();
   }
 
   public get UserProjects() {
@@ -136,12 +136,12 @@ export class DataService {
       });
   }
 
-  // для подгрузки проекта
+  // для подгрузки проекта в ProjectForViewing
   loadProjectByID(id: number) {
     console.debug('data: load Project by ID');
     let foundproject = this.dataStore.projects.find(item => item.Id == id);
     if (foundproject) {
-      this.missedProject.next(foundproject);
+      this.projectForViewing.next(foundproject);
       console.debug('load from data');
     }
     else {
@@ -149,7 +149,7 @@ export class DataService {
         if (res != null) {
           // дописываем в конец массива            
           this.dataStore.projects.push(res);
-          this.missedProject.next(res);
+          this.projectForViewing.next(res);
         }
       });
     }
@@ -214,12 +214,12 @@ export class DataService {
 
 
 
-  // для подгрузки новости
+    // для подгрузки новости в NewsForViewing
   loadNewsByID(id: number) {
     console.debug('data: load News by ID');
     let foundnews = this.dataStore.news.find(item => item.Id == id);
     if (foundnews) {
-      this.missedNews.next(foundnews);
+      this.newsForViewing.next(foundnews);
       console.debug('load from data');
     }
     else {
@@ -229,7 +229,7 @@ export class DataService {
           console.debug('NEW NEWS');
           // дописываем в конец массива            
           this.dataStore.news.push(res);  
-          this.missedNews.next(Object.assign({}, res));
+          this.newsForViewing.next(Object.assign({}, res));
         }
       });
     }

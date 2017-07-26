@@ -54,7 +54,7 @@ export class TeacherProjectPageComponent implements OnInit, OnDestroy {
 
   getProjectInfo() {
     this.data.loadProjectByID(this.projectId);
-    this.data.MissedProject.subscribe(res => {
+    this.data.ProjectForViewing.subscribe(res => {
       if (res != null)
         this.projectObs.next(res);
     });
