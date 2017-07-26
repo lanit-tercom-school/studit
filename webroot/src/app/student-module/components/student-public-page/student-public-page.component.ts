@@ -4,7 +4,7 @@ import { Observable } from "rxjs/Observable";
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 import { UserService } from 'services/user.service';
-import { DataService } from 'services/data.service';
+import { AlertService } from 'services/alert.service';
 
 import { CurrentUser } from 'models/current-user';
 
@@ -18,7 +18,7 @@ export class StudentPublicPageComponent implements OnInit {
   private currentUser: BehaviorSubject<CurrentUser> = new BehaviorSubject(new CurrentUser());
 
   constructor(private userService: UserService,
-    private data: DataService,
+    private alert: AlertService,
     private route: ActivatedRoute) { }
 
   ngOnInit() {
@@ -34,7 +34,7 @@ export class StudentPublicPageComponent implements OnInit {
             this.currentUser.next(c);
           },
           error => {
-            this.data.alertError(error, 'ERROR: ngOnInit() -> getUserById()');
+            this.alert.alertError(error, 'ERROR: ngOnInit() -> getUserById()');
           });
       });
   }

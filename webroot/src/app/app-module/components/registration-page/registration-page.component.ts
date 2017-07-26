@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { AuthService } from 'services/auth.service';
-import { DataService } from 'services/data.service';
+import { AlertService } from 'services/alert.service';
 
 import { UserRegister } from 'models/user-register';
 
@@ -17,8 +17,8 @@ export class RegistrationPageComponent implements OnInit {
   private error: string;
 
   constructor(private auth: AuthService,
-    private data: DataService,
-    private router: Router) { }
+    private router: Router,
+    private alert: AlertService) { }
 
   ngOnInit() {
   }
@@ -29,7 +29,7 @@ export class RegistrationPageComponent implements OnInit {
         this.router.navigate(['/registration/validate']);
       },
       error => {
-        this.data.alertError(error, 'ERROR: register() -> auth.register()');
+        this.alert.alertError(error, 'ERROR: register() -> auth.register()');
       });
   }
 

@@ -7,6 +7,7 @@ import { StudentService } from 'services/student.service';
 import { ProjectService } from 'services/project.service';
 import { NewsService } from 'services/news.service';
 import { UserService } from 'services/user.service';
+import { AlertService } from 'services/alert.service';
 
 import { NewsItem } from "models/news-item";
 import { ProjectItem } from 'models/project-item';
@@ -54,7 +55,8 @@ export class DataService {
     private studentService: StudentService,
     private newsService: NewsService,
     private projectService: ProjectService,
-    private userService: UserService
+    private userService: UserService,
+    private alert: AlertService,
   ) { }
 
   public get News() {
@@ -70,7 +72,6 @@ export class DataService {
     return this.projectsCountObs.asObservable();
   }
 
-  //TODO: Change Missed to Viewed
   public get ProjectForViewing() {
     return this.projectForViewing.asObservable();
   }
@@ -106,17 +107,7 @@ export class DataService {
     return this.userToken;
   }
 
-  public alertError(error: any, stackFunction: string) {
-    if (error.status) {
-      alert('Ошибка! ' + error.status + ' ' + error.statusText);
-      console.debug('ERROR: status ' + error.status + ' ' + error.statusText);
-    }
-    if (error.message) {
-      alert('Ошибка! ' + error.message);
-      console.debug('ERROR: status ' + error.message);
-    }
-    console.debug(stackFunction);
-  }
+
 
   loadAll() {
     this.loadProjects(2, 0);
@@ -148,7 +139,7 @@ export class DataService {
         }
       },
       error => {
-        this.alertError(error, 'ERROR: loadProjects() -> getProjectItems()');
+        this.alert.alertError(error, 'ERROR: loadProjects() -> getProjectItems()');
       });
   }
 
@@ -169,7 +160,7 @@ export class DataService {
         }
       },
         error => {
-          this.alertError(error, 'ERROR: loadProjectByID() -> getProjectById()');
+          this.alert.alertError(error, 'ERROR: loadProjectByID() -> getProjectById()');
         });
     }
 
@@ -182,7 +173,7 @@ export class DataService {
       this.projectsForMainPage.next(Object.assign({}, this.dataStore).projectsForMainPage);
     },
       error => {
-        this.alertError(error, 'ERROR: loadProjectsForMainPage() -> getMainPageProjects()');
+        this.alert.alertError(error, 'ERROR: loadProjectsForMainPage() -> getMainPageProjects()');
       });
   }
 
@@ -197,9 +188,10 @@ export class DataService {
 
       },
         error => {
-          this.alertError(error, 'ERROR: loadUsersProjects() -> getProjectsOfUser()');
+          this.alert.alertError(error, 'ERROR: loadUsersProjects() -> getProjectsOfUser()');
         });
-    } else {
+    } 
+    else {
       console.debug('Error in data.service: can not load usersProject without auth');
     }
   }
@@ -212,7 +204,7 @@ export class DataService {
         this.userEnrolledProjects.next(Object.assign({}, this.dataStore).userEnrolledProjects);
       },
         error => {
-          this.alertError(error, 'ERROR: loadEnrolledUsersProject() -> getEnrolledUsersProject()');
+          this.alert.alertError(error, 'ERROR: loadEnrolledUsersProject() -> getEnrolledUsersProject()');
         });
     } else {
       console.log('Error in data.service: can not load enrolledUsersProject without auth');
@@ -228,7 +220,7 @@ export class DataService {
 
     },
       error => {
-        this.alertError(error, 'ERROR: loadNews() -> getNewsPage()');
+        this.alert.alertError(error, 'ERROR: loadNews() -> getNewsPage()');
       });
   }
 
@@ -238,7 +230,7 @@ export class DataService {
       this.enrollsForTeacher.next(Object.assign({}, this.dataStore).enrollsForTeacher);
     },
       error => {
-        this.alertError(error, 'ERROR: loadEnrollsForTeacher() -> getEnrollsForTeacher()');
+        this.alert.alertError(error, 'ERROR: loadEnrollsForTeacher() -> getEnrollsForTeacher()');
       });
   }
 
@@ -265,7 +257,7 @@ export class DataService {
         }
       },
         error => {
-          this.alertError(error, 'ERROR: loadNewsByID() -> getNewsById()');
+          this.alert.alertError(error, 'ERROR: loadNewsByID() -> getNewsById()');
         });
     }
 

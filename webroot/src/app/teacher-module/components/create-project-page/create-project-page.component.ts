@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { Observable } from "rxjs/Observable";
 
 import { TeacherService } from "services/teacher.service";
-import { DataService } from "services/data.service";
+import { AlertService } from "services/alert.service";
 
 import { ProjectItem } from "models/project-item";
 
@@ -18,7 +18,7 @@ export class CreateProjectPageComponent implements OnInit {
 
   constructor(private router : Router,
    private teacherService: TeacherService,
-   private data: DataService) { }
+   private alert: AlertService) { }
 
   ngOnInit() {
     }
@@ -31,7 +31,7 @@ export class CreateProjectPageComponent implements OnInit {
       //this.router.navigate(['/home']);
       },
       error => {
-        this.data.alertError(error, 'ERROR: makeProject() -> postProject()');
+        this.alert.alertError(error, 'ERROR: makeProject() -> postProject()');
       });
     }
 

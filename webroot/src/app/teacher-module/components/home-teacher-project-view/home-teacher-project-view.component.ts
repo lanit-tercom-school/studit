@@ -1,23 +1,27 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Observable } from "rxjs/Observable";
 
-import { ProjectItem } from 'models/project-item';
 import { TeacherService } from 'services/teacher.service';
 import { StudentService } from 'services/student.service';
 import { DataService } from 'services/data.service';
+import { AlertService } from 'services/alert.service';
+
 import { EnrollItem } from 'models/enroll-item';
+import { ProjectItem } from 'models/project-item';
 
 @Component({
   selector: 'app-home-teacher-project-view',
   templateUrl: './home-teacher-project-view.component.html',
   styleUrls: ['./home-teacher-project-view.component.css']
 })
+
 export class HomeTeacherProjectViewComponent implements OnInit {
   private ProjectList: Observable<ProjectItem[]>;
   private EnrollList: Observable<EnrollItem[]>;
 
   constructor(private teacherService: TeacherService,
    private data: DataService,
+   private alert: AlertService,
    private studentService: StudentService) { }
 
   ngOnInit() {
@@ -32,11 +36,11 @@ export class HomeTeacherProjectViewComponent implements OnInit {
         this.data.loadEnrollsForTeacher();
       },
         error => {
-          this.data.alertError(error, 'ERROR: accept() -> unenrollToProject() -> postUserToProject()');
+          this.alert.alertError(error, 'ERROR: accept() -> unenrollToProject() -> postUserToProject()');
         });
     },
       error => {
-        this.data.alertError(error, 'ERROR: accept() -> unenrollToProject()');
+        this.alert.alertError(error, 'ERROR: accept() -> unenrollToProject()');
       });
   }
 }

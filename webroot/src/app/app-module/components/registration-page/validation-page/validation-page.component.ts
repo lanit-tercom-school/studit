@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { AuthService } from 'services/auth.service';
-import { DataService } from 'services/data.service';
+import { AlertService } from 'services/alert.service';
 
 @Component({
   selector: 'app-validation-page',
@@ -16,18 +16,18 @@ export class ValidationPageComponent implements OnInit {
 
 
   constructor(private auth: AuthService,
-  private data: DataService) { }
+  private alert: AlertService) { }
 
   validate() {
     this.auth.validate(this.validationCode)
       .subscribe(
-      data => {
+      () => {
         this.message = 'Registered!';
         localStorage.removeItem("validation_code");
       },
       error => {
         this.message = error;
-        this.data.alertError(error, 'ERROR: validate() -> auth.validate()');
+        this.alert.alertError(error, 'ERROR: validate() -> auth.validate()');
       });
   }
 

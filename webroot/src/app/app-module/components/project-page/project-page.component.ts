@@ -7,6 +7,8 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 import { DataService } from 'services/data.service';
 import { ProjectService } from 'services/project.service';
+import { AlertService } from 'services/alert.service';
+
 import { MaterialsItem } from 'models/materials-item';
 import { ProjectItem } from 'models/project-item';
 import { ProjectNewsItem } from 'models/proj-news-item';
@@ -27,6 +29,7 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private http: Http,
     private data: DataService,
+    private alert: AlertService,
     private projectService: ProjectService
   )
   { }
@@ -51,7 +54,7 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
         this.projectObs.next(res);
     },
       error => {
-        this.data.alertError(error, 'ERROR: getProjectInfo() -> MissedProject');
+        this.alert.alertError(error, 'ERROR: getProjectInfo() -> MissedProject');
       });
 
   }
@@ -73,7 +76,7 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
         this.tasks = res
       },
       error => {
-        this.data.alertError(error, 'ERROR: getTaskItems()');
+        this.alert.alertError(error, 'ERROR: getTaskItems()');
       });
   }
 }

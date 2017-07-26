@@ -7,6 +7,7 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { TeacherService } from 'services/teacher.service';
 import { DataService } from 'services/data.service';
 import { ProjectService } from 'services/project.service';
+import { AlertService } from 'services/alert.service';
 
 import { MaterialsItem } from 'models/materials-item';
 import { ProjectItem } from 'models/project-item';
@@ -21,6 +22,7 @@ type StatusEnroll = "Enrolling" | "InProject" | "Unenrolling";
   templateUrl: './teacher-project-page.component.html',
   styleUrls: ['./teacher-project-page.component.css']
 })
+
 export class TeacherProjectPageComponent implements OnInit, OnDestroy {
 
  private projectObs: BehaviorSubject<ProjectItem> = new BehaviorSubject(new ProjectItem());
@@ -34,6 +36,7 @@ export class TeacherProjectPageComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private http: Http,
     private data: DataService,
+    private alert: AlertService,
     private projectService: ProjectService
   )
   { }
@@ -59,7 +62,7 @@ export class TeacherProjectPageComponent implements OnInit, OnDestroy {
         this.projectObs.next(res);
     },
       error => {
-        this.data.alertError(error, 'ERROR: getProjectInfo() -> MissedProject');
+        this.alert.alertError(error, 'ERROR: getProjectInfo() -> MissedProject');
       });
 
   }
@@ -86,7 +89,7 @@ export class TeacherProjectPageComponent implements OnInit, OnDestroy {
       }
     },
       error => {
-        this.data.alertError(error, 'ERROR: choseButtonStatus() -> UserProjects');
+        this.alert.alertError(error, 'ERROR: choseButtonStatus() -> UserProjects');
       });
   }
 }

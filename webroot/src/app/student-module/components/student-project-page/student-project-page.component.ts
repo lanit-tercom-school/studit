@@ -7,6 +7,7 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { DataService } from 'services/data.service';
 import { ProjectService } from 'services/project.service';
 import { StudentService } from 'services/student.service';
+import { AlertService } from 'services/alert.service'; 
 
 import { MaterialsItem } from 'models/materials-item';
 import { ProjectItem } from 'models/project-item';
@@ -35,7 +36,8 @@ export class StudentProjectPageComponent implements OnInit, OnDestroy {
     private http: Http,
     private data: DataService,
     private studentService: StudentService,
-    private projectService: ProjectService) { }
+    private projectService: ProjectService,
+    private alert: AlertService,) { }
 
   ngOnInit() {
     if (localStorage.getItem('current_user')) { this.authorized = true; }
@@ -56,7 +58,7 @@ export class StudentProjectPageComponent implements OnInit, OnDestroy {
         this.projectObs.next(res);
     },
       error => {
-        this.data.alertError(error, 'ERROR: getProjectInfo() -> MissedProject');
+        this.alert.alertError(error, 'ERROR: getProjectInfo() -> MissedProject');
       });
 
   }
@@ -70,7 +72,7 @@ export class StudentProjectPageComponent implements OnInit, OnDestroy {
         this.data.loadEnrolledUsersProject();
       },
       error => {
-        this.data.alertError(error, 'ERROR: enroll() -> enrollToProject()');
+        this.alert.alertError(error, 'ERROR: enroll() -> enrollToProject()');
       });
   }
 
@@ -81,7 +83,7 @@ export class StudentProjectPageComponent implements OnInit, OnDestroy {
         this.data.loadEnrolledUsersProject();
       },
       error => {
-        this.data.alertError(error, 'ERROR: unenroll() -> unenrollToProject()');
+        this.alert.alertError(error, 'ERROR: unenroll() -> unenrollToProject()');
       });
   }
 
@@ -95,7 +97,7 @@ export class StudentProjectPageComponent implements OnInit, OnDestroy {
       }
     },
       error => {
-        this.data.alertError(error, 'ERROR: choseButtonStatus() -> UserProjects');
+        this.alert.alertError(error, 'ERROR: choseButtonStatus() -> UserProjects');
       });
 
     this.data.UserEnrolledProjects.subscribe(res => {
@@ -109,7 +111,7 @@ export class StudentProjectPageComponent implements OnInit, OnDestroy {
       }
     },
       error => {
-        this.data.alertError(error, 'ERROR: choseButtonStatus() -> UserEnrolledProjects');
+        this.alert.alertError(error, 'ERROR: choseButtonStatus() -> UserEnrolledProjects');
       });
   }
 } 
