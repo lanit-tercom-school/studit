@@ -38,7 +38,7 @@ export class StudentProjectPageComponent implements OnInit, OnDestroy {
     private data: DataService,
     private studentService: StudentService,
     private projectService: ProjectService,
-    private taskService : TaskService,
+    private taskService: TaskService,
   ) { }
 
   ngOnInit() {
@@ -53,16 +53,16 @@ export class StudentProjectPageComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
   }
 
-  getProjectTasks(gitHubUrl:string) {
-    this.taskService.getTaskItemsFromGitHub(gitHubUrl).subscribe(res=>{
+  getProjectTasks(gitHubUrl: string) {
+    this.taskService.getTaskItemsFromGitHub(gitHubUrl).subscribe(res => {
       this.tasksObs.next(res);
-      });;
+    });;
   }
 
   getProjectInfo() {
     this.data.loadProjectByID(this.projectId);
     this.data.ProjectForViewing.subscribe(res => {
-      if (res != null){
+      if (res != null) {
         this.projectObs.next(res);
         this.getProjectTasks(res.GitHubUrl)
       }

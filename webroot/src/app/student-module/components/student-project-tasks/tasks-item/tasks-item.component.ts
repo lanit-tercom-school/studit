@@ -12,7 +12,7 @@ export class TasksItemComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-  	this.TasksItem.body = this.TasksItem.body.slice(0, 100);
+  	this.TasksItem.Body = this.TasksItem.Body.slice(0, 100);
   }
 
 }

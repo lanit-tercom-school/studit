@@ -22,6 +22,7 @@ export class TaskService {
                 let taskItem: TasksItem = new TasksItem();
                 taskItem.Title = element.title;
                 taskItem.Body=element.body;
+                taskItem.Url=element.html_url;
                 taskItem.NicnameOfUser=element.user.login;
                 taskItem.DataOfCreation=element.created_at;
                 taskList.push(taskItem);

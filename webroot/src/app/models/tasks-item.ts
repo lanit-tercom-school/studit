@@ -3,4 +3,5 @@ export class TasksItem {
   DataOfCreation: string;
   NicnameOfUser: string;
   Body:string;
+  Url: string;
 }

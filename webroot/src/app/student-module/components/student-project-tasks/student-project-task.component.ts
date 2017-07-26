@@ -1,4 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { Observable } from "rxjs/Observable";
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 import { TasksItem } from "models/tasks-item";
 
@@ -7,11 +9,6 @@ import { TasksItem } from "models/tasks-item";
   templateUrl: './student-project-task.component.html',
   styleUrls: ['./student-project-task.component.css']
 })
-export class StudentProjectTasksComponent implements OnInit {
-  @Input() public TasksItemList;
-  constructor() { }
-
-  ngOnInit() {
-  }
-
+export class StudentProjectTasksComponent  {
+  @Input() public TasksItemList: BehaviorSubject<TasksItem[]>;
 }

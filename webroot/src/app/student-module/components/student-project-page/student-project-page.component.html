@@ -1,10 +1,10 @@
-<div class="container">
+<div class="container card card-outline">
 	<div class="row" id="main-info">
 		<div class="col-lg-3 col-md-12" id="project-img-status">
 			<img width="225px" height="225px" src="{{projectObs.value.Logo}}" alt="Project image">
 			<div [ngSwitch]="enrollButtonStatus">
 				<div *ngSwitchCase="'Enrolling'">
-					<button type="button" role="button" class="btn btn-large btn-block btn-primary"  data-toggle="modal" data-target="#enrollMessageModal">Подать заявку</button>
+					<button type="button" role="button" class="btn btn-large btn-block btn-primary" data-toggle="modal" data-target="#enrollMessageModal">Подать заявку</button>
 				</div>
 				<div *ngSwitchCase="'Unenrolling'">
 					<button type="button" role="button" class="btn btn-large btn-block btn-warning" (click)="unenroll()">Отменить заявку</button>
@@ -24,7 +24,11 @@
 			<i>Теги:</i> <a class="blacktag" href="#">lorem ipsum</a>
 		</div>
 	</div>
-	<!-- <app-student-project-tasks [TasksItemList]="this.TaskItemList"></app-student-project-tasks> -->
+	<div class="row">
+		<div class="col-sm-12 col-md-6 offset-md-3">
+			<app-student-project-tasks [TasksItemList]="tasksObs"></app-student-project-tasks>
+		</div>
+	</div>
 </div>
 
 
