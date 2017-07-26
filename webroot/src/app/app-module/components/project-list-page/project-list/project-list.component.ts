@@ -29,11 +29,8 @@ export class ProjectListComponent implements OnInit {
     let offset = 0;
     if (page > 1)
       offset = (page - 1) * this.limit;
-    console.log('offset' + offset)
     this.data.loadProjects(this.limit, offset);
-   // console.log('on page' + this.data.NumberOfProjectsOnPage);
     this.ProjectList = this.data.Projects;
-   // console.log('total '+ this.totalObs);
     this.p = page;
     this.loading = false;
     window.scrollTo(0, 0);

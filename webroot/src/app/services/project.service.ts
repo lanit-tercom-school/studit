@@ -5,7 +5,13 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/observable/throw';
 
+
+import { ProjectItem } from "models/project-item";
+import { MaterialsItem } from "models/materials-item";
+import { ProjectNewsItem } from "models/proj-news-item";
+import { ProjectTaskItem } from "models/project-task-item";
 import { environment } from '../../environments/environment';
+
 
 @Injectable()
 export class ProjectService {
@@ -13,7 +19,7 @@ export class ProjectService {
   constructor(private http: Http) {
   }
 
-  getMainPageProjects() {
+  getMainPageProjects(): Observable<ProjectItem[]> {
     var query = `{ 
       ProjectList(Limit: "3" Offset: "0")
       {
@@ -27,22 +33,17 @@ export class ProjectService {
     }`;
     return this.http.get(environment.apiUrl + '/graphql?query=' + query)
       .map((response: Response) => {
-        let res = response.json().data.ProjectList;
-        res.forEach(element => {
-          element.Logo = environment.apiUrl + element.Logo;
-        });
-        return res;
+        return response.json().data.ProjectList;
       })
       .catch((error: any) => {
           return Observable.throw(error);
       });
-
   }
 
-// получить все проекты
-  getProjectItems(limit_: number, offset_: number) {
-    var variables = {limit: limit_, offset: offset_}
-   var query =`query($limit:String, $offset: String)
+  // получить все проекты
+  getProjectItems(limit_: number, offset_: number): Observable<ProjectItem[]> {
+    var variables = { limit: limit_, offset: offset_ }
+    var query = `query($limit:String, $offset: String)
    {
      ProjectList(Offset: $offset Limit: $limit)
     {
@@ -54,7 +55,7 @@ export class ProjectService {
       Name
     }
   }&variables=`+ JSON.stringify(variables);
-      return this.http.get(environment.apiUrl + '/graphql?query=' + query)
+    return this.http.get(environment.apiUrl + '/graphql?query=' + query)
       .map((response: Response) => {
         let res = response.json().data.ProjectList;
         return res;
@@ -64,9 +65,9 @@ export class ProjectService {
        });
   }
 
-  getProjectById(id_: number) {
-  var variable = { id: id_};
-   var query = `query($id:ID)
+  getProjectById(id_: number): Observable<ProjectItem> {
+    var variable = { id: id_ };
+    var query = `query($id:ID)
    {
     Project(Id: $id)
     {
@@ -103,7 +104,7 @@ export class ProjectService {
     ];
   }
 
-  getProjectNewsItem(id: number) {
+  getProjectNewsItem(id: number): ProjectNewsItem[] {
     return [
       {
         "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean porttitor dapibus magna",
@@ -122,7 +123,7 @@ export class ProjectService {
     ];
   }
 
-  getProjectAllTaskItem(id: number) {
+  getProjectAllTaskItem(id: number): ProjectTaskItem[] {
     return [
       {
         "number": "645",

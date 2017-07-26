@@ -25,8 +25,15 @@ export class UserPublicPageComponent implements OnInit {
     this.route.params
       .subscribe(params => {
         this.userService.getUserById(+params['id'])
-          .subscribe(res => this.currentUser.next(res),
-          error => {
+          .subscribe(res => {
+            let c: CurrentUser = new (CurrentUser);
+            c.User.Avatar = res.Avatar;
+            c.User.Id = +res.Id;
+            c.User.Description = res.Description;
+            c.User.Nickname = res.Nickname;
+            this.currentUser.next(c);
+          },
+            error => {
             this.data.alertError(error, 'ERROR: ngOnInit() -> getUserById()');
           });
       });

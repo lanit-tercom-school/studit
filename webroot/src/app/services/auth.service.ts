@@ -9,10 +9,12 @@ import 'rxjs/add/observable/throw';
 import { environment } from '../../environments/environment';
 
 import { User } from 'models/user';
+import { Message } from 'models/message';
 import { UserRegister } from 'models/user-register';
 
 @Injectable()
 export class AuthService {
+    //TODO: Add types to all methods!
 
     constructor(private http: Http) { }
 
@@ -64,7 +66,7 @@ export class AuthService {
         localStorage.removeItem("current_user");
     }
 
-    validate(key_: string) {
+    validate(key_: string): Observable<Message> {
         var variable = { key: key_ };
         var query = `mutation ($key: String )
     {
@@ -77,10 +79,9 @@ export class AuthService {
       }
     } &variables=`+ JSON.stringify(variable);
         return this.http.get(environment.authUrl + '/graphql?query=' + query)
-            .catch((error: any) => {
-                return Observable.throw(error);
+            .catch((error: any) => { return Observable.throw(error) }).map(res => {
+                return res.json().data.Auth.Activation;
             });
-
     }
 
     register(user: UserRegister) {

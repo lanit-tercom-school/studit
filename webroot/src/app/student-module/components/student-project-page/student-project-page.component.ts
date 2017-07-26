@@ -39,25 +39,19 @@ export class StudentProjectPageComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     if (localStorage.getItem('current_user')) { this.authorized = true; }
-    this.route.params
-      .subscribe(params => {
-        this.projectId = params['id'];
+     this.route.params.subscribe(p => {
+        this.projectId = +p['id'];
         this.getProjectInfo();
         this.choseButtonStatus();
-        //console.log(this.enrollButtonStatus);
-      });
-    //this.getTaskItems();
-
+      }); 
   }
-
+ 
   ngOnDestroy() {
   }
 
   getProjectInfo() {
     this.data.loadProjectByID(this.projectId);
-    console.log('page: getProjectInfo');
-    this.data.MissedProject.subscribe(res => {
-      console.log(res);
+    this.data.ProjectForViewing.subscribe(res => {
       if (res != null)
         this.projectObs.next(res);
     },
@@ -67,19 +61,7 @@ export class StudentProjectPageComponent implements OnInit, OnDestroy {
 
   }
 
-  /* getMaterialsItems(): MaterialsItem[] {
-     return this.projectService.getMaterialsItems(1);
-   }
-   getProjectNewsItem(): ProjectNewsItem[] {
-     return this.projectService.getProjectNewsItem(1);
-   }
-   getTaskItems() {
-     this.http.get('https://api.github.com/repos/lanit-tercom-school/studit/issues')
-       .map((response: Response) => {
-         let res = response.json().slice(0, 4);
-         return res;
-       }).subscribe(res => this.tasks = res);
-   }*/
+
   enroll() {
     this.studentService.enrollToProject(this.data.UserId, this.projectId,
       JSON.parse(localStorage.getItem('current_user')).Token, this.enrollMessage)
@@ -106,8 +88,10 @@ export class StudentProjectPageComponent implements OnInit, OnDestroy {
   choseButtonStatus() {
     this.enrollButtonStatus = "Enrolling";
     this.data.UserProjects.subscribe(res => {
-      if (res != null && res.find(pr => pr.Id == this.projectId)) {
-        this.enrollButtonStatus = "InProject";
+      if (res != null) {
+         if (res.find(pr => pr.Id == this.projectId)) {
+          this.enrollButtonStatus = "InProject";
+        } 
       }
     },
       error => {
@@ -128,4 +112,4 @@ export class StudentProjectPageComponent implements OnInit, OnDestroy {
         this.data.alertError(error, 'ERROR: choseButtonStatus() -> UserEnrolledProjects');
       });
   }
-}
+} 

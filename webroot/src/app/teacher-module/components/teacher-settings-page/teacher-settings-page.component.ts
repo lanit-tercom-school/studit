@@ -31,9 +31,14 @@ export class TeacherSettingsPageComponent implements OnInit {
       .subscribe(params => {
         this.userService.getUserById(JSON.parse(localStorage.getItem('current_user')).User.Id)
           .subscribe(res => {
-            this.currentUser.next(res)
+            let c: CurrentUser = new (CurrentUser);
+            c.User.Avatar = res.Avatar;
+            c.User.Id = +res.Id;
+            c.User.Description = res.Description;
+            c.User.Nickname = res.Nickname;
+            this.currentUser.next(c);
           },
-          error => {
+           error => {
             this.data.alertError(error, 'ERROR: ngOnInit() -> getUserById');
           });
       });

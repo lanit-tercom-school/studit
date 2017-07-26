@@ -30,9 +30,7 @@ constructor(
 
   getReadingNews(){
     this.data.loadNewsByID(this.newsID);
-    console.log('data: getReadingNews');
-    this.data.MissedNews.subscribe(res => {
-      console.log(res);
+    this.data.NewsForViewing.subscribe(res => {
       if (res != null)
         this.readingNews.next(res);
     },
