@@ -52,7 +52,7 @@ export class StudentService {
     let headers = new Headers();
     headers.append('Authorization', 'Bearer ' + token);
     return this.http.get(environment.apiUrl + '/graphql?query=' + query, { headers: headers })
-      .map((response: Response) => { return response.json().data });
+      .map((response: Response) => { return response.json().data.DeleteProjectEnroll });
   }
 
   // показать заявки пользователя
