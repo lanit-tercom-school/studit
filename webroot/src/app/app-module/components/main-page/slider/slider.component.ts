@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from "rxjs/Observable";
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+
+import { ICarouselConfig, AnimationConfig } from 'angular4-carousel';
 
 import { DataService } from 'services/data.service';
 import { ProjectItem } from 'models/project-item';
@@ -11,26 +14,21 @@ import { ProjectItem } from 'models/project-item';
 })
 export class SliderComponent implements OnInit {
 
-    public ProjectList: Observable<ProjectItem[]>;
-   private p: number = 1;
-  private limit: number = 1;
-  private total: number = 3;
+  config: Object = {
+    pagination: '.swiper-pagination',
+    paginationClickable: true,
+    nextButton: '.swiper-button-next',
+    prevButton: '.swiper-button-prev',
+    spaceBetween: 30
+  };
+
+  public ProjectList: Observable<ProjectItem[]>;
 
   private loading: boolean;
   constructor(private data: DataService) { }
 
   ngOnInit() {
     this.ProjectList = this.data.ProjectsForMainPage;
-    this.getPage(1);
-  }
-
-  getPage(page: number) {
-    this.loading = true;
-    let offset = 0;
-    if (page > 1)
-      offset = (page - 1) * this.limit;
-    this.p = page;
-    this.loading = false;
   }
 
 }
