@@ -129,6 +129,12 @@ func (h *Handler) ContextHandler(ctx context.Context, w http.ResponseWriter, r *
 	if len(tokenStr) > 7 {
 		c = context.WithValue(c, "Token", tokenStr[7:])
 	}
+	haveFile := r.Header.Get("HaveFile")
+	if haveFile == "true"{
+		file, handler, _ := r.FormFile("uploadfile")
+		c = context.WithValue(c, "File", file)
+		c = context.WithValue(c, "FileHeader", handler)
+	}
 	// execute graphql query
 	params := graphql.Params{
 		Schema:         *h.Schema,
