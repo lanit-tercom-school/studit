@@ -7,6 +7,8 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 import { DataService } from 'services/data.service';
 import { ProjectService } from 'services/project.service';
+import { AlertService } from 'services/alert.service';
+
 import { MaterialsItem } from 'models/materials-item';
 import { ProjectItem } from 'models/project-item';
 import { ProjectNewsItem } from 'models/proj-news-item';
@@ -27,6 +29,7 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private http: Http,
     private data: DataService,
+    private alert: AlertService,
     private projectService: ProjectService
   )
   { }
@@ -43,27 +46,37 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
   }
-  
+
   getProjectInfo() {
     this.data.loadProjectByID(this.projectId);
     this.data.ProjectForViewing.subscribe(res => {
       if (res != null)
         this.projectObs.next(res);
-    });
+    },
+      error => {
+        this.alert.alertError(error, 'getProjectInfo() -> MissedProject');
+      });
 
   }
 
   getMaterialsItems(): MaterialsItem[] {
     return this.projectService.getMaterialsItems(1);
   }
+
   getProjectNewsItem(): ProjectNewsItem[] {
     return this.projectService.getProjectNewsItem(1);
   }
+
   getTaskItems() {
     this.http.get('https://api.github.com/repos/lanit-tercom-school/studit/issues')
       .map((response: Response) => {
         let res = response.json().slice(0, 4);
         return res;
-      }).subscribe(res => this.tasks = res);
+      }).subscribe(res => {
+        this.tasks = res
+      },
+      error => {
+        this.alert.alertError(error, 'getTaskItems()');
+      });
   }
 }

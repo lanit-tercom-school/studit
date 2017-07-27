@@ -9,12 +9,17 @@ import { NewsService } from 'services/news.service';
 import { UserService } from 'services/user.service';
 import { TaskService } from 'services/task.service';
 
+import { AlertService } from 'services/alert.service';
+
 import { NewsItem } from "models/news-item";
 import { TasksItem } from "models/tasks-item";
 import { ProjectItem } from 'models/project-item';
 import { EnrollItem } from 'models/enroll-item';
-import { environment } from '../../environments/environment';
+
 import { PermLevel } from 'models/permission-level.enum';
+
+import { environment } from '../../environments/environment';
+
 
 import 'rxjs/add/operator/filter';
 
@@ -59,6 +64,7 @@ export class DataService {
     private newsService: NewsService,
     private projectService: ProjectService,
     private userService: UserService,
+    private alert: AlertService,
     private taskService: TaskService,
   ) { }
 
@@ -78,7 +84,6 @@ export class DataService {
     return this.projectsCountObs.asObservable();
   }
 
-  //TODO: Change Missed to Viewed
   public get ProjectForViewing() {
     return this.projectForViewing.asObservable();
   }
@@ -114,8 +119,8 @@ export class DataService {
     return this.userToken;
   }
 
+
   loadAll() {
-    console.log('Data.service ->loadAll');
     this.loadProjects(2, 0);
     this.loadProjectsForMainPage();
     if (localStorage.getItem('current_user')) {
@@ -130,7 +135,9 @@ export class DataService {
         this.loadEnrollsForTeacher();
       }
     }
+    console.debug('Data.service -> loadAll');
   }
+
 
   loadProjects(limit: number, offset: number) {
     this.projectService.getProjectItems(limit, offset)
@@ -141,6 +148,9 @@ export class DataService {
           this.dataStore.projects.forEach(a => { a.Logo = this.addApiUrl(a.Logo); })
           this.projects.next(Object.assign({}, this.dataStore).projects);
         }
+      },
+      error => {
+        this.alert.alertError(error, 'loadProjects() -> getProjectItems()');
       });
   }
 
@@ -182,7 +192,10 @@ export class DataService {
           this.dataStore.projects.push(res);
           this.projectForViewing.next(res);
         }
-      });
+      },
+        error => {
+          this.alert.alertError(error, 'loadProjectByID() -> getProjectById()');
+        });
     }
 
   }
@@ -192,7 +205,10 @@ export class DataService {
       this.dataStore.projectsForMainPage = res;
       this.dataStore.projectsForMainPage.forEach(a => { a.Logo = this.addApiUrl(a.Logo); })
       this.projectsForMainPage.next(Object.assign({}, this.dataStore).projectsForMainPage);
-    })
+    },
+      error => {
+        this.alert.alertError(error, 'loadProjectsForMainPage() -> getMainPageProjects()');
+      });
   }
 
   loadUsersProjects() {
@@ -204,26 +220,31 @@ export class DataService {
           this.userProjects.next(Object.assign({}, this.dataStore).userProjects);
         }
 
-      });
-    } else {
-      console.log('Error in data.service: can not load usersProject without auth');
+      },
+        error => {
+          this.alert.alertError(error, 'loadUsersProjects() -> getProjectsOfUser()');
+        });
+    } 
+    else {
+      console.debug('Error in data.service: can not load usersProject without auth');
     }
   }
 
   loadEnrolledUsersProject() {
     if (localStorage.getItem('current_user')) {
       this.studentService.getEnrolledUsersProject(this.userId, this.userToken).subscribe(res => {
-
         this.dataStore.userEnrolledProjects = res;
         //console.log(this.dataStore.userEnrolledProjects);
         this.userEnrolledProjects.next(Object.assign({}, this.dataStore).userEnrolledProjects);
-      })
+      },
+        error => {
+          this.alert.alertError(error, 'loadEnrolledUsersProject() -> getEnrolledUsersProject()');
+        });
     } else {
       console.log('Error in data.service: can not load enrolledUsersProject without auth');
     }
   }
 
-  // значения по умолчанию
   loadNews(offset: number) {
     this.newsService.getNewsPage(this.numberOfNewsOnPage, offset).subscribe(res => {
       this.newsCount = res.TotalCount;
@@ -231,14 +252,20 @@ export class DataService {
       this.dataStore.news = res.NewsList;
       this.news.next(Object.assign({}, this.dataStore).news);
 
-    });
+    },
+      error => {
+        this.alert.alertError(error, 'loadNews() -> getNewsPage()');
+      });
   }
 
   loadEnrollsForTeacher() {
     this.teacherService.getEnrollsForTeacher(this.userToken, this.userId).subscribe(res => {
       this.dataStore.enrollsForTeacher = res;
       this.enrollsForTeacher.next(Object.assign({}, this.dataStore).enrollsForTeacher);
-    });
+    },
+      error => {
+        this.alert.alertError(error, 'loadEnrollsForTeacher() -> getEnrollsForTeacher()');
+      });
   }
 
   // TODO: сделать метод для проверки наличия новости в dataService
@@ -254,7 +281,7 @@ export class DataService {
       console.debug('load from data');
     }
     else {
-      console.debug('can not find');
+      console.debug('Can not find');
       this.newsService.getNewsById(id).subscribe(res => {
         if (res != null) {
           console.debug('NEW NEWS');
@@ -262,7 +289,10 @@ export class DataService {
           this.dataStore.news.push(res);
           this.newsForViewing.next(Object.assign({}, res));
         }
-      });
+      },
+        error => {
+          this.alert.alertError(error, 'loadNewsByID() -> getNewsById()');
+        });
     }
 
   }

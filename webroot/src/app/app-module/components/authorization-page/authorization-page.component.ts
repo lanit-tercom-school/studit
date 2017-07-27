@@ -2,6 +2,7 @@ import { Component, OnInit, NgModule } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { AuthService } from 'services/auth.service';
+import { AlertService } from 'services/alert.service';
 import { DataService } from 'services/data.service';
 import { User } from 'models/user';
 
@@ -15,10 +16,12 @@ import { User } from 'models/user';
 export class AuthorizationPageComponent implements OnInit {
 
   private localUser: User = { login: "", password: "" };
-  private error: any;
   private ReturnUrl: string
 
-  constructor(private auth: AuthService, private router: Router, private data: DataService) { }
+  constructor(private auth: AuthService,
+   private router: Router,
+   private data: DataService,
+   private alert: AlertService) { }
 
   ngOnInit() {
     this.auth.unauthentificatenow();
@@ -36,8 +39,7 @@ export class AuthorizationPageComponent implements OnInit {
          this.router.navigate(['home']);
       },
       error => {
-        console.log(error);
-        this.error = error;
+        this.alert.alertError(error, 'authenticatenow()');
       });
   }
 }

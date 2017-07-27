@@ -4,6 +4,7 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 import { NewsItem } from 'models/news-item';
 import { DataService } from 'services/data.service';
+import { AlertService } from 'services/alert.service';
 
 @Component({
   selector: 'app-main-full-news-page',
@@ -18,6 +19,7 @@ private sub: any;
 
 constructor(
   private data: DataService,
+  private alert: AlertService,
   private route: ActivatedRoute,
   private router: Router) { }
 
@@ -33,6 +35,9 @@ constructor(
     this.data.NewsForViewing.subscribe(res => {
       if (res != null)
         this.readingNews.next(res);
-    });
+    },
+      error => {
+        this.alert.alertError(error, 'getReadingNews() -> MissedNews');
+      });
   }
 }

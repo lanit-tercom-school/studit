@@ -9,6 +9,8 @@ import { TaskService } from 'services/task.service';
 import { ProjectService } from 'services/project.service';
 import { StudentService } from 'services/student.service';
 
+import { AlertService } from 'services/alert.service';
+
 import { MaterialsItem } from 'models/materials-item';
 import { ProjectItem } from 'models/project-item';
 import { ProjectNewsItem } from 'models/proj-news-item';
@@ -22,6 +24,7 @@ type StatusEnroll = "Enrolling" | "InProject" | "Unenrolling";
   templateUrl: './teacher-project-page.component.html',
   styleUrls: ['./teacher-project-page.component.css']
 })
+
 export class TeacherProjectPageComponent implements OnInit, OnDestroy {
 
   private projectObs: BehaviorSubject<ProjectItem> = new BehaviorSubject(new ProjectItem());
@@ -40,6 +43,7 @@ export class TeacherProjectPageComponent implements OnInit, OnDestroy {
     private studentService: StudentService,
     private projectService: ProjectService,
     private taskService: TaskService,
+    private alert: AlertService,
   ) { }
 
   ngOnInit() {
@@ -66,7 +70,10 @@ export class TeacherProjectPageComponent implements OnInit, OnDestroy {
         this.projectObs.next(res);
         this.getProjectTasks(res.GitHubUrl)
       }
-    });
+    },
+      error => {
+        this.alert.alertError(error, ' getProjectInfo() -> MissedProject');
+      });
 
   }
 
@@ -93,6 +100,9 @@ export class TeacherProjectPageComponent implements OnInit, OnDestroy {
       if (res != null && res.find(pr => pr.Id == this.projectId)) {
         this.enrollButtonStatus = 'InProject';
       }
-    })
+    },
+      error => {
+        this.alert.alertError(error, 'choseButtonStatus() -> UserProjects');
+      });
   }
 }

@@ -2,10 +2,12 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
-import {NgxPaginationModule} from 'ngx-pagination'; 
+import { NgxPaginationModule } from 'ngx-pagination'; 
 
 import { AppRouterProvider } from './routes';
 import { PathManager } from 'services/path.manager';
+import { AuthService } from 'services/auth.service';
+import { AlertService } from 'services/alert.service';
 
 import { DataService } from 'services/data.service';
 import { TeacherService } from 'services/teacher.service';
@@ -14,7 +16,7 @@ import { ProjectService } from 'services/project.service';
 import { NewsService } from 'services/news.service';
 import { UserService } from 'services/user.service';
 import { TaskService } from 'services/task.service';
-import { AuthService } from 'services/auth.service';
+
 
 import { AppComponent } from './components/app.component';
 import { MainComponent } from './components/main-page/main.component';
@@ -98,6 +100,7 @@ import { ErrorPageComponent } from './components/error-page/error-page.component
     TaskService,
     AuthService,
     DataService,
+    AlertService,
     PathManager
     ],
   bootstrap: [AppComponent]

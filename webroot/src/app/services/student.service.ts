@@ -5,6 +5,8 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/observable/throw';
 
+import { AlertService } from 'services/alert.service';
+
 import { ProjectItem } from "models/project-item";
 import { Message } from "models/message";
 import { ProjectTaskItem } from "models/project-task-item";
@@ -15,8 +17,10 @@ import { environment } from '../../environments/environment';
 @Injectable()
 export class StudentService {
 
-  constructor(private http: Http) {
+  constructor(private http: Http,
+  private alert: AlertService) {
   }
+
   //Отправить заявку на участие в проекте
   enrollToProject(user_: number, project_: number, token: string, message_: string): Observable<ProjectItem> {
     var variables = { message: message_, user: user_, project: project_ };
@@ -35,9 +39,11 @@ export class StudentService {
     } &variables=`+ JSON.stringify(variables);
     let headers = new Headers();
     headers.append('Authorization', 'Bearer ' + token);
-    return this.http.get(environment.apiUrl + '/graphql?query=' + query, { headers: headers }).map(res => {
-      return res.json().data.Enroll.Project;
-    });
+    return this.http.get(environment.apiUrl + '/graphql?query=' + query, { headers: headers })
+    .map((response: Response) => { this.alert.checkGraphQLResponse(response); })
+    .catch((error: any) => {
+         return Observable.throw(error);
+       });
   }
 
   //Отменить заявку на участие в проекте
@@ -52,8 +58,14 @@ export class StudentService {
     let headers = new Headers();
     headers.append('Authorization', 'Bearer ' + token);
     return this.http.get(environment.apiUrl + '/graphql?query=' + query, { headers: headers })
-      .map((response: Response) => { return response.json().data.DeleteProjectEnroll });
+      .map((response: Response) => { 
+        this.alert.checkGraphQLResponse(response);
+        return response.json().data.DeleteProjectEnroll })
+      .catch((error: any) => {
+         return Observable.throw(error);
+      });
   }
+
 
   // показать заявки пользователя
   getEnrolledUsersProject(id_: number, token: string): Observable<EnrollItem[]> {
@@ -77,7 +89,13 @@ export class StudentService {
     let headers = new Headers();
     headers.append('Authorization', 'Bearer ' + token);
     return this.http.get(environment.apiUrl + '/graphql?query=' + query, { headers: headers })
-      .map((response: Response) => { return response.json().data.User.Enrolls });
+      .map((response: Response) => {
+        this.alert.checkGraphQLResponse(response);
+        return response.json().data.User.Enrolls
+      })
+      .catch((error: any) => {
+         return Observable.throw(error);
+      });
   }
 
   // получить задачи студента по id проекта

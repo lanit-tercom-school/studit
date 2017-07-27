@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { AuthService } from 'services/auth.service';
+import { AlertService } from 'services/alert.service';
 
 @Component({
   selector: 'app-validation-page',
@@ -10,22 +12,26 @@ import { AuthService } from 'services/auth.service';
 export class ValidationPageComponent implements OnInit {
 
   private validationCode: string;
-  private message: string;
   private isValidated: boolean;
 
 
-  constructor(private auth: AuthService) { }
+  constructor(private auth: AuthService,
+  private alert: AlertService,
+  private router: Router) { }
 
   validate() {
     this.auth.validate(this.validationCode)
       .subscribe(
-      data => {
-        this.message = 'Registered!';
+      () => {
         localStorage.removeItem("validation_code");
+        alert('Вы успешно зарегистрировались. Добро пожаловать!');
+        //TODO   Добавить сюда автоматическую авторизацию и вход пользователя
+        
+        /*localStorage.setItem('current_user', user);
+        this.router.navigate(['/home']);*/
       },
       error => {
-        console.log(error);
-        this.message = error;
+        this.alert.alertError(error, 'validate() -> auth.validate()');
       });
   }
 

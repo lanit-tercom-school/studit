@@ -6,9 +6,14 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./error-page.component.css']
 })
 export class ErrorPageComponent implements OnInit {
+
+  private isAuthorised: boolean = false;
+
   constructor() { }
 
   ngOnInit() {
+    if (localStorage.getItem('current_user'))
+        this.isAuthorised = true;
 
   }
 

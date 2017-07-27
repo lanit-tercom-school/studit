@@ -8,6 +8,7 @@ import { DataService } from 'services/data.service';
 import { TaskService } from 'services/task.service';
 import { ProjectService } from 'services/project.service';
 import { StudentService } from 'services/student.service';
+import { AlertService } from 'services/alert.service'; 
 
 import { MaterialsItem } from 'models/materials-item';
 import { ProjectItem } from 'models/project-item';
@@ -38,8 +39,8 @@ export class StudentProjectPageComponent implements OnInit, OnDestroy {
     private data: DataService,
     private studentService: StudentService,
     private projectService: ProjectService,
-    private taskService: TaskService,
-  ) { }
+    private alert: AlertService,
+    private taskService: TaskService) { }
 
   ngOnInit() {
     if (localStorage.getItem('current_user')) { this.authorized = true; }
@@ -63,12 +64,14 @@ export class StudentProjectPageComponent implements OnInit, OnDestroy {
     this.data.ProjectForViewing.subscribe(res => {
       if (res != null) {
         this.projectObs.next(res);
-        this.getProjectTasks(res.GitHubUrl)
+        this.getProjectTasks(res.GitHubUrl);
       }
-    });
+    },
+      error => {
+        this.alert.alertError(error, ' getProjectInfo() -> MissedProject');
+      });
 
   }
-
 
   enroll() {
     this.studentService.enrollToProject(this.data.UserId, this.projectId,
@@ -76,13 +79,20 @@ export class StudentProjectPageComponent implements OnInit, OnDestroy {
       .subscribe(res => {
         this.enrollButtonStatus = "Unenrolling";
         this.data.loadEnrolledUsersProject();
+      },
+      error => {
+        this.alert.alertError(error, ' enroll() -> enrollToProject()');
       });
   }
+
   unenroll() {
     this.studentService.unenrollToProject(this.projectEnrollId,
       JSON.parse(localStorage.getItem('current_user')).Token).subscribe(res => {
         this.enrollButtonStatus = "Enrolling";
         this.data.loadEnrolledUsersProject();
+      },
+      error => {
+        this.alert.alertError(error, ' unenroll() -> unenrollToProject()');
       });
   }
 
@@ -94,7 +104,11 @@ export class StudentProjectPageComponent implements OnInit, OnDestroy {
           this.enrollButtonStatus = "InProject";
         }
       }
-    });
+    },
+      error => {
+        this.alert.alertError(error, ' choseButtonStatus() -> UserProjects');
+      });
+
     this.data.UserEnrolledProjects.subscribe(res => {
       if (res != null && res.find(pr => pr.Project.Id == this.projectId)) {
         this.enrollButtonStatus = "Unenrolling";
@@ -104,6 +118,9 @@ export class StudentProjectPageComponent implements OnInit, OnDestroy {
           }
         })
       }
-    })
+    },
+      error => {
+        this.alert.alertError(error, 'choseButtonStatus() -> UserEnrolledProjects');
+      });
   }
 } 

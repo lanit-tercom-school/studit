@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers, RequestOptions, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
+
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/observable/throw';
-
 
 import { ProjectItem } from "models/project-item";
 import { MaterialsItem } from "models/materials-item";
@@ -12,11 +12,13 @@ import { ProjectNewsItem } from "models/proj-news-item";
 import { ProjectTaskItem } from "models/project-task-item";
 import { environment } from '../../environments/environment';
 
+import { AlertService } from 'services/alert.service';
 
 @Injectable()
 export class ProjectService {
 
-  constructor(private http: Http) {
+  constructor(private http: Http,
+  private alert: AlertService) {
   }
 
   getMainPageProjects(): Observable<ProjectItem[]> {
@@ -34,14 +36,12 @@ export class ProjectService {
     }`;
     return this.http.get(environment.apiUrl + '/graphql?query=' + query)
       .map((response: Response) => {
-       /*  let res = response.json().data.ProjectList;
-         res.forEach(element => {
-          element.Logo = environment.apiUrl + element.Logo;
-        }); 
-        return res; */
+        this.alert.checkGraphQLResponse(response);
         return response.json().data.ProjectList;
+      })
+      .catch((error: any) => {
+          return Observable.throw(error);
       });
-
   }
 
   // получить все проекты
@@ -62,9 +62,13 @@ export class ProjectService {
   }&variables=`+ JSON.stringify(variables);
     return this.http.get(environment.apiUrl + '/graphql?query=' + query)
       .map((response: Response) => {
+        this.alert.checkGraphQLResponse(response);
         let res = response.json().data.ProjectList;
         return res;
-      });
+      })
+      .catch((error: any) => {
+        return Observable.throw(error);
+       });
   }
 
   getProjectById(id_: number): Observable<ProjectItem> {
@@ -84,9 +88,16 @@ export class ProjectService {
     }
   }&variables=`+ JSON.stringify(variable);
     return this.http.get(environment.apiUrl + '/graphql?query=' + query)
-      .map(response => response.json().data.Project);
+    .map(response => {
+      this.alert.checkGraphQLResponse(response);
+      return response.json().data.Project;
+    })
+    .catch((error: any) => {
+         return Observable.throw(error);
+    });
   }
-  getMaterialsItems(id: number): MaterialsItem[] {
+  
+    getMaterialsItems(id: number) {
     return [
       {
         "description": "Resource one",
@@ -110,14 +121,12 @@ export class ProjectService {
         "links": "#",
         "main": "Lorem ipsum dolor sit amet",
         "data": "20.07.16 22:10"
-
       },
       {
         "description": "Nullam cursus ornare quam, vitae tincidunt neque ullamcorper in.",
         "links": "#",
         "main": "Fusce odio lorem",
         "data": "19.07.16 16:02"
-
       }
     ];
   }
@@ -142,7 +151,6 @@ export class ProjectService {
         "tags": ["tag1", "tag2"],
         "rating": "3"
       },
-
       {
         "number": "645",
         "taskname": "Name of task",
@@ -152,7 +160,6 @@ export class ProjectService {
         "tags": ["some tag", "some tag 2"],
         "rating": "4"
       }
-
     ];
   }
 

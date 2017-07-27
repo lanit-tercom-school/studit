@@ -6,6 +6,8 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/observable/throw';
 
+import { AlertService } from 'services/alert.service';
+
 import { ProjectItem } from 'models/project-item';
 import { UserInfo } from 'models/user-info';
 import { environment } from '../../environments/environment';
@@ -13,8 +15,9 @@ import { environment } from '../../environments/environment';
 @Injectable()
 export class UserService {
 
-  constructor(private http: Http) {
-  }
+  constructor(private http: Http,
+  private alert: AlertService) { }
+
   //TODO: It not work!
   getUsers() {
     return this.http.get(environment.apiUrl + '/v1/user/id/').map((response: Response) => response.json());
@@ -34,8 +37,12 @@ export class UserService {
 }&variables=`+ JSON.stringify(variable);
     return this.http.get(environment.apiUrl + '/graphql?query=' + query)
       .map((response: Response) => {
+        this.alert.checkGraphQLResponse(response);
         return response.json().data.User;
-      });
+      })
+      .catch((error: any) => {
+         return Observable.throw(error);
+       });
 
   }
 //TODO: It not work!
@@ -82,13 +89,17 @@ export class UserService {
 }&variables=`+ JSON.stringify(variable);
     let headers = new Headers();
     headers.append('Authorization', 'Bearer ' + token);
-    return this.http.get(environment.apiUrl + '/graphql?query=' + query, { headers: headers })
+    return this.http.get(environment.apiUrl + '/graphql?query=' + query, { headers: headers })    
       .map((response: Response) => {
+        this.alert.checkGraphQLResponse(response);
         let projects = new Array<ProjectItem>();
         response.json().data.User.ProjectOn.forEach(element => {
           projects.push(element.Project)
         });
-        return projects
-      });
+        return projects;
+      })
+        .catch((error: any) => {
+         return Observable.throw(error);
+       });
   }
 }

@@ -8,6 +8,8 @@ import 'rxjs/add/observable/throw';
 
 import { environment } from '../../environments/environment';
 
+import { AlertService } from 'services/alert.service';
+
 import { User } from 'models/user';
 import { Message } from 'models/message';
 import { UserRegister } from 'models/user-register';
@@ -16,7 +18,8 @@ import { UserRegister } from 'models/user-register';
 export class AuthService {
     //TODO: Add types to all methods!
 
-    constructor(private http: Http) { }
+    constructor(private http: Http,
+    private alert: AlertService) { }
 
     authenticatenow(user: User) {
         var variables = { login: user.login, password: user.password };
@@ -41,13 +44,16 @@ export class AuthService {
     } &variables=`+ JSON.stringify(variables);
         return this.http.get(environment.authUrl + '/graphql?query=' + query)
             .map((response: Response) => {
-                // successful login => getting jwt
-                let res = response.json().data.Auth.Signin;
-                if (res && res.Token) {
+                this.alert.checkGraphQLResponse(response);
+                let signin = response.json().data.Auth.Signin;
+                if (signin && signin.Token) {
                     // save data for keeping user logged in
-                    res.User.Login = user.login;
-                    localStorage.setItem('current_user', JSON.stringify(res));
+                    signin.User.Login = user.login;
+                    localStorage.setItem('current_user', JSON.stringify(signin));
                 }
+            })
+            .catch((error: any) => {
+                return Observable.throw(error);
             });
     }
 
@@ -68,9 +74,11 @@ export class AuthService {
       }
     } &variables=`+ JSON.stringify(variable);
         return this.http.get(environment.authUrl + '/graphql?query=' + query)
-            .catch((error: any) => { return Observable.throw(error) }).map(res => {
-                return res.json().data.Auth.Activation;
-            });
+        .map(response => {
+            this.alert.checkGraphQLResponse(response);
+                return response.json().data.Auth.Activation;
+            })
+            .catch((error: any) => { return Observable.throw(error) })
     }
 
     register(user: UserRegister) {
@@ -86,8 +94,9 @@ export class AuthService {
     }
     } &variables=`+ JSON.stringify(variables);
         return this.http.get(environment.authUrl + '/graphql?query=' + query)
-            .map((res: Response) => {
-                var code = res.json().data.Auth.Signup.ActivationCode;
+            .map((response: Response) => {
+                this.alert.checkGraphQLResponse(response);
+                var code = response.json().data.Auth.Signup.ActivationCode;
                 if (code)
                     localStorage.setItem('validation_code', code);
                 else

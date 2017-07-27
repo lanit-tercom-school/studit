@@ -4,6 +4,8 @@ import { Observable } from "rxjs/Observable";
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 import { UserService } from "services/user.service";
+import { AlertService } from "services/alert.service";
+
 import { CurrentUser } from 'models/current-user';
 
 @Component({
@@ -11,6 +13,7 @@ import { CurrentUser } from 'models/current-user';
   templateUrl: './teacher-settings-page.component.html',
   styleUrls: ['./teacher-settings-page.component.css']
 })
+
 export class TeacherSettingsPageComponent implements OnInit {
 
   private currentUser: BehaviorSubject<CurrentUser> = new BehaviorSubject(new CurrentUser());
@@ -20,7 +23,9 @@ export class TeacherSettingsPageComponent implements OnInit {
   private NewPasswordAgain = '';
   private error: any;
 
-  constructor(private userService: UserService, private route: ActivatedRoute) { }
+  constructor(private userService: UserService,
+  private alert: AlertService, 
+  private route: ActivatedRoute) { }
 
   ngOnInit() {
     this.route.params
@@ -33,6 +38,9 @@ export class TeacherSettingsPageComponent implements OnInit {
             c.User.Description = res.Description;
             c.User.Nickname = res.Nickname;
             this.currentUser.next(c);
+          },
+           error => {
+            this.alert.alertError(error, ' ngOnInit() -> getUserById');
           });
       });
   }

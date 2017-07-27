@@ -4,6 +4,8 @@ import { Observable } from "rxjs/Observable";
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 import { UserService } from "services/user.service";
+import { AlertService } from "services/alert.service";
+
 import { CurrentUser } from 'models/current-user';
 
 @Component({
@@ -21,6 +23,7 @@ export class StudentSettingsPageComponent implements OnInit {
   private error: any;
 
   constructor(private userService: UserService,
+  private alert: AlertService,
     private route: ActivatedRoute) { }
 
   ngOnInit() {
@@ -34,6 +37,9 @@ export class StudentSettingsPageComponent implements OnInit {
             c.User.Description = res.Description;
             c.User.Nickname = res.Nickname;
             this.currentUser.next(c);
+          },
+           error => {
+            this.alert.alertError(error, 'ngOnInit() -> getUserById');
           });
       });
   }
