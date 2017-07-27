@@ -16,6 +16,7 @@ var RootQuery = gql.NewObject(
 			"User":        &queries.GetUserById,
 			"Project":     &queries.GetProjectById,
 			"File":        &queries.GetFileById,
+			"FileList":    &queries.GetFileList,
 		},
 	},
 )

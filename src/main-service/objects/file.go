@@ -41,6 +41,21 @@ var FileType = gql.NewObject(
 	},
 )
 
+type FileList struct{
+	Files     []File
+}
+
+var FileListType = gql.NewObject(
+	gql.ObjectConfig{
+		Name: "FileList",
+		Fields: gql.Fields{
+			"Files": &gql.Field{
+				Type: gql.NewList(FileType),
+			},
+		},
+	},
+)
+
 
 func ResolveGetFileById(p gql.ResolveParams) (interface{}, error) {
 	var id string
@@ -54,3 +69,21 @@ func ResolveGetFileById(p gql.ResolveParams) (interface{}, error) {
 	err := helpers.HttpGetWithToken(conf.Configuration.FileServiceURL+"v1/files/"+id,token, &file)
 	return file, err
 }
+
+func ResolveGetFileList(p gql.ResolveParams) (interface{}, error) {
+	var id string
+	token:=helpers.InterfaceToString(p.Context.Value("Token"));
+	id, ok := p.Args["Id"].(string)
+	var files []File
+	var err error
+	if !ok {
+		err = helpers.HttpGetWithToken(conf.Configuration.FileServiceURL+"v1/files/",token, &files)
+	} else {
+		err = helpers.HttpGetWithToken(conf.Configuration.FileServiceURL+"v1/files/?Id="+id,token, &files)
+	}
+	fileList:=FileList{
+		Files: files,
+	}
+	return fileList, err
+}
+

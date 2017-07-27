@@ -7,6 +7,7 @@ import (
 )
 
 var GetFileById gql.Field
+var GetFileList gql.Field
 
 func init() {
 	GetFileById = gql.Field{
@@ -17,5 +18,14 @@ func init() {
 			},
 		},
 		Resolve: objects.ResolveGetFileById,
+	}
+	GetFileList = gql.Field{
+		Type: objects.FileListType,
+		Args: gql.FieldConfigArgument{
+			"Id": &gql.ArgumentConfig{
+				Type: gql.String,
+			},
+		},
+		Resolve: objects.ResolveGetFileList,
 	}
 }
