@@ -1,0 +1,9 @@
+.project-card{
+    margin-bottom: 2rem;
+    max-width: 22rem;
+}
+
+.card-deck{
+    display: flex;
+    justify-content: space-around;
+}
