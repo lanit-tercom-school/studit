@@ -81,6 +81,9 @@ func ResolveGetFileList(p gql.ResolveParams) (interface{}, error) {
 	} else {
 		err = helpers.HttpGetWithToken(conf.Configuration.FileServiceURL+"v1/files/?Id="+id,token, &files)
 	}
+	for i,v:=range files{
+		files[i].Path=conf.Configuration.FileServiceURL+v.Path
+	}
 	fileList:=FileList{
 		Files: files,
 	}
