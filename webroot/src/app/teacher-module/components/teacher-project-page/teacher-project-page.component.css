@@ -1,47 +1,34 @@
-#main-info
-{
-    padding: 1rem;
-    background: whitesmoke;
+.card{
+  background-color: var(--section-color); 
+  padding: 2rem 1rem 2rem 1rem;
 }
 
-#project-img-status
-{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 0;
-}
-
-#status
-{
-  padding-top: 1rem;
-}
-
-#project-name
-{
-  margin-bottom: 1rem;
-}
-.blacktag
-{
-  font-style: italic;
-  color: black;
-}
-
-.blacktag:hover
-{
-  text-decoration: underline;
+.row{ 
+    margin: 0rem 0rem 0rem 0rem;
 }
 
 .container
 {
-    background: whitesmoke;
+    margin-top: 3rem;
+    background: white;
     margin-bottom: 3rem;
+    padding-right: 0rem;  
 }
+  .status{
+    margin-top:1rem;
+    text-align: center;
+  }
 
 .btn
 {
   margin-top: 1rem;
+  width:100%;
 }
+
+img{
+  width:100%;
+}
+
 #enrollMessage
 {
    width: 100%;
@@ -50,7 +37,6 @@
 }
 .modal-header
 {
-
   border-style: none;
 }
 .modal-title
