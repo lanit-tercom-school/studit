@@ -4,6 +4,8 @@ import { FormsModule } from '@angular/forms';
 
 import { TeacherRoutingModule } from './teacher-routing.module';
 
+import { TasksItemComponent } from "./components/teacher-project-tasks/tasks-item/tasks-item.component";
+import { TeacherProjectTasksComponent } from "./components/teacher-project-tasks/teacher-project-task.component";
 import { HomePageTeacherComponent } from './components/home-page-teacher/home-page-teacher.component'
 import { CreateProjectPageComponent } from './components/create-project-page/create-project-page.component';
 import { TeacherNotePageComponent } from './components/teacher-notification-page/teacher-notification-page.component';
@@ -19,6 +21,8 @@ import { TeacherPublicPageComponent } from './components/teacher-public-page/tea
     FormsModule
   ],
   declarations: [
+    TeacherProjectTasksComponent,
+    TasksItemComponent,
     HomePageTeacherComponent,
     CreateProjectPageComponent,
     TeacherNotePageComponent,

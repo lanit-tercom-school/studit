@@ -14,22 +14,20 @@ export class TaskService {
     constructor(private http: Http) {
     }
 
-    gettaskItem(id: number): TasksItem[] {
-        return [
-            {
-                "task": "Complete this exercise...",
-                "open": "More details",
-                "data": "20.03.17",
-                "number": "1"
-            },
-            {
-                "task": "Change this sentence...",
-                "open": "More details",
-                "data": "28.03.17",
-                "number": "2"
-
-            }
-
-        ];
+    getTaskItemsFromGitHub(gitHubUrl: string): Observable<TasksItem[]> {
+        gitHubUrl = gitHubUrl.slice(18, gitHubUrl.length)
+        return this.http.get("https://api.github.com/repos" + gitHubUrl + "/issues").map(res => {
+            let taskList: TasksItem[] = new Array<TasksItem>();
+            res.json().forEach(element => {
+                let taskItem: TasksItem = new TasksItem();
+                taskItem.Title = element.title;
+                taskItem.Body=element.body;
+                taskItem.Url=element.html_url;
+                taskItem.NicnameOfUser=element.user.login;
+                taskItem.DataOfCreation=element.created_at;
+                taskList.push(taskItem);
+            });
+            return taskList;
+        });
     }
 }

@@ -18,6 +18,7 @@ type Project struct {
 	Logo           string    `json:"Logo"`
 	Tags           []string  `json:"Tags"`
 	Status         string    `json:"Status"`
+	GitHubUrl      string    `json:"GitHubUrl"`
 }
 
 //ProjectType - grqphql объект проекта
@@ -44,6 +45,9 @@ var ProjectType = gql.NewObject(
 				Type: gql.String,
 			},
 			"Status": &gql.Field{
+				Type: gql.String,
+			},
+			"GitHubUrl": &gql.Field{
 				Type: gql.String,
 			},
 		},
@@ -74,6 +78,7 @@ func ResolvePostProject(p gql.ResolveParams) (interface{}, error) {
 			Description:    helpers.InterfaceToString(p.Args["Description"]),
 			Logo:           helpers.InterfaceToString(p.Args["Logo"]),
 			Status:         helpers.InterfaceToString(p.Args["Status"]),
+			GitHubUrl:      helpers.InterfaceToString(p.Args["GitHubUrl"]),
 			Tags:           helpers.InterfaceToArrayStrings(p.Args["Tags"]),
 		}
 		err := helpers.HttpPost(conf.Configuration.DataServiceURL+"v1/project/", projectToSend, &projectToGet)
@@ -84,7 +89,6 @@ func ResolvePostProject(p gql.ResolveParams) (interface{}, error) {
 			Id: projectToGet.Id,
 		}
 		projectUserToGet := ProjectUser{}
-		helpers.LogAccesAllowed("PostProjectOn")
 		projectUserToSend := ProjectUser{
 			Project:    project,
 			User:       user,

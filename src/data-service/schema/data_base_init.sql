@@ -12,6 +12,7 @@ CREATE TABLE project (
     name              TEXT                          NOT NULL,
     status            status                        NOT NULL,
     tags              TEXT[]           NOT NULL DEFAULT '{}',
+    githuburl         TEXT                          NOT NULL,
 
     CONSTRAINT project_pk PRIMARY KEY (id)
 );

@@ -16,6 +16,7 @@ func InitProject(o orm.Ormer) []models.Project {
 			Logo:        "http://www.calorizator.ru/sites/default/files/imagecache/product_512/product/juice-10.jpg",
 			Tags:        []string{"studit", "summerschool"},
 			Status:      "started",
+			GitHubUrl:   "https://github.com/eyshella/test_for_studit",
 		},
 		{
 			Name:        "Модный фрилансер",
@@ -23,6 +24,7 @@ func InitProject(o orm.Ormer) []models.Project {
 			Logo:        "http://findfood.ru/attaches/product/bezalkogolnyie-napitki/apelsinovyj-sok.jpg",
 			Tags:        []string{"freelance"},
 			Status:      "opened",
+			GitHubUrl:   "https://github.com/eyshella/test_for_studit",
 		},
 		{
 			Name:        "Оригинальное название",
@@ -30,6 +32,7 @@ func InitProject(o orm.Ormer) []models.Project {
 			Logo:        "http://www.calorizator.ru/sites/default/files/imagecache/product_512/product/juice-35.jpg",
 			Tags:        []string{"creative"},
 			Status:      "opened",
+			GitHubUrl:   "https://github.com/eyshella/test_for_studit",
 		},
 		{
 			Name:        "TFS Mobile",
@@ -37,6 +40,7 @@ func InitProject(o orm.Ormer) []models.Project {
 			Logo:        "http://www.calorizator.ru/sites/default/files/imagecache/product_512/product/juice-20.jpg",
 			Tags:        []string{"TFS", "summerschool"},
 			Status:      "opened",
+			GitHubUrl:   "https://github.com/eyshella/test_for_studit",
 		},
 		{
 			Name:        "Еще один проект",
@@ -44,6 +48,7 @@ func InitProject(o orm.Ormer) []models.Project {
 			Logo:        "http://www.calorizator.ru/sites/default/files/imagecache/recipes_full/recipe/57829.jpg",
 			Tags:        []string{"project"},
 			Status:      "opened",
+			GitHubUrl:   "https://github.com/eyshella/test_for_studit",
 		},
 	}
 

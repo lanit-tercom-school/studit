@@ -99,15 +99,18 @@ export class TeacherService {
       name: project.Name,
       description: project.Description,
       logo: project.Logo,
-      tags: project.Tags
+      tags: project.Tags,
+      github: project.GitHubUrl,
     };
     var query = `mutation ($name: String!
      $description: String!
      $logo: String
+     $github: String!
      $tags: String)
     {
       PostProject(Name: $name
        Description: $description
+       GitHubUrl: $github
        Logo: $logo
        Tags: $tags)
       {
@@ -115,6 +118,7 @@ export class TeacherService {
         Name
         Description
         DateOfCreation
+        GitHubUrl
       }
     } &variables=`+ JSON.stringify(variables);
     let headers = new Headers();

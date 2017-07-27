@@ -1,6 +1,7 @@
-export interface TasksItem {
-  task: string;
-  data: string;
-  open: string;
-  number:string;
+export class TasksItem {
+  Title: string;
+  DataOfCreation: string;
+  NicnameOfUser: string;
+  Body:string;
+  Url: string;
 }

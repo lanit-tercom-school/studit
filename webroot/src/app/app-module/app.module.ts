@@ -42,8 +42,6 @@ import { MainFullNewsPageComponent } from './components/main-full-news-page/main
 import { ProjectPageComponent } from './components/project-page/project-page.component';
 import { MaterialsComponent } from '../shared-components/project-items/materials/materials.component';
 import { MaterialsItemComponent } from '../shared-components/project-items/materials/materials-item/materials-item.component';
-import { TasksComponent } from '../shared-components/project-items/tasks/tasks.component';
-import { TasksItemComponent } from "../shared-components/project-items/tasks/tasks-item/tasks-item.component";
 import { ProjNewsComponent } from '../shared-components/project-items/proj-news/proj-news.component';
 import { ProjNewsItemComponent } from "../shared-components/project-items/proj-news/proj-news-item/proj-news-item.component";
 
@@ -85,8 +83,6 @@ import { ErrorPageComponent } from './components/error-page/error-page.component
     ProjectPageComponent,
     MaterialsComponent,
     MaterialsItemComponent,
-    TasksComponent,
-    TasksItemComponent,
     ProjNewsComponent,
     ProjNewsItemComponent,
     AuthorizationPageComponent,
