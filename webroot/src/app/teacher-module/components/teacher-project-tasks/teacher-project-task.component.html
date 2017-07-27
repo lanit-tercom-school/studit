@@ -1,0 +1,5 @@
+<h5 align="center">Текущие задачи на GitHub</h5>
+<hr>
+<ul>
+  <app-tasks-item *ngFor="let task of TasksItemList | async" [TasksItem]=task></app-tasks-item>
+</ul>
