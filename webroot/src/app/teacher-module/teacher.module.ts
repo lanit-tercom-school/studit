@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { FileUploadModule } from 'ng2-file-upload';
 
 import { TeacherRoutingModule } from './teacher-routing.module';
 
@@ -18,7 +19,8 @@ import { TeacherPublicPageComponent } from './components/teacher-public-page/tea
   imports: [
     CommonModule,
     TeacherRoutingModule,
-    FormsModule
+    FormsModule,
+    FileUploadModule
   ],
   declarations: [
     TeacherProjectTasksComponent,

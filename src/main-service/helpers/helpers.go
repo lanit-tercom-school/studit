@@ -9,6 +9,8 @@ import (
 	"log"
 	"net/http"
 	"strings"
+	"mime/multipart"
+	"io"
 )
 
 type Message struct {
@@ -46,6 +48,13 @@ func LogErrorGet(url string, err error) {
 }
 func LogGet(url string, str string) {
 	log.Printf("Get: %s %s", url, str)
+}
+
+func LogErrorPut(url string, err error) {
+	log.Printf("Put: %s Error %s", url, err)
+}
+func LogPut(url string, str string) {
+	log.Printf("Put: %s %s", url, str)
 }
 
 func LogAccesAllowed(str string) {
@@ -114,12 +123,47 @@ func HttpGet(url string, o interface{}) (err error) {
 }
 
 func HttpPutWithToken(url string, token string, send interface{}, get interface{}) (err error) {
-	LogGet(url, "Sending")
+	LogPut(url, "Sending")
 	var resp *http.Response
 	client := &http.Client{}
 	jsonToSend, err := json.Marshal(send)
 	bodyToSend := bytes.NewBuffer(jsonToSend)
 	req, err := http.NewRequest("PUT", url, bodyToSend)
+	if err != nil {
+		LogErrorPut(url, err)
+		return
+	}
+	req.Header.Set("Bearer-Token", token)
+	resp, err = client.Do(req)
+	if err != nil {
+		LogErrorPut(url, err)
+		return
+	}
+	LogPut(url, "Received "+resp.Status)
+	if !(resp.StatusCode >= 200 && resp.StatusCode < 300) {
+		err = errors.New(GetErrorMessageFromResponse(url, resp))
+		LogErrorPut(url, err)
+		return
+	}
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		LogErrorPut(url, err)
+		return
+	}
+	err = json.Unmarshal(body, get)
+	if err != nil {
+		LogErrorPut(url, err)
+		return
+	}
+	LogPut(url, "Success")
+	return
+}
+
+func HttpGetWithToken(url string, token string,  get interface{}) (err error) {
+	LogGet(url, "Sending")
+	var resp *http.Response
+	client := &http.Client{}
+	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		LogErrorGet(url, err)
 		return
@@ -214,4 +258,57 @@ func HttpDelete(url string, send interface{}, get interface{}) (err error) {
 	}
 	LogDelete(url, "Success")
 	return
+}
+
+func HttpPostWithTokenAndFile(url string, token string, file multipart.File, handler *multipart.FileHeader, get interface{}) (err error) {
+	LogPost(url, "Sending")
+	var resp *http.Response
+	client := &http.Client{}
+	req, err := newfileUploadRequest(url,"uploadfile",file,handler)
+	if err != nil {
+		LogErrorPost(url, err)
+		return
+	}
+	req.Header.Set("Bearer-Token", token)
+	resp, err = client.Do(req)
+	if err != nil {
+		LogErrorPost(url, err)
+		return
+	}
+	LogPost(url, "Received "+resp.Status)
+	if !(resp.StatusCode >= 200 && resp.StatusCode < 300) {
+		err = errors.New(GetErrorMessageFromResponse(url, resp))
+		LogErrorPost(url, err)
+		return
+	}
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		LogErrorPost(url, err)
+		return
+	}
+	err = json.Unmarshal(body, get)
+	if err != nil {
+		LogErrorPost(url, err)
+		return
+	}
+	LogPost(url, "Success")
+	return
+}
+
+// Creates a new file upload http request with optional extra params
+func newfileUploadRequest(url string, paramName string, file multipart.File, handler *multipart.FileHeader) (*http.Request, error) {
+  body := &bytes.Buffer{}
+  writer := multipart.NewWriter(body)
+  part, err := writer.CreateFormFile(paramName, handler.Filename)
+  if err != nil {
+      return nil, err
+  }
+  _, err = io.Copy(part, file)
+  err = writer.Close()
+  if err != nil {
+      return nil, err
+  }
+  req, err := http.NewRequest("POST", url, body)
+  req.Header.Set("Content-Type", writer.FormDataContentType())
+  return req, err
 }
