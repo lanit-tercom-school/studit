@@ -30,7 +30,7 @@
       </div>
     </form>
   </div>
-
+  <input type="file" (change)="fileChange($event)" placeholder="Upload file" accept=".jpg,.png">
   <div id="create-message" *ngIf="isCreated">
     <h2>Проект успешно создан!</h2>
     <a href="/home">Вернуться</a>

@@ -4,6 +4,7 @@ import (
 	"errors"
 	"time"
 	"mime/multipart"
+	"strconv"
 
 	"main-service/conf"
 	"main-service/helpers"
@@ -92,13 +93,14 @@ func ResolveGetFileList(p gql.ResolveParams) (interface{}, error) {
 }
 
 func ResolvePostFile(p gql.ResolveParams) (interface{}, error) {
-	var id string
+	var id int
 	token:=helpers.InterfaceToString(p.Context.Value("Token"));
 	file :=p.Context.Value("File").(multipart.File)
 	handler :=p.Context.Value("FileHeader").(*multipart.FileHeader)
 	var fileToGet File
 	var err error
 	err = helpers.HttpPostWithTokenAndFile(conf.Configuration.FileServiceURL+"v1/files/",token,file,handler,&id)
-	err = helpers.HttpGetWithToken(conf.Configuration.FileServiceURL+"v1/files/"+id,token, &fileToGet)
+	err = helpers.HttpGetWithToken(conf.Configuration.FileServiceURL+"v1/files/"+strconv.Itoa(id),token, &fileToGet)
+	fileToGet.Path=conf.Configuration.FileServiceURL+fileToGet.Path
 	return fileToGet, err
 }
