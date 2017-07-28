@@ -10,7 +10,7 @@ type File struct {
 	Id             int       `orm:"column(id);pk;auto"`
 	Name           string    `orm:"column(name)"`
 	Path           string    `orm:"column(path)"`
-	DateOfCreation time.Time `orm:"column(date_of_creation);type(datetime)"`
+	DateOfCreation time.Time `orm:"column(created);type(datetime)"`
 	User           int       `orm:"column(user_id);"`
 }
 
