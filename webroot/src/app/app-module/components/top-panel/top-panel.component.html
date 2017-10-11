@@ -1,5 +1,5 @@
 <!-- Just an image -->
-<nav class="navbar sticky-top navbar-toggleable-md navbar-light">
+<nav class="navbar sticky-top navbar-expand-md navbar-light">
   <div class="container">
     <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav"
       aria-expanded="false" aria-label="Toggle navigation">
@@ -82,11 +82,27 @@
             <a class="lanit-nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
               <i class="fa fa-user-circle fa-lg" aria-hidden="true"></i> {{currentUser.User.Nickname}}
             </a>
-         <div class="dropdown-menu">
+            <div class="dropdown-menu">
               <a class="dropdown-item" routerLink="/user/{{currentUser.User.Id}}"><i class="fa fa-address-card fa-fw" aria-hidden="true"></i> Мой профиль</a>
-              <div *ngIf='currentUser.PermissionLevel==0'><a class="dropdown-item" routerLink="/student/profile/settings"><i class="fa fa-cog fa-fw" aria-hidden="true"></i> Настройки</a></div>
-              <div *ngIf='currentUser.PermissionLevel==1'><a class="dropdown-item" routerLink="/teacher/profile/settings"><i class="fa fa-cog fa-fw" aria-hidden="true"></i> Настройки</a></div>
-              <div *ngIf='currentUser.PermissionLevel==2'><a class="dropdown-item" routerLink="/admin/profile/settings"><i class="fa fa-cog fa-fw" aria-hidden="true"></i> Настройки</a></div>
+              <div *ngIf='currentUser.PermissionLevel==0'>
+                <a class="dropdown-item" routerLink="/student/profile/settings">
+                  <i class="fa fa-cog fa-fw" aria-hidden="true"></i> 
+                  Настройки
+                </a>
+              </div>
+              <div *ngIf='currentUser.PermissionLevel==1'>
+                <a class="dropdown-item" routerLink="/teacher/profile/settings">
+                  <i class="fa fa-cog fa-fw" aria-hidden="true"></i>
+                   Настройки
+                </a>
+              </div>
+              <div *ngIf='currentUser.PermissionLevel==2'>
+                <a class="dropdown-item" routerLink="/admin/profile/settings">
+                  <i class="fa fa-cog fa-fw" aria-hidden="true">
+                    </i> 
+                    Настройки
+                  </a>
+              </div>
               <a class="dropdown-item" href="#"><i class="fa fa-bell-o fa-fw" aria-hidden="true"></i> Уведомления</a>
               <div class="dropdown-divider"></div>
               <a class="dropdown-item" id="log-out" routerLink="/auth" routerLinkActive="active" (click)="logout()">
