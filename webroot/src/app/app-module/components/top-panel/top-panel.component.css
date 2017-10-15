@@ -40,3 +40,8 @@
 {
     fill: var(--section-color);
 }
+
+/*ann class dropdown*/
+.dropdown-visible {
+	display:block;
+}
