@@ -78,8 +78,9 @@
           </li>
         </div>
         <div *ngIf="currentUser">
-          <li class="nav-item dropdown">
-            <a class="lanit-nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+          <li class="nav-item dropdown" (mouseleave)="hidemenu()"> <!-- ann add event dropdown -->
+            <a class="lanit-nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"
+                (mouseover)="showmenu()" ><!-- ann add event dropdown -->
               <i class="fa fa-user-circle fa-lg" aria-hidden="true"></i> {{currentUser.User.Nickname}}
             </a>
             <div class="dropdown-menu">

@@ -27,5 +27,14 @@ export class TopPanelComponent implements OnInit, DoCheck {
     this.auth.unauthentificatenow();
     window.location.reload()
   }
+    
+     // ann add dropdown
+    showmenu() {
+   document.querySelector(".dropdown-menu").classList.add("dropdown-visible");
+    }
+    
+    hidemenu() {
+    document.querySelector(".dropdown-menu").classList.remove("dropdown-visible");
+    }
 
 }
