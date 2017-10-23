@@ -81,7 +81,6 @@ start_tmux() {
     tmux_exec() {
         tmux send-keys -t $1 " ${*:2}"
         tmux send-keys -t $1  C-m
-        tmux_clear $1
     }
 
     # Export variable to bottom pane
@@ -239,6 +238,7 @@ start_tmux() {
 
     # Kill session on Ctrl-D
     tmux_exec $console_id trap kill_tmux EXIT
+    tmux_clear
 
     run_services
 
