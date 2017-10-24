@@ -250,15 +250,8 @@ src/service/lastupdate.tmp
 #############
 ## Go/beego
 #############
-**/swagger/*
-**/swagger.zip
-**/lastupdate.tmp
 **/*.exe~
 *.exe
-pkg/
-src/service/swagger/*
-src/github.com/*
-src/golang.org/*
 src/service/routers/commentsRouter_*
 src/auth-service/routers/commentsRouter_*
 src/main-service/routers/commentsRouter_*

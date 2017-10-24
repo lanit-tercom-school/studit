@@ -1,5 +1,6 @@
-export GOPATH=$PWD/../../..
-export PATH=$PATH:$GOPATH/bin
+#!/bin/bash
+export GOPATH="$PWD/../../.."
+export PATH="$PATH:$GOPATH/bin"
 export PGPASSWORD=postgres
 export PGUSER=postgres
 

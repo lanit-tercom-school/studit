@@ -1,3 +1,9 @@
-### Backend  
-[Описание](src/service/README.md)   
-[Минимальный набор знаний для участия в разработке backend](src/service/info.md)
+## Setup
+
+### Backend
+
+Add cloned repository to your [GOPATH](https://github.com/golang/go/wiki/GOPATH)
+
+Install [bee](https://github.com/beego/bee):
+
+`$ go get https://github.com/beego/bee`
