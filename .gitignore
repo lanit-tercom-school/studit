@@ -5,6 +5,7 @@
 *.pydevproject
 .project
 .metadata
+src/file-service/files
 bin/
 tmp/
 *.tmp

@@ -7,11 +7,11 @@ import (
 )
 
 type File struct {
-	Id             int       `orm:"column(id);pk;auto"                         json:"id"`
-	Name           string    `orm:"column(name)"                               json:"name"`
-	Path           string    `orm:"column(path)"                               json:"path,omitempty"`
-	DateOfCreation time.Time `orm:"column(date_of_creation);type(datetime)"    json:"created"`
-	User           int       `orm:"column(user_id);"                           json:"user-id"`
+	Id             int       `orm:"column(id);pk;auto"`
+	Name           string    `orm:"column(name)"`
+	Path           string    `orm:"column(path)"`
+	DateOfCreation time.Time `orm:"column(created);type(datetime)"`
+	User           int       `orm:"column(user_id);"`
 }
 
 func (t *File) TableName() string {

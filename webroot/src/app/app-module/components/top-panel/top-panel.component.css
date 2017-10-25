@@ -2,18 +2,16 @@
 {
     padding: 0;
     padding-top: .2rem;
-    font-size: 1.25rem;
+    padding-bottom: 1rem;
+    font-size: 1.5rem;
     font-weight: 500;
+    border: 0;
 }
 
-.navbar-nav
-{
-    float: right;
-    margin-left:40%;
-    width: 100%;
-    justify-content: space-around;
+.nav{
+    margin-left: 10rem;
+    padding-top: 1rem;
 }
-
 
 #log-out
 {

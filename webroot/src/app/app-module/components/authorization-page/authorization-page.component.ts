@@ -21,6 +21,7 @@ export class AuthorizationPageComponent implements OnInit {
   constructor(private auth: AuthService, private router: Router, private data: DataService) { }
 
   ngOnInit() {
+    window.scrollTo(0,0);
     this.auth.unauthentificatenow();
     this.ReturnUrl = this.router.routerState.snapshot.root.queryParams['ReturnUrl'] || '/home';
   }

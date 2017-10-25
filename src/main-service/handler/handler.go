@@ -120,7 +120,7 @@ func NewRequestOptions(r *http.Request) *RequestOptions {
 func (h *Handler) ContextHandler(ctx context.Context, w http.ResponseWriter, r *http.Request) {
 	//Allow CORS
 	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Headers", "Authorization")
+	w.Header().Set("Access-Control-Allow-Headers", "Authorization, X-Requested-With, Content-Type")
 	// get query
 	opts := NewRequestOptions(r)
 	//Авторизация
@@ -128,6 +128,16 @@ func (h *Handler) ContextHandler(ctx context.Context, w http.ResponseWriter, r *
 	c := context.WithValue(ctx, "CurrentUser", objects.Auth(tokenStr))
 	if len(tokenStr) > 7 {
 		c = context.WithValue(c, "Token", tokenStr[7:])
+	}
+	contentType:=r.Header.Get("Content-Type")
+	if (strings.HasPrefix(contentType, "multipart/form-data")){
+		var err error
+		file, handler, err := r.FormFile("uploadFile")
+		if err!=nil{
+			helpers.LogErrorServer(err)
+		}
+		c = context.WithValue(c, "File", file)
+		c = context.WithValue(c, "FileHeader", handler) 
 	}
 	// execute graphql query
 	params := graphql.Params{

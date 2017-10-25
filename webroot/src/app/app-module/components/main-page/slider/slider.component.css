@@ -1,9 +1,27 @@
-.project-card{
-    margin-bottom: 2rem;
-    max-width: 22rem;
+.swiper-cover{
+    margin: 2rem auto;
+    max-width: 80%;
 }
 
-.card-deck{
-    display: flex;
-    justify-content: space-around;
+.swiper-text
+{
+ position: absolute;
+  width: 100%;
+  top: 13px;;
+  margin-right: 0.5rem;
+}
+
+.swiper-text > div
+{
+    padding-right: 5px;
+}
+
+a
+{
+  width: calc(33.33333% - 0.5rem);
+}
+
+a,p,h2{
+      text-decoration: none;
+      color: black;
 }

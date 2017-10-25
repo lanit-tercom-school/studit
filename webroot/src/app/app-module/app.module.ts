@@ -2,7 +2,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
-import {NgxPaginationModule} from 'ngx-pagination'; 
+import { NgxPaginationModule } from 'ngx-pagination'; 
+import { SwiperModule } from 'angular2-useful-swiper';
 
 import { AppRouterProvider } from './routes';
 import { PathManager } from 'services/path.manager';
@@ -15,6 +16,7 @@ import { NewsService } from 'services/news.service';
 import { UserService } from 'services/user.service';
 import { TaskService } from 'services/task.service';
 import { AuthService } from 'services/auth.service';
+import { FileService } from 'services/file.service';
 
 import { AppComponent } from './components/app.component';
 import { MainComponent } from './components/main-page/main.component';
@@ -58,7 +60,8 @@ import { ErrorPageComponent } from './components/error-page/error-page.component
     FormsModule,
     HttpModule,
     AppRouterProvider,
-    NgxPaginationModule
+    NgxPaginationModule,
+    SwiperModule
   ],
   declarations: [
     AppComponent,
@@ -90,6 +93,7 @@ import { ErrorPageComponent } from './components/error-page/error-page.component
     ErrorPageComponent,
   ],
   providers: [
+    FileService,
     TeacherService,
     StudentService,
     ProjectService,
