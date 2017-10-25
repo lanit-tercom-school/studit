@@ -80,7 +80,6 @@ export class ProjectService {
       Name
       Description
       DateOfCreation
-      GitHubUrl
     }
   }&variables=`+ JSON.stringify(variable);
     return this.http.get(environment.apiUrl + '/graphql?query=' + query)

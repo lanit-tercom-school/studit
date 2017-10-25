@@ -1,0 +1,9 @@
+diff a/webroot/src/app/services/project.service.ts b/webroot/src/app/services/project.service.ts	(rejected hunks)
+@@ -80,6 +80,7 @@
+       Name
+       Description
+       DateOfCreation
++      GitHubUrl
+     }
+   }&variables=`+ JSON.stringify(variable);
+     return this.http.get(environment.apiUrl + '/graphql?query=' + query)
