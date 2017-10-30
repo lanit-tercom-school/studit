@@ -75,6 +75,8 @@
           <a class="lanit-nav-link" routerLink="/projects">Проекты
           </a>
         </li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
         <li *ngIf="currentUser == undefined" class="nav-item">
           <a class="lanit-nav-link" id="sign-in" routerLink="/auth" [queryParams]="{'ReturnUrl':url}">Вход
           </a>
