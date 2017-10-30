@@ -3,14 +3,13 @@
     padding: 0;
     padding-top: .2rem;
     padding-bottom: 1rem;
-    font-size: 1.5rem;
-    font-weight: 500;
+    font-size: 1.8rem;
+    font-weight: 600;
     border: 0;
 }
 
 .nav{
     margin-left: 10rem;
-    padding-top: 1rem;
 }
 
 #log-out
@@ -37,4 +36,11 @@
 .logo-text
 {
     fill: var(--section-color);
+}
+
+.nav >li >a {
+  padding-bottom: 25px;
+  padding-left: 30px;
+  padding-right: 30px;
+  padding-top: 25px;
 }
