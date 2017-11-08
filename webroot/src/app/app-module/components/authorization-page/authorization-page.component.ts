@@ -41,4 +41,8 @@ export class AuthorizationPageComponent implements OnInit {
         this.error = error;
       });
   }
+
+    loginGithub() {
+    this.auth.authenticateGithub();
+  }
 }

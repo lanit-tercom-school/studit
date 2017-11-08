@@ -96,4 +96,12 @@ export class AuthService {
             .catch((error: any) => { return Observable.throw(error) });
     }
 
+authenticateGithub()
+{
+    var client_id = '278a631dd0eb679ee4eb';
+    var req = 'https://github.com/login/oauth/authorize?client_id='+ client_id;;
+    window.open(req, "_blank");
 }
+}
+
+
