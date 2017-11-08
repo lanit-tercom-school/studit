@@ -14,6 +14,7 @@ import { UserPublicPageComponent } from './components/user-public-page/user-publ
 import { MainNewsPageComponent } from './components/main-news-page/main-news-page.component';
 import { MainFullNewsPageComponent } from './components/main-full-news-page/main-full-news-page.component';
 import { ErrorPageComponent } from './components/error-page/error-page.component';
+import { GithubPageComponent } from './components/github-page/github-page.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'main', pathMatch: 'full', canActivate: [PathManager] },
@@ -30,6 +31,8 @@ export const routes: Routes = [
    { path: 'user/:id', component: UserPublicPageComponent,  canActivate: [PathManager] },
   { path: 'news', component: MainNewsPageComponent },
   { path: 'news/:id', component: MainFullNewsPageComponent },
+
+  { path: 'github_callback', component: GithubPageComponent },
   { path: '**', component: ErrorPageComponent },
 ];
 

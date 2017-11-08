@@ -99,7 +99,8 @@ export class AuthService {
 authenticateGithub()
 {
     var client_id = '278a631dd0eb679ee4eb';
-    var req = 'https://github.com/login/oauth/authorize?client_id='+ client_id;;
+    var redirect = 'http://localhost:4200/github_callback';
+    var req = 'https://github.com/login/oauth/authorize?client_id='+ client_id + '&redirect_uri=' + redirect;
     window.open(req, "_blank");
 }
 }
