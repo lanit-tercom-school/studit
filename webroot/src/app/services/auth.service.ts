@@ -98,8 +98,8 @@ export class AuthService {
 
 authenticateGithub()
 {
-    var client_id = '278a631dd0eb679ee4eb';
-    var req = 'https://github.com/login/oauth/authorize?client_id='+ client_id + '&redirect_uri=' + environment.githubCallbackUrl;
+    var req = 'https://github.com/login/oauth/authorize?client_id='
+    + environment.clientID + '&redirect_uri=' + environment.githubCallbackUrl;
     
     //window.open(req, "_blank");
     window.location.href  = req;
