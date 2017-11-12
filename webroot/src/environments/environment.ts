@@ -6,5 +6,6 @@
 export const environment = {
   production: false,
   apiUrl: "http://localhost:8080",
-  authUrl: "http://localhost:8080",  // убрать
+  authUrl: "http://localhost:8080",
+  githubCallbackUrl: "http://localhost:4200/github_callback"
 };
