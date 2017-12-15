@@ -88,7 +88,7 @@ import { ErrorPageComponent } from './components/error-page/error-page.component
     ProjNewsItemComponent,
     AuthorizationPageComponent,
     RegistrationPageComponent,
-    ValidationPageComponent,
+    ValidationPageComponent,fdsfdsfdsfdsf
     UserPublicPageComponent,
     ErrorPageComponent,
   ],
