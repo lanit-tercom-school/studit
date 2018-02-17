@@ -1,0 +1,56 @@
+version: '2'
+services:
+    postgres:
+        image: postgres
+        ports:
+            - "5432:5432"
+        restart: always
+        environment:
+            POSTGRES_PASSWORD: postgres
+        volumes:
+            - "./database/init:/docker-entrypoint-initdb.d"
+    auth-service-migrate:
+        image: boxfuse/flyway
+        command: -url=jdbc:postgresql://database:5432/studit_auth -user=postgres -password=postgres migrate
+        volumes:
+            - "./database/migrations/auth-service:/flyway/sql"
+        links:
+            - "postgres:database"
+        restart: on-failure
+    auth-service:
+        build: "./backend/src/auth-service/"
+        ports:
+            - "8082:8082"
+        links:
+            - "postgres:database"
+        restart: always
+    data-service-migrate:
+        image: boxfuse/flyway
+        command: -url=jdbc:postgresql://database:5432/studit_auth -user=postgres -password=postgres migrate
+        volumes:
+            - "./database/migrations/data-service:/flyway/sql"
+        links:
+            - "postgres:database"
+        restart: on-failure
+    data-service:
+        build: "./backend/src/data-service/"
+        ports:
+            - "8081:8081"
+        links:
+            - "postgres:database"
+        restart: always
+    file-service-migrate:
+        image: boxfuse/flyway
+        command: -url=jdbc:postgresql://database:5432/studit_auth -user=postgres -password=postgres migrate
+        volumes:
+            - "./database/migrations/data-service:/flyway/sql"
+        links:
+            - "postgres:database"
+        restart: on-failure
+    file-service:
+        build: "./backend/src/file-service/"
+        ports:
+            - "8084:8084"
+        links:
+            - "postgres:database"
+        restart: always

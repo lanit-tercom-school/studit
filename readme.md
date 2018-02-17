@@ -6,7 +6,8 @@
 
 1. Install [PostgreSQL 10 (Database)](https://www.postgresql.org/download/) with root user/password as *postgres/postgres*
 1. Install [Go](https://golang.org/dl/)
-1. Set [Gopath](https://github.com/golang/go/wiki/GOPATH) as *repository_path*
+1. Set [Gopath](https://github.com/golang/go/wiki/GOPATH) as *repository_path\\backend*
+1. Add to system *PATH*: *%GOPATH%\bin\\*
 1. Install [Bee (Beego client)](https://github.com/beego/bee): `$ go get github.com/beego/bee`
 1. Install [Dep (Go package manager)](https://github.com/golang/dep): `$ go get -u github.com/golang/dep/cmd/dep`
 

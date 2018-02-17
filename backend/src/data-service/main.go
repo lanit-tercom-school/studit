@@ -7,14 +7,23 @@ import (
 	"net/http"
 	"net/rpc"
 
+	"github.com/astaxie/beego/config"
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
 	_ "github.com/lib/pq"
 )
 
 func init() {
-	orm.RegisterDataBase("default", "postgres", "postgres://postgres:postgres@127.0.0.1:5432/studit?sslmode=disable")
-	err := StartRPCService()
+	dbconf, err := config.NewConfig("ini", "conf/database.conf")
+	if err != nil {
+		beego.Critical(err.Error())
+		panic(err)
+	}
+	postgresStrConfig := "postgres://" + dbconf.String("login") + ":" +
+		dbconf.String("password") + "@" + dbconf.String("host") + ":" + dbconf.String("port") + "/" +
+		dbconf.String("database") + "?sslmode=" + dbconf.String("sslmode")
+	orm.RegisterDataBase("default", "postgres", postgresStrConfig)
+	err = StartRPCService()
 	if err != nil {
 		beego.Critical(err.Error())
 		panic(err)
