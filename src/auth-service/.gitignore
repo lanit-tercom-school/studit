@@ -1,6 +1,0 @@
-vendor/
-vendor.orig/
-swagger/
-routers/commentsRouter_*
-auth-service
-lastupdate.tmp

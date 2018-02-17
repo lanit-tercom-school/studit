@@ -1,0 +1,49 @@
+h1
+{
+  margin: 2rem auto;
+}
+input { 
+
+  margin-top: 2rem;
+}
+#project-avatar
+{
+    margin-top: 2rem;
+    width: 225px;
+    height: 225px;
+}
+
+#inputProjDescription
+{
+
+   max-height: 8rem;
+   min-height: 8rem;
+}
+
+.btn-submit
+{
+  margin-top: 0.75rem;
+  margin-bottom: 3rem;
+}
+
+.form-line
+{
+  margin-bottom: 1rem;
+}
+
+.block-form
+{
+  margin-top:  2rem;
+  margin-bottom: 2.5rem;
+}
+
+#create-message {
+   text-align: center;
+   width: 100%;
+   margin-top: 10%;
+   margin-bottom: 33%;
+}
+
+a{
+  font-size: 18px;
+}

@@ -1,0 +1,18 @@
+.error-message {
+  font-size: 18px;
+}
+
+#cover {
+   width: 100%;
+   margin-top: 5%;
+   margin-bottom: 5%;
+}
+
+ul, li {
+  margin-top: 1rem;
+}
+
+img {
+  height: 300px;
+  width: 300px;
+}

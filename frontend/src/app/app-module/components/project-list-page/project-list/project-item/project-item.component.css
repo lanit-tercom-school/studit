@@ -1,0 +1,22 @@
+.card
+{
+  height: 40rem;
+  width: 25rem;
+  text-align: left;
+  border: 0px;
+}
+
+.card-block{
+  background-color: var(--section-color);
+  height: 15rem;
+}
+
+.card-img-top{
+  height: 25rem;
+  width: 25rem;
+}
+
+a{
+    text-decoration: none;
+    color: black;
+}

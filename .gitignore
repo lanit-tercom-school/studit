@@ -252,11 +252,9 @@ src/service/lastupdate.tmp
 #############
 **/*.exe~
 *.exe
-src/service/routers/commentsRouter_*
-src/auth-service/routers/commentsRouter_*
-src/main-service/routers/commentsRouter_*
-src/auth-service/swagger/*
-src/main-service/swagger/*
-#########################
-run_front.cmd
-run_back.cmd
+backend/src/service/routers/commentsRouter_*
+backend/src/auth-service/routers/commentsRouter_*
+backend/src/main-service/routers/commentsRouter_*
+backend/src/auth-service/swagger/*
+backend/src/main-service/swagger/*
+

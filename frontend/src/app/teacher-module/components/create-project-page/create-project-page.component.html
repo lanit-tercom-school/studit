@@ -1,0 +1,37 @@
+<div class="container">
+  <div *ngIf="!isCreated">
+    <h1 align="center">Создание проекта</h1>
+    <hr>
+    <form>
+      <div class="row">
+        <div class="col-sm-12 col-md-5 col-lg-3 offset-lg-2" align="center">
+          <img id="project-avatar" src={{createdProject.Logo}} alt="Project photo">
+          <br>
+          <input type="file" (change)="load($event)" accept=".jpg,.png" size="5">
+        </div>
+        <div class="col-sm-12 col-md-5 col-lg-5" align="left">
+          <form class="block-form">
+            <div class="form-line">
+              <label class="col-form-label">Название проекта:</label>
+              <input class="form-control" placeholder="" [(ngModel)]="createdProject.Name" name="projectName" required>
+            </div>
+            <div class="form-line">
+              <label class="col-form-label" for="inputDescription">Описание проекта:</label>
+              <textarea class="form-control" id="inputProjDescription" [(ngModel)]="createdProject.Description" name="projDescription"
+                required></textarea>
+            </div>
+            <div class="form-line">
+              <label class="col-form-label" for="inputGitHubUrl">GitHub</label>
+              <input class="form-control" placeholder="" [(ngModel)]="createdProject.GitHubUrl" name="projGitHubUrl" required>
+            </div>
+            <button role="button" class="btn btn-primary btn-submit" type="submit" (click)="makeProject()">Создать</button>
+          </form>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div id="create-message" *ngIf="isCreated">
+    <h2>Проект успешно создан!</h2>
+    <a href="/home">Вернуться</a>
+  </div>
+</div>

@@ -1,0 +1,14 @@
+a
+{
+  color:black;
+  text-decoration: none;
+}
+li
+{
+  list-style-type: none;
+  margin-bottom: 1rem;
+  word-break: break-all;
+}
+.card{
+  background-color: var(--section-color);
+}

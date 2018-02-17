@@ -1,0 +1,14 @@
+.container
+{
+  text-align: center;
+  margin: 50px auto;
+}
+
+.project-list
+{
+  display: flex;
+}
+
+h1 {
+  margin-bottom: 50px;
+}
