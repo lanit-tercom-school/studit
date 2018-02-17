@@ -26,7 +26,7 @@ services:
         restart: always
     data-service-migrate:
         image: boxfuse/flyway
-        command: -url=jdbc:postgresql://database:5432/studit_auth -user=postgres -password=postgres migrate
+        command: -url=jdbc:postgresql://database:5432/studit_data -user=postgres -password=postgres migrate
         volumes:
             - "./database/migrations/data-service:/flyway/sql"
         links:
@@ -41,9 +41,9 @@ services:
         restart: always
     file-service-migrate:
         image: boxfuse/flyway
-        command: -url=jdbc:postgresql://database:5432/studit_auth -user=postgres -password=postgres migrate
+        command: -url=jdbc:postgresql://database:5432/studit_file -user=postgres -password=postgres migrate
         volumes:
-            - "./database/migrations/data-service:/flyway/sql"
+            - "./database/migrations/file-service:/flyway/sql"
         links:
             - "postgres:database"
         restart: on-failure
