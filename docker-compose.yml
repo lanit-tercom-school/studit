@@ -1,4 +1,6 @@
-version: '2'
+version: '3'
+volumes:
+    postgres_vol:
 services:
     postgres:
         image: postgres
@@ -9,6 +11,7 @@ services:
             POSTGRES_PASSWORD: postgres
         volumes:
             - "./database/init:/docker-entrypoint-initdb.d"
+            - "postgres_vol:/var/lib/postgresql/data"
     auth-service-migrate:
         image: boxfuse/flyway
         command: -url=jdbc:postgresql://database:5432/studit_auth -user=postgres -password=postgres migrate
@@ -23,6 +26,7 @@ services:
             - "8082:8082"
         links:
             - "postgres:database"
+            - "data-service:data-service"
         restart: always
     data-service-migrate:
         image: boxfuse/flyway
@@ -53,4 +57,13 @@ services:
             - "8084:8084"
         links:
             - "postgres:database"
+        restart: always
+    main-service:
+        build: "./backend/src/main-service/"
+        ports:
+            - "8080:8080"
+        links:
+            - "file-service:file-service"
+            - "data-service:data-service"
+            - "auth-service:auth-service"
         restart: always

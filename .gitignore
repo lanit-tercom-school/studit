@@ -258,3 +258,5 @@ backend/src/main-service/routers/commentsRouter_*
 backend/src/auth-service/swagger/*
 backend/src/main-service/swagger/*
 
+**/_vendor-*/*
+**/Gopkg.*

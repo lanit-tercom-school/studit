@@ -1,4 +1,4 @@
-package controllers
+﻿package controllers
 
 import (
 	"auth-service/models"
@@ -8,6 +8,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/astaxie/beego/config"
 	"github.com/astaxie/beego"
 )
 
@@ -30,6 +31,8 @@ type ActivationUser struct {
 // activation channel
 var ac chan ActivationUser
 
+var dataServiceRpc string
+
 // TODO: this block is not tested
 // Вызов функции активации на главном сервисе через RPC,
 // а так же поддержание соединения и повторные попытки активации
@@ -46,7 +49,7 @@ func StartActivationCycle() {
 				panic("Activation channel is corrupted")
 			} else {
 				if !connected {
-					if client, err = rpc.DialHTTP("tcp", ":8088"); err != nil {
+					if client, err = rpc.DialHTTP("tcp", dataServiceRpc); err != nil {
 						beego.Critical("Can't connect to RPC Service:", err.Error())
 					} else {
 						connected = true
@@ -125,6 +128,12 @@ func LoadActivationQueue() {
 func init() {
 	go StartActivationCycle()
 	ac = make(chan ActivationUser)
+	dataServiceConf, err := config.NewConfig("ini", "conf/rpc.conf")
+	if err != nil {
+		beego.Critical(err.Error())
+		panic(err)
+	}
+	dataServiceRpc = dataServiceConf.String("data-service-rpc")
 }
 
 func MainServiceActivateUser(id int, nickname string) {
