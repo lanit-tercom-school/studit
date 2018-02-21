@@ -11,7 +11,7 @@ import (
 
 func init() {
 	err := orm.RegisterDataBase("default", "postgres",
-		"postgres://postgres:postgres@localhost:5432/studit?sslmode=disable")
+		"postgres://postgres:postgres@localhost:5432/studit_data?sslmode=disable")
 	if err != nil {
 		beego.Critical(err.Error())
 		panic(err)
