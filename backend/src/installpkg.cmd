@@ -1,0 +1,12 @@
+cd auth-service
+dep init
+dep ensure
+cd ../file-service
+dep init
+dep ensure
+cd ../data-service
+dep init
+dep ensure
+cd ../main-service
+dep init
+dep ensure
