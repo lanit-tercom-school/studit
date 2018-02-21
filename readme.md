@@ -12,7 +12,7 @@
 5. Установить [Bee (Beego client)](https://github.com/beego/bee), введя в консоль команду `go get -u github.com/beego/bee`
 6. Установить [Dep (Go package manager)](https://github.com/golang/dep), введя в консоль команду `go get -u github.com/golang/dep/cmd/dep`
 7. Установить пакеты, запустив файл: installpkg.cmd (studit\backend\src)
-8. Инициализировать базу данных, запустив файл: initdbs.cmd (studit\backend\src)
+8. Инициализировать базы данных, запустив файл: initdbs.cmd (studit\backend\src)
 
 ### Develop launch
 1. Запустить backend, открыв файл: run-backend.cmd (studit\backend\src)
