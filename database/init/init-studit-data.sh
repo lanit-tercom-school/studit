@@ -1,2 +1,2 @@
-dropdb -e --host=localhost --port=5432 --username="$POSTGRES_USER" --no-password --if-exists studit_data && echo "dropdb OK" \
-createdb -e --owner="$POSTGRES_USER" --host=localhost --port=5432 --username="$POSTGRES_USER" --no-password studit_data && echo "createdb OK" \
+dropdb -e --host=localhost --port=5432 --username="$POSTGRES_USER" --no-password --if-exists studit_data
+createdb -e --owner="$POSTGRES_USER" --host=localhost --port=5432 --username="$POSTGRES_USER" --no-password studit_data
