@@ -10,7 +10,6 @@ COPY ./main.go ./main.go
 COPY ./Gopkg.toml ./Gopkg.toml
 COPY ./Gopkg.lock ./Gopkg.lock
 RUN go get -u github.com/golang/dep/cmd/dep
-RUN dep init
 RUN dep ensure
 
 RUN go install -v 
