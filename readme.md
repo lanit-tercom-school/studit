@@ -1,4 +1,4 @@
-# StudIT WIKI
+﻿# StudIT WIKI
 
 ## Backend
 
@@ -28,4 +28,11 @@
 
 1. Запустить frontend: из папки *repository_path*\frontend командой `npm start`
 1. [Открыть frontend в браузере](http://localhost:4200) 
+
+asd
+asda
+sdas
+da
+sda
+s
 
