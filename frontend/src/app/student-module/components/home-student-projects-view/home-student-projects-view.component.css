@@ -1,6 +1,6 @@
 .card
 {
-    margin-bottom:1rem;
+    margin-bottom: 3rem;
     word-wrap: break-word;
 }
 
@@ -30,20 +30,20 @@ a:hover
 .project-info
 {
     padding: 1rem 2rem 0rem 2rem;
+    margin: 1rem 4rem;
     background-color: var(--section-color);
 }
 
 .read-more
 {
-    margin: 0rem;
-    width: 90%;
-    position: absolute;
+    margin: 1rem 0rem 0rem 0rem;
+    width: 92%;
+    \\position: absolute;
     bottom: 0;
     text-align: right;
-    color: var(--dark-accent-color);
+    color: var(--dark-logo-color);
 }
 
 h3{
-    margin-top: 2rem;
-    margin-bottom: 2rem;
+    margin: 2rem 0rem 2rem 2rem;
 }
