@@ -12,6 +12,19 @@ services:
         volumes:
             - "./database/init:/docker-entrypoint-initdb.d"
             - "postgres_vol:/var/lib/postgresql/data"
+    data-service-migrate:
+        image: boxfuse/flyway
+        command: -url=jdbc:postgresql://database:5432/studit_data -user=postgres -password=postgres migrate
+        volumes:
+            - "./database/migrations/data-service:/flyway/sql"
+        links:
+            - "postgres:database"
+        restart: on-failure
+    data-service:
+        build: "./backend/src/data-service/"
+        links:
+            - "postgres:database"
+        restart: always
     auth-service-migrate:
         image: boxfuse/flyway
         command: -url=jdbc:postgresql://database:5432/studit_auth -user=postgres -password=postgres migrate
@@ -25,19 +38,6 @@ services:
         links:
             - "postgres:database"
             - "data-service:data-service"
-        restart: always
-    data-service-migrate:
-        image: boxfuse/flyway
-        command: -url=jdbc:postgresql://database:5432/studit_data -user=postgres -password=postgres migrate
-        volumes:
-            - "./database/migrations/data-service:/flyway/sql"
-        links:
-            - "postgres:database"
-        restart: on-failure
-    data-service:
-        build: "./backend/src/data-service/"
-        links:
-            - "postgres:database"
         restart: always
     file-service-migrate:
         image: boxfuse/flyway
