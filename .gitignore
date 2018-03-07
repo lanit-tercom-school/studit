@@ -259,3 +259,4 @@ backend/src/auth-service/swagger/*
 backend/src/main-service/swagger/*
 
 **/_vendor-*/*
+**/swagger.zip
