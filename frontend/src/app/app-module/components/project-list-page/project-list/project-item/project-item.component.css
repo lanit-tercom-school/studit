@@ -9,6 +9,7 @@
 .card-block{
   background-color: var(--section-color);
   height: 15rem;
+  padding: 1rem;
 }
 
 .card-img-top{
@@ -19,4 +20,9 @@
 a{
     text-decoration: none;
     color: black;
+}
+.card-title
+{
+  text-align:center;
+  font-weight: 600;
 }
