@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css?family=Jura');
 .container
 {
     margin: 10rem auto;
@@ -5,6 +6,27 @@
 
 h1
 {
+    color: white;
+    font-family: 'Jura', sans-serif;
+    font-size: 5.5rem;
+}
+
+#cover {
+    background: var(--primary-color);
+    background-size: cover;
+    height: 94%;
     text-align: center;
-    margin-bottom: 3rem;
+    display: flex;
+    align-items: center;
+}
+.checkbox{
+    color: white;
+    margin-top: 0rem;
+    margin-bottom: 0rem;
+}
+.row{
+    margin: 1rem 0rem;
+}
+.button{
+    margin-bottom: 5rem;
 }

@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css?family=Jura');
+
 .container
 {
    margin: 2.5rem auto;
@@ -36,8 +38,8 @@ a {
 .active{    
     pointer-events: none;
     cursor: default;
-    text-decoration: underline;
     color:#1796B8;
+    font-weight: bold;
 }
 
 li a
