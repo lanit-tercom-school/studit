@@ -11,6 +11,10 @@ h1
     font-size: 5.5rem;
 }
 
+h3{
+    margin: 0rem;
+}
+
 #cover {
     background: var(--primary-color);
     background-size: cover;
@@ -25,8 +29,8 @@ h1
     margin-bottom: 0rem;
 }
 .row{
-    margin: 1rem 0rem;
+    margin: 1.5rem 0rem;
 }
-.button{
-    margin-bottom: 5rem;
+.btn{
+    margin-bottom: 1.5rem;
 }
