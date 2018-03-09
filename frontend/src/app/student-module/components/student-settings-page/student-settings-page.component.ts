@@ -33,6 +33,7 @@ export class StudentSettingsPageComponent implements OnInit {
             c.User.Id = +res.Id;
             c.User.Description = res.Description;
             c.User.Nickname = res.Nickname;
+            
             this.currentUser.next(c);
           });
       });
