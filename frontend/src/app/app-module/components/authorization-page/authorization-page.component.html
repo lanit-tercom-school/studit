@@ -1,31 +1,39 @@
-<div class="container">
-  <h1>Войти в аккаунт</h1>
-  <form class="col-sm-offset-4">
-    <form class="form-horizontal" role="form">
-      <div class="form-group">
-        <div class="col-sm-6">
-          <input type="email" class="form-control" name="email" placeholder="Email" [(ngModel)]="localUser.login" required
-            autofocus>
+<section id="cover">
+  <div id="cover-caption">
+    <form class="container">
+      <div class="row">
+        <h1>Войти в аккаунт</h1>
+      </div>
+      <div class="row">
+        <div class="form-group">
+          <div class="col-sm-4 col-sm-offset-4">
+            <input type="email" class="form-control" name="email" placeholder="Email" [(ngModel)]="localUser.login" required autofocus>
+          </div>
         </div>
       </div>
-      <div class="form-group">
-        <div class="col-sm-6">
-          <input type="password" class="form-control" name="password" placeholder="Пароль" [(ngModel)]="localUser.password">
+      <div class="row">
+        <div class="form-group">
+          <div class="col-sm-4 col-sm-offset-4">
+            <input type="password" class="form-control" name="password" placeholder="Пароль" [(ngModel)]="localUser.password">
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-2 col-md-offset-6">
+          <div class="checkbox">
+            <label>
+                <input type="checkbox" value="remember-me"> Запомнить
+              </label>
+          </div>
+        </div>
+      </div>
+      <div class="form-group row">
+        <div class="col-sm-4 col-sm-offset-4">
+          <h3>{{error}}</h3>
+          <button role="button" class="btn btn-primary btn-block" type="submit" (click)="login()">Войти</button>
+          <button role="button" class="btn btn-secondary btn-block" routerLink="/registration" routerLinkActive="active">Зарегистрироваться</button>
         </div>
       </div>
     </form>
-    <div class="checkbox">
-      <label>
-        <input type="checkbox" value="remember-me"> Запомнить
-      </label>
-    </div>
-    <div class="form-group row">
-      <div class="col-sm-6">
-        <h3>{{error}}</h3>
-        <button role="button" class="btn btn-primary btn-block" type="submit" (click)="login()">Войти</button>
-        <button role="button" class="btn btn-secondary btn-block" routerLink="/registration" routerLinkActive="active">Зарегистрироваться</button>
-      </div>
-    </div>
-  </form>
-
-</div>
+  </div>
+</section>
