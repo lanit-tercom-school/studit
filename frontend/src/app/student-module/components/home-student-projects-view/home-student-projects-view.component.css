@@ -38,7 +38,6 @@ a:hover
 {
     margin: 1rem 0rem 0rem 0rem;
     width: 92%;
-    \\position: absolute;
     bottom: 0;
     text-align: right;
     color: var(--dark-logo-color);
