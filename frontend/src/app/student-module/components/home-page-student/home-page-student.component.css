@@ -31,15 +31,14 @@
     color: darkslategrey;
 }
 
-a {
+a{
     color:#1796B8;
 }
 
 .active{    
     pointer-events: none;
     cursor: default;
-    color:#1796B8;
-    font-weight: bold;
+    font-weight: 900;
 }
 
 li a
@@ -62,4 +61,21 @@ li a:hover
 .breadcrumb-item-padding
 {
     padding: 4rem;
+}
+.nav-tabs{
+    margin-top: 1rem;
+    margin-bottom: 0rem;
+}
+.home-content{
+    padding: 2rem 0rem;
+}
+
+.not-active {
+  pointer-events: none;
+  cursor: default;
+  text-decoration:none;
+}
+
+a{
+    cursor: pointer;
 }
