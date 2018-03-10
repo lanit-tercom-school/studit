@@ -1,6 +1,3 @@
-@import url('https://fonts.googleapis.com/css?family=Ubuntu');
-@import url('https://fonts.googleapis.com/css?family=Neucha');
-
 .card
 {
     margin-bottom: 3rem;
@@ -16,27 +13,12 @@
     max-width: 15rem;
     max-height: 20rem;
 }
-
-a
-{
-   text-decoration: none;
-   color:inherit;
-}
-
-a:hover
-{
-   text-decoration: none;
-   color:cadetblue;
-   transition: color .3s;
-}
-
 .project-info
 {
     padding: 1rem 2rem 0rem 2rem;
     margin: 0rem 0rem;
     background-color: var(--section-color);
 }
-
 .read-more
 {
     margin: 1rem 0rem 0rem 0rem;
@@ -45,7 +27,6 @@ a:hover
     text-align: right;
     color: var(--dark-logo-color);
 }
-
 h3{
     margin: 0rem 0rem 2rem 0rem;
     font-family: 'Jura', sans-serif;

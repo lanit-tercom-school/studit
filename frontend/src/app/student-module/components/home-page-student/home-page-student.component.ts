@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home-page-student',
@@ -7,9 +8,25 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HomePageStudentComponent implements OnInit {
 
-  constructor() { }
+  CurrentSectionOpened: string = 'projects'
+
+  constructor(private router: Router) { }
 
   ngOnInit() {
   }
+
+  public chooseSection(section: string) {
+    this.CurrentSectionOpened = section;
+    switch (section) {
+      case 'projects':
+        this.router.navigateByUrl('student/home/projects');
+        break;
+      case 'enrollings':
+        this.router.navigateByUrl('student/home/enrollings');
+      default:
+        break;
+    }
+  }
+
 
 }
