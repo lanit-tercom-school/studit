@@ -52,12 +52,13 @@ services:
         links:
             - "postgres:database"
         restart: always
+        ports:
+            - "8084:8084"
     main-service:
         build: "./backend/src/main-service/"
         ports:
             - "8080:8080"
         links:
-            - "file-service:file-service"
             - "data-service:data-service"
             - "auth-service:auth-service"
         restart: always

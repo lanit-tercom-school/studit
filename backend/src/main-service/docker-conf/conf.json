@@ -1,5 +1,5 @@
 {
-    "FileServiceURL": "http://file-service:8084/",
+    "FileServiceURL": "http://188.225.78.46:8084/",
     "AuthServiceURL": "http://auth-service:8082/",
     "DataServiceURL": "http://data-service:8081/",
     "JwtSecret" : "this_is_my_dirty_little_secret",
