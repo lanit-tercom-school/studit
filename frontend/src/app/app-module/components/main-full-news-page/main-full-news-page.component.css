@@ -11,6 +11,8 @@ img {
 
 button {
     margin-bottom: 20px;
+    color: var(--dark-logo-color);
+    font-size: 1rem;
 }
 
 p.text {

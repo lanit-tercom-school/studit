@@ -19,21 +19,21 @@ h3{
     background: var(--primary-color);
     background-size: cover;
     height: 94%;
-    text-align: center;
-   
     align-items: center;
 }
 .checkbox{
     color: white;
-    margin-top: 0rem;
-    margin-bottom: 0rem;
 }
 .row{
+    margin: 0rem 0rem;
+}
+.form-group{
     margin: 1.5rem 0rem;
 }
 .btn{
     margin-bottom: 1.5rem;
 }
 .inscription{
-    margin-top: 10rem;
+    margin-top: 12rem;
+    text-align: center;
 }
