@@ -24,8 +24,6 @@ services:
         build: "./backend/src/data-service/"
         links:
             - "postgres:database"
-        ports:
-            - "8081:8081"
         restart: always
     auth-service-migrate:
         image: boxfuse/flyway
@@ -41,8 +39,6 @@ services:
             - "postgres:database"
             - "data-service:data-service"
         restart: always
-        ports:
-            - "8082:8082"
     file-service-migrate:
         image: boxfuse/flyway
         command: -url=jdbc:postgresql://database:5432/studit_file -user=postgres -password=postgres migrate
@@ -53,8 +49,6 @@ services:
         restart: on-failure
     file-service:
         build: "./backend/src/file-service/"
-        ports:
-            - "8084:8084"
         links:
             - "postgres:database"
         restart: always
