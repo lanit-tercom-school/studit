@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css?family=Jura');
 .container
 {
-    margin: 10rem auto;
+    margin: 0rem auto;
 }
 
 h1
@@ -20,7 +20,7 @@ h3{
     background-size: cover;
     height: 94%;
     text-align: center;
-    display: flex;
+   
     align-items: center;
 }
 .checkbox{
@@ -33,4 +33,7 @@ h3{
 }
 .btn{
     margin-bottom: 1.5rem;
+}
+.inscription{
+    margin-top: 10rem;
 }
