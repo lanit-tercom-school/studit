@@ -39,7 +39,7 @@ export class AuthService {
          }
     }
     } &variables=`+ JSON.stringify(variables);
-        return this.http.get(environment.authUrl + '/graphql?query=' + query)
+        return this.http.get(environment.apiUrl + '/graphql?query=' + query)
             .map((response: Response) => {
                 // successful login => getting jwt
                 let res = response.json().data.Auth.Signin;
@@ -67,7 +67,7 @@ export class AuthService {
          }
       }
     } &variables=`+ JSON.stringify(variable);
-        return this.http.get(environment.authUrl + '/graphql?query=' + query)
+        return this.http.get(environment.apiUrl + '/graphql?query=' + query)
             .catch((error: any) => { return Observable.throw(error) }).map(res => {
                 return res.json().data.Auth.Activation;
             });
@@ -85,7 +85,7 @@ export class AuthService {
          }
     }
     } &variables=`+ JSON.stringify(variables);
-        return this.http.get(environment.authUrl + '/graphql?query=' + query)
+        return this.http.get(environment.apiUrl + '/graphql?query=' + query)
             .map((res: Response) => {
                 var code = res.json().data.Auth.Signup.ActivationCode;
                 if (code)
