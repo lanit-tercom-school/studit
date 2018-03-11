@@ -2,8 +2,8 @@
     <div class="row">
         <div class="col-md-10 col-md-offset-1">
             <ul class="nav nav-tabs">
-                <li [ngClass]="{active: CurrentSectionOpened==='projects'}"><a (click)="chooseSection('projects')">Проекты</a></li>
-                <li [ngClass]="{active: CurrentSectionOpened==='enrollings'}"><a (click)="chooseSection('enrollings')">Заявки</a></li>
+                <li [ngClass]="{active: CurrentUrl===PROJECT_SECTION_URL}"><a (click)="chooseSection(PROJECT_SECTION_URL)">Проекты</a></li>
+                <li [ngClass]="{active: CurrentUrl===ENROLLINGS_SECTION_URL}"><a (click)="chooseSection(ENROLLINGS_SECTION_URL)">Заявки</a></li>
                 <li><a class="not-active">Задачи</a></li>
             </ul>
         </div>

@@ -8,24 +8,20 @@ import { Router } from '@angular/router';
 })
 export class HomePageStudentComponent implements OnInit {
 
-  CurrentSectionOpened: string = 'projects'
+  PROJECT_SECTION_URL: string = '/student/home/projects';
+  ENROLLINGS_SECTION_URL: string = '/student/home/enrollings';
+
+  CurrentUrl: string = ''
 
   constructor(private router: Router) { }
 
   ngOnInit() {
+    this.CurrentUrl = this.router.url.valueOf();
   }
 
   public chooseSection(section: string) {
-    this.CurrentSectionOpened = section;
-    switch (section) {
-      case 'projects':
-        this.router.navigateByUrl('student/home/projects');
-        break;
-      case 'enrollings':
-        this.router.navigateByUrl('student/home/enrollings');
-      default:
-        break;
-    }
+    this.CurrentUrl = section;
+    this.router.navigateByUrl(section);
   }
 
 

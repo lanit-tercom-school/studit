@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css?family=Jura');
 .card
 {
   height: 40rem;
@@ -24,5 +25,7 @@ a{
 .card-title
 {
   text-align:center;
-  font-weight: 600;
+  font-family: 'Jura', sans-serif;
+  font-size: 1.7rem;
+  font-weight: 900;
 }
