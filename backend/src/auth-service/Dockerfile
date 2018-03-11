@@ -14,4 +14,4 @@ RUN go get -u go get -u github.com/beego/bee
 RUN dep ensure
 
 
-CMD ["bee run main.go"]
+CMD ["bee run"]
