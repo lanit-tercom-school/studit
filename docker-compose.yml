@@ -53,8 +53,6 @@ services:
         links:
             - "postgres:database"
         restart: always
-        ports:
-            - "8084:8084"
         volumes:
             - "files_vol:/go/src/file-service/files"
     main-service:
