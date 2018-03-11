@@ -1,6 +1,7 @@
 version: '3'
 volumes:
     postgres_vol:
+    files_vol:
 services:
     postgres:
         image: postgres
