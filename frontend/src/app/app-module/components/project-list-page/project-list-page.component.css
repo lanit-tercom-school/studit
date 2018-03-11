@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css?family=Jura');
 .container
 {
   text-align: center;
@@ -12,4 +13,7 @@
 
 h1 {
   margin-bottom: 50px;
+  font-family: 'Jura', sans-serif;
+  font-size: 3.5rem;
+  font-weight: bold;
 }
