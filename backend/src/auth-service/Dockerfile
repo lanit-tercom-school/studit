@@ -10,7 +10,7 @@ COPY ./main.go ./main.go
 COPY ./Gopkg.toml ./Gopkg.toml
 COPY ./Gopkg.lock ./Gopkg.lock
 RUN go get -u github.com/golang/dep/cmd/dep
-RUN go get -u go get -u github.com/beego/bee
+RUN go get -u github.com/beego/bee
 RUN dep ensure
 
 
