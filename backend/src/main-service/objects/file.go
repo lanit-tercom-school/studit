@@ -84,7 +84,7 @@ func ResolveGetFileList(p gql.ResolveParams) (interface{}, error) {
 		err = helpers.HttpGetWithToken(conf.Configuration.FileServiceURL+"v1/files/?Id="+id,token, &files)
 	}
 	for i,v:=range files{
-		files[i].Path=conf.Configuration.FileServiceURL+v.Path
+		files[i].Path=conf.Configuration.FilesURL+v.Path
 	}
 	fileList:=FileList{
 		Files: files,
@@ -101,6 +101,6 @@ func ResolvePostFile(p gql.ResolveParams) (interface{}, error) {
 	var err error
 	err = helpers.HttpPostWithTokenAndFile(conf.Configuration.FileServiceURL+"v1/files/",token,file,handler,&id)
 	err = helpers.HttpGetWithToken(conf.Configuration.FileServiceURL+"v1/files/"+strconv.Itoa(id),token, &fileToGet)
-	fileToGet.Path=conf.Configuration.FileServiceURL+fileToGet.Path
+	fileToGet.Path=conf.Configuration.FilesURL+fileToGet.Path
 	return fileToGet, err
 }
