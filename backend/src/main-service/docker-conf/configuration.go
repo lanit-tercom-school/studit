@@ -12,6 +12,7 @@ type configuration struct {
 	DataServiceURL string
 	JwtSecret      string
 	HttpPort       string
+	FilesURL	   string
 }
 
 //Configuration - object containing configuration information
