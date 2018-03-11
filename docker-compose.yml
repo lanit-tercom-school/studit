@@ -56,8 +56,7 @@ services:
         ports:
             - "8084:8084"
         volumes:
-            - "files_vol:/files"
-            - "postgres_vol:/var/lib/postgresql/data"
+            - "files_vol:/go/src/file-service/files"
     main-service:
         build: "./backend/src/main-service/"
         ports:
