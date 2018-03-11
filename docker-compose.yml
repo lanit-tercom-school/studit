@@ -54,6 +54,9 @@ services:
         restart: always
         ports:
             - "8084:8084"
+        volumes:
+            - "files_vol:/files"
+            - "postgres_vol:/var/lib/postgresql/data"
     main-service:
         build: "./backend/src/main-service/"
         ports:
@@ -67,3 +70,5 @@ services:
         ports:
             - "80:80"
         restart: always
+        volumes:
+            - "files_vol:/usr/share/nginx/files/"
