@@ -1,10 +1,27 @@
+@import url('https://fonts.googleapis.com/css?family=Jura');
 .container
 {
-    margin: 10rem auto;
+    margin: 0rem auto;
 }
 
 h1
 {
     text-align: center;
     margin-bottom: 3rem;
+    color: white;
+    font-family: 'Jura', sans-serif;
+    font-size: 5.5rem;
+}
+#cover {
+    background: var(--primary-color);
+    background-size: cover;
+    height: 94%;
+    align-items: center;
+}
+.inscription{
+    margin-top: 12rem;
+    text-align: center;
+}
+.form-check{
+    color: white;
 }

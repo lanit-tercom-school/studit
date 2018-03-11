@@ -1,40 +1,44 @@
-<div class="container">
-  <h1>Регистрация</h1>
-  <form class="col-sm-offset-4">
-    <div class="form-group row">
-      <div class="col-sm-6">
-        <input type="text" name="name" class="form-control" id="inputName" placeholder="Полное имя" [(ngModel)]="user.nickname">
-      </div>
+<section id="cover">
+  <div class="container">
+    <div class="inscription">
+      <h1>Регистрация</h1>
     </div>
-    <form class="form-horizontal" role="form">
-      <div class="form-group">
+    <form class="col-sm-offset-4">
+      <div class="form-group row">
         <div class="col-sm-6">
-          <input type="email" class="form-control" name="email" id="inputEmail3" placeholder="Email" [(ngModel)]="user.login">
+          <input type="text" name="name" class="form-control" id="inputName" placeholder="Полное имя" [(ngModel)]="user.nickname">
         </div>
       </div>
-    </form>
-    <form class="form-horizontal" role="form">
-      <div class="form-group">
-        <div class="col-sm-6">
-          <input type="password" class="form-control" name="password" id="inputEmail3" placeholder="Пароль" [(ngModel)]="user.password">
+      <form class="form-horizontal" role="form">
+        <div class="form-group">
+          <div class="col-sm-6">
+            <input type="email" class="form-control" name="email" id="inputEmail3" placeholder="Email" [(ngModel)]="user.login">
+          </div>
         </div>
-      </div>
-    </form>
-    <div class="form-group row">
-      <div class="col-sm-10">
-        <div class="form-check">
-          <label class="form-check-label">
+      </form>
+      <form class="form-horizontal" role="form">
+        <div class="form-group">
+          <div class="col-sm-6">
+            <input type="password" class="form-control" name="password" id="inputEmail3" placeholder="Пароль" [(ngModel)]="user.password">
+          </div>
+        </div>
+      </form>
+      <div class="form-group row">
+        <div class="col-sm-10">
+          <div class="form-check">
+            <label class="form-check-label">
             <input class="form-check-input" type="checkbox"> Согласие с
             <a href="#">правилами</a> использования
           </label>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="form-group row">
-      <div class="col-sm-6">
-        <h3>{{error}}</h3>
-        <button role="button" type="submit" class="btn btn-primary btn-block" (click)="register()">Зарегистрироваться</button>
+      <div class="form-group row">
+        <div class="col-sm-6">
+          <h3>{{error}}</h3>
+          <button role="button" type="submit" class="btn btn-primary btn-block" (click)="register()">Зарегистрироваться</button>
+        </div>
       </div>
-    </div>
-  </form>
-</div>
+    </form>
+  </div>
+</section>
