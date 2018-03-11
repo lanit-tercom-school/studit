@@ -6,5 +6,5 @@
 export const environment = {
   production: false,
   apiUrl: "http://188.225.78.46:8080",
-  authUrl: "http://localhost:8080",  // убрать
+  authUrl: "http://188.225.78.46:8080",  // убрать
 };
