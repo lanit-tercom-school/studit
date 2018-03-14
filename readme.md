@@ -1,8 +1,9 @@
-# StudIT WIKI
+﻿# StudIT WIKI
 
 ## Backend
 
 ### Setup
+
 
 1. Установить [PostgreSQL 9.6 (Database)](https://www.postgresql.org/download/), (!!! обязательно проверьте, что первые 2 цифры версии, которую вы устанавливаете : 9.6.)  во время установки введите password: *postgres* 
 2. Установить [Go](https://golang.org/dl/)
