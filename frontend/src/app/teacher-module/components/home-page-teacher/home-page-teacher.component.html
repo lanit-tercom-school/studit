@@ -1,10 +1,14 @@
 <div class='container'>
-    <nav class="breadcrumb h4 lead">
-        <a class="breadcrumb-item active" href="#">Мои проекты</a>
-        <a class="breadcrumb-item" href="#">Курсы</a>
-        <a class="breadcrumb-item" href="#">Задачи</a>
-        <a class="breadcrumb-item" href="#">Что-то ещё</a>
-    </nav>
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+            <ul class="nav nav-tabs">
+                <li [ngClass]="{active: CurrentUrl===PROJECT_SECTION_URL}"><a (click)="chooseSection(PROJECT_SECTION_URL)">Проекты</a></li>
+                <li [ngClass]="{active: CurrentUrl===ENROLLINGS_SECTION_URL}"><a (click)="chooseSection(ENROLLINGS_SECTION_URL)">Заявки</a></li>
+                <li><a class="not-active">Задачи</a></li>
+            </ul>
+        </div>
+    </div>
+    
 
     <div class="row home-content">
         <div class="col col-7">
@@ -14,6 +18,8 @@
                 <button routerLink = "/teacher/createproject" type="button" class="btn btn-large btn-block btn-info btn-project">Создать проект</button>
             </div>
         </div>
+    </div>
+</div>
 
         <!-- <div class='col col-5'>
             <div class="card card-outline mb-3 text-center">
@@ -40,5 +46,4 @@
                 </ul>
             </div>
         </div> -->
-    </div>
-</div>
+   
