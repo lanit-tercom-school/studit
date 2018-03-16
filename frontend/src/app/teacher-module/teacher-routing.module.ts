@@ -9,6 +9,7 @@ import { CreateProjectPageComponent } from './components/create-project-page/cre
 import { TeacherNotePageComponent } from './components/teacher-notification-page/teacher-notification-page.component';
 import { TeacherProjectPageComponent } from './components/teacher-project-page/teacher-project-page.component';
 import { TeacherPublicPageComponent } from './components/teacher-public-page/teacher-public-page.component';
+import { HomeTeacherEnrollingPageComponent } from './components/home-teacher-enrolling-page/home-teacher-enrolling-page.component';
 
 
 const routes: Routes = [
@@ -31,6 +32,10 @@ const routes: Routes = [
         path: 'projects',
         component: HomeTeacherProjectViewComponent,
       },
+      {
+        path: 'enrollings',
+        component: HomeTeacherEnrollingPageComponent,
+      }
     ]
   },
 

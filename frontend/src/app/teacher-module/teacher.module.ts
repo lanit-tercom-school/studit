@@ -14,7 +14,7 @@ import { HomeTeacherProjectViewComponent } from './components/home-teacher-proje
 import { TeacherProjectPageComponent } from './components/teacher-project-page/teacher-project-page.component';
 import { TeacherSettingsPageComponent } from './components/teacher-settings-page/teacher-settings-page.component';
 import { TeacherPublicPageComponent } from './components/teacher-public-page/teacher-public-page.component';
-
+import { HomeTeacherEnrollingPageComponent } from './components/home-teacher-enrolling-page/home-teacher-enrolling-page.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -31,7 +31,8 @@ import { TeacherPublicPageComponent } from './components/teacher-public-page/tea
     HomeTeacherProjectViewComponent,
     TeacherProjectPageComponent,
     TeacherSettingsPageComponent,
-    TeacherPublicPageComponent
+    TeacherPublicPageComponent,
+    HomeTeacherEnrollingPageComponent,
   ]
 })
 export class TeacherModule { }
