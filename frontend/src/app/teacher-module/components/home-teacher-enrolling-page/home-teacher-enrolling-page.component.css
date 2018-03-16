@@ -16,7 +16,7 @@
 .project-info
 {
     padding: 1rem 2rem 0rem 2rem;
-    margin: 0rem 0rem;
+    margin: 2rem 0rem;
     background-color: var(--section-color);
 }
 .read-more
@@ -38,4 +38,7 @@ h3{
 }
 .message{
     font-size: 14px;
+}
+.read-more{
+    padding-bottom: 1rem;
 }

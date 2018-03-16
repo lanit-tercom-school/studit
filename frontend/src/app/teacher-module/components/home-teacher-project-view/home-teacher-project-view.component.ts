@@ -24,11 +24,4 @@ export class HomeTeacherProjectViewComponent implements OnInit {
   }
   ngOnDestroy() {
   }
-  accept(enroll:EnrollItem) {
-    this.studentService.unenrollToProject(enroll.Id, this.data.UserToken).subscribe(r => {
-        this.teacherService.postUserToProject(+enroll.User.Id, enroll.Project.Id, this.data.UserToken).subscribe(res => {
-          this.data.loadEnrollsForTeacher();
-        });
-    });
-  }
 }
