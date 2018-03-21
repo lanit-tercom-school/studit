@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css?family=Jura');
 .card{
   background-color: var(--section-color); 
   padding: 2rem 1rem 2rem 1rem;
@@ -46,4 +47,14 @@ img{
 .modal-footer
 {
   border-style: none;
+}
+h2{
+    font-family: 'Jura', sans-serif;
+    font-weight: bold;
+    font-size: 3.5rem;
+}
+.participants{
+  margin-top: 2rem;
+  text-align: center;
+  text-decoration: underline;
 }

@@ -43,16 +43,10 @@ a{
 
 li a
 {
-    text-decoration: none;
+    text-decoration: pink;
     color:inherit;
 }
 
-li a:hover
-{
-    text-decoration: none;
-    color:cadetblue;
-    transition: color .3s;
-}
 
 .outlet
 {

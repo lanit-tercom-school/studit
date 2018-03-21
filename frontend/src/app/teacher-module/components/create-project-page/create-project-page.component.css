@@ -1,6 +1,9 @@
+@import url('https://fonts.googleapis.com/css?family=Jura');
 h1
 {
-  margin: 2rem auto;
+    margin: 2rem auto;
+    font-family: 'Jura', sans-serif;
+    font-weight: bold;
 }
 input { 
 
@@ -46,4 +49,13 @@ input {
 
 a{
   font-size: 18px;
+}
+
+button{
+    background-color: var(--logo-color);
+    border-color: var(--dark-logo-color);
+}
+button:hover{
+    background-color: var(--dark-logo-color);
+    border-color: var(--dark-logo-color);
 }
