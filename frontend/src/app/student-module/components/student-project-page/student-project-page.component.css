@@ -50,6 +50,7 @@ img{
 }
 h2{
     font-family: 'Jura', sans-serif;
+    font-weight: bold;
     font-size: 3.5rem;
 }
 .project-description{

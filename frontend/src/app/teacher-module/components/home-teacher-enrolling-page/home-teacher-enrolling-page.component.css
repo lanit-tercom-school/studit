@@ -50,3 +50,8 @@ button:hover{
     background-color: var(--dark-logo-color);
     border-color: var(--dark-logo-color);
 }
+.Name{
+    font-family: 'Jura', sans-serif;
+    font-weight: bold;
+    color: var(--dark-logo-color);
+}

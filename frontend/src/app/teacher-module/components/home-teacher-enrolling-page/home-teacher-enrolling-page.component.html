@@ -10,7 +10,7 @@
         alt="Card image cap">
     </div>
     <div class="col-sm-8 project-info col-sm-offset-1">
-      <p class="lead">{{Enroll.User.Nickname}} хочет записаться на {{Enroll.Project.Name}}</p>
+      <p class="lead"> <a class="Name" routerLink="/user/{{Enroll.User.Id}}">{{Enroll.User.Nickname}}</a> хочет записаться на {{Enroll.Project.Name}}</p>
       <p>Сообщение: "{{Enroll.Message}}"</p>
       <div class="read-more">
         <button type="button" class="btn btn-success" (click)="accept(Enroll)">Принять</button>
