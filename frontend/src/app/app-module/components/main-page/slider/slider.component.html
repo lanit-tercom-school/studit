@@ -4,10 +4,18 @@
     <div class="swiper-wrapper">
       <div class="swiper-slide" *ngFor="let project of ProjectList | async">
         <a routerLink="/project/{{project.Id}}">
-        <img src="{{project.Logo}}" alt="Project logo">
-          <div class="swiper-text">            
-              <h3 class="swiper-project-name">{{project.Name}}</h3>
-              <p class="swiper-project-name">{{project.Description}}</p>
+          <div class="container">
+            <div class="row">
+              <div class="col-sm-6">
+                <img src="{{project.Logo}}" alt="Project logo" class="img-responsive">
+              </div>
+              <div class="swiper-text col-sm-6">
+                <h3 class="swiper-project-name">
+                  <strong>{{project.Name}}</strong>
+                </h3>
+                <p class="swiper-project-name">{{project.Description}}</p>
+              </div>
+            </div>
           </div>
         </a>
       </div>
