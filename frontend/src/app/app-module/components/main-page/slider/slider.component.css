@@ -1,14 +1,15 @@
+@import url('https://fonts.googleapis.com/css?family=Jura');
 .swiper-cover{
-    margin: 2rem auto;
+    margin: 0rem auto 3rem auto;
     max-width: 80%;
+    padding-top: 3rem;
 }
 
 .swiper-text
 {
  position: absolute;
-  width: 100%;
-  top: 13px;;
-  margin-right: 0.5rem;
+ top:0%;
+ width: 100%;  
 }
 
 .swiper-text > div
@@ -24,4 +25,18 @@ a
 a,p,h2{
       text-decoration: none;
       color: black;
+}
+h1{
+    font-family: 'Jura', sans-serif;
+    font-weight: bold;
+}
+.swiper-project-name{
+    font-family: 'Jura', sans-serif;
+    margin-top:0rem;
+}
+.project-logo{
+    /*max-height: 30rem;
+    max-width: 30rem;*/
+    max-height: 35rem;
+    max-width: 100%;
 }
