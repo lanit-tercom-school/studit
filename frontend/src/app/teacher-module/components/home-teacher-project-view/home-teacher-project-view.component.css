@@ -58,3 +58,7 @@ button{
     background-color: var(--logo-color);
     border-color: var(--dark-logo-color);
 }
+button:hover{
+    background-color: var(--dark-logo-color);
+    border-color: var(--dark-logo-color);
+}
