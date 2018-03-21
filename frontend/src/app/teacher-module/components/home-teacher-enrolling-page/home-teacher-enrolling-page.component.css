@@ -1,40 +1,24 @@
-@import url('https://fonts.googleapis.com/css?family=Jura');
 .card
 {
-    margin-bottom:3rem;
+    margin-bottom: 3rem;
     word-wrap: break-word;
 }
 
 .row{
     width: 100%;
-    margin: 0rem 0rem 0rem 0rem
+    margin: 0rem 0rem 0rem 0rem;
 }
 .card-img
 {
-     max-width: 16rem;
+    max-width: 16rem;
     max-height: 20rem;
 }
-
-a
-{
-   text-decoration: none;
-   color:inherit;
-}
-
-a:hover
-{
-   text-decoration: none;
-   color:cadetblue;
-   transition: color .3s;
-}
-
 .project-info
 {
     padding: 1rem 2rem 0rem 2rem;
-    margin: 0rem 0rem;
+    margin: 2rem 0rem;
     background-color: var(--section-color);
 }
-
 .read-more
 {
     margin: 1rem 0rem 0rem 0rem;
@@ -43,7 +27,6 @@ a:hover
     text-align: right;
     color: var(--dark-logo-color);
 }
-
 h3{
     margin: 0rem 0rem 2rem 0rem;
     font-family: 'Jura', sans-serif;
@@ -53,8 +36,9 @@ h3{
     font-family: 'Jura', sans-serif;
      
 }
-button{
-    margin-bottom: 2rem;
-    background-color: var(--logo-color);
-    border-color: var(--dark-logo-color);
+.message{
+    font-size: 14px;
+}
+.read-more{
+    padding-bottom: 1rem;
 }
