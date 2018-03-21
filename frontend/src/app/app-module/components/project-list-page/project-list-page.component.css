@@ -3,12 +3,12 @@
 {
   text-align: center;
   margin: 50px auto;
-  height: 79.5vh;
 }
 
 .project-list
 {
   display: flex;
+  min-height: 100%;
 }
 
 h1 {
