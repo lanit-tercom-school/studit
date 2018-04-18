@@ -1,16 +1,8 @@
-.btn
-{
-    margin-bottom: 1em;
-    margin-left: 0em;
-}
+@import url('https://fonts.googleapis.com/css?family=Jura');
+
 .container
 {
-    margin: 2% auto;
-}
-
-.home-content
-{
-    margin: 3% 0%;
+   margin: 2.5rem auto;
 }
 
 .home-card-header
@@ -29,7 +21,7 @@
 .home-list li
 {
     list-style-type: none;
-    padding: 3%;
+    padding: 2%;
     text-align: left;
 }
 
@@ -39,30 +31,45 @@
     color: darkslategrey;
 }
 
-a {
-  color: inherit;
+a{
+    color:#1796B8;
 }
 
-.active{
-    color: darkgray;
+.active{    
     pointer-events: none;
     cursor: default;
+    font-weight: 900;
 }
 
 li a
 {
-    text-decoration: none;
+    text-decoration: pink;
     color:inherit;
 }
 
-li a:hover
-{
-    text-decoration: none;
-    color:cadetblue;
-    transition: color .3s;
-}
 
 .outlet
 {
     padding: 0;
+}
+.breadcrumb-item-padding
+{
+    padding: 4rem;
+}
+.nav-tabs{
+    margin-top: 1rem;
+    margin-bottom: 0rem;
+}
+.home-content{
+    padding: 2rem 0rem;
+}
+
+.not-active {
+  pointer-events: none;
+  cursor: default;
+  text-decoration:none;
+}
+
+a{
+    cursor: pointer;
 }

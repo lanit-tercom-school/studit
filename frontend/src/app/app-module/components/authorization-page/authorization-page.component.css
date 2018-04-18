@@ -18,8 +18,8 @@ h3{
 #cover {
     background: var(--primary-color);
     background-size: cover;
-    height: 94%;
     align-items: center;
+    min-height: 100%;
 }
 .checkbox{
     color: white;

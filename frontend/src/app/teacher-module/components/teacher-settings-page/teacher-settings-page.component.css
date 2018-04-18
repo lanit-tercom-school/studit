@@ -1,9 +1,12 @@
+@import url('https://fonts.googleapis.com/css?family=Jura');
 .container
 {
 }
 
 h1{
-  margin: 2rem auto;
+    margin: 2rem auto;
+    font-family: 'Jura', sans-serif;
+    font-weight: bold;
 }
 
 #user-avatar
@@ -44,10 +47,17 @@ h1{
 
 .block-form
 {
-  margin-bottom: 2.5rem;
+  margin-bottom: 2.5rem;  
 }
 .acc-label
 {
   position: absolute;
   left: 4.5rem;
+}
+legend{
+   font-family: 'Jura', sans-serif;
+    font-weight: bold;
+}
+.bfp{
+  margin-top: 2rem;
 }
