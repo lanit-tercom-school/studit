@@ -8,6 +8,7 @@ import { HomeStudentProjectsViewComponent } from './components/home-student-proj
 import { StudentProjectPageComponent } from './components/student-project-page/student-project-page.component';
 import { StudentPublicPageComponent } from './components/student-public-page/student-public-page.component';
 import { HomeStudentEnrollingPageComponent } from './components/home-student-enrolling-page/home-student-enrolling-page.component';
+import { HomeStudentTasksViewComponent } from './components/home-student-tasks-view/home-student-tasks-view.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -30,6 +31,10 @@ const routes: Routes = [
       {
         path: 'enrollings',
         component: HomeStudentEnrollingPageComponent,
+      },
+	  {
+        path: 'tasks',
+        component: HomeStudentTasksViewComponent,
       }
     ]
   }
