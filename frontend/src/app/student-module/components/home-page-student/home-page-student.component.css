@@ -3,6 +3,7 @@
 .container
 {
    margin: 2.5rem auto;
+   min-height: 86%;
 }
 
 .home-card-header
@@ -65,6 +66,7 @@ li a:hover
 .nav-tabs{
     margin-top: 1rem;
     margin-bottom: 0rem;
+    height: 4%;
 }
 .home-content{
     padding: 2rem 0rem;

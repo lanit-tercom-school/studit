@@ -1,25 +1,27 @@
-<h1 align="center">Студенческие проекты</h1>
-<div class="swiper-cover">
-  <swiper class="swiper" [config]="config">
-    <div class="swiper-wrapper">
-      <div class="swiper-slide" *ngFor="let project of ProjectList | async">
-        <a routerLink="/project/{{project.Id}}">
-          <div class="row">
-            <div class="col-sm-4 col-sm-offset-1">
-              <img class="project-logo" src="{{project.Logo}}" alt="Project logo">
-            </div>
-            <div class="swiper-text col-sm-6">
-              <div class="col-sm-offset-5">
-                <h3 class="swiper-project-name">{{project.Name}}</h3>
-                <p class="swiper-project-description">{{project.Description}}</p>
+<div class="container">
+  <h1 align="center">Студенческие проекты</h1>
+  <div class="swiper-cover">
+    <swiper class="swiper" [config]="config">
+      <div class="swiper-wrapper">
+        <div class="swiper-slide" *ngFor="let project of ProjectList | async">
+          <a routerLink="/project/{{project.Id}}">
+            <div class="row">
+              <div class="col-sm-6 col-sm-offset-1">
+                <img class="project-logo" src="{{project.Logo}}" alt="Project logo">
+              </div>
+              <div class="swiper-text col-sm-6">
+                <div class="col-sm-offset-6">
+                  <h3 class="swiper-project-name">{{project.Name}}</h3>
+                  <p class="swiper-project-description">{{project.Description}}</p>
+                </div>
               </div>
             </div>
-          </div>
-        </a>
+          </a>
+        </div>
       </div>
-    </div>
-    <div class="swiper-pagination"></div>
-    <div class="swiper-button-next"></div>
-    <div class="swiper-button-prev"></div>
-  </swiper>
+      <div class="swiper-pagination"></div>
+      <div class="swiper-button-next"></div>
+      <div class="swiper-button-prev"></div>
+    </swiper>
+  </div>
 </div>

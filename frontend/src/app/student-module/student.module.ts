@@ -13,6 +13,7 @@ import { StudentPublicPageComponent } from './components/student-public-page/stu
 //import { ProjectTaskListComponent } from './components/student-project-page/project-task-list/project-task-list.component';
 import { StudentSettingsPageComponent } from './components/student-settings-page/student-settings-page.component';
 import { HomeStudentEnrollingPageComponent } from './components/home-student-enrolling-page/home-student-enrolling-page.component';
+import { ProjectUsersViewComponent } from './components/project-users-view/project-users-view.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -27,7 +28,8 @@ import { HomeStudentEnrollingPageComponent } from './components/home-student-enr
     StudentProjectPageComponent,
     StudentPublicPageComponent,
     StudentSettingsPageComponent,
-    HomeStudentEnrollingPageComponent
+    HomeStudentEnrollingPageComponent,
+    ProjectUsersViewComponent
   ]
 })
 export class StudentModule { }
