@@ -213,7 +213,7 @@ func (c *RegistrationController) Register() {
 				c.Data["json"] = err.Error()
 				c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
 			} else {
-				SendingRegistrationToken(pass, u.Login)
+				models.SendingRegistrationToken(pass, u.Login)
 				c.Data["json"] = "OK"
 				beego.Trace("Register OK")
 			}
@@ -229,7 +229,7 @@ func (c *RegistrationController) Activate() {
 		if err != nil {
 			beego.Debug("Activation error: " + err.Error())
 			c.Data["json"] = MakeMessageForSending(err.Error())
-			c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
+			c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)   
 		} else {
 			beego.Trace("Activation OK")
 			c.Data["json"] = MakeMessageForSending("Registered")
