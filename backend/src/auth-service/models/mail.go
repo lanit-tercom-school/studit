@@ -7,7 +7,17 @@ import (
 	"net/smtp"
 
 	"github.com/astaxie/beego"
+	"github.com/astaxie/beego/config"
 )
+
+type MailConfig struct {
+	SmtpHttpsPort  string
+	SmtpUrl        string
+	SenderEmail    string
+	SenderPassword string
+}
+
+var mailConfig MailConfig
 
 type Mail struct {
 	senderId string
@@ -20,6 +30,21 @@ type Mail struct {
 type SmtpServer struct {
 	host string
 	port string
+}
+
+func init() {
+	mailconf, err := config.NewConfig("ini", "conf/mail.conf")
+	if err != nil {
+		beego.Critical(err.Error())
+		panic(err)
+	}
+	mailConfig = MailConfig{
+		SmtpHttpsPort:  mailconf.String("https_port"),
+		SmtpUrl:        mailconf.String("smtp_host"),
+		SenderEmail:    mailconf.String("sender_email"),
+		SenderPassword: mailconf.String("sender_password"),
+	}
+
 }
 
 func (s *SmtpServer) ServerName() string {
@@ -44,19 +69,18 @@ func SendingRegistrationToken(pass string, Login string) *error {
 	//build a message
 	mail := Mail{}
 
-	mail.senderId = "no-reply@studit.club"
+	mail.senderId = mailConfig.SenderEmail
 	mail.toId = Login
 	mail.subject = "StudIT registration"
 	mail.body = "Copy this registration code:\n\n"
 	mail.pass = pass
 
 	messageBody := mail.BuildMessage()
+	smtpServer := SmtpServer{host: mailConfig.SmtpUrl, port: mailConfig.SmtpHttpsPort}
 
-	smtpServer := SmtpServer{host: "smtp.yandex.ru", port: "465"}
-
-	log.Println(smtpServer.host)
+	log.Println(mailConfig)
 	//build an auth
-	auth := smtp.PlainAuth("", mail.senderId, "LfWTgQ", smtpServer.host)
+	auth := smtp.PlainAuth("", mail.senderId, mailConfig.SenderPassword, smtpServer.host)
 
 	// Gmail will reject connection if it's not secure
 	// TLS config

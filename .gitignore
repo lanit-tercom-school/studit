@@ -260,3 +260,7 @@ backend/src/main-service/swagger/*
 
 **/_vendor-*/*
 **/swagger.zip
+backend/src/test/main.go
+backend/src/test/debug
+backend/src/auth-service/debug
+.vscode/launch.json
