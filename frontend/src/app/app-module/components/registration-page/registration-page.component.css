@@ -1,8 +1,5 @@
 @import url('https://fonts.googleapis.com/css?family=Jura');
-.container
-{
-    margin: 0rem auto;
-}
+
 
 h1
 {
@@ -15,7 +12,7 @@ h1
 #cover {
     background: var(--primary-color);
     background-size: cover;
-    height: 94%;
+    height: 93%;
     align-items: center;
 }
 .inscription{

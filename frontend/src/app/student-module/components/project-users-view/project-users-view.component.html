@@ -1,0 +1,7 @@
+<h5 align="center">В проекте участвуют</h5>
+<hr>
+<a *ngFor="let user of ProjectUsersList | async">
+  <div class="row">
+  {{user.Nickname}}
+  </div>
+</a>

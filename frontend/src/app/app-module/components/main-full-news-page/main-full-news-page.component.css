@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css?family=Jura');
+
 h1{
     font-family: 'Jura', sans-serif;
     font-weight: bold;
@@ -30,4 +31,7 @@ p.text {
 }
 .blacktag:hover{
   text-decoration: underline;
+}
+.right{
+    margin-bottom: 3rem;
 }

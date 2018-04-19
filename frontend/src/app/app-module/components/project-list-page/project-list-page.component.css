@@ -1,14 +1,15 @@
 @import url('https://fonts.googleapis.com/css?family=Jura');
 .container
 {
-  text-align: center;
-  margin: 50px auto;
+    text-align: center;
+    margin: 2rem auto;
+   
 }
 
 .project-list
 {
   display: flex;
-  min-height: 100%;
+  min-height: 86%;
 }
 
 h1 {

@@ -2,7 +2,7 @@
 #cover {
     background: var(--primary-color);
     background-size: cover;
-    height: 94%;
+    height: 100%;
     text-align: center;
     display: flex;
     align-items: center;
