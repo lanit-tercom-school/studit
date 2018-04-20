@@ -19,16 +19,12 @@ type MailConfig struct {
 var mailConfig MailConfig
 
 type Mail struct {
-	senderId string
-	toId     string
-	subject  string
-	body     string
-	pass     string
-}
-
-type SmtpServer struct {
-	host string
-	port string
+	senderId       string
+	senderPassword string
+	toId           string
+	subject        string
+	body           string
+	pass           string
 }
 
 func init() {
@@ -46,10 +42,6 @@ func init() {
 
 }
 
-func (s *SmtpServer) ServerName() string {
-	return s.host + ":" + s.port
-}
-
 func (mail *Mail) BuildMessage() string {
 	message := ""
 	message += fmt.Sprintf("From: %s\r\n", mail.senderId)
@@ -63,24 +55,24 @@ func (mail *Mail) BuildMessage() string {
 	return message
 }
 
-func (mail *Mail) Send() error {
+func (mail *Mail) Send(smtpUrl string, smtpPort string) error {
 	//build an auth
-	auth := smtp.PlainAuth("", mail.senderId, mailConfig.SenderPassword, mailConfig.SmtpUrl)
+	auth := smtp.PlainAuth("", mail.senderId, mail.senderPassword, smtpUrl)
 
 	// Gmail will reject connection if it's not secure
 	// TLS config
 	tlsconfig := &tls.Config{
 		InsecureSkipVerify: true,
-		ServerName:         mailConfig.SmtpUrl,
+		ServerName:         smtpUrl,
 	}
 
-	conn, err := tls.Dial("tcp", mailConfig.SmtpUrl+":"+mailConfig.SmtpHttpsPort, tlsconfig)
+	conn, err := tls.Dial("tcp", smtpUrl+":"+smtpPort, tlsconfig)
 	if err != nil {
 		beego.Error("Sending email error" + err.Error())
 		return err
 	}
 
-	client, err := smtp.NewClient(conn, mailConfig.SmtpUrl)
+	client, err := smtp.NewClient(conn, smtpUrl)
 	if err != nil {
 		beego.Error("Sending email error" + err.Error())
 		return err
@@ -137,11 +129,12 @@ func SendingRegistrationToken(pass string, Login string) error {
 	mail.subject = "StudIT registration"
 	mail.body = "Copy this registration code:\n\n"
 	mail.pass = pass
+	mail.senderPassword = mailConfig.SenderPassword
 
 	messageBody := mail.BuildMessage()
 
 	//build an auth
-	auth := smtp.PlainAuth("", mail.senderId, mailConfig.SenderPassword, mailConfig.SmtpUrl)
+	auth := smtp.PlainAuth("", mail.senderId, mail.senderPassword, mailConfig.SmtpUrl)
 
 	// Gmail will reject connection if it's not secure
 	// TLS config
