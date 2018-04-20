@@ -3,7 +3,6 @@ package models
 import (
 	"crypto/tls"
 	"fmt"
-	"log"
 	"net/smtp"
 
 	"github.com/astaxie/beego"
@@ -39,7 +38,7 @@ func init() {
 		panic(err)
 	}
 	mailConfig = MailConfig{
-		SmtpHttpsPort:  mailconf.String("https_port"),
+		SmtpHttpsPort:  mailconf.String("smtp_https_port"),
 		SmtpUrl:        mailconf.String("smtp_host"),
 		SenderEmail:    mailconf.String("sender_email"),
 		SenderPassword: mailconf.String("sender_password"),
@@ -64,11 +63,11 @@ func (mail *Mail) BuildMessage() string {
 	return message
 }
 
-func SendingRegistrationToken(pass string, Login string) *error {
+func SendingRegistrationToken(pass string, Login string) error {
 
-	//build a message
 	mail := Mail{}
 
+	//build a message
 	mail.senderId = mailConfig.SenderEmail
 	mail.toId = Login
 	mail.subject = "StudIT registration"
@@ -78,7 +77,6 @@ func SendingRegistrationToken(pass string, Login string) *error {
 	messageBody := mail.BuildMessage()
 	smtpServer := SmtpServer{host: mailConfig.SmtpUrl, port: mailConfig.SmtpHttpsPort}
 
-	log.Println(mailConfig)
 	//build an auth
 	auth := smtp.PlainAuth("", mail.senderId, mailConfig.SenderPassword, smtpServer.host)
 
@@ -91,42 +89,42 @@ func SendingRegistrationToken(pass string, Login string) *error {
 
 	conn, err := tls.Dial("tcp", smtpServer.ServerName(), tlsconfig)
 	if err != nil {
-		beego.Debug("Register error:" + err.Error())
+		return err
 	}
 
 	client, err := smtp.NewClient(conn, smtpServer.host)
 	if err != nil {
-		beego.Debug("Register error:" + err.Error())
+		return err
 	}
 
 	// step 1: Use Auth
 	if err = client.Auth(auth); err != nil {
-		beego.Debug("Register error:" + err.Error())
+		return err
 	}
 
 	// step 2: add all from and to
 	if err = client.Mail(mail.senderId); err != nil {
-		beego.Debug("Register error:" + err.Error())
+		return err
 	}
 
 	if err = client.Rcpt(mail.toId); err != nil {
-		beego.Debug("Register error:" + err.Error())
+		return err
 	}
 
 	// Data
 	w, err := client.Data()
 	if err != nil {
-		beego.Debug("Register error:" + err.Error())
+		return err
 	}
 
 	_, err = w.Write([]byte(messageBody))
 	if err != nil {
-		beego.Debug("Register error:" + err.Error())
+		return err
 	}
 
 	err = w.Close()
 	if err != nil {
-		beego.Debug("Register error:" + err.Error())
+		return err
 	}
 
 	client.Quit()
