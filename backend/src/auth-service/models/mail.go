@@ -63,6 +63,70 @@ func (mail *Mail) BuildMessage() string {
 	return message
 }
 
+func (mail *Mail) Send() error {
+	//build an auth
+	auth := smtp.PlainAuth("", mail.senderId, mailConfig.SenderPassword, mailConfig.SmtpUrl)
+
+	// Gmail will reject connection if it's not secure
+	// TLS config
+	tlsconfig := &tls.Config{
+		InsecureSkipVerify: true,
+		ServerName:         mailConfig.SmtpUrl,
+	}
+
+	conn, err := tls.Dial("tcp", mailConfig.SmtpUrl+":"+mailConfig.SmtpHttpsPort, tlsconfig)
+	if err != nil {
+		beego.Error("Sending email error" + err.Error())
+		return err
+	}
+
+	client, err := smtp.NewClient(conn, mailConfig.SmtpUrl)
+	if err != nil {
+		beego.Error("Sending email error" + err.Error())
+		return err
+	}
+
+	// step 1: Use Auth
+	if err = client.Auth(auth); err != nil {
+		beego.Error("Sending email error" + err.Error())
+		return err
+	}
+
+	// step 2: add all from and to
+	if err = client.Mail(mail.senderId); err != nil {
+		beego.Error("Sending email error" + err.Error())
+		return err
+	}
+
+	if err = client.Rcpt(mail.toId); err != nil {
+		beego.Error("Sending email error" + err.Error())
+		return err
+	}
+
+	// Data
+	w, err := client.Data()
+	if err != nil {
+		beego.Error("Sending email error" + err.Error())
+		return err
+	}
+
+	_, err = w.Write([]byte(mail.BuildMessage()))
+	if err != nil {
+		beego.Error("Sending email error" + err.Error())
+		return err
+	}
+
+	err = w.Close()
+	if err != nil {
+		beego.Error("Sending email error" + err.Error())
+		return err
+	}
+
+	client.Quit()
+	return nil
+
+}
+
 func SendingRegistrationToken(pass string, Login string) error {
 
 	mail := Mail{}
@@ -75,55 +139,62 @@ func SendingRegistrationToken(pass string, Login string) error {
 	mail.pass = pass
 
 	messageBody := mail.BuildMessage()
-	smtpServer := SmtpServer{host: mailConfig.SmtpUrl, port: mailConfig.SmtpHttpsPort}
 
 	//build an auth
-	auth := smtp.PlainAuth("", mail.senderId, mailConfig.SenderPassword, smtpServer.host)
+	auth := smtp.PlainAuth("", mail.senderId, mailConfig.SenderPassword, mailConfig.SmtpUrl)
 
 	// Gmail will reject connection if it's not secure
 	// TLS config
 	tlsconfig := &tls.Config{
 		InsecureSkipVerify: true,
-		ServerName:         smtpServer.host,
+		ServerName:         mailConfig.SmtpUrl,
 	}
 
-	conn, err := tls.Dial("tcp", smtpServer.ServerName(), tlsconfig)
+	conn, err := tls.Dial("tcp", mailConfig.SmtpUrl+":"+mailConfig.SmtpHttpsPort, tlsconfig)
 	if err != nil {
+		beego.Error("Sending email error" + err.Error())
 		return err
 	}
 
-	client, err := smtp.NewClient(conn, smtpServer.host)
+	client, err := smtp.NewClient(conn, mailConfig.SmtpUrl)
 	if err != nil {
+		beego.Error("Sending email error" + err.Error())
 		return err
 	}
 
 	// step 1: Use Auth
 	if err = client.Auth(auth); err != nil {
+		beego.Error("Sending email error" + err.Error())
 		return err
 	}
 
 	// step 2: add all from and to
 	if err = client.Mail(mail.senderId); err != nil {
+		beego.Error("Sending email error" + err.Error())
 		return err
 	}
 
 	if err = client.Rcpt(mail.toId); err != nil {
+		beego.Error("Sending email error" + err.Error())
 		return err
 	}
 
 	// Data
 	w, err := client.Data()
 	if err != nil {
+		beego.Error("Sending email error" + err.Error())
 		return err
 	}
 
 	_, err = w.Write([]byte(messageBody))
 	if err != nil {
+		beego.Error("Sending email error" + err.Error())
 		return err
 	}
 
 	err = w.Close()
 	if err != nil {
+		beego.Error("Sending email error" + err.Error())
 		return err
 	}
 
