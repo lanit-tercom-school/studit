@@ -86,13 +86,6 @@ export class AuthService {
     }
     } &variables=`+ JSON.stringify(variables);
         return this.http.get(environment.apiUrl + '/graphql?query=' + query)
-            .map((res: Response) => {
-                var code = res.json().data.Auth.Signup.ActivationCode;
-                if (code)
-                    localStorage.setItem('validation_code', code);
-                else
-                    return Observable.throw('no code');
-            })
             .catch((error: any) => { return Observable.throw(error) });
     }
 

@@ -8,8 +8,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/astaxie/beego/config"
 	"github.com/astaxie/beego"
+	"github.com/astaxie/beego/config"
 )
 
 // Регистрация нового пользователя
@@ -213,11 +213,15 @@ func (c *RegistrationController) Register() {
 				c.Data["json"] = err.Error()
 				c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
 			} else {
-				// TODO: sent email with `pass`
-				c.Data["json"] = struct {
-					Code string `json:"code"`
-				}{Code: pass} // TODO:! CHANGE TO "OK" !
-				beego.Trace("Register OK")
+
+				if err = models.SendingRegistrationToken(pass, u.Login); err != nil {
+					beego.Debug("Register error:" + err.Error())
+					c.Data["json"] = err.Error()
+					c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
+				} else {
+					c.Data["json"] = MakeMessageForSending("OK")
+					beego.Trace("Register OK")
+				}
 			}
 		}
 	}

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { AuthService } from 'services/auth.service';
 
@@ -9,28 +10,25 @@ import { AuthService } from 'services/auth.service';
 })
 export class ValidationPageComponent implements OnInit {
 
-  private validationCode: string;
-  private message: string;
+  private validationCode: string ='';
   private isValidated: boolean;
 
 
-  constructor(private auth: AuthService) { }
+  constructor(private auth: AuthService, private router: Router) { }
 
   validate() {
     this.auth.validate(this.validationCode)
       .subscribe(
       data => {
-        this.message = 'Registered!';
-        localStorage.removeItem("validation_code");
+        this.router.navigateByUrl("/auth")
       },
       error => {
         console.log(error);
-        this.message = error;
+        //TODO: Make notification for user here.
       });
   }
 
   ngOnInit() {
-    this.validationCode = localStorage.getItem("validation_code")
   }
 
 }
