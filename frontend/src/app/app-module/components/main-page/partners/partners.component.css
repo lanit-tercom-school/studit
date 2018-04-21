@@ -12,7 +12,6 @@ h1
 .container
 {
     margin: 0rem auto;
-    height: 86%;
 }
 
 .partners-list{
@@ -29,6 +28,6 @@ h1
 #cover {
     background: var(--primary-color);
     background-size: cover;
-    height: 94%;
+    height: 96vh;
     align-items: center;
 }
