@@ -16,6 +16,9 @@
 {
     padding-right: 5px;
 }
+.container{
+    height: 86%;
+}
 
 a
 {
@@ -37,6 +40,6 @@ h1{
 .project-logo{
     /*max-height: 30rem;
     max-width: 30rem;*/
-    max-height: 35rem;
+    max-height: 100%;
     max-width: 100%;
 }

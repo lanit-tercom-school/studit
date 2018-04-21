@@ -13,6 +13,7 @@ import { MaterialsItem } from 'models/materials-item';
 import { ProjectItem } from 'models/project-item';
 import { ProjectNewsItem } from 'models/proj-news-item';
 import { TasksItem } from 'models/tasks-item';
+import { UserInfo } from 'models/user-info';
 
 type StatusEnroll = "Enrolling" | "InProject" | "Unenrolling";
 
@@ -33,6 +34,7 @@ export class StudentProjectPageComponent implements OnInit, OnDestroy {
   private isTeacher = false;
   private enrollMessage = 'Please write back soon!';
   private enrollButtonStatus = "Enrolling";
+  private projectUsers: BehaviorSubject<UserInfo[]> = new BehaviorSubject<UserInfo[]>([]);
   constructor(private route: ActivatedRoute,
     private http: Http,
     private data: DataService,
@@ -48,6 +50,33 @@ export class StudentProjectPageComponent implements OnInit, OnDestroy {
       this.getProjectInfo();
       this.choseButtonStatus();
     });
+    let a: UserInfo[] = [];
+    a.push(
+      {
+        Avatar: "a",
+        Description: "dd",
+        Id: "22",
+        Nickname: "Happy penguin"
+      }
+    );
+    a.push(
+      {
+        Avatar: "a",
+        Description: "dd",
+        Id: "22",
+        Nickname: "Sad eagle"
+      }
+    );
+    a.push(
+      {
+        Avatar: "a",
+        Description: "dd",
+        Id: "22",
+        Nickname: "Indifferent boa"
+      }
+    );
+
+    this.projectUsers.next(a)
   }
 
   ngOnDestroy() {

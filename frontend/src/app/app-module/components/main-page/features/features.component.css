@@ -4,8 +4,11 @@
     background-color: white;
 }
 
-.container{
-    margin: 1rem auto;
+.text{
+    margin-top: 6rem;
+}
+.container-fluid{
+    height: 86%;
 }
 
 .feature-img{
@@ -36,4 +39,5 @@ h2:first-letter {
 .row{
     margin: 2rem 0rem;
 }
+
 

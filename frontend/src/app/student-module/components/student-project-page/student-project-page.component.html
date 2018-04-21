@@ -26,8 +26,11 @@
 		</div>
 	</div>
 	<div class="row">
-		<div class="col-sm-12 col-md-6 ">
+		<div class="col-sm-12 col-md-4 col-md-offset-1">
 			<app-student-project-tasks [TasksItemList]="tasksObs"></app-student-project-tasks>
+		</div>
+		<div class="col-sm-12 col-md-4 col-md-offset-2">
+			<app-project-users-view [ProjectUsersList]="projectUsers"></app-project-users-view>
 		</div>
 	</div>
 </div>
