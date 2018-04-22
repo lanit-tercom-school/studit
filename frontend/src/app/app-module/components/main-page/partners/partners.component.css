@@ -8,26 +8,3 @@ h1
     font-family: 'Jura', sans-serif;
     font-size: 5.5rem;
 }
-
-.container
-{
-    margin: 0rem auto;
-}
-
-.partners-list{
-    display: flex;
-    justify-content: space-around;
-}
-
-.partner-card{
-    align-items: center;
-    display: flex;
-    justify-content: space-around;
-    margin: 2rem auto;
-}
-#cover {
-    background: var(--primary-color);
-    background-size: cover;
-    height: 96vh;
-    align-items: center;
-}
