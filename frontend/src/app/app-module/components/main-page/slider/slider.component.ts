@@ -2,8 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Observable } from "rxjs/Observable";
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
-import { ICarouselConfig, AnimationConfig } from 'angular4-carousel';
-
 import { DataService } from 'services/data.service';
 import { ProjectItem } from 'models/project-item';
 

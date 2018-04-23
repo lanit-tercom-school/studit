@@ -8,6 +8,18 @@
     background-color: var(--primary-color);
 }
 
+.navbar-toggle{
+    margin-top: 1.5rem;
+}
+
+.navbar-collapse{
+    border: none;
+}
+
+.navbar-brand{
+    margin-bottom: 1rem;
+}
+
 #log-out
 {
     color: firebrick;

@@ -1,13 +1,7 @@
 <!-- Just an image -->
 <nav class="navbar navbar-inverse navbar-light">
-  <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbarNav" aria-expanded="false">
-      <span class="sr-only">Toggle navigation</span>
-      <span class="icon-bar"></span>
-      <span class="icon-bar"></span>
-      <span class="icon-bar"></span>
-    </button>
   <div class="row">
-    <div class="col-xs-3 col-sm-1 col-sm-offset-1">
+    <div class="col-xs-3 col-sm-1">
       <a class="navbar-brand" routerLink="">
         <svg width="60" version="1.1" viewBox="0 0 360 214" xmlns="http://www.w3.org/2000/svg">
           <g>
@@ -62,7 +56,13 @@
         </svg>
       </a>
     </div>
-    <div class="col-sm-offset-1 col-xs-9">
+    <button type="button" class="navbar-toggle collapsed col-xs-1" data-toggle="collapse" data-target="#navbarNav" aria-expanded="false">
+      <span class="sr-only">Toggle navigation</span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </button>
+    <div class="col-sm-offset-1 col-sm-9 col-xs-12">
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="nav navbar-nav">
           <li *ngIf="currentUser" class="nav-item">

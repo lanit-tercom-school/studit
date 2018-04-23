@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css?family=Jura');
-.container
-{
-    height: 100%;
+
+.section-authorization{
+    align-items: center;
 }
 
 h1
@@ -15,15 +15,6 @@ h3{
     margin: 0rem;
 }
 
-#cover {
-    background: var(--primary-color);
-    background-size: cover;
-    align-items: center;
-    min-height: 93%;
-}
-.checkbox{
-    color: white;
-}
 .row{
     margin: 0rem 0rem;
 }

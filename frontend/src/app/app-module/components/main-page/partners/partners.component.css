@@ -3,8 +3,13 @@
 h1
 {
     text-align: center;
-    margin-bottom: 100px;
+    margin-top: 3rem;
+    margin-bottom: 3rem;
     color: white;
     font-family: 'Jura', sans-serif;
     font-size: 5.5rem;
+}
+
+.shift{
+    min-height: 15rem;
 }
