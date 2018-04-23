@@ -4,5 +4,5 @@
     "DataServiceURL": "http://data-service:8081/",
     "JwtSecret" : "this_is_my_dirty_little_secret",
     "HttpPort" : "8080",
-	"FilesURL":"http://188.225.78.46/"
+    "FilesURL":"https://studit.club/"
 }
