@@ -70,3 +70,4 @@ services:
         restart: always
         volumes:
             - "files_vol:/usr/share/nginx/files/"
+            - "/etc/letsencrypt/:/etc/letsencrypt/"
