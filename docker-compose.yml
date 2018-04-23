@@ -70,7 +70,7 @@ services:
             - "443:443"
         restart: always
         links:
-            -"main-service:main-service"
+            - "main-service:main-service"
         volumes:
             - "files_vol:/usr/share/nginx/files/"
             - "/etc/letsencrypt/:/etc/letsencrypt/"
