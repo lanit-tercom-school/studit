@@ -14,8 +14,8 @@ type ProjectController struct {
 }
 
 type GetAllProjectsResponce struct {
-	TotalCount int
-	Items      []models.Project
+	TotalCount  int
+	ProjectList []models.Project
 }
 
 // URLMapping ...
@@ -102,8 +102,8 @@ func (c *ProjectController) GetAll() {
 			c.Data["json"] = MakeMessageForSending(err.Error())
 		} else {
 			responce := GetAllProjectsResponce{
-				Items:      l,
-				TotalCount: int(count),
+				ProjectList: l,
+				TotalCount:  int(count),
 			}
 			c.Ctx.Output.SetStatus(HTTP_OK)
 			c.Data["json"] = responce
