@@ -42,13 +42,20 @@ export class AuthorizationPageComponent implements OnInit {
       });
   }
 
-  returnPage(): string {
-    if (this.ReturnUrl==='/registration/validate' ) this.ReturnUrl='/home';
-    else
-      if (this.ReturnUrl==='/registration') this.ReturnUrl='/home';  
-      else
-        if (this.ReturnUrl==='error')  this.ReturnUrl='/main';
-    return this.ReturnUrl; 
-    
+  returnPage(): string{
+    switch(this.ReturnUrl){
+      case "/registration/validate":{
+        return '/home';
+      }
+      case"/registration":{
+        return '/home';
+      }
+      case "/error":{
+        return '/home';
+      }
+      default:{
+        return this.ReturnUrl;
+      }
+    }
   }
 }
