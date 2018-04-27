@@ -34,11 +34,28 @@ export class AuthorizationPageComponent implements OnInit {
           this.ReturnUrl = '/home';
         }
         this.router.navigate([this.ReturnUrl]);*/
-         this.router.navigate(['home']);
+        this.router.navigate([this.returnPage()]);
       },
       error => {
         console.log(error);
         this.error = error;
       });
+  }
+
+  returnPage(): string{
+    switch(this.ReturnUrl){
+      case "/registration/validate":{
+        return '/home';
+      }
+      case"/registration":{
+        return '/home';
+      }
+      case "/error":{
+        return '/home';
+      }
+      default:{
+        return this.ReturnUrl;
+      }
+    }
   }
 }
