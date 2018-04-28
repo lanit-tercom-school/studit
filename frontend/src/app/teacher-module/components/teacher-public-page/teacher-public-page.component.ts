@@ -13,7 +13,7 @@ import { CurrentUser } from 'models/current-user';
 })
 export class TeacherPublicPageComponent implements OnInit {
 
-  private currentUser: BehaviorSubject<CurrentUser> = new BehaviorSubject(new CurrentUser());
+  public CurrentUser: BehaviorSubject<CurrentUser> = new BehaviorSubject(new CurrentUser());
 
   constructor(private userService: UserService, private route: ActivatedRoute) { }
 
@@ -27,7 +27,7 @@ export class TeacherPublicPageComponent implements OnInit {
             c.User.Id = +res.Id;
             c.User.Description = res.Description;
             c.User.Nickname = res.Nickname;
-            this.currentUser.next(c);
+            this.CurrentUser.next(c);
           });
       });
   }

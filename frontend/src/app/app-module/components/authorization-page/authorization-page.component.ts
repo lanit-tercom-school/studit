@@ -14,7 +14,7 @@ import { User } from 'models/user';
 })
 export class AuthorizationPageComponent implements OnInit {
 
-  private localUser: User = { login: "", password: "" };
+  public LocalUser: User = { login: "", password: "" };
   private error: any;
   private ReturnUrl: string
 
@@ -27,7 +27,7 @@ export class AuthorizationPageComponent implements OnInit {
   }
 
   login() {
-    this.auth.authenticatenow(this.localUser).subscribe(
+    this.auth.authenticatenow(this.LocalUser).subscribe(
       data => {
         this.data.loadAll();
         /*if (this.ReturnUrl === '/registration') {

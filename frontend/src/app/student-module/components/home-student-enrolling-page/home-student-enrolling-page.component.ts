@@ -11,7 +11,7 @@ import { DataService } from 'services/data.service';
 })
 export class HomeStudentEnrollingPageComponent implements OnInit {
 
-  private ProjectEnrollList: Observable<EnrollItem[]>;
+  public ProjectEnrollList: Observable<EnrollItem[]>;
 
   constructor(private data: DataService) { }
 

@@ -17,8 +17,8 @@ import { ProjectItem } from "models/project-item";
 
 export class CreateProjectPageComponent implements OnInit {
 
-  private createdProject = new ProjectItem();
-  private isCreated = false;
+  public CreatedProject = new ProjectItem();
+  public IsCreated = false;
   constructor(
     private router: Router,
     private teacherService: TeacherService,
@@ -32,15 +32,15 @@ export class CreateProjectPageComponent implements OnInit {
 
   load(event) {
     this.fileService.uploadFiles(event.target.files).subscribe(res => {
-      this.createdProject.Logo = res;
+      this.CreatedProject.Logo = res;
     });
   }
 
   makeProject() {
-    this.teacherService.postProject(this.createdProject, JSON.parse(localStorage.getItem('current_user')).Token)
+    this.teacherService.postProject(this.CreatedProject, JSON.parse(localStorage.getItem('current_user')).Token)
       .subscribe(() => {
         console.log('Project was added');
-        this.isCreated = true;
+        this.IsCreated = true;
         //this.router.navigate(['/home']);
       });
   }
@@ -48,6 +48,6 @@ export class CreateProjectPageComponent implements OnInit {
   addLogo() {
     var promptValue = prompt('Укажите адрес картинки.', '');
     if (promptValue != null && promptValue != '')
-      this.createdProject.Logo = promptValue;
+      this.CreatedProject.Logo = promptValue;
   }
 }

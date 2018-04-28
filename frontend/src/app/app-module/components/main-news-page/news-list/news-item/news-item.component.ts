@@ -8,7 +8,7 @@ import {NewsItem} from "models/news-item";
   styleUrls: ['./news-item.component.css']
 })
 export class NewsItemComponent implements OnInit {
-  @Input() NewsItem: NewsItem;
+  @Input() public NewsItem: NewsItem;
   constructor() { }
 
   ngOnInit() {

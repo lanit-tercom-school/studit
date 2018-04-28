@@ -1,4 +1,3 @@
-<!-- Just an image -->
 <nav class="navbar navbar-inverse navbar-light">
   <div class="row">
     <div class="col-xs-3 col-sm-1">
@@ -65,7 +64,7 @@
     <div class="col-sm-offset-1 col-sm-9 col-xs-12">
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="nav navbar-nav">
-          <li *ngIf="currentUser" class="nav-item">
+          <li *ngIf="CurrentUser" class="nav-item">
             <a class="lanit-nav-link" routerLink="/home">Домой
           </a>
           </li>
@@ -77,22 +76,22 @@
             <a class="lanit-nav-link" routerLink="/projects">Проекты
           </a>
           </li>
-          <li *ngIf="currentUser == undefined" class="nav-item">
+          <li *ngIf="CurrentUser == undefined" class="nav-item">
             <a class="lanit-nav-link" id="sign-in" routerLink="/auth" [queryParams]="{'ReturnUrl':url}">Вход
           </a>
           </li>
-          <li *ngIf="currentUser" class="dropdown">
+          <li *ngIf="CurrentUser" class="dropdown">
             <a class="lanit-nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-            <i class="fa fa-user-circle fa-lg" aria-hidden="true"></i> {{currentUser.User.Nickname}}
+            <i class="fa fa-user-circle fa-lg" aria-hidden="true"></i> {{CurrentUser.User.Nickname}}
           </a>
             <ul class="dropdown-menu">
-              <li><a class="dropdown-item" routerLink="/user/{{currentUser.User.Id}}">
+              <li><a class="dropdown-item" routerLink="/user/{{CurrentUser.User.Id}}">
               <i class="fa fa-address-card fa-fw" aria-hidden="true"></i> Мой профиль</a></li>
-              <li><a *ngIf='currentUser.PermissionLevel==0' class="dropdown-item" routerLink="/student/profile/settings">
+              <li><a *ngIf='CurrentUser.PermissionLevel==0' class="dropdown-item" routerLink="/student/profile/settings">
               <i class="fa fa-cog fa-fw" aria-hidden="true"></i> Настройки</a></li>
-              <li><a *ngIf='currentUser.PermissionLevel==1' class="dropdown-item" routerLink="/teacher/profile/settings">
+              <li><a *ngIf='CurrentUser.PermissionLevel==1' class="dropdown-item" routerLink="/teacher/profile/settings">
               <i class="fa fa-cog fa-fw" aria-hidden="true"></i> Настройки</a></li>
-              <li><a *ngIf='currentUser.PermissionLevel==2' class="dropdown-item" routerLink="/admin/profile/settings">
+              <li><a *ngIf='CurrentUser.PermissionLevel==2' class="dropdown-item" routerLink="/admin/profile/settings">
               <i class="fa fa-cog fa-fw" aria-hidden="true"></i> Настройки</a></li>
               <li><a class="dropdown-item" href="#">
               <i class="fa fa-bell-o fa-fw" aria-hidden="true"></i> Уведомления</a></li>

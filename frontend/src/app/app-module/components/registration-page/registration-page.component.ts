@@ -11,7 +11,7 @@ import { UserRegister } from 'models/user-register';
 })
 export class RegistrationPageComponent implements OnInit {
 
-  private user: UserRegister = { login: "", nickname: "", password: "" };
+  public User: UserRegister = { login: "", nickname: "", password: "" };
   private error: string;
 
   constructor(private auth: AuthService, private router: Router) { }
@@ -20,7 +20,7 @@ export class RegistrationPageComponent implements OnInit {
   }
 
   register() {
-    this.auth.register(this.user).subscribe(
+    this.auth.register(this.User).subscribe(
       data => {
         this.router.navigate(['/registration/validate']);
       },

@@ -12,14 +12,14 @@ import { ProjectItem } from 'models/project-item';
 export class MainComponent implements OnInit {
 
   private projects: Observable<ProjectItem[]>;
-  private partners;
+  public Partners;
 
   constructor(private data: DataService) {
   }
 
   ngOnInit() {
     this.getMainProjectList();
-    this.partners = [{
+    this.Partners = [{
       src: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/Microsoft_logo_(2012).svg/2000px-Microsoft_logo_(2012).svg.png",
       link: "https://www.microsoft.com/ru-ru/"
     },

@@ -3,7 +3,7 @@
   <hr>
   <div class="row">
     <div class="col-sm-12 col-md-5 col-lg-3 offset-lg-2" align = "center">
-        <img id = "user-avatar" src="{{currentUser.value.User.Avatar}}" alt="Student photo">
+        <img id = "user-avatar" src="{{CurrentUser.value.User.Avatar}}" alt="Student photo">
         <br>
         <button  role="button" class="bfp btn btn-secondary btn-submit">Изменить изабражение</button>
     </div>
@@ -12,7 +12,7 @@
             <legend>Личные данные</legend>
           <div class="form-inline">
             <label class="col-sm-2 col-md-3 col-lg-2 col-form-label">Nickname</label>
-            <input class="form-control" placeholder={{currentUser.value.User.Nickname}}>
+            <input class="form-control" placeholder={{CurrentUser.value.User.Nickname}}>
           </div>
         <button type="submit" role="button" class="btn btn-secondary btn-submit">Подтвердить</button>
        </form>
@@ -41,27 +41,27 @@
           <legend>Дополнительная информация</legend>
            <form class="form-inline">
             <label class="col-sm-2 col-md-3 col-lg-2 col-form-label" for="inputDescription">О себе</label>
-            <textarea class=" form-control" id = "inputDescription">{{currentUser.value.User.Description}}</textarea>
+            <textarea class=" form-control" id = "inputDescription">{{CurrentUser.value.User.Description}}</textarea>
           </form>
           <button type="submit" role="button" class="btn btn-secondary btn-submit">Подтвердить</button>
         </form>
 
         <form class = "block-form">
              <legend >Управление доступом </legend>
-             <button class = "btn btn-secondary btn-submit" *ngIf="!clicked" role="button"  (click)="ShowHide()">Сменить пароль</button>
-             <button class = "btn btn-secondary btn-submit" *ngIf="clicked" role="button" (click)="ShowHide()">Скрыть</button>
-             <span *ngIf="isChanged">
+             <button class = "btn btn-secondary btn-submit" *ngIf="!Clicked" role="button"  (click)="ShowHide()">Сменить пароль</button>
+             <button class = "btn btn-secondary btn-submit" *ngIf="Clicked" role="button" (click)="ShowHide()">Скрыть</button>
+             <span *ngIf="IsChanged">
                 <p class="text-success">Пароль успешно изменен.</p>
              </span>
-           <form *ngIf="clicked && !isChanged">
+           <form *ngIf="Clicked && !IsChanged">
              <div class="form-inline">
                <label class="col-sm-2 col-md-3 col-lg-3 col-form-label">Старый пароль</label>
-               <input type="password" [(ngModel)] ="passwords.old"  name ="oldPassword"
+               <input type="password" [(ngModel)] ="Passwords.old"  name ="oldPassword"
                class="form-control">
              </div>
              <div class="form-inline">
                <label class="col-sm-2 col-md-3 col-lg-3  col-form-label">Новый пароль</label>
-               <input type="password" [(ngModel)] ="passwords.new" name ="newPassword"
+               <input type="password" [(ngModel)] ="Passwords.new" name ="newPassword"
                  class="form-control">
              </div>
              <div class="form-inline">

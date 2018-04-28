@@ -11,7 +11,7 @@ import { TeacherService } from 'services/teacher.service';
   styleUrls: ['./teacher-notification-page.component.css']
 })
 export class TeacherNotePageComponent implements OnInit, OnDestroy {
-  private EnrollList: EnrollItem[];
+  public EnrollList: EnrollItem[];
   constructor(private teacherService: TeacherService) { }
 
   ngOnInit() {

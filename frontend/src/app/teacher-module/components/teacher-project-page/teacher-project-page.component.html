@@ -3,21 +3,21 @@
   <div class="card card-outline">
     <div class="row" id="main-info">
       <div class="col-sm-3" id="project-img-status">
-        <img class="card-img" src="{{projectObs.value.Logo}}" alt="Project image">
-        <div *ngIf="enrollButtonStatus=='InProject'" class="status">
+        <img class="card-img" src="{{ProjectObs.value.Logo}}" alt="Project image">
+        <div *ngIf="EnrollButtonStatus=='InProject'" class="status">
           <h5 id="status">Вы куратор проекта</h5>
         </div>
       </div>
       <div class="col-sm-8 offset-sm-1">
-        <h2 id="project-name">{{projectObs.value.Name}}</h2>
-        <p class="project-description">{{projectObs.value.Description}}</p>
+        <h2 id="project-name">{{ProjectObs.value.Name}}</h2>
+        <p class="project-description">{{ProjectObs.value.Description}}</p>
         <i>Теги:</i> <a class="blacktag" href="#">lorem ipsum</a>
       </div>
     </div>
   </div>
   <div class="row">
     <div class="col-sm-6 col-md-6">
-      <app-teacher-project-tasks [TasksItemList]="tasksObs"></app-teacher-project-tasks>
+      <app-teacher-project-tasks [TasksItemList]="TasksObs"></app-teacher-project-tasks>
     </div>
     <div class="col-sm-6 col-md-6">
       <p class="participants">Участники проекта</p>
