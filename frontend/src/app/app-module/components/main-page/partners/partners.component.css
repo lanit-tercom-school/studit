@@ -13,3 +13,9 @@ h1
 .shift{
     min-height: 15rem;
 }
+.partner-item{
+    background-color: white;
+    height: 10rem;
+    padding: 2rem;
+    
+}

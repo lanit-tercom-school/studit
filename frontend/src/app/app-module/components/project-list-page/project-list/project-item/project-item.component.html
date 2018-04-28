@@ -1,10 +1,30 @@
-<div class="card">
-  <a routerLink="/project/{{ProjectItem.Id}}" routerLinkActive="active">
-    <img class="card-img-top" src="{{ProjectItem.Logo}}" alt="Card image cap">
-  <div class="card-block">
-    <h4 class="card-title">{{ProjectItem.Name}}</h4>
-    <p class="card-text">{{ProjectItem.Description}}</p>
-    <p class="card-text" style="text-align: right;"></p>
+<div class="hidden-xs">
+  <div class="card">
+    <a routerLink="/project/{{ProjectItem.Id}}" routerLinkActive="active">
+         <img class="card-img-top" src="{{ProjectItem.Logo}}" alt="Card image cap">
+      <div class="card-block">
+        <h4 class="card-title">{{ProjectItem.Name}}</h4>
+        <p class="card-text">{{ProjectItem.Description}}</p>
+        <p class="card-text" style="text-align: right;"></p>
+      </div>
+     </a>
   </div>
-  </a>
+</div>
+<div class="visible-xs">
+  <div class="card-xs">
+    <a routerLink="/project/{{ProjectItem.Id}}" routerLinkActive="active">
+      <div class="row">
+        <div class="col-xs-4">
+          <img class="card-img-top-xs" src="{{ProjectItem.Logo}}" alt="Card image cap">
+        </div>
+        <div class="card-block-xs">
+          <div class="col-xs-8">
+            <h4 class="card-title">{{ProjectItem.Name}}</h4>
+            <p class="card-text-xs">{{ProjectItem.Description}}</p>
+            <p class="card-text" style="text-align: right;"></p>
+          </div>
+        </div>
+      </div>
+    </a>
+  </div>
 </div>

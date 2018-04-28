@@ -1,7 +1,12 @@
+@import url('https://fonts.googleapis.com/css?family=Jura');
+
 .swiper-project-name{
     opacity: 0.9;
     cursor: pointer;
     margin-top: 3rem;
+    font-family: 'Jura', sans-serif;
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
 }
 .swiper-project-name:hover{
     opacity: 1;
@@ -14,3 +19,8 @@
 .swiper-section{
     margin-top: 3rem;
 }
+ h1{
+    font-family: 'Jura', sans-serif;
+    font-size: 4.5rem;
+    margin-bottom: 5rem;
+ }

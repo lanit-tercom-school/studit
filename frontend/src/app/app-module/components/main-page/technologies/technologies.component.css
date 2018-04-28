@@ -1,23 +1,16 @@
-@import url('https://fonts.googleapis.com/css?family=Jura');
-
-
 h1
 {
     text-align: center;
+    margin-top: 3rem;
     margin-bottom: 3rem;
     color: white;
     font-family: 'Jura', sans-serif;
     font-size: 5.5rem;
 }
-
-.inscription{
-    margin-top: 12rem;
+.name_of_technologies{
     text-align: center;
-}
-.form-check{
     color: white;
-}
-
-.form-group{
-    margin: 1.3rem 0rem ;
+    font-family: 'Jura', sans-serif;
+    font-size: 2.5rem;
+    cursor: pointer;
 }
