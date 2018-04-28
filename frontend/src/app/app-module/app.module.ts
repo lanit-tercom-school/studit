@@ -52,6 +52,7 @@ import { ValidationPageComponent } from './components/registration-page/validati
 import { UserPublicPageComponent } from './components/user-public-page/user-public-page.component';
 
 import { ErrorPageComponent } from './components/error-page/error-page.component';
+import { TechnologiesComponent } from './components/technologies/technologies.component';
 
 
 @NgModule({
@@ -91,6 +92,7 @@ import { ErrorPageComponent } from './components/error-page/error-page.component
     ValidationPageComponent,
     UserPublicPageComponent,
     ErrorPageComponent,
+    TechnologiesComponent,
   ],
   providers: [
     FileService,

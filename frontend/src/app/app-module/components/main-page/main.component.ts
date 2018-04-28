@@ -24,12 +24,12 @@ export class MainComponent implements OnInit {
       link: "https://www.microsoft.com/ru-ru/"
     },
     {
-      src: "https://upload.wikimedia.org/wikipedia/ru/0/00/The_Faculty_of_Mathematics_and_Mechanics_Logo.png",
-      link: "http://www.math.spbu.ru/rus/"
+      src: "https://sun1-4.userapi.com/c834103/v834103120/94e29/EWgKHEbny-Q.jpg",
+      link: "https://www.math.spbu.ru/rus/"
     },
     {
-      src: "http://www.sporos.narod.ru/images/logo_spbgu.jpg",
-      link: "http://spbu.ru/"
+      src: "https://spbu.ru/sites/all/themes/spbgu/markup/dist/img/logo-big-color.svg",
+      link: "https://spbu.ru/"
     }];
   }
 

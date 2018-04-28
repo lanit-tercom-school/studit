@@ -1,9 +1,8 @@
 
 img{
-    max-height: 10rem;
+    max-height: 100%;
     opacity: 0.8;
     display: block;
-    margin: 2rem auto;
 }
 
 
@@ -15,4 +14,6 @@ img:hover
 .partner-wrapper{
     width: 100%;
     height: 100%;
+    margin-left: auto;
+    margin-right: auto;
 }
