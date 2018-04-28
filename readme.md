@@ -1,4 +1,4 @@
-﻿# StudIT WIKI
+# QuickStart
 
 ## Backend
 
