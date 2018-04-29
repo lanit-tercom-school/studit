@@ -93,8 +93,6 @@
               <i class="fa fa-cog fa-fw" aria-hidden="true"></i> Настройки</a></li>
               <li><a *ngIf='CurrentUser.PermissionLevel==2' class="dropdown-item" routerLink="/admin/profile/settings">
               <i class="fa fa-cog fa-fw" aria-hidden="true"></i> Настройки</a></li>
-              <li><a class="dropdown-item" href="#">
-              <i class="fa fa-bell-o fa-fw" aria-hidden="true"></i> Уведомления</a></li>
               <li><a class="dropdown-item" id="log-out" routerLink="/auth" (click)="logout()">
               <i class="fa fa-times-circle fa=fw" style="width:18px; text-align:center;" aria-hidden="true"></i> Выход</a></li>
             </ul>

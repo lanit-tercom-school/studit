@@ -1,10 +1,5 @@
 @import url('https://fonts.googleapis.com/css?family=Jura');
-.container
-{
-    text-align: center;
-    margin: 2rem auto;
-   
-}
+
 .section-project-list-page{
      text-align: center;
 }
@@ -12,8 +7,8 @@
 
 
 h1 {
-  margin: 1rem 0rem;
+  margin: 3rem 0rem;
   font-family: 'Jura', sans-serif;
-  font-size: 3.5rem;
+  font-size: 3.2rem;
   font-weight: bold;
 }

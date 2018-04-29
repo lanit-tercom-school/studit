@@ -1,5 +1,5 @@
 <div class="row">
-    <div class="col-xs-12 col-sm-6" *ngFor="let project of ProjectList | async | paginate: { id: 'projects-pagination',
+    <div class="col-xs-12 col-sm-3 col-sm-offset-2" *ngFor="let project of ProjectList | async | paginate: { id: 'projects-pagination',
      itemsPerPage: Limit,  totalItems: TotalCount | async, currentPage: CurrentPage}">
         <app-project-item [ProjectItem]="project"></app-project-item>
     </div>
