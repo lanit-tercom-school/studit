@@ -9,6 +9,11 @@ import (
 	gql "github.com/graphql-go/graphql"
 )
 
+func init() {
+	//Здесь прописанны поля, которые вызывали ошибку "typechecking loop involving"
+	ProjectType.AddFieldConfig("Users", &gql.Field{Type: gql.NewList(UserType), Resolve: ResolveGetUsersByProject})
+}
+
 //Project - используется для получения проекта с data-service
 type Project struct {
 	Id             int       `json:"Id"`

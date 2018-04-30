@@ -31,4 +31,5 @@ func init() {
 		},
 		Resolve: objects.ResolveGetProjectList,
 	}
+
 }
