@@ -25,7 +25,7 @@ export class TopPanelComponent implements OnInit, DoCheck {
 
   logout() {
     this.auth.unauthentificatenow();
-    window.location.reload()
+    this.router.navigateByUrl("/auth")
   }
 
 }
