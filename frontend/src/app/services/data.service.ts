@@ -115,7 +115,6 @@ export class DataService {
   }
 
   loadAll() {
-    console.log('Data.service ->loadAll');
     this.loadProjects(2, 0);
     this.loadProjectsForMainPage();
     if (localStorage.getItem('current_user')) {

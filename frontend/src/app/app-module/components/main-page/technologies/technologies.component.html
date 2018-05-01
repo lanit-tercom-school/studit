@@ -1,18 +1,10 @@
 <div class="section section-black">
-   <h1>В наших проектах мы используем большое количество технологий</h1>
-   <div class="row">
-       <div class="col-sm-3">
-           <a class="name_of_technologies">Проект StudIT</a>
-       </div>
-       <div class="col-sm-3">
-           <a class="name_of_technologies">Другой проект</a>
-       </div>
-       <div class="col-sm-3">
-           <a class="name_of_technologies">Полюбому лучший</a>
-       </div>
-       <div class="col-sm-3">
-           <a class="name_of_technologies">Нет, наш лучший</a>
-       </div>
-
-   </div>
+    <h1>В наших проектах мы используем большое количество технологий</h1>
+    <div class="row">
+        <div *ngFor="let item of Technologies" class="col-sm-2 col-xs-3">
+            <a href="{{item.url}}">
+                <img class="logo_of_technologies" src="{{item.image}}">
+            </a>
+        </div>
+    </div>
 </div>

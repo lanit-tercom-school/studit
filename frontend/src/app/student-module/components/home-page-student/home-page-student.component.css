@@ -1,39 +1,14 @@
 @import url('https://fonts.googleapis.com/css?family=Jura');
 
-.container
+.section-home-student-page
 {
-   margin: 2.5rem auto;
-   min-height: 86%;
+   margin: 0.5rem auto;
 }
 
-.home-card-header
-{
-    background-color: whitesmoke;
-    padding: 0.5rem 0;
-    margin: 0;
-}
-
-.home-list
-{
-    padding: 0;
-    margin: 0;
-}
-
-.home-list li
-{
-    list-style-type: none;
-    padding: 2%;
-    text-align: left;
-}
-
-.home-list .show-full-list
-{
-    text-align: center;
-    color: darkslategrey;
-}
 
 a{
     color:#1796B8;
+    cursor: pointer;
 }
 
 .active{    
@@ -55,19 +30,12 @@ li a:hover
     transition: color .3s;
 }
 
-.outlet
-{
-    padding: 0;
-}
-.breadcrumb-item-padding
-{
-    padding: 4rem;
-}
+
 .nav-tabs{
     margin-top: 1rem;
     margin-bottom: 0rem;
-    height: 4%;
 }
+
 .home-content{
     padding: 2rem 0rem;
 }
@@ -78,6 +46,3 @@ li a:hover
   text-decoration:none;
 }
 
-a{
-    cursor: pointer;
-}
