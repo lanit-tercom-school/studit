@@ -4,8 +4,17 @@
     background-color: white;
 }
 
+h1
+{
+    text-align: center;
+    margin-top: 3rem;
+    margin-bottom: 2rem;
+    font-family: 'Jura', sans-serif;
+    font-size: 3.5rem;
+}
+
 .text{
-    margin-top: 5rem;
+    margin-top: 2rem;
 }
 .container-fluid{
     height: 86%;

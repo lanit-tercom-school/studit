@@ -55,7 +55,7 @@ export class StudentProjectPageComponent implements OnInit, OnDestroy {
       {
         Avatar: "a",
         Description: "dd",
-        Id: "22",
+        Id: "4",
         Nickname: "Happy penguin"
       }
     );
@@ -63,7 +63,7 @@ export class StudentProjectPageComponent implements OnInit, OnDestroy {
       {
         Avatar: "a",
         Description: "dd",
-        Id: "22",
+        Id: "3",
         Nickname: "Sad eagle"
       }
     );
@@ -71,8 +71,24 @@ export class StudentProjectPageComponent implements OnInit, OnDestroy {
       {
         Avatar: "a",
         Description: "dd",
-        Id: "22",
+        Id: "9",
         Nickname: "Indifferent boa"
+      }
+    );
+      a.push(
+      {
+        Avatar: "a",
+        Description: "dd",
+        Id: "10",
+        Nickname: "Silly parrot"
+      }
+    );
+    a.push(
+      {
+        Avatar: "a",
+        Description: "dd",
+        Id: "11",
+        Nickname: "Cooling elephant"
       }
     );
 

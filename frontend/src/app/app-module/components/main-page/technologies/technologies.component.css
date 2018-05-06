@@ -5,12 +5,17 @@ h1
     margin-bottom: 3rem;
     color: white;
     font-family: 'Jura', sans-serif;
-    font-size: 5.5rem;
+    font-size: 3.5rem;
 }
 .name_of_technologies{
     text-align: center;
     color: white;
     font-family: 'Jura', sans-serif;
-    font-size: 2.5rem;
+    font-size: 3.5rem;
     cursor: pointer;
+}
+
+.logo_of_technologies{
+    max-height: 15rem;
+    margin-top: 2rem;
 }

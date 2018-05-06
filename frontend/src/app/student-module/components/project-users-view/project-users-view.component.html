@@ -1,6 +1,6 @@
 <h5 align="center">В проекте участвуют</h5>
 <hr>
-<a *ngFor="let user of ProjectUsersList | async">
+<a routerLink="/user/{{user.Id}}" *ngFor="let user of ProjectUsersList | async">
   <div class="row">
   {{user.Nickname}}
   </div>
