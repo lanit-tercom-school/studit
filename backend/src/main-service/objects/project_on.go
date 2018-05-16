@@ -26,6 +26,10 @@ type ProjectUser struct {
 	Progress   int       `json:"Progress"`
 }
 
+type ProjectOnUser struct {
+	User User `json:"User"`
+}
+
 //ProjectOnType - grqphql объект связи пользователя и проекта
 var ProjectOnType = gql.NewObject(
 	gql.ObjectConfig{
@@ -76,11 +80,39 @@ func ResolveGetEnrollsByProjectOn(p gql.ResolveParams) (interface{}, error) {
 	helpers.LogAccesDenied("GetEnrollsByProjectOn")
 	return nil, errors.New("Access is denied")
 }
+
 func ResolveGetEnrollsByUser(p gql.ResolveParams) (interface{}, error) {
-	u := p.Source.(User)
-	var projectEnrolls []ProjectEnroll
-	err := helpers.HttpGet(conf.Configuration.DataServiceURL+"v1/project_enroll/?query=User:"+strconv.Itoa(u.Id), &projectEnrolls)
-	return projectEnrolls, err
+	if p.Context.Value("CurrentUser").(CurrentClient).PermissionLevel >= LEADER {
+		helpers.LogAccesAllowed("GetEnrollsByUSer")
+		u := p.Source.(User)
+		var projectEnrolls []ProjectEnroll
+		err := helpers.HttpGet(conf.Configuration.DataServiceURL+"v1/project_enroll/?query=User:"+strconv.Itoa(u.Id), &projectEnrolls)
+		return projectEnrolls, err
+	}
+	helpers.LogAccesDenied("GetEnrollsByUser")
+	return nil, errors.New("Access is denied")
+}
+
+func ResolveGetUsersByProject(p gql.ResolveParams) (interface{}, error) {
+	project := p.Source.(Project)
+	var usersByProject []ProjectOnUser
+	err := helpers.HttpGet(conf.Configuration.DataServiceURL+"v1/project_user/?query=project_id%3A"+strconv.Itoa(project.Id)+"&fields=User", &usersByProject)
+	userId := p.Context.Value("CurrentUser").(CurrentClient).UserId
+	find := false
+	for _, v := range usersByProject {
+		if v.User.Id == userId {
+			find = true
+		}
+	}
+	if p.Context.Value("CurrentUser").(CurrentClient).PermissionLevel >= LEADER || find {
+		result := []User{}
+		for _, v := range usersByProject {
+			result = append(result, v.User)
+		}
+		return result, err
+	}
+	helpers.LogAccesDenied("GetUsersByProject")
+	return nil, errors.New("Access is denied")
 }
 
 func ResolvePostProjectOn(p gql.ResolveParams) (interface{}, error) {

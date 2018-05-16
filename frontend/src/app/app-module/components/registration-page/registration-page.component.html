@@ -1,43 +1,37 @@
-<section id="cover">
-  <div class="container">
-    <div class="inscription">
-      <h1>Регистрация</h1>
+<div class="section section-black">
+  <div class="inscription">
+    <h1>Регистрация</h1>
+  </div>
+  <form class="col-sm-offset-4">
+    <div class="form-group row">
+      <div class="col-sm-6">
+        <input type="text" name="name" class="form-control" id="inputName" placeholder="Полное имя" [(ngModel)]="User.nickname">
+      </div>
     </div>
-    <form class="col-sm-offset-4">
-      <div class="form-group row">
+    <form class="form-horizontal" role="form">
+      <div class="form-group">
         <div class="col-sm-6">
-          <input type="text" name="name" class="form-control" id="inputName" placeholder="Полное имя" [(ngModel)]="user.nickname">
-        </div>
-      </div>
-      <form class="form-horizontal" role="form">
-        <div class="form-group">
-          <div class="col-sm-6">
-            <input type="email" class="form-control" name="email" id="inputEmail3" placeholder="Email" [(ngModel)]="user.login">
-          </div>
-        </div>
-      </form>
-      <form class="form-horizontal" role="form">
-        <div class="form-group">
-          <div class="col-sm-6">
-            <input type="password" class="form-control" name="password" id="inputEmail3" placeholder="Пароль" [(ngModel)]="user.password">
-          </div>
-        </div>
-      </form>
-      <div class="form-group row">
-        <div class="col-sm-10">
-          <div class="form-check">
-            <label class="form-check-label">
-            <input class="form-check-input" type="checkbox"> Согласие с
-            <a href="#">правилами</a> использования
-          </label>
-          </div>
-        </div>
-      </div>
-      <div class="form-group row">
-        <div class="col-sm-6">
-          <button role="button" type="submit" class="btn btn-primary btn-block" (click)="register()">Зарегистрироваться</button>
+          <input type="email" class="form-control" name="email" id="inputEmail3" placeholder="Email" [(ngModel)]="User.login">
         </div>
       </div>
     </form>
-  </div>
-</section>
+    <form class="form-horizontal" role="form">
+      <div class="form-group">
+        <div class="col-sm-6">
+          <input type="password" class="form-control" name="password" id="inputEmail3" placeholder="Пароль" [(ngModel)]="User.password">
+        </div>
+      </div>
+    </form>
+    <div class="form-group row">
+      <div class="col-sm-10">
+        <div class="form-check">
+        </div>
+      </div>
+    </div>
+    <div class="form-group row">
+      <div class="col-sm-6">
+        <button role="button" type="submit" class="btn btn-primary btn-block" (click)="register()">Зарегистрироваться</button>
+      </div>
+    </div>
+  </form>
+</div>

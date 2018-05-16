@@ -10,7 +10,7 @@ import { AuthService } from 'services/auth.service';
   styleUrls: ['./about.component.css']
 })
 export class AboutComponent implements OnInit {
-  private user: UserRegister = { login: "", nickname: "", password: "" };
+  public User: UserRegister = { login: "", nickname: "", password: "" };
   private error: string;
   private currentUser;
   constructor(private auth: AuthService, private router: Router) {
@@ -21,7 +21,7 @@ export class AboutComponent implements OnInit {
   }
 
   register() {
-    this.auth.register(this.user).subscribe(
+    this.auth.register(this.User).subscribe(
       data => {
         this.router.navigate(['/registration/validate']);
       },

@@ -11,7 +11,7 @@ import { User } from 'models/user';
   styleUrls: ['./top-panel.component.css']
 })
 export class TopPanelComponent implements OnInit, DoCheck {
-  private currentUser;
+  public CurrentUser;
   private url: string;
   constructor(private auth: AuthService, private router: Router) { }
 
@@ -19,13 +19,13 @@ export class TopPanelComponent implements OnInit, DoCheck {
   }
 
   ngDoCheck() {
-    this.currentUser = JSON.parse(localStorage.getItem('current_user'));
+    this.CurrentUser = JSON.parse(localStorage.getItem('current_user'));
     this.url = this.router.routerState.snapshot.url;
   }
 
   logout() {
     this.auth.unauthentificatenow();
-    window.location.reload()
+    this.router.navigateByUrl("/auth")
   }
 
 }

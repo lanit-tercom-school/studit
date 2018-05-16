@@ -9,16 +9,15 @@ h1
     font-family: 'Jura', sans-serif;
     font-size: 5.5rem;
 }
-#cover {
-    background: var(--primary-color);
-    background-size: cover;
-    height: 93%;
-    align-items: center;
-}
+
 .inscription{
     margin-top: 12rem;
     text-align: center;
 }
 .form-check{
     color: white;
+}
+
+.form-group{
+    margin: 1.3rem 0rem ;
 }

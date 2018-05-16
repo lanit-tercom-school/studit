@@ -24,17 +24,17 @@ type StatusEnroll = "Enrolling" | "InProject" | "Unenrolling";
 })
 export class StudentProjectPageComponent implements OnInit, OnDestroy {
 
-  private projectObs: BehaviorSubject<ProjectItem> = new BehaviorSubject(new ProjectItem());
-  private tasksObs: Observable<TasksItem[]>;
+  public ProjectObs: BehaviorSubject<ProjectItem> = new BehaviorSubject(new ProjectItem());
+  public TasksObs: Observable<TasksItem[]>;
+  public ProjectUsers: BehaviorSubject<UserInfo[]> = new BehaviorSubject<UserInfo[]>([]);
+  public EnrollMessage = 'Please write back soon!';
+  public EnrollButtonStatus = "Enrolling";
 
 
   private projectId: number;
   private projectEnrollId: number;
   private authorized = false;
   private isTeacher = false;
-  private enrollMessage = 'Please write back soon!';
-  private enrollButtonStatus = "Enrolling";
-  private projectUsers: BehaviorSubject<UserInfo[]> = new BehaviorSubject<UserInfo[]>([]);
   constructor(private route: ActivatedRoute,
     private http: Http,
     private data: DataService,
@@ -55,7 +55,7 @@ export class StudentProjectPageComponent implements OnInit, OnDestroy {
       {
         Avatar: "a",
         Description: "dd",
-        Id: "22",
+        Id: "4",
         Nickname: "Happy penguin"
       }
     );
@@ -63,7 +63,7 @@ export class StudentProjectPageComponent implements OnInit, OnDestroy {
       {
         Avatar: "a",
         Description: "dd",
-        Id: "22",
+        Id: "3",
         Nickname: "Sad eagle"
       }
     );
@@ -71,12 +71,28 @@ export class StudentProjectPageComponent implements OnInit, OnDestroy {
       {
         Avatar: "a",
         Description: "dd",
-        Id: "22",
+        Id: "9",
         Nickname: "Indifferent boa"
       }
     );
+      a.push(
+      {
+        Avatar: "a",
+        Description: "dd",
+        Id: "10",
+        Nickname: "Silly parrot"
+      }
+    );
+    a.push(
+      {
+        Avatar: "a",
+        Description: "dd",
+        Id: "11",
+        Nickname: "Cooling elephant"
+      }
+    );
 
-    this.projectUsers.next(a)
+    this.ProjectUsers.next(a)
   }
 
   ngOnDestroy() {
@@ -84,14 +100,14 @@ export class StudentProjectPageComponent implements OnInit, OnDestroy {
 
   getProjectTasks(gitHubUrl: string) {
     this.data.loadTaskByGitHubUrl(gitHubUrl);
-    this.tasksObs = this.data.TasksForViewing;
+    this.TasksObs = this.data.TasksForViewing;
   }
 
   getProjectInfo() {
     this.data.loadProjectByID(this.projectId);
     this.data.ProjectForViewing.subscribe(res => {
       if (res != null) {
-        this.projectObs.next(res);
+        this.ProjectObs.next(res);
         this.getProjectTasks(res.GitHubUrl)
       }
     });
@@ -101,32 +117,32 @@ export class StudentProjectPageComponent implements OnInit, OnDestroy {
 
   enroll() {
     this.studentService.enrollToProject(this.data.UserId, this.projectId,
-      JSON.parse(localStorage.getItem('current_user')).Token, this.enrollMessage)
+      JSON.parse(localStorage.getItem('current_user')).Token, this.EnrollMessage)
       .subscribe(res => {
-        this.enrollButtonStatus = "Unenrolling";
+        this.EnrollButtonStatus = "Unenrolling";
         this.data.loadEnrolledUsersProject();
       });
   }
   unenroll() {
     this.studentService.unenrollToProject(this.projectEnrollId,
       JSON.parse(localStorage.getItem('current_user')).Token).subscribe(res => {
-        this.enrollButtonStatus = "Enrolling";
+        this.EnrollButtonStatus = "Enrolling";
         this.data.loadEnrolledUsersProject();
       });
   }
 
   choseButtonStatus() {
-    this.enrollButtonStatus = "Enrolling";
+    this.EnrollButtonStatus = "Enrolling";
     this.data.UserProjects.subscribe(res => {
       if (res != null) {
         if (res.find(pr => pr.Id == this.projectId)) {
-          this.enrollButtonStatus = "InProject";
+          this.EnrollButtonStatus = "InProject";
         }
       }
     });
     this.data.UserEnrolledProjects.subscribe(res => {
       if (res != null && res.find(pr => pr.Project.Id == this.projectId)) {
-        this.enrollButtonStatus = "Unenrolling";
+        this.EnrollButtonStatus = "Unenrolling";
         res.forEach(p => {
           if (p.Project.Id == this.projectId) {
             this.projectEnrollId = p.Id;

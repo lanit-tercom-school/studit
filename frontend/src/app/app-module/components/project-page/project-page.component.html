@@ -1,13 +1,14 @@
-<div class="container">
+<div class="section">
   <div class="card">
     <div class="row" id="main-info">
       <div class="col-md-3 col-md-12" id="project-img-status">
-        <img width="225px" height="225px" src="{{projectObs.value.Logo}}" alt="Project">
+        <img width="225px" height="225px" src="{{ProjectObs.value.Logo}}" alt="Project">
       </div>
       <div class="col-md-8">
-        <h2 id="project-name">{{projectObs.value.Name}}</h2>
-        <p class="lead">{{projectObs.value.Description}}</p>
-        <i>Теги:</i> <a class="blacktag" href="#">lorem ipsum</a>
+        <h2 id="project-name">{{ProjectObs.value.Name}}</h2>
+        <p class="lead">{{ProjectObs.value.Description}}</p>
+        <i>Теги:</i>
+        <a class="blacktag" href="#">lorem ipsum</a>
       </div>
     </div>
   </div>
@@ -17,9 +18,6 @@
         <app-materials [MaterialsList]=getMaterialsItems()></app-materials>
       </div>
     </div>
-    <!--     <div class="col-lg-6 col-md-offset-12">
-      <app-tasks [TasksItemList]="this.tasks"></app-tasks>
-    </div> -->
     <div class="content">
       <div class="col-md-4 col-md-offset-2">
         <div class="heading">

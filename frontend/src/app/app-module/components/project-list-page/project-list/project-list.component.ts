@@ -12,27 +12,27 @@ import { ProjectItem } from 'models/project-item';
 export class ProjectListComponent implements OnInit {
 
   public ProjectList: Observable<ProjectItem[]>;
-  private p: number = 1;
-  private limit: number = 2;
-  private totalObs: Observable<number>;
+  public CurrentPage: number = 1;
+  public Limit: number = 2;
+  public TotalCount: Observable<number>;
 
-  private loading: boolean;
+  public Loading: boolean;
   constructor(private data: DataService) { }
 
   ngOnInit() {
-    this.totalObs = this.data.ProjectCountObs;
+    this.TotalCount = this.data.ProjectCountObs;
     this.getPage(1);
   }
 
   getPage(page: number) {
-    this.loading = true;
+    this.Loading = true;
     let offset = 0;
     if (page > 1)
-      offset = (page - 1) * this.limit;
-    this.data.loadProjects(this.limit, offset);
+      offset = (page - 1) * this.Limit;
+    this.data.loadProjects(this.Limit, offset);
     this.ProjectList = this.data.Projects;
-    this.p = page;
-    this.loading = false;
+    this.CurrentPage = page;
+    this.Loading = false;
     window.scrollTo(0, 0);
   }
 }

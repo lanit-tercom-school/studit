@@ -7,14 +7,14 @@
   <div class="row">
     <div class="form-group">
       <div class="col-sm-4 col-sm-offset-4">
-        <input type="email" class="form-control" name="email" placeholder="Email" [(ngModel)]="localUser.login" required autofocus>
+        <input type="email" class="form-control" name="email" placeholder="Email" [(ngModel)]="LocalUser.login" required autofocus>
       </div>
     </div>
   </div>
   <div class="row">
     <div class="form-group">
       <div class="col-sm-4 col-sm-offset-4">
-        <input type="password" class="form-control" name="password" placeholder="Пароль" [(ngModel)]="localUser.password">
+        <input type="password" class="form-control" name="password" placeholder="Пароль" [(ngModel)]="LocalUser.password">
       </div>
     </div>
   </div>
@@ -22,16 +22,15 @@
     <div class="col-sm-2 col-sm-offset-4">
       <div class="checkbox">
         <label>
-                <input type="checkbox" value="remember-me"> Запомнить
-              </label>
+          <input type="checkbox" value="remember-me"> Запомнить
+        </label>
       </div>
     </div>
   </div>
   <div class="form-group row">
     <div class="col-sm-4 col-sm-offset-4">
-      <h3>{{error}}</h3>
       <button role="button" class="btn btn-primary btn-block" type="submit" (click)="login()">Войти</button>
-      <button role="button" class="btn btn-secondary btn-block" routerLink="/registration" routerLinkActive="active">Зарегистрироваться</button>
+      <button role="button" class="btn btn-default btn-block" routerLink="/registration" routerLinkActive="active">Зарегистрироваться</button>
     </div>
   </div>
 </form>

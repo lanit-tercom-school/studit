@@ -10,14 +10,14 @@ import { AuthService } from 'services/auth.service';
 })
 export class ValidationPageComponent implements OnInit {
 
-  private validationCode: string ='';
+  public ValidationCode: string ='';
   private isValidated: boolean;
 
 
   constructor(private auth: AuthService, private router: Router) { }
 
   validate() {
-    this.auth.validate(this.validationCode)
+    this.auth.validate(this.ValidationCode)
       .subscribe(
       data => {
         this.router.navigateByUrl("/auth")

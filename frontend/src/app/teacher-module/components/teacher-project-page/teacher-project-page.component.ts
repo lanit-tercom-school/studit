@@ -24,8 +24,8 @@ type StatusEnroll = "Enrolling" | "InProject" | "Unenrolling";
 })
 export class TeacherProjectPageComponent implements OnInit, OnDestroy {
 
-  private projectObs: BehaviorSubject<ProjectItem> = new BehaviorSubject(new ProjectItem());
-  private tasksObs: Observable<TasksItem[]>;
+  public ProjectObs: BehaviorSubject<ProjectItem> = new BehaviorSubject(new ProjectItem());
+  public TasksObs: Observable<TasksItem[]>;
 
 
   private projectId: number;
@@ -33,7 +33,7 @@ export class TeacherProjectPageComponent implements OnInit, OnDestroy {
   private authorized = false;
   private isTeacher = false;
   private enrollMessage = 'Please write back soon!';
-  private enrollButtonStatus = "Enrolling";
+  public EnrollButtonStatus = "Enrolling";
   constructor(private route: ActivatedRoute,
     private http: Http,
     private data: DataService,
@@ -56,14 +56,14 @@ export class TeacherProjectPageComponent implements OnInit, OnDestroy {
 
   getProjectTasks(gitHubUrl: string) {
     this.data.loadTaskByGitHubUrl(gitHubUrl);
-    this.tasksObs = this.data.TasksForViewing;
+    this.TasksObs = this.data.TasksForViewing;
   }
 
   getProjectInfo() {
     this.data.loadProjectByID(this.projectId);
     this.data.ProjectForViewing.subscribe(res => {
       if (res != null) {
-        this.projectObs.next(res);
+        this.ProjectObs.next(res);
         this.getProjectTasks(res.GitHubUrl)
       }
     });
@@ -75,23 +75,23 @@ export class TeacherProjectPageComponent implements OnInit, OnDestroy {
     this.studentService.enrollToProject(this.data.UserId, this.projectId,
       JSON.parse(localStorage.getItem('current_user')).Token, this.enrollMessage)
       .subscribe(res => {
-        this.enrollButtonStatus = "Unenrolling";
+        this.EnrollButtonStatus = "Unenrolling";
         this.data.loadEnrolledUsersProject();
       });
   }
   unenroll() {
     this.studentService.unenrollToProject(this.projectEnrollId,
       JSON.parse(localStorage.getItem('current_user')).Token).subscribe(res => {
-        this.enrollButtonStatus = "Enrolling";
+        this.EnrollButtonStatus = "Enrolling";
         this.data.loadEnrolledUsersProject();
       });
   }
 
   choseButtonStatus() {
-    this.enrollButtonStatus = 'Enrolling';
+    this.EnrollButtonStatus = 'Enrolling';
     this.data.UserProjects.subscribe(res => {
       if (res != null && res.find(pr => pr.Id == this.projectId)) {
-        this.enrollButtonStatus = 'InProject';
+        this.EnrollButtonStatus = 'InProject';
       }
     })
   }

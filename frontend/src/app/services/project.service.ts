@@ -10,6 +10,7 @@ import { ProjectItem } from "models/project-item";
 import { MaterialsItem } from "models/materials-item";
 import { ProjectNewsItem } from "models/proj-news-item";
 import { ProjectTaskItem } from "models/project-task-item";
+import { UserInfo } from 'models/user-info';
 import { environment } from '../../environments/environment';
 
 
@@ -34,11 +35,11 @@ export class ProjectService {
     }`;
     return this.http.get(environment.apiUrl + '/graphql?query=' + query)
       .map((response: Response) => {
-       /*  let res = response.json().data.ProjectList;
-         res.forEach(element => {
-          element.Logo = environment.apiUrl + element.Logo;
-        }); 
-        return res; */
+        /*  let res = response.json().data.ProjectList;
+          res.forEach(element => {
+           element.Logo = environment.apiUrl + element.Logo;
+         }); 
+         return res; */
         return response.json().data.ProjectList;
       });
 
@@ -86,6 +87,26 @@ export class ProjectService {
     return this.http.get(environment.apiUrl + '/graphql?query=' + query)
       .map(response => response.json().data.Project);
   }
+
+  getUsersByProject(id: number): Observable<UserInfo[]> {
+    let variable = { id: id };
+    let query = `
+    query($id:ID)
+    {
+      Project(Id: $id) {
+        Users {
+          Id
+          Nickname
+        }
+      }
+    }&variables=`+ JSON.stringify(variable);
+    let headers = new Headers();
+    headers.append('Accept', 'application/json');
+    headers.append('Authorization', 'Bearer ' + JSON.parse(localStorage.getItem('current_user')).Token);
+    return this.http.get(environment.apiUrl + '/graphql?query=' + query, { headers: headers })
+      .map(response => response.json().data.Project.Users);
+  }
+
   getMaterialsItems(id: number): MaterialsItem[] {
     return [
       {

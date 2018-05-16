@@ -13,11 +13,11 @@ import { CurrentUser } from 'models/current-user';
 })
 export class TeacherSettingsPageComponent implements OnInit {
 
-  private currentUser: BehaviorSubject<CurrentUser> = new BehaviorSubject(new CurrentUser());
-  private clicked = false;
-  private isChanged = false;
-  private passwords = { old: '', new: '' };
-  private NewPasswordAgain = '';
+  public CurrentUser: BehaviorSubject<CurrentUser> = new BehaviorSubject(new CurrentUser());
+  public Clicked = false;
+  public IsChanged = false;
+  public Passwords = { old: '', new: '' };
+  public NewPasswordAgain = '';
   private error: any;
 
   constructor(private userService: UserService, private route: ActivatedRoute) { }
@@ -32,44 +32,44 @@ export class TeacherSettingsPageComponent implements OnInit {
             c.User.Id = +res.Id;
             c.User.Description = res.Description;
             c.User.Nickname = res.Nickname;
-            this.currentUser.next(c);
+            this.CurrentUser.next(c);
           });
       });
   }
 
   ShowHide() {
-    if (!this.clicked) {
-      this.clicked = true;
-      this.isChanged = false;
+    if (!this.Clicked) {
+      this.Clicked = true;
+      this.IsChanged = false;
     }
     else
-      this.clicked = false;
+      this.Clicked = false;
   }
 
   ChangePassword() {
-    if (this.passwords.new != this.NewPasswordAgain) {
+    if (this.Passwords.new != this.NewPasswordAgain) {
       alert('Пароли не совпадают!');
       this.ClearPasswords();
     }
     else {
-      this.userService.changePasswordForUser(JSON.parse(localStorage.getItem('current_user')).token, this.passwords)
+      this.userService.changePasswordForUser(JSON.parse(localStorage.getItem('current_user')).token, this.Passwords)
         .subscribe(res => {
-          this.isChanged = true;
-          this.clicked = false;
+          this.IsChanged = true;
+          this.Clicked = false;
           this.ClearPasswords();
         },
-        error => {
-          this.error = error;
-          alert('Ошибка! ' + this.error);
-          this.ClearPasswords();
-          this.isChanged = false;
-        });
+          error => {
+            this.error = error;
+            alert('Ошибка! ' + this.error);
+            this.ClearPasswords();
+            this.IsChanged = false;
+          });
     }
   }
 
   ClearPasswords() {
-    this.passwords.old = '';
-    this.passwords.new = '';
+    this.Passwords.old = '';
+    this.Passwords.new = '';
     this.NewPasswordAgain = '';
   }
 }

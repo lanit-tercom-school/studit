@@ -2,22 +2,23 @@
   <h1 align="center">Студенческие проекты</h1>
   <div class="row">
     <div class="col-sm-10 col-sm-offset-1">
-
       <swiper class="swiper" [config]="config">
         <div class="swiper-wrapper">
           <div class="swiper-slide" *ngFor="let project of ProjectList | async">
-            <div class="row">
-              <div class="col-sm-6">
+            <div class="row for_border">
+              <div class="col-sm-5 col-sm-offset-1">
                 <img class="project-logo" src="{{project.Logo}}" alt="Project logo">
               </div>
-              <div class="swiper-text col-sm-6">
+              <div class="swiper-text col-sm-4">
                 <h3 class="swiper-project-name" routerLink="/project/{{project.Id}}">{{project.Name}}</h3>
                 <p class="swiper-project-description">{{project.Description}}</p>
               </div>
             </div>
           </div>
         </div>
-        <div class="swiper-pagination"></div>
+        <div class="swiper-pagination-wrapper">
+          <div class="swiper-pagination"></div>
+        </div>
         <div class="swiper-button-next hidden-xs"></div>
         <div class="swiper-button-prev hidden-xs"></div>
       </swiper>

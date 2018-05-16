@@ -3,6 +3,9 @@
 .section-authorization{
     align-items: center;
 }
+.btn-secondary{
+    color:var(--primary-color);
+}
 
 h1
 {

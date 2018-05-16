@@ -19,7 +19,7 @@ import { TasksItem } from 'models/tasks-item';
 })
 export class ProjectPageComponent implements OnInit, OnDestroy {
 
-  private projectObs: BehaviorSubject<ProjectItem> = new BehaviorSubject(new ProjectItem());
+  public ProjectObs: BehaviorSubject<ProjectItem> = new BehaviorSubject(new ProjectItem());
   private projectId;
   private tasks = [];
   private message = 'Please write back soon!';
@@ -48,7 +48,7 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
     this.data.loadProjectByID(this.projectId);
     this.data.ProjectForViewing.subscribe(res => {
       if (res != null)
-        this.projectObs.next(res);
+        this.ProjectObs.next(res);
     });
 
   }

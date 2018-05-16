@@ -5,7 +5,9 @@
   width: 25rem;
   text-align: left;
   border: 0px;
+  margin: 0rem auto;
 }
+
 
 .card-block{
   background-color: var(--section-color);
@@ -13,9 +15,28 @@
   padding: 1rem;
 }
 
+.card-block-xs{
+  background-color: var(--section-color);
+  min-height: 11rem;
+}
 .card-img-top{
   height: 25rem;
   width: 25rem;
+}
+
+.card-xs{
+  margin-bottom: 1rem;
+}
+
+.card-img-top-xs{
+  max-height: 10rem;
+  margin-top: 1rem;
+  padding: auto auto;
+}
+
+.card-text-xs{
+  margin-top: 1rem;
+  background-color: var(--section-color);
 }
 
 a{
@@ -24,7 +45,7 @@ a{
 }
 .card-title
 {
-  text-align:center;
+  text-align: center;
   font-family: 'Jura', sans-serif;
   font-size: 1.7rem;
   font-weight: 900;

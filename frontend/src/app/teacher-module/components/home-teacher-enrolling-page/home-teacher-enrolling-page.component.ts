@@ -13,7 +13,7 @@ import { StudentService } from 'services/student.service';
 })
 export class HomeTeacherEnrollingPageComponent implements OnInit {
 
-  private EnrollList: Observable<EnrollItem[]>;
+  public EnrollList: Observable<EnrollItem[]>;
 
   constructor(private teacherService: TeacherService, private data: DataService, private studentService: StudentService) { }
 

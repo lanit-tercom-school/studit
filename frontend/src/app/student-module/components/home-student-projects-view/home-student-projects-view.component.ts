@@ -12,14 +12,12 @@ import { DataService } from 'services/data.service';
 })
 export class HomeStudentProjectsViewComponent implements OnInit, OnDestroy {
   private userId: string;
-  private ProjectList: Observable<ProjectItem[]>;
-  private ProjectEnrollList: Observable<EnrollItem[]>;
+  public ProjectList: Observable<ProjectItem[]>;
 
-  constructor( private data: DataService) { }
+  constructor(private data: DataService) { }
 
   ngOnInit() {
     this.ProjectList = this.data.UserProjects;
-    this.ProjectEnrollList = this.data.UserEnrolledProjects;
   }
   ngOnDestroy() {
 

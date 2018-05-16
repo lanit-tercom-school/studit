@@ -12,24 +12,24 @@ import { ProjectItem } from 'models/project-item';
 export class MainComponent implements OnInit {
 
   private projects: Observable<ProjectItem[]>;
-  private partners;
+  public Partners;
 
   constructor(private data: DataService) {
   }
 
   ngOnInit() {
     this.getMainProjectList();
-    this.partners = [{
+    this.Partners = [{
       src: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/Microsoft_logo_(2012).svg/2000px-Microsoft_logo_(2012).svg.png",
       link: "https://www.microsoft.com/ru-ru/"
     },
     {
-      src: "https://upload.wikimedia.org/wikipedia/ru/0/00/The_Faculty_of_Mathematics_and_Mechanics_Logo.png",
-      link: "http://www.math.spbu.ru/rus/"
+      src: "https://sun1-4.userapi.com/c834103/v834103120/94e29/EWgKHEbny-Q.jpg",
+      link: "https://www.math.spbu.ru/rus/"
     },
     {
-      src: "http://www.sporos.narod.ru/images/logo_spbgu.jpg",
-      link: "http://spbu.ru/"
+      src: "https://spbu.ru/sites/all/themes/spbgu/markup/dist/img/logo-big-color.svg",
+      link: "https://spbu.ru/"
     }];
   }
 
