@@ -21,6 +21,7 @@
 .for_border{
      border: 1px solid var(--dark-logo-color);
      border-radius: 5px;
+     padding: 1rem;
 }
 
 .swiper-section{
@@ -38,8 +39,6 @@
      max-height: 40rem;
  }
 
-.swiper-pagination-wrapper{
-    margin-top: 3rem;
-}
+
  
 

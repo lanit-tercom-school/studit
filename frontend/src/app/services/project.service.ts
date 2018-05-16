@@ -97,6 +97,8 @@ export class ProjectService {
         Users {
           Id
           Nickname
+          Avatar
+          Description
         }
       }
     }&variables=`+ JSON.stringify(variable);

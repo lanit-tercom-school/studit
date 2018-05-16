@@ -1,7 +1,8 @@
 <h5 align="center">В проекте участвуют</h5>
 <hr>
 <a routerLink="/user/{{user.Id}}" *ngFor="let user of ProjectUsersList | async">
-  <div class="row">
-  {{user.Nickname}}
+  <div class="row view">
+         <img src="{{user.Avatar}}">
+        {{user.Nickname}}
   </div>
 </a>

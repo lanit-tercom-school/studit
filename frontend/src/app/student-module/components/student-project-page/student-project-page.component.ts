@@ -26,7 +26,7 @@ export class StudentProjectPageComponent implements OnInit, OnDestroy {
 
   public ProjectObs: BehaviorSubject<ProjectItem> = new BehaviorSubject(new ProjectItem());
   public TasksObs: Observable<TasksItem[]>;
-  public ProjectUsers: BehaviorSubject<UserInfo[]> = new BehaviorSubject<UserInfo[]>([]);
+  public ProjectUsers: Observable<UserInfo[]> = new Observable<UserInfo[]>();
   public EnrollMessage = 'Please write back soon!';
   public EnrollButtonStatus = "Enrolling";
 
@@ -49,50 +49,10 @@ export class StudentProjectPageComponent implements OnInit, OnDestroy {
       this.projectId = +p['id'];
       this.getProjectInfo();
       this.choseButtonStatus();
-    });
-    let a: UserInfo[] = [];
-    a.push(
-      {
-        Avatar: "a",
-        Description: "dd",
-        Id: "4",
-        Nickname: "Happy penguin"
-      }
-    );
-    a.push(
-      {
-        Avatar: "a",
-        Description: "dd",
-        Id: "3",
-        Nickname: "Sad eagle"
-      }
-    );
-    a.push(
-      {
-        Avatar: "a",
-        Description: "dd",
-        Id: "9",
-        Nickname: "Indifferent boa"
-      }
-    );
-      a.push(
-      {
-        Avatar: "a",
-        Description: "dd",
-        Id: "10",
-        Nickname: "Silly parrot"
-      }
-    );
-    a.push(
-      {
-        Avatar: "a",
-        Description: "dd",
-        Id: "11",
-        Nickname: "Cooling elephant"
-      }
-    );
-
-    this.ProjectUsers.next(a)
+      this.ProjectUsers = this.projectService.getUsersByProject(this.projectId);
+    });   
+    if (localStorage.getItem('current_user')) { this.authorized = false; }
+    
   }
 
   ngOnDestroy() {
