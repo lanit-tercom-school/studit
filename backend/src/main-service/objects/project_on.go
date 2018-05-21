@@ -52,7 +52,7 @@ var ProjectOnType = gql.NewObject(
 func ResolveGetProjectOnByUser(p gql.ResolveParams) (interface{}, error) {
 	c := p.Context.Value("CurrentUser").(CurrentClient)
 	u := p.Source.(User)
-	if c.PermissionLevel == ADMIN || c.UserId == u.Id {
+	if c.PermissionLevel !=VIEWER {
 		helpers.LogAccesAllowed("GetProjectOnByUser")
 		var projectUsers []ProjectUser
 		var projectOn ProjectOn

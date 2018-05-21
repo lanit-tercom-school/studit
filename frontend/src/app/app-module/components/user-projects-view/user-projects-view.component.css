@@ -1,14 +1,5 @@
 @import url('https://fonts.googleapis.com/css?family=Jura');
 
-ul{
-  padding:0;
-}
-h5{
-    font-family: 'Jura', sans-serif;
-    font-weight: bold;
-    font-size: 20px;
-    margin-top: 2rem;
-}
 a{
     font-size: 15px;
     color: var(--primary-color);
@@ -23,4 +14,11 @@ img{
     margin-right: 1rem;
     margin-top: 1rem;
     margin-bottom: 1rem;
+}
+
+h5{
+    font-family: 'Jura', sans-serif;
+    font-weight: bold;
+    font-size: 20px;
+    margin-top: 2rem;
 }

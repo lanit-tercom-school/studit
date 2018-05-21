@@ -13,30 +13,40 @@ import { CurrentUser } from 'models/current-user';
 })
 export class StudentSettingsPageComponent implements OnInit {
 
-  public CurrentUser: BehaviorSubject<CurrentUser> = new BehaviorSubject(new CurrentUser());
+  public CurrentUser: CurrentUser = {
+    User: {
+      Avatar: 'http://atom96.ru/wp-content/uploads/2017/10/%D0%BD%D0%B5%D1%82-%D1%84%D0%BE%D1%82%D0%BE.png',
+      Description: '',
+      Id: -1,
+      Login: '',
+      Nickname: '',
+    },
+    DataOfExpiration: undefined,
+    PermissionLevel: undefined,
+    Token: undefined
+  };
   public Clicked = false;
   public IsChanged = false;
   public Passwords = { old: '', new: '' };
   public NewPasswordAgain = '';
   private error: any;
-
+  private email: string;
   constructor(private userService: UserService,
     private route: ActivatedRoute) { }
 
   ngOnInit() {
+    this.CurrentUser.User.Login = JSON.parse(localStorage.getItem('current_user')).User.Login;
     this.route.params
       .subscribe(params => {
         this.userService.getUserById(JSON.parse(localStorage.getItem('current_user')).User.Id)
           .subscribe(res => {
-            let c: CurrentUser = new (CurrentUser);
-            c.User.Avatar = res.Avatar;
-            c.User.Id = +res.Id;
-            c.User.Description = res.Description;
-            c.User.Nickname = res.Nickname;
-            
-            this.CurrentUser.next(c);
+            this.CurrentUser.User.Avatar = res.Avatar;
+            this.CurrentUser.User.Id = +res.Id;
+            this.CurrentUser.User.Description = res.Description;
+            this.CurrentUser.User.Nickname = res.Nickname;
           });
       });
+    this.email = JSON.parse(localStorage.getItem('current_user')).User.Id;
   }
 
   ShowHide() {

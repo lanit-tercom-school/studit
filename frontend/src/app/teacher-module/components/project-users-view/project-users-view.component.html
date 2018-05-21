@@ -3,8 +3,8 @@
 <a routerLink="/user/{{user.Id}}" *ngFor="let user of ProjectUsersList | async">
   <div class="row view">
     <div class="col-sm-offset-4">
-         <img src="{{user.Avatar}}">
-        {{user.Nickname}}
+      <img src="{{user.Avatar}}"> 
+      {{user.Nickname}}
     </div>
   </div>
 </a>

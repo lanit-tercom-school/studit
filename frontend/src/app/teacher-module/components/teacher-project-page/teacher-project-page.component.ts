@@ -13,6 +13,7 @@ import { MaterialsItem } from 'models/materials-item';
 import { ProjectItem } from 'models/project-item';
 import { ProjectNewsItem } from 'models/proj-news-item';
 import { TasksItem } from 'models/tasks-item';
+import { UserInfo } from 'models/user-info';
 
 
 type StatusEnroll = "Enrolling" | "InProject" | "Unenrolling";
@@ -26,7 +27,7 @@ export class TeacherProjectPageComponent implements OnInit, OnDestroy {
 
   public ProjectObs: BehaviorSubject<ProjectItem> = new BehaviorSubject(new ProjectItem());
   public TasksObs: Observable<TasksItem[]>;
-
+  public ProjectUsers: Observable<UserInfo[]> = new Observable<UserInfo[]>();
 
   private projectId: number;
   private projectEnrollId: number;
@@ -42,13 +43,14 @@ export class TeacherProjectPageComponent implements OnInit, OnDestroy {
     private taskService: TaskService,
   ) { }
 
-  ngOnInit() {
+ngOnInit() {
     if (localStorage.getItem('current_user')) { this.authorized = true; }
     this.route.params.subscribe(p => {
       this.projectId = +p['id'];
       this.getProjectInfo();
       this.choseButtonStatus();
-    });
+      this.ProjectUsers = this.projectService.getUsersByProject(this.projectId);
+    });   
   }
 
   ngOnDestroy() {

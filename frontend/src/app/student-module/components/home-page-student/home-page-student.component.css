@@ -26,7 +26,6 @@ li a
 li a:hover
 {
     text-decoration: none;
-    color:cadetblue;
     transition: color .3s;
 }
 

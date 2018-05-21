@@ -51,7 +51,7 @@ export class StudentProjectPageComponent implements OnInit, OnDestroy {
       this.choseButtonStatus();
       this.ProjectUsers = this.projectService.getUsersByProject(this.projectId);
     });   
-    if (localStorage.getItem('current_user')) { this.authorized = false; }
+    
     
   }
 
