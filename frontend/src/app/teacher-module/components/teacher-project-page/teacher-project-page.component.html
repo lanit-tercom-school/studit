@@ -19,8 +19,8 @@
     <div class="col-sm-6 col-md-6">
       <app-teacher-project-tasks [TasksItemList]="TasksObs"></app-teacher-project-tasks>
     </div>
-    <div class="col-sm-6 col-md-6">
-      <p class="participants">Участники проекта</p>
-    </div>
+    <div class="col-sm-12 col-md-4 col-md-offset-2">
+			<app-project-users-view [ProjectUsersList]="ProjectUsers"></app-project-users-view>
+		</div>
   </div>
 </div>

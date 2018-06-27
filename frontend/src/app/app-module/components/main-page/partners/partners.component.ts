@@ -6,11 +6,10 @@ import { Component, OnInit, Input } from '@angular/core';
   styleUrls: ['./partners.component.css']
 })
 export class PartnersComponent implements OnInit {
-
+  
   @Input() public PartnersList;
-
+  
   constructor() { }
-
   ngOnInit() {
   }
 

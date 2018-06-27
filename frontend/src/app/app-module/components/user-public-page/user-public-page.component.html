@@ -1,4 +1,4 @@
-<div class="container">
+<div class="section">
   <div class="row" id="main-info">
     <div class="col-sm-3" id="photo-and-rating">
       <div id="author-photo">
@@ -11,16 +11,9 @@
     </div>
   </div>
 
-  <div class="row" id="projects-and-courses">
-    <div class="col-sm-6">
-      <h4>Участие в проектах</h4>
-      <hr>
-      <h4>TODO backend</h4>
-    </div>
-    <div class="col-sm-6">
-      <h4>Проходятся курсы</h4>
-      <hr>
-      <h4>TODO backend</h4>
+   <div class="row" id="projects-and-courses">
+    <div class="col-sm-4 col-sm-offset-1">
+      <app-user-projects-view [UsersProjectList]="Projects"></app-user-projects-view>
     </div>
   </div>
 </div>

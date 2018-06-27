@@ -2,7 +2,8 @@
   <div class="card">
     <div class="row" id="main-info">
       <div class="col-md-3 col-md-12" id="project-img-status">
-        <img width="225px" height="225px" src="{{ProjectObs.value.Logo}}" alt="Project">
+        <img *ngIf="ProjectObs.value.Logo!==undefined" width="225px" height="225px" src="{{ProjectObs.value.Logo}}" alt="Project">
+        <img *ngIf="ProjectObs.value.Logo===undefined" width="225px" height="225px" src="./assets/no_image.png" alt="Project">
       </div>
       <div class="col-md-8">
         <h2 id="project-name">{{ProjectObs.value.Name}}</h2>
