@@ -82,9 +82,9 @@ func ResolveGetEnrollsByProjectOn(p gql.ResolveParams) (interface{}, error) {
 }
 
 func ResolveGetEnrollsByUser(p gql.ResolveParams) (interface{}, error) {
-	if p.Context.Value("CurrentUser").(CurrentClient).PermissionLevel >= LEADER {
+	u := p.Source.(User)
+	if p.Context.Value("CurrentUser").(CurrentClient).PermissionLevel >= LEADER || p.Context.Value("CurrentUser").(CurrentClient).UserId == u.Id{
 		helpers.LogAccesAllowed("GetEnrollsByUSer")
-		u := p.Source.(User)
 		var projectEnrolls []ProjectEnroll
 		err := helpers.HttpGet(conf.Configuration.DataServiceURL+"v1/project_enroll/?query=User:"+strconv.Itoa(u.Id), &projectEnrolls)
 		return projectEnrolls, err
