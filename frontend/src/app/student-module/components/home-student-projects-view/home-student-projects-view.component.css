@@ -19,13 +19,13 @@
 a
 {
    text-decoration: none;
-   color:inherit;
+   color: var(--logo-color)
 }
 
 a:hover
 {
    text-decoration: none;
-   color:cadetblue;
+   color:var(--dark-logo-color);
    transition: color .3s;
 }
 
