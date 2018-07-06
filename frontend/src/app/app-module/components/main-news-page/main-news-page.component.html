@@ -1,10 +1,44 @@
 <section id="page_news">
 	<div class="container">
 		<div class="row">
-			<div class="col col-2">
+			<div class="col-sm-2">
 				<h1>Новости</h1>
+			</div>
+			<div class="col-sm-1">
+				<button type="button" class="btn btn-news btn-primary" data-toggle="modal" data-target="#enrollNewsModal">+</button>
 			</div>
 		</div>
 		<app-news-list></app-news-list>
 	</div>
 </section>
+<!--Модальное окно-->
+<div id="enrollNewsModal" class="modal fade" data-backdrop="static">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+				<h4 class="modal-title">Название новости</h4>
+			</div>
+			<div class="modal-body">
+				<input class="form-control" id="EnrollNewsName" [(ngModel)]="CreatedNews.Title" name="EnrollNewsName" maxlength="300">
+			</div>
+			<div class="modal-header">
+					<h4 class="modal-title">Изображение новости</h4>
+				</div>
+			<div class="modal-image col-sm-offset-1">
+					<img id="project-avatar" src={{CreatedNews.Image}} alt="News photo">
+					<input type="file" (change)="load($event)" accept=".jpg,.png" size="5">
+				</div>
+			<div class="modal-header">
+				<h4 class="modal-title">Описание новости</h4>
+			</div>
+			<div class="modal-body">
+				<textarea class="form-control" id="EnrollNewsDescription" [(ngModel)]="CreatedNews.Description" name="EnrollNewsDescription" autofocus></textarea>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary" (click)="makeNews()" data-dismiss="modal">Отправить</button>
+				<button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
+			</div>
+		</div>
+	</div>
+</div>
