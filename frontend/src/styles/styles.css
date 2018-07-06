@@ -85,3 +85,12 @@ h1, h2, h3, h4 {
   border-color: var(--dark-accent-color);
   color: var(--section-color);
 }
+.btn
+{
+  margin-top: 1rem;
+  margin-left: 0rem;
+}
+.modal-footer .btn+.btn {
+  margin-bottom: 0;
+  margin-left: 0px;
+}

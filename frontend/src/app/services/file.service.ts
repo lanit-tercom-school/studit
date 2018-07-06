@@ -19,7 +19,7 @@ export class FileService {
       let headers = new Headers();
       headers.append('Accept', 'application/json');
       headers.append('Authorization', 'Bearer ' + this.data.UserToken);
-      var query = `mutation
+      let query = `mutation
       {
         PostFile
         {
@@ -27,7 +27,7 @@ export class FileService {
           Path
         }
       }
-      `
+      `;
       return this.http.post(environment.apiUrl + '/graphql?query=' + query, formData, { headers: headers })
         .map(response => response.json().data.PostFile.Path);
     }

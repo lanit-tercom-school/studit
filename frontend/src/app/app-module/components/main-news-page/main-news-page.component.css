@@ -12,3 +12,40 @@ h1 {
   font-size: 3.5rem;
   font-weight: bold;
 }
+.btn
+{
+  margin-top: 1rem;
+  width:100%;
+  margin-left: 0rem;
+}
+.btn-news{
+  position:fixed;
+	width:60px;
+	height:60px;
+	bottom:40px;
+	right:40px;
+	border-radius:50px;
+  text-align:center;
+  font-family: 'Jura', sans-serif;
+	font-size: 3rem;
+}
+.btn-primary{
+    background-color: var(--logo-color);
+    border-color: var(--dark-logo-color);
+}
+
+.btn-primary:hover{
+    background-color: var(--dark-logo-color);
+    border-color: var(--dark-logo-color);
+}
+img{
+  margin-bottom: 1rem;
+  margin-top: 1rem;
+}
+.modal-image{
+  width: 10rem;
+  margin-bottom: 1rem;
+}
+.modal-body{
+  margin-bottom: 0rem;
+}
