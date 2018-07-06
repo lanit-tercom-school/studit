@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable } from "rxjs/Observable";
+import { Observable } from 'rxjs/Observable';
 import { Http, Headers, RequestOptions, Response } from '@angular/http';
 
-import { FileService } from "services/file.service";
-import { TeacherService } from "services/teacher.service";
-import { DataService } from "services/data.service";
-import { ProjectItem } from "models/project-item";
+import { FileService } from 'services/file.service';
+import { TeacherService } from 'services/teacher.service';
+import { DataService } from 'services/data.service';
+import { ProjectItem } from 'models/project-item';
 
 @Component({
   selector: 'create-project-page',

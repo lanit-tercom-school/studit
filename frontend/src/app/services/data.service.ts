@@ -32,9 +32,10 @@ export class DataService {
   private enrollsForTeacher: BehaviorSubject<EnrollItem[]> = <BehaviorSubject<EnrollItem[]>>new BehaviorSubject([]);
   private tasksForViewing: BehaviorSubject<TasksItem[]> = <BehaviorSubject<TasksItem[]>>new BehaviorSubject([]);
   private newsCount: number;
+  private projectCount: number;
   private newsCountObs: BehaviorSubject<number> = new BehaviorSubject<number>(0);
 
-  private projectsCount: number = 7; //заглушка
+  private numberOfProjectsOnPage: number=2;
   private projectsCountObs: BehaviorSubject<number> = new BehaviorSubject<number>(7);
   private projectForViewing: BehaviorSubject<ProjectItem> = new BehaviorSubject<ProjectItem>(null);
   private newsForViewing: BehaviorSubject<NewsItem> = new BehaviorSubject<NewsItem>(null);
@@ -104,6 +105,10 @@ export class DataService {
     this.numberOfNewsOnPage = value;
   }
 
+  public set NumberOfProjectOnPage(value: number) {
+    this.numberOfProjectsOnPage = value;
+  }
+
   public get PermLvl() {
     return this.userPermLvl;
   }
@@ -115,7 +120,6 @@ export class DataService {
   }
 
   loadAll() {
-    this.loadProjects(2, 0);
     this.loadProjectsForMainPage();
     if (localStorage.getItem('current_user')) {
       this.userToken = JSON.parse(localStorage.getItem('current_user')).Token;
@@ -131,17 +135,6 @@ export class DataService {
     }
   }
 
-  loadProjects(limit: number, offset: number) {
-    this.projectService.getProjectItems(limit, offset)
-      .subscribe(res => {
-        if (res != null) {
-          this.dataStore.projects = res;
-          //this.projectsCountObs.next(Object.assign({},this.projectsCount));
-          this.dataStore.projects.forEach(a => { a.Logo = this.addApiUrl(a.Logo); })
-          this.projects.next(Object.assign({}, this.dataStore).projects);
-        }
-      });
-  }
 
   loadTaskByGitHubUrl(gitHubUrl: string) {
     let url: string = gitHubUrl;
@@ -229,6 +222,16 @@ export class DataService {
       this.newsCountObs.next(this.newsCount);
       this.dataStore.news = res.NewsList;
       this.news.next(Object.assign({}, this.dataStore).news);
+
+    });
+  }
+
+  loadProjects(offset: number) {
+    this.projectService.getProjectItems(this.numberOfProjectsOnPage, offset).subscribe(res => {
+      this.projectCount = res.TotalCount;
+      this.projectsCountObs.next(this.projectCount);
+      this.dataStore.projects = res.ProjectList;
+      this.projects.next(Object.assign({}, this.dataStore).projects);
 
     });
   }

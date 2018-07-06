@@ -12,6 +12,7 @@ import { ProjectNewsItem } from "models/proj-news-item";
 import { ProjectTaskItem } from "models/project-task-item";
 import { UserInfo } from 'models/user-info';
 import { environment } from '../../environments/environment';
+import { ProjectList } from 'models/project-list';
 
 
 @Injectable()
@@ -46,19 +47,21 @@ export class ProjectService {
   }
 
   // получить все проекты
-  getProjectItems(limit_: number, offset_: number): Observable<ProjectItem[]> {
-    var variables = { limit: limit_, offset: offset_ }
+  getProjectItems(limit_: number, offset_: number): Observable<ProjectList> {
+    var variables = { limit: limit_, offset: offset_ };
     var query = `query($limit:String, $offset: String)
    {
-     ProjectList(Offset: $offset Limit: $limit)
-    {
-      Description
-      DateOfCreation
-      Logo
-      Tags
-      Id
-      Name
-      GitHubUrl
+     ProjectList(Offset: $offset Limit: $limit){
+      ProjectList {
+        Description
+        DateOfCreation
+        Logo
+        Tags
+        Id
+        Name
+        GitHubUrl
+      }
+      TotalCount
     }
   }&variables=`+ JSON.stringify(variables);
     return this.http.get(environment.apiUrl + '/graphql?query=' + query)

@@ -7,10 +7,10 @@
   </div>
   <div *ngFor="let Project of ProjectList | async" class="card card-outline">
     <div class="row">
-      <div class="col-md-2 col-sm-2 col-md-offset-1">
-        <img class="card-img" src="http://sportlife.top/wp-content/uploads/2017/02/best-300x225.jpg" alt="Card image cap">
+      <div class="card col-sm-2 hidden-xs col-sm-offset-1">
+        <img class="card-img" src="{{Project.Logo}}" >
       </div>
-      <div class="col-md-8 col-sm-8 col-md-offset-2 project-info">
+      <div class="col-sm-8 project-info">
         <p class="lead">{{Project.Name}}</p>
         <p>{{Project.Description}}</p>
         <div class="read-more">
@@ -26,7 +26,41 @@
 
   <div class="row">
     <div class="col-sm-offset-1 col-sm-4">
-      <button routerLink="/teacher/createproject" type="button" class="btn btn-large btn-block btn-info btn-project">Создать проект</button>
+      <button type="button" class="btn btn-project btn-primary" data-toggle="modal" data-target="#enrollProjectModal">+</button>
     </div>
   </div>
   <!--  <div><a class="nav-link" routerLink="/projects/tasks" routerLinkActive="active">Список задач</a> -->
+
+  <!--Модальное окно-->
+  <div id="enrollProjectModal" class="modal fade" data-backdrop="static">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+          <h4 class="modal-title">Название проекта</h4>
+        </div>
+        <div class="modal-body">
+          <input class="form-control" placeholder="" [(ngModel)]="CreatedProject.Name" name="projectName" required>
+        </div>
+        <div class="modal-header">
+          <h4 class="modal-title">Изображение проекта</h4>
+        </div>
+        <div class="modal-image col-sm-offset-1">
+          <img id="project-avatar" src={{CreatedProject.Logo}} alt="Project photo">
+          <input type="file" (change)="load($event)" accept=".jpg,.png" size="5">
+        </div>
+        <div class="modal-header">
+          <h4 class="modal-title">Описание проекта</h4>
+        </div>
+        <div class="modal-body">
+          <textarea class="form-control" id="inputProjDescription" [(ngModel)]="CreatedProject.Description" name="projDescription"
+            required></textarea>
+        </div>
+        <div class="modal-footer">
+          <button role="button" class="btn btn-primary btn-submit" type="submit" (click)="makeProject()" data-dismiss="modal">Создать</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
+        </div>
+      </div>
+    </div>
+  </div>
+ 

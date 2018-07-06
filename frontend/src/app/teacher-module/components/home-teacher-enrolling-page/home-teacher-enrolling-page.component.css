@@ -12,11 +12,11 @@
 {
     max-width: 16rem;
     max-height: 20rem;
+    margin: 0rem;
 }
-.project-info
-{
+.project-info {
     padding: 1rem 2rem 0rem 2rem;
-    margin: 2rem 0rem;
+    margin: 0rem 0rem;
     background-color: var(--section-color);
 }
 .read-more
@@ -54,4 +54,11 @@ button:hover{
     font-family: 'Jura', sans-serif;
     font-weight: bold;
     color: var(--dark-logo-color);
+}
+img {
+    margin-bottom: 1rem;
+    margin-top: 1rem;
+    -webkit-box-shadow: 7px 12px 15px 0px rgba(0, 0, 0, 0.62);
+    -moz-box-shadow: 7px 12px 15px 0px rgba(0, 0, 0, 0.62);
+    box-shadow: 7px 12px 15px 0px rgba(0, 0, 0, 0.62);
 }

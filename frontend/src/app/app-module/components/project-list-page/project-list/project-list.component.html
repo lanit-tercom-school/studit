@@ -1,6 +1,6 @@
 <div class="row">
     <div class="col-xs-12 col-sm-3 col-sm-offset-2" *ngFor="let project of ProjectList | async | paginate: { id: 'projects-pagination',
-     itemsPerPage: Limit,  totalItems: TotalCount | async, currentPage: CurrentPage}">
+     itemsPerPage: Limit,  totalItems: TotalNumberOfItem | async, currentPage: PageNumber}">
         <app-project-item [ProjectItem]="project"></app-project-item>
     </div>
 </div>
