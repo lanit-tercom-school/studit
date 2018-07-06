@@ -3,7 +3,7 @@
   <hr>
   <div class="row">
     <div class="col-sm-12 col-md-5 col-lg-3 offset-lg-2" align = "center">
-        <img id = "user-avatar" src="{{CurrentUser.value.User.Avatar}}" alt="Student photo">
+        <img id = "user-avatar" src="{{CurrentUser.User.Avatar}}" alt="Student photo">
         <br>
         <button  role="button" class="bfp btn btn-secondary btn-submit">Изменить изображение</button>
     </div>
@@ -12,7 +12,7 @@
             <legend>Личные данные</legend>
           <div class="form-inline">
             <label class="col-sm-2 col-md-3 col-lg-2 col-form-label">Nickname</label>
-            <input class="form-control" placeholder={{CurrentUser.value.User.Nickname}}>
+             <input name="nickname" class="form-control" [(ngModel)]="CurrentUser.User.Nickname">
           </div>
         <button type="submit" role="button" class="btn btn-secondary btn-submit">Подтвердить</button>
        </form>
@@ -21,7 +21,7 @@
            <legend>Контакты</legend>
            <div class="form-inline">
             <label class="col-sm-2 col-md-3 col-lg-2 col-form-label" for="inputEmail">E-mail<sup>*</sup></label>
-            <input class="form-control" id="inputEmail" placeholder="E-mail">
+            <input name="email" class="form-control" [(ngModel)]="CurrentUser.User.Login">
            </div>
           <div class="form-inline">
            <label class="col-sm-2 col-md-3  col-lg-2 col-form-label" for="inputPhone">Телефон</label>
@@ -41,7 +41,7 @@
           <legend>Дополнительная информация</legend>
            <form class="form-inline">
             <label class="col-sm-2 col-md-3 col-lg-2 col-form-label" for="inputDescription">О себе</label>
-            <textarea class=" form-control" id = "inputDescription">{{CurrentUser.value.User.Description}}</textarea>
+            <textarea class=" form-control" id = "inputDescription">{{CurrentUser.User.Description}}</textarea>
           </form>
           <button type="submit" role="button" class="btn btn-secondary btn-submit">Подтвердить</button>
         </form>

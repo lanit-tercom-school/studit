@@ -49,6 +49,7 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
     this.data.ProjectForViewing.subscribe(res => {
       if (res != null)
         this.ProjectObs.next(res);
+        console.log(res);
     });
 
   }

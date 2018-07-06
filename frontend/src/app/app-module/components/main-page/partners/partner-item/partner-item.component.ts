@@ -8,7 +8,6 @@ import { Component, OnInit, Input } from '@angular/core';
 export class PartnerItemComponent implements OnInit {
 
   @Input() PartnerItem;
-
   constructor() { }
 
   ngOnInit() {

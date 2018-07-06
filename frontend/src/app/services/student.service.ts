@@ -9,6 +9,7 @@ import { ProjectItem } from "models/project-item";
 import { Message } from "models/message";
 import { ProjectTaskItem } from "models/project-task-item";
 import { EnrollItem } from "models/enroll-item";
+import { ProjectShort } from 'models/project-short';
 
 import { environment } from '../../environments/environment';
 
@@ -38,6 +39,38 @@ export class StudentService {
     return this.http.get(environment.apiUrl + '/graphql?query=' + query, { headers: headers }).map(res => {
       return res.json().data.Enroll.Project;
     });
+  }
+
+  getProjectByUsers(id: number): Observable<ProjectShort[]> {
+    let variable = { id: id };
+    let query = `
+          query($id:ID){
+            User(Id: $id){
+              ProjectOn{
+                Project{
+                  Name,
+                  Id,
+                  Logo
+                }
+              }
+            }
+    }&variables=`+ JSON.stringify(variable);
+    let headers = new Headers();
+    headers.append('Accept', 'application/json');
+    headers.append('Authorization', 'Bearer ' + JSON.parse(localStorage.getItem('current_user')).Token);
+    return this.http.get(environment.apiUrl + '/graphql?query=' + query, { headers: headers })
+      .map(response => {
+        let projects: ProjectShort[] = [];
+        response.json().data.User.ProjectOn.forEach(element => {
+          let project: ProjectShort = {
+            id: element.Project.Id,
+            name: element.Project.Name,
+            logo: element.Project.Logo
+          }
+          projects.push(project);
+        });
+        return projects;
+      });
   }
 
   //Отменить заявку на участие в проекте

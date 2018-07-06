@@ -25,6 +25,16 @@
   margin-top: 1rem;
   width:100%;
 }
+.btn-primary{
+    margin-bottom: 2rem;
+    background-color: var(--logo-color);
+    border-color: var(--dark-logo-color);
+}
+
+.btn-primary:hover{
+    background-color: var(--dark-logo-color);
+    border-color: var(--dark-logo-color);
+}
 
 img{
   width:100%;
