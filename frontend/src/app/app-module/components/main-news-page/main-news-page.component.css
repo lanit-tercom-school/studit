@@ -49,3 +49,7 @@ img{
 .modal-body{
   margin-bottom: 0rem;
 }
+textarea{
+  resize: none;
+  height: 15rem;
+}
