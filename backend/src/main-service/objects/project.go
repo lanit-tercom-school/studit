@@ -26,6 +26,12 @@ type Project struct {
 	GitHubUrl      string    `json:"GitHubUrl"`
 }
 
+type ProjectsSet struct {
+	TotalCount    int
+	FilteredCount int
+	ProjectsList  []Project
+}
+
 //ProjectType - grqphql объект проекта
 var ProjectType = gql.NewObject(
 	gql.ObjectConfig{
@@ -54,6 +60,23 @@ var ProjectType = gql.NewObject(
 			},
 			"GitHubUrl": &gql.Field{
 				Type: gql.String,
+			},
+		},
+	},
+)
+
+var ProjectsSetType = gql.NewObject(
+	gql.ObjectConfig{
+		Name: "ProjectsSet",
+		Fields: gql.Fields{
+			"TotalCount": &gql.Field{
+				Type: gql.String,
+			},
+			"FilteredCount": &gql.Field{
+				Type: gql.String,
+			},
+			"ProjectsList": &gql.Field{
+				Type: gql.NewList(ProjectType),
 			},
 		},
 	},
@@ -119,7 +142,7 @@ func ResolveGetProjectList(p gql.ResolveParams) (interface{}, error) {
 		err := errors.New("missed Offset")
 		return nil, err
 	}
-	var project []Project
-	err := helpers.HttpGet(conf.Configuration.DataServiceURL+"v1/project/?limit="+limit+"&offset="+offset, &project)
-	return project, err
+	var set ProjectsSet
+	err := helpers.HttpGet(conf.Configuration.DataServiceURL+"v1/project/?limit="+limit+"&offset="+offset, &set)
+	return set, err
 }

@@ -3,8 +3,6 @@ package models
 import (
 	"errors"
 	"fmt"
-	"reflect"
-	"strings"
 	"time"
 
 	"github.com/astaxie/beego/orm"
@@ -19,6 +17,14 @@ type Project struct {
 	Tags        []string  `orm:"-"`
 	Status      string    `orm:"column(status)"`
 	GitHubUrl   string    `orm:"column(githuburl)"`
+}
+
+type ProjectsJSONSet struct {
+	Arr string `orm:"type(json)"`
+}
+
+func (set ProjectsJSONSet) MarshalJSON() ([]byte, error) {
+	return []byte(set.Arr), nil
 }
 
 func init() {
@@ -47,80 +53,80 @@ func GetProjectById(id int) (v *Project, err error) {
 
 // GetAllProject retrieves all Project matches certain condition. Returns empty list if
 // no records exist
-func GetAllProject(query map[string]string, fields []string, sortby []string, order []string,
-	offset int64, limit int64) (ml []interface{}, err error) {
+func GetAllProject(fields []string, sortby []string, order []string,
+	offset int64, limit int64) (interface{}, error) {
 	o := orm.NewOrm()
-	qs := o.QueryTable(new(Project))
-	// query k=v
-	for k, v := range query {
-		// rewrite dot-notation to Object__Attribute
-		k = strings.Replace(k, ".", "__", -1)
-		if strings.Contains(k, "isnull") {
-			qs = qs.Filter(k, (v == "true" || v == "1"))
-		} else {
-			qs = qs.Filter(k, v)
-		}
-	}
-	// order by:
-	var sortFields []string
-	if len(sortby) != 0 {
-		if len(sortby) == len(order) {
-			// 1) for each sort field, there is an associated order
-			for i, v := range sortby {
-				orderby := ""
-				if order[i] == "desc" {
-					orderby = "-" + v
-				} else if order[i] == "asc" {
-					orderby = v
-				} else {
-					return nil, errors.New("Error: Invalid order. Must be either [asc|desc]")
-				}
-				sortFields = append(sortFields, orderby)
-			}
-			qs = qs.OrderBy(sortFields...)
-		} else if len(sortby) != len(order) && len(order) == 1 {
-			// 2) there is exactly one order, all the sorted fields will be sorted by this order
-			for _, v := range sortby {
-				orderby := ""
-				if order[0] == "desc" {
-					orderby = "-" + v
-				} else if order[0] == "asc" {
-					orderby = v
-				} else {
-					return nil, errors.New("Error: Invalid order. Must be either [asc|desc]")
-				}
-				sortFields = append(sortFields, orderby)
-			}
-		} else if len(sortby) != len(order) && len(order) != 1 {
-			return nil, errors.New("Error: 'sortby', 'order' sizes mismatch or 'order' size is not 1")
-		}
-	} else {
-		if len(order) != 0 {
-			return nil, errors.New("Error: unused 'order' fields")
-		}
+	orderSort, err := GetOrderBySort(sortby, order)
+	if err != nil {
+		fmt.Println(err)
+		return nil, err
 	}
 
-	var l []Project
-	qs = qs.OrderBy(sortFields...)
-	if _, err = qs.Limit(limit, offset).All(&l, fields...); err == nil {
-		if len(fields) == 0 {
-			for _, v := range l {
-				ml = append(ml, v)
-			}
-		} else {
-			// trim unused fields
-			for _, v := range l {
-				m := make(map[string]interface{})
-				val := reflect.ValueOf(v)
-				for _, fname := range fields {
-					m[fname] = val.FieldByName(fname).Interface()
-				}
-				ml = append(ml, m)
+	var set ProjectsJSONSet
+
+	err = o.Raw(`
+		SELECT row_to_json(t) arr
+		  FROM (SELECT COUNT(*) "TotalCount"
+			 , (SELECT COUNT(*) "FilteredCount"
+				  FROM project)
+			 , (SELECT array_to_json(array_agg(row_to_json(d))) "ProjectsList"
+				  FROM (SELECT id "Id", created "Created", description "Description", logo "Logo"
+					  , name "Name", status "Status",  tags "Tags", githuburl "Githuburl"
+						  FROM project`+orderSort+`
+						OFFSET $1 LIMIT $2 ) d)
+				  FROM project) t`, offset, limit).QueryRow(&set)
+	if err != nil {
+		fmt.Println(err)
+		return nil, err
+	}
+
+	return set, nil
+
+}
+
+func GetOrderBySort(sortby, order []string) (string, error) {
+	if err := Check(sortby); err != nil {
+		return "", err
+	}
+
+	var result string
+	switch len(order) {
+	case 0:
+		if len(sortby) != 0 {
+			return "", errors.New("Error: Insufficient number of order")
+		}
+		// there is exactly one orders, all the sorted fields will be sorted by this orders
+	case 1:
+		for _, v := range sortby {
+			switch order[0] {
+			case "desc", "asc":
+				result += v + " " + order[0] + ", "
+			default:
+				return "", errors.New("Error: Invalid orders. Must be either [asc|desc]")
 			}
 		}
-		return ml, nil
+		// there is an orders for each sorted fields
+	case len(sortby):
+		for i, v := range sortby {
+			switch order[i] {
+			case "desc", "asc":
+				result += v + " " + order[i] + ", "
+			default:
+				return "", errors.New("Error: Invalid orders. Must be either [asc|desc]")
+			}
+		}
+	default:
+		if len(sortby) == 0 {
+			return "", errors.New("Error: Unused 'orders' fields")
+		}
+		return "", errors.New("Error: 'sortCols' and 'orders' sizes mismatch or 'orders' size is not 1")
 	}
-	return nil, err
+
+	if len(result) > 0 {
+		result = "ORDER BY " + result[:len(result)-2]
+	}
+
+	return result, nil
 }
 
 // UpdateProject updates Project by Id and returns error if
