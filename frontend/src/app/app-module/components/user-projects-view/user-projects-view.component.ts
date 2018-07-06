@@ -9,12 +9,12 @@ import { ProjectShort } from 'models/project-short';
   styleUrls: ['./user-projects-view.component.css']
 })
 export class UserProjectsViewComponent implements OnInit {
- @Input() public UsersProjectList: BehaviorSubject<ProjectShort[]>;
+  @Input() public UsersProjectList: BehaviorSubject<ProjectShort[]>;
 
   constructor() { }
 
   ngOnInit() {
-    this.UsersProjectList.subscribe(data=>console.log(data));
+
   }
 
 }

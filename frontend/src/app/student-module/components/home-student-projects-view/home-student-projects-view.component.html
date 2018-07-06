@@ -1,6 +1,14 @@
 <div class="row">
-  <div class="col-sm-offset-1"> 
+  <div class="col-sm-offset-1" *ngIf="(ProjectList | async).length!==0"> 
     <h3>Ваши проекты</h3>
+  </div>
+  <div class="col-sm-offset-1" *ngIf="(ProjectList | async).length===0"> 
+    <div class="row">
+    <h3>Кажется, у вас еще нет проектов :(</h3>
+  </div>
+  <div class="row">
+    <a routerLink="/projects">Выбрать себе проект</a>
+  </div>
   </div>
 </div>
     <div *ngFor="let Project of ProjectList | async" class="card card-outline">
