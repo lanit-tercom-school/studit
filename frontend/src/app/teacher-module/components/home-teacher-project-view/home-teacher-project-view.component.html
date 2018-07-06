@@ -7,7 +7,7 @@
   </div>
   <div *ngFor="let Project of ProjectList | async" class="card card-outline">
     <div class="row">
-      <div class="card col-sm-2 col-sm-offset-1">
+      <div class="card col-sm-2 hidden-xs col-sm-offset-1">
         <img class="card-img" src="{{Project.Logo}}" >
       </div>
       <div class="col-sm-8 project-info">

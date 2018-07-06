@@ -51,6 +51,7 @@ export class TeacherService {
                             {
                               Id
                               Name
+                              Logo
                             }
                             User{
                               Nickname
