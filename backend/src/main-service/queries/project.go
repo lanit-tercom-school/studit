@@ -20,7 +20,7 @@ func init() {
 		Resolve: objects.ResolveGetProjectById,
 	}
 	GetProjectList = gql.Field{
-		Type: gql.NewList(objects.ProjectType),
+		Type: objects.ProjectsSetType,
 		Args: gql.FieldConfigArgument{
 			"Limit": &gql.ArgumentConfig{
 				Type: gql.String,

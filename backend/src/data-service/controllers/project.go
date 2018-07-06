@@ -3,6 +3,7 @@ package controllers
 import (
 	"data-service/models"
 	"encoding/json"
+	"fmt"
 	"strconv"
 	"strings"
 
@@ -84,7 +85,7 @@ func (c *ProjectController) GetAll() {
 	var fields []string
 	var sortby []string
 	var order []string
-	var query = make(map[string]string)
+	//var query = make(map[string]string)
 	var limit int64 = 10
 	var offset int64
 
@@ -108,22 +109,8 @@ func (c *ProjectController) GetAll() {
 	if v := c.GetString("order"); v != "" {
 		order = strings.Split(v, ",")
 	}
-	// query: k:v,k:v
-	if v := c.GetString("query"); v != "" {
-		for _, cond := range strings.Split(v, ",") {
-			kv := strings.SplitN(cond, ":", 2)
-			if len(kv) != 2 {
-				c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
-				c.Data["json"] = MakeMessageForSending("Error: invalid query key/value pair")
-				c.ServeJSON()
-				return
-			}
-			k, v := kv[0], kv[1]
-			query[k] = v
-		}
-	}
 
-	l, err := models.GetAllProject(query, fields, sortby, order, offset, limit)
+	l, err := models.GetAllProject(fields, sortby, order, offset, limit)
 	if err != nil {
 		c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
 		c.Data["json"] = MakeMessageForSending(err.Error())
@@ -131,6 +118,7 @@ func (c *ProjectController) GetAll() {
 		c.Ctx.Output.SetStatus(HTTP_OK)
 		c.Data["json"] = l
 	}
+	fmt.Println(l)
 	c.ServeJSON()
 }
 
