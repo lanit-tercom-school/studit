@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { Observable } from "rxjs/Observable";
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-
+import { FileService } from 'services/file.service';
+import { StudentService } from "services/student.service";
 import { UserService } from "services/user.service";
 import { CurrentUser } from 'models/current-user';
 
@@ -15,7 +16,7 @@ export class StudentSettingsPageComponent implements OnInit {
 
   public CurrentUser: CurrentUser = {
     User: {
-      Avatar: 'http://atom96.ru/wp-content/uploads/2017/10/%D0%BD%D0%B5%D1%82-%D1%84%D0%BE%D1%82%D0%BE.png',
+      Avatar: './assets/no_image.png',
       Description: '',
       Id: -1,
       Login: '',
@@ -31,8 +32,9 @@ export class StudentSettingsPageComponent implements OnInit {
   public NewPasswordAgain = '';
   private error: any;
   private email: string;
-  constructor(private userService: UserService,
-    private route: ActivatedRoute) { }
+  public IsCreated = false;
+  constructor(private userService: UserService, private studentService: StudentService,
+    private route: ActivatedRoute,  private fileService: FileService) { }
 
   ngOnInit() {
     this.CurrentUser.User.Login = JSON.parse(localStorage.getItem('current_user')).User.Login;
@@ -48,6 +50,19 @@ export class StudentSettingsPageComponent implements OnInit {
       });
     this.email = JSON.parse(localStorage.getItem('current_user')).User.Id;
   }
+  load(event) {
+  this.fileService.uploadFiles(event.target.files).subscribe(res => {
+    this.CurrentUser.User.Avatar = res;
+  });
+  }
+  /* makeAvatar() {
+    this.studentService.postNewAvatar(JSON.parse(localStorage.getItem('current_user')).Token, this.CurrentUser.User.Avatar)
+      .subscribe(() => {
+        console.log('Avatar was changed');
+        this.IsCreated = true;
+        // this.router.navigate(['/home']);
+      });
+  } */
 
   ShowHide() {
     if (!this.Clicked) {

@@ -1,6 +1,10 @@
+@import url('https://fonts.googleapis.com/css?family=Jura');
 ul{
   padding:0;
 }
 h5{
+  font-family: 'Jura', sans-serif;
+  font-weight: bold;
+  font-size: 20px;
   margin-top: 2rem;
 }

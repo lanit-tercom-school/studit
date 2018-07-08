@@ -3,9 +3,9 @@
   <hr>
   <div class="row">
     <div class="col-sm-12 col-md-5 col-lg-3 offset-lg-2" align="center">
-      <img id="user-avatar" src="{{CurrentUser.User.Avatar}}" alt="Student photo">
-      <br>
-      <button role="button" class="bfp btn btn-secondary btn-submit">Изменить изображение</button>
+      <img id="user-avatar" src={{CurrentUser.User.Avatar}} alt="Student photo">
+					<input type="file" (change)="load($event)" accept=".jpg,.png" size="5">
+          <button type="button" class="btn btn-primary" (click)="makeAvatar()" data-dismiss="modal">Подтвердить</button>
     </div>
     <div class="col-sm-12 col-md-5 col-lg-7" align="left">
       <form class="block-form">
@@ -14,7 +14,7 @@
           <label class="col-sm-2 col-md-3 col-lg-2 col-form-label">Nickname</label>
           <input name="nickname" class="form-control" [(ngModel)]="CurrentUser.User.Nickname">
         </div>
-        <button type="submit" role="button" class="btn btn-secondary btn-submit">Подтвердить</button>
+        <button type="submit" role="button" class="btn btn-primary">Подтвердить</button>
       </form>
 
       <form class="block-form">
@@ -35,7 +35,7 @@
           <input type="checkbox" value="contactsHidden"> Не показывать контакты на моей странице
         </label>
         <br>
-        <button type="submit" role="button" class="btn btn-secondary btn-submit">Подтвердить</button>
+        <button type="submit" role="button" class="btn btn-primary">Подтвердить</button>
       </form>
 
       <form class="block-form">
@@ -46,13 +46,13 @@
             <textarea class="form-control" id="inputDescription" maxlength="300">{{CurrentUser.User.Description}}</textarea>
           </div>
         </form>
-        <button type="submit" role="button" class="btn btn-secondary btn-submit">Подтвердить</button>
+        <button type="submit" role="button" class="btn btn-primary">Подтвердить</button>
       </form>
 
       <form class="block-form">
-        <legend>Управление доступом </legend>
-        <button class="btn btn-secondary btn-submit" *ngIf="!Clicked" role="button" (click)="ShowHide()">Сменить пароль</button>
-        <button class="btn btn-secondary btn-submit" *ngIf="Clicked" role="button" (click)="ShowHide()">Скрыть</button>
+        <legend>Изменение пароля</legend>
+        <button class="btn btn-primary" *ngIf="!Clicked" role="button" (click)="ShowHide()">Сменить пароль</button>
+        <button class="btn btn-default" *ngIf="Clicked" role="button" (click)="ShowHide()">Скрыть</button>
         <span *ngIf="IsChanged">
           <p class="text-success">Пароль успешно изменен.</p>
         </span>
@@ -69,7 +69,7 @@
             <label class="col-sm-2 col-md-3 col-lg-3  col-form-label">Повторите пароль</label>
             <input type="password" [(ngModel)]="NewPasswordAgain" name="newPasswordAgain" class="form-control">
           </div>
-          <button type="submit" role="button" (click)="ChangePassword()" class="btn btn-secondary btn-submit">Подтвердить</button>
+          <button type="submit" role="button" (click)="ChangePassword()" class="btn btn-primary">Подтвердить</button>
         </form>
       </form>
     </div>
