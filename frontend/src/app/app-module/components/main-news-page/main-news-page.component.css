@@ -40,17 +40,6 @@ h1 {
     border-color: var(--dark-logo-color);
 }
 
-.btn-default{
-  background-color: var(--accent-color);
-  border-color: var(--dark-accent-color);
-  color: white;
-}
-
-.btn-default:hover{
-  background-color: var(--dark-accent-color);
-  border-color: var(--dark-accent-color);
-  color: white;
-}
 
 img{
   margin-bottom: 1rem;
