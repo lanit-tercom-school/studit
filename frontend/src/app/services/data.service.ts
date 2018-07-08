@@ -205,9 +205,7 @@ export class DataService {
   loadEnrolledUsersProject() {
     if (localStorage.getItem('current_user')) {
       this.studentService.getEnrolledUsersProject(this.userId, this.userToken).subscribe(res => {
-
         this.dataStore.userEnrolledProjects = res;
-        //console.log(this.dataStore.userEnrolledProjects);
         this.userEnrolledProjects.next(Object.assign({}, this.dataStore).userEnrolledProjects);
       })
     } else {

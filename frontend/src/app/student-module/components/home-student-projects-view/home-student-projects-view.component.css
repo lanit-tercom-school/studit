@@ -56,3 +56,9 @@ h3{
 .message{
     font-size: 14px;
 }
+img {
+    
+    -webkit-box-shadow: 7px 12px 15px 0px rgba(0, 0, 0, 0.62);
+    -moz-box-shadow: 7px 12px 15px 0px rgba(0, 0, 0, 0.62);
+    box-shadow: 7px 12px 15px 0px rgba(0, 0, 0, 0.62);
+}

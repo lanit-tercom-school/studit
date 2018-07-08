@@ -68,7 +68,7 @@ export class TeacherService {
       .map((response: Response) => {
         let Enrolls: EnrollItem[] = new Array<EnrollItem>();
         response.json().data.User.ProjectOn.forEach(element => {
-          if (element.Enrolls.length != 0) {
+          if (element.Enrolls.length !== 0) {
             element.Enrolls.forEach(e => {
               Enrolls.push(e)
             });
@@ -79,7 +79,7 @@ export class TeacherService {
   }
 
   postUserToProject(user_id: number, project_id: number, token: string): Observable<ProjectItem> {// Добавить пользователя в проект
-    var variable = { user_id: user_id, project_id: project_id };
+    let variable = { user_id: user_id, project_id: project_id };
     let query = `mutation($user_id:Int! $project_id:Int!)
     {
       PostProjectOn(User:$user_id Project:$project_id){

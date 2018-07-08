@@ -4,7 +4,7 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/observable/throw';
-
+import { UserInfo } from 'models/user-info';
 import { ProjectItem } from "models/project-item";
 import { Message } from "models/message";
 import { ProjectTaskItem } from "models/project-task-item";
@@ -41,6 +41,28 @@ export class StudentService {
     });
   }
 
+  postNewAvatar(token: string, avatar: string): Observable<UserInfo[]> {
+    let variable = {avatar: avatar };
+    console.log(JSON.stringify(variable));
+    let query = `mutation ($title: String!, $description: String!, $image: String!) {
+      PostNews(Title: $title, Description: $description, Image: $image) {
+        Created
+        Description
+        Id
+        Image
+        LastEdit
+        Tags
+        Title
+      }
+    }  
+ &variables=` + JSON.stringify(variable);
+    let headers = new Headers();
+    headers.append('Authorization', 'Bearer ' + token);
+    return this.http.get(environment.apiUrl + '/graphql?query=' + query, { headers: headers })
+      .map((response: Response) => {
+        return response.json().data.PostNews;
+      });
+  }
   getProjectByUsers(id: number): Observable<ProjectShort[]> {
     let variable = { id: id };
     let query = `
@@ -103,6 +125,7 @@ export class StudentService {
           {
             Id
             Name
+            Logo
           }
         }
   }
