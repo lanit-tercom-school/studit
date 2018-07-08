@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css?family=Jura');
+
 #main-info
 {
     padding: 1rem;
@@ -7,55 +8,17 @@
     margin-top: 3.5rem;   
 }
 
-#photo-and-rating
-{
-    display: flex;
-    flex-direction: column;
-}
-
 #project-img
 {
     margin-bottom: 1rem;
 }
 
-.container
-{
-    margin-bottom: 3rem;
-}
-
-#rating-change
-{
-    display: flex;
-    justify-content: space-around;
-}
-
-#current-rating
-{
-    display: flex;
-    justify-content: center;
-}
-
-#author-photo
-{
-    display: flex;
-    justify-content: center;
-}
 
 #projects-and-courses
 {
     margin-top: 3rem;
 }
 
-#project-course-card
-{
-    min-height: 11rem;
-    background: whitesmoke;
-    width: 100%;
-    padding: 0.5rem 0.5rem;
-    margin: 1rem auto;
-    text-align: right;
-    border: 1px solid gainsboro;
-}
 
 p
 {
@@ -63,21 +26,7 @@ p
 
 }
 
-#author-ul
-{
-    padding: 0;
-}
 
-#author-li
-{
-    list-style-type: none;
-}
-
-.card-link
-{
-    color:inherit;
-    text-decoration:none;
-}
 h3{
     font-family: 'Jura', sans-serif;
     font-weight: bold;

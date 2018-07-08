@@ -14,5 +14,6 @@ h1
     min-height: 15rem;
 }
 .partner-item{
-    height: 20rem;    
+    height: 20rem; 
+    margin-bottom: 1rem;   
 }
