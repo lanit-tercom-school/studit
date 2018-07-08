@@ -6,12 +6,6 @@
     background: whitesmoke; 
 }
 
-#photo-and-rating
-{
-    display: flex;
-    flex-direction: column;
-}
-
 #project-img
 {
     margin-bottom: 1rem;
@@ -36,8 +30,8 @@
 
 #author-photo
 {
-    display: flex;
-    justify-content: center;
+    width: 225px;
+    height: 225px;
 }
 
 #projects-and-courses

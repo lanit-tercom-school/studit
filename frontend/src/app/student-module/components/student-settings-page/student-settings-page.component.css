@@ -1,7 +1,4 @@
 @import url('https://fonts.googleapis.com/css?family=Jura');
-.container
-{
-}
 
 h1{
   margin: 2rem auto;
@@ -16,14 +13,6 @@ h1{
     height: 225px;
 }
 
-#inputDescription
-{
-   max-width: 40%;
-   min-width: 40%;
-   max-height: 5rem;
-   min-height: 5rem;
-   text-align: left;
-}
 
 .btn-submit
 {
@@ -59,6 +48,8 @@ legend{
    font-family: 'Jura', sans-serif;
     font-weight: bold;
 }
-.bfp{
-  margin-top: 2rem;
+
+textarea{
+  resize: none;
+  height: 8rem;
 }

@@ -7,13 +7,7 @@ h1
     font-family: 'Jura', sans-serif;
     font-size: 3.5rem;
 }
-.name_of_technologies{
-    text-align: center;
-    color: white;
-    font-family: 'Jura', sans-serif;
-    font-size: 3.5rem;
-    cursor: pointer;
-}
+
 
 .logo_of_technologies{
     max-height: 15rem;

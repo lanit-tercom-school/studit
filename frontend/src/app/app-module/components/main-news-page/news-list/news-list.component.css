@@ -1,3 +1,4 @@
 .news-list{
     height: 4%;
+    overflow: hidden;
 }

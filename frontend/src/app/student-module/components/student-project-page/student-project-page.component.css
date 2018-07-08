@@ -8,13 +8,7 @@
     margin: 0rem 0rem 0rem 0rem;
 }
 
-.container
-{
-    margin-top: 3rem;
-    background: white;
-    margin-bottom: 3rem;
-    padding-right: 0rem;  
-}
+
   .status{
     margin-top:1rem;
     text-align: center;
@@ -22,11 +16,11 @@
 
 .btn
 {
-  margin-top: 1rem;
+  margin-top: 0rem;
   width:100%;
 }
 .btn-primary{
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
     background-color: var(--logo-color);
     border-color: var(--dark-logo-color);
 }
@@ -40,10 +34,10 @@ img{
   width:100%;
 }
 
-#enrollMessage
+#EnrollMessage
 {
    width: 100%;
-   height: 5rem;
+   height: 8rem;
    text-align: left;
 }
 .modal-header
@@ -65,4 +59,7 @@ h2{
 }
 .project-description{
   font-size: 1.5rem;
+}
+textarea{
+  resize: none;
 }

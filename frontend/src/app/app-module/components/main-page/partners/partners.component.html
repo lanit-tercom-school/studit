@@ -2,8 +2,8 @@
   <h1>Партнёры</h1>
   <div class="row shift col-sm-12 hidden-xs">
   </div>
-  <div class="partners-list row">
-    <div *ngFor="let partner of PartnersList" class="col-xs-12 col-sm-4 partner-item">
+  <div class="row">
+    <div *ngFor="let partner of PartnersList" class="col-sm-4 partner-item">
       <app-partner-item [PartnerItem]="partner"></app-partner-item>
     </div>
   </div>
