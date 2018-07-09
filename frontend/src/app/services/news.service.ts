@@ -31,7 +31,6 @@ export class NewsService {
           Description
           Created
           LastEdit
-          Tags
           Image
           Id
         }

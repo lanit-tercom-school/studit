@@ -1,6 +1,6 @@
 export enum PermLevel
 {
-    Student, 
-    Teacher, 
+    Student,
+    Teacher,
     Admin
 }

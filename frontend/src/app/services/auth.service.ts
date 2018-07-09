@@ -19,8 +19,8 @@ export class AuthService {
     constructor(private http: Http) { }
 
     authenticatenow(user: User) {
-        var variables = { login: user.login, password: user.password };
-        var query = `mutation ($login: String $password: String)
+        let variables = { login: user.login, password: user.password };
+        let query = `mutation ($login: String $password: String)
     {
       Auth
       {
@@ -74,8 +74,8 @@ export class AuthService {
     }
 
     register(user: UserRegister) {
-        var variables = { login: user.login, nickname: user.nickname, password: user.password };
-        var query = `mutation ($login: String $nickname: String $password: String)
+        let variables = { login: user.login, nickname: user.nickname, password: user.password };
+        let query = `mutation ($login: String $nickname: String $password: String)
     {
       Auth
       {
