@@ -4,7 +4,6 @@ export class NewsItem {
   Created: string;
   LastEdit: string;
   Id: 0;
-  Tags: {};
   Image: string;
 
 }

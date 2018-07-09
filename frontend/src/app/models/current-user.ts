@@ -6,16 +6,17 @@ export class CurrentUser {
     constructor() {
         this.User = {
             Id: 0,
-            Nickname: "",
-            Description: "",
-            Avatar: "",
-            Login: ""
+            Nickname: '',
+            Description: '',
+            Avatar: '',
+            Login: ''
         };
-        this.Token = "";
+        this.Token = '';
         this.PermissionLevel = PermLevel.Student;
-        this.DataOfExpiration = ""; 
+        this.DataOfExpiration = '';
     }
 
+    // tslint:disable-next-line:member-ordering
     User: {
         Id: number,
         Nickname: string,
