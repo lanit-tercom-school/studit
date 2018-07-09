@@ -4,7 +4,7 @@
 			<div class="col-sm-2">
 				<h1>Новости</h1>
 			</div>
-			<a *ngIf='CurrentUser.PermissionLevel!=0'>
+			<a *ngIf='CurrentUser && ((CurrentUser.PermissionLevel==1)||(CurrentUser.PermissionLevel==2))'>
 				<div class="col-sm-1">
 					<button type="button" class="btn btn-news btn-primary" data-toggle="modal" data-target="#enrollNewsModal">+</button>
 				</div>
