@@ -2,6 +2,7 @@
 {
     margin-bottom: 3rem;
     word-wrap: break-word;
+    padding: 0rem;
 }
 
 .row{
@@ -12,6 +13,7 @@
 {
     max-width: 16rem;
     max-height: 20rem;
+    margin: 0rem;
 }
 .project-info
 {
