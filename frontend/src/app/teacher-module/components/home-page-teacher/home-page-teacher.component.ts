@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { NavigationEnd } from '@angular/router';
+import { Router, } from '@angular/router';
 
 @Component({
   selector: 'app-home-page-teacher',
@@ -17,6 +18,11 @@ export class HomePageTeacherComponent implements OnInit {
 
   ngOnInit() {
     this.CurrentUrl = this.router.url.valueOf();
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        this.CurrentUrl = this.router.url.valueOf();
+      }
+    });
   }
 
   public chooseSection(section: string) {
