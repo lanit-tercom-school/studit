@@ -38,6 +38,7 @@ export class StudentSettingsPageComponent implements OnInit {
 
   ngOnInit() {
     this.CurrentUser.User.Login = JSON.parse(localStorage.getItem('current_user')).User.Login;
+    console.log(CurrentUser);
     this.route.params
       .subscribe(params => {
         this.userService.getUserById(JSON.parse(localStorage.getItem('current_user')).User.Id)

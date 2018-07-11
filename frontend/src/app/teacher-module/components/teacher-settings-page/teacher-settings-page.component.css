@@ -9,20 +9,24 @@ h1{
 #user-avatar
 {
     margin-top: 2rem;
+    margin-bottom: 1rem;
     width: 225px;
     height: 225px;
 }
 
-.btn-submit
-{
-  margin-top: 0.75rem;
-  margin-bottom: 0.5rem;
+.btn-primary{
+  background-color: var(--logo-color);
+  border-color: var(--dark-logo-color);
 }
 
-.btn-add
-{
-  border-radius: 30px;
+.btn-primary:hover{
+  background-color: var(--dark-logo-color);
+  border-color: var(--dark-logo-color);
 }
+.btm-default{
+  margin-top: 0rem;
+}
+
 .list-group
 {
   width: 50%;
