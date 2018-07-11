@@ -28,7 +28,8 @@
 				<h4 class="modal-title">Изображение новости</h4>
 			</div>
 			<div class="modal-image col-sm-offset-1">
-				<img id="project-avatar" src={{CreatedNews.Image}} alt="News photo">
+				<img *ngIf='CreatedNews.Image' id="project-avatar" src={{CreatedNews.Image}} alt="News photo">
+				<img *ngIf='!CreatedNews.Image' id="project-avatar" src='./assets/no_image.png' alt="News photo">
 				<input type="file" (change)="load($event)" accept=".jpg,.png" size="5">
 			</div>
 			<div class="modal-header">

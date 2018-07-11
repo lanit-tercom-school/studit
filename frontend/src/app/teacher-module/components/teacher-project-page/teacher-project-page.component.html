@@ -3,7 +3,8 @@
   <div class="card card-outline">
     <div class="row" id="main-info">
       <div class="col-sm-3" id="project-img-status">
-        <img class="card-img" src="{{ProjectObs.value.Logo}}" alt="Project image">
+        <img *ngIf='ProjectObs.value.Logo' class="card-img" src="{{ProjectObs.value.Logo}}" alt="Project image">
+        <img *ngIf='!ProjectObs.value.Logo' class="card-img" src="./assets/no_image.png" alt="Project image">
         <div *ngIf="EnrollButtonStatus=='InProject'" class="status">
           <h5 id="status">Вы куратор проекта</h5>
         </div>

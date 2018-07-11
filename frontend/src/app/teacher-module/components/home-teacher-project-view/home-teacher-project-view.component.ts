@@ -8,6 +8,7 @@ import { TeacherService } from 'services/teacher.service';
 import { StudentService } from 'services/student.service';
 import { DataService } from 'services/data.service';
 import { FileService } from 'services/file.service';
+import { TestImageService } from 'services/testImage.service';
 
 @Component({
   selector: 'app-home-teacher-project-view',
@@ -24,12 +25,19 @@ export class HomeTeacherProjectViewComponent implements OnInit {
     private data: DataService,
     private http: Http,
     private fileService: FileService,
-    private studentService: StudentService
+    private studentService: StudentService,
+    private testImageService: TestImageService
    ) {};
 
   ngOnInit() {
     this.ProjectList = this.data.UserProjects;
-    this.CreatedProject.Logo = './assets/no_image.png';
+    this.ProjectList.subscribe(data => {
+      data.forEach(item => {
+        this.testImageService.testImage(item.Logo, ()=> {
+          item.Logo = "";
+        });
+      })
+    });
   }
   
   load(event) {

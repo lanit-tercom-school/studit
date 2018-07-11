@@ -54,6 +54,7 @@ import { UserPublicPageComponent } from './components/user-public-page/user-publ
 import { ErrorPageComponent } from './components/error-page/error-page.component';
 import { TechnologiesComponent } from './components/main-page/technologies/technologies.component';
 import { UserProjectsViewComponent } from './components/user-projects-view/user-projects-view.component';
+import { TestImageService } from 'services/testImage.service';
 
 
 @NgModule({
@@ -106,7 +107,8 @@ import { UserProjectsViewComponent } from './components/user-projects-view/user-
     TaskService,
     AuthService,
     DataService,
-    PathManager
+    PathManager,
+    TestImageService
     ],
   bootstrap: [AppComponent]
 })

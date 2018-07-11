@@ -8,7 +8,8 @@
   <div *ngFor="let Project of ProjectList | async" class="card card-outline">
     <div class="row">
       <div class="card col-sm-2 hidden-xs col-sm-offset-1">
-        <img class="card-img" src="{{Project.Logo}}">
+        <img *ngIf='Project.Logo' class="card-img" src="{{Project.Logo}}">
+        <img *ngIf='!Project.Logo' class="card-img" src="./assets/no_image.png">
       </div>
       <div class="col-sm-8 project-info">
         <p class="lead">{{Project.Name}}</p>
@@ -46,7 +47,8 @@
           <h4 class="modal-title">Изображение проекта</h4>
         </div>
         <div class="modal-image col-sm-offset-1">
-          <img id="project-avatar" src={{CreatedProject.Logo}} alt="Project photo">
+          <img *ngIf='CreatedProject.Logo' id="project-avatar" src={{CreatedProject.Logo}} alt="Project photo">
+          <img *ngIf='!CreatedProject.Logo' id="project-avatar" src='./assets/no_image.png' alt="Project photo">
           <input type="file" (change)="load($event)" accept=".jpg,.png" size="5">
         </div>
         <div class="modal-header">
