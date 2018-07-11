@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers, RequestOptions, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
+import * as moment from 'moment';
 
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
@@ -16,7 +17,9 @@ import { UserRegister } from 'models/user-register';
 export class AuthService {
     //TODO: Add types to all methods!
 
-    constructor(private http: Http) { }
+    constructor(private http: Http) {
+        this.checktoken();
+    }
 
     authenticatenow(user: User) {
         let variables = { login: user.login, password: user.password };
@@ -38,7 +41,7 @@ export class AuthService {
             }
          }
     }
-    } &variables=`+ JSON.stringify(variables);
+    } &variables=` + JSON.stringify(variables);
         return this.http.get(environment.apiUrl + '/graphql?query=' + query)
             .map((response: Response) => {
                 // successful login => getting jwt
@@ -51,13 +54,23 @@ export class AuthService {
             });
     }
 
+    checktoken() {
+        if (localStorage.getItem('current_user')) {
+            let today = moment();
+            let other = moment(JSON.parse(localStorage.getItem('current_user')).DataOfExpiration, 'YYYY-MM-DD hh:mm:ss[.sssssss]');
+            if (other.isBefore(today)) {
+                localStorage.removeItem('current_user');
+            }
+        }
+    }
+
     unauthentificatenow() {
-        localStorage.removeItem("current_user");
+        localStorage.removeItem('current_user');
     }
 
     validate(key_: string): Observable<Message> {
-        var variable = { key: key_ };
-        var query = `mutation ($key: String )
+        let variable = { key: key_ };
+        let query = `mutation ($key: String )
     {
       Auth
       {
@@ -66,7 +79,7 @@ export class AuthService {
           Message
          }
       }
-    } &variables=`+ JSON.stringify(variable);
+    } &variables=` + JSON.stringify(variable);
         return this.http.get(environment.apiUrl + '/graphql?query=' + query)
             .catch((error: any) => { return Observable.throw(error) }).map(res => {
                 return res.json().data.Auth.Activation;
@@ -84,7 +97,7 @@ export class AuthService {
            ActivationCode
          }
     }
-    } &variables=`+ JSON.stringify(variables);
+    } &variables=` + JSON.stringify(variables);
         return this.http.get(environment.apiUrl + '/graphql?query=' + query)
             .catch((error: any) => { return Observable.throw(error) });
     }

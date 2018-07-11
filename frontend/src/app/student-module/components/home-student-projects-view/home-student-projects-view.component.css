@@ -4,6 +4,7 @@
 {
     margin-bottom: 3rem;
     word-wrap: break-word;
+    padding: 0rem;
 }
 
 .row{
@@ -14,6 +15,7 @@
 {
     max-width: 16rem;
     max-height: 20rem;
+    margin: 0rem;
 }
 
 a
@@ -32,6 +34,7 @@ a:hover
 .project-info
 {
     padding: 1rem 2rem 0rem 2rem;
+    margin: 0rem 0rem;
     background-color: var(--section-color);
 }
 
