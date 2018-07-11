@@ -3,7 +3,7 @@ export class ProjectItem {
     this.Name = '';
     this.Description = '';
     this.DateOfCreation = '';
-    this.Logo = 'https://yegitsin.com/admin/pages/pictures/empty.jpg';
+    this.Logo = '';
     this.Tags = '';
     this.Id = 0;
     this.Status = '';

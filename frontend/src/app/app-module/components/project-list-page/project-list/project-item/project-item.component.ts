@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ProjectItem } from 'models/project-item';
-
+import { TestImageService } from 'services/testImage.service';
 @Component({
   host: { 'class': 'card' },
   selector: 'app-project-item',
@@ -12,8 +12,12 @@ export class ProjectItemComponent implements OnInit {
 
   @Input() ProjectItem: ProjectItem;
 
-  constructor() { }
+  constructor(
+    private testImageService: TestImageService
+  ) { }
 
-  ngOnInit() { }
+  ngOnInit() { 
+    this.testImageService.testImage(this.ProjectItem.Logo, () => this.ProjectItem.Logo = "");
+  }
 
 }

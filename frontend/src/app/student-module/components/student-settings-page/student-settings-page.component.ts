@@ -16,7 +16,7 @@ export class StudentSettingsPageComponent implements OnInit {
 
   public CurrentUser: CurrentUser = {
     User: {
-      Avatar: './assets/no_image.png',
+      Avatar: '',
       Description: '',
       Id: -1,
       Login: '',

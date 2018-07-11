@@ -4,6 +4,7 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 import { NewsItem } from 'models/news-item';
 import { DataService } from 'services/data.service';
+import { TestImageService } from 'services/testImage.service';
 
 @Component({
   selector: 'app-main-full-news-page',
@@ -19,7 +20,8 @@ export class MainFullNewsPageComponent implements OnInit {
   constructor(
     private data: DataService,
     private route: ActivatedRoute,
-    private router: Router) { }
+    private router: Router,
+    private testImageService: TestImageService) { }
 
   ngOnInit() {
     this.sub = this.route.params.subscribe(params => {
@@ -31,8 +33,10 @@ export class MainFullNewsPageComponent implements OnInit {
   getReadingNews() {
     this.data.loadNewsByID(this.newsID);
     this.data.NewsForViewing.subscribe(res => {
-      if (res != null)
+      if (res != null){
         this.ReadingNews.next(res);
+        this.testImageService.testImage(res.Image, () => res.Image = "");
+      }
     });
   }
 }
