@@ -18,5 +18,6 @@ var RootMutation = gql.NewObject(
 			"DeleteProjectEnroll": &mutations.DeleteProjectEnroll,
 			"DeleteProjectOn":     &mutations.DeleteProjectOn,
 			"Auth":                &mutations.AuthQuery,
+			"User":                &mutations.UserQuery,
 		},
 	})

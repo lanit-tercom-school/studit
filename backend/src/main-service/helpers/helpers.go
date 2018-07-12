@@ -5,12 +5,12 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"log"
+	"mime/multipart"
 	"net/http"
 	"strings"
-	"mime/multipart"
-	"io"
 )
 
 type Message struct {
@@ -159,7 +159,7 @@ func HttpPutWithToken(url string, token string, send interface{}, get interface{
 	return
 }
 
-func HttpGetWithToken(url string, token string,  get interface{}) (err error) {
+func HttpGetWithToken(url string, token string, get interface{}) (err error) {
 	LogGet(url, "Sending")
 	var resp *http.Response
 	client := &http.Client{}
@@ -264,7 +264,7 @@ func HttpPostWithTokenAndFile(url string, token string, file multipart.File, han
 	LogPost(url, "Sending")
 	var resp *http.Response
 	client := &http.Client{}
-	req, err := newfileUploadRequest(url,"uploadfile",file,handler)
+	req, err := newfileUploadRequest(url, "uploadfile", file, handler)
 	if err != nil {
 		LogErrorPost(url, err)
 		return
@@ -297,18 +297,18 @@ func HttpPostWithTokenAndFile(url string, token string, file multipart.File, han
 
 // Creates a new file upload http request with optional extra params
 func newfileUploadRequest(url string, paramName string, file multipart.File, handler *multipart.FileHeader) (*http.Request, error) {
-  body := &bytes.Buffer{}
-  writer := multipart.NewWriter(body)
-  part, err := writer.CreateFormFile(paramName, handler.Filename)
-  if err != nil {
-      return nil, err
-  }
-  _, err = io.Copy(part, file)
-  err = writer.Close()
-  if err != nil {
-      return nil, err
-  }
-  req, err := http.NewRequest("POST", url, body)
-  req.Header.Set("Content-Type", writer.FormDataContentType())
-  return req, err
+	body := &bytes.Buffer{}
+	writer := multipart.NewWriter(body)
+	part, err := writer.CreateFormFile(paramName, handler.Filename)
+	if err != nil {
+		return nil, err
+	}
+	_, err = io.Copy(part, file)
+	err = writer.Close()
+	if err != nil {
+		return nil, err
+	}
+	req, err := http.NewRequest("POST", url, body)
+	req.Header.Set("Content-Type", writer.FormDataContentType())
+	return req, err
 }
