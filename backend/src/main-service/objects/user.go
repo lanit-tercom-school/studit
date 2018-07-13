@@ -71,18 +71,14 @@ func ResolveGetUserById(p gql.ResolveParams) (interface{}, error) {
 }
 
 func ChangeUser(p gql.ResolveParams, paramName string) (interface{}, error) {
-
-	Log("ChangeUser")
 	new := helpers.InterfaceToString(p.Args["New"])
 	token := helpers.InterfaceToString(p.Context.Value("Token"))
-	Log("New Nickname: " + new)
 
 	user := User{}
 	id := strconv.Itoa(p.Context.Value("CurrentUser").(CurrentClient).UserId)
-	Log("Id: " + id)
+
 	err := helpers.HttpGetWithToken(conf.Configuration.DataServiceURL+"v1/user/"+id, token, &user)
-	Log("HttpGetError: " + err.Error())
-	Log("Old NickName: " + user.Nickname)
+
 	switch paramName {
 	case "Nickname":
 		user.Nickname = new
@@ -92,26 +88,21 @@ func ChangeUser(p gql.ResolveParams, paramName string) (interface{}, error) {
 		user.Description = new
 	default:
 		err = errors.New("Invalid param")
-		Log("Invalid param")
 		return nil, err
 	}
 
 	return user, err
 }
 
+//ResolvePutNewNickname - Смена NickName пользователя
 func ResolvePutNewNickname(p gql.ResolveParams) (interface{}, error) {
 
-	Log("ResolvePutNewNickname")
-
 	token := helpers.InterfaceToString(p.Context.Value("Token"))
-	Log("token: " + token)
 
 	user, err := ChangeUser(p, "Nickname")
-	Log("ChangeUserError: " + err.Error())
 
 	message := Message{}
-	erro := helpers.HttpPutWithToken(conf.Configuration.DataServiceURL+"v1/user/", token, user, &message)
-	Log("Message: " + message.Message)
-	Log("SUCCESS")
-	return message, erro
+	err = helpers.HttpPutWithToken(conf.Configuration.DataServiceURL+"v1/user/"+strconv.Itoa(p.Context.Value("CurrentUser").(CurrentClient).UserId), token, user, &message)
+
+	return message, err
 }

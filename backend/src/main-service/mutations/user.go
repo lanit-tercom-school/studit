@@ -17,7 +17,7 @@ var UserQueryType = gql.NewObject(
 		Name: "UserQuery",
 		Fields: gql.Fields{
 			"ChangeNickname": &gql.Field{
-				Type: objects.UserType,
+				Type: objects.MessageType,
 				Args: gql.FieldConfigArgument{
 					"New": &gql.ArgumentConfig{
 						Type: gql.String,
