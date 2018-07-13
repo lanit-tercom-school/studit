@@ -2,7 +2,6 @@ package objects
 
 import (
 	"errors"
-	"log"
 	"main-service/conf"
 	"main-service/helpers"
 	"strconv"
@@ -22,11 +21,6 @@ type User struct {
 	Nickname    string
 	Description string
 	Avatar      string
-}
-
-//temp function
-func Log(text string) {
-	log.Printf("Log: %v\n", text)
 }
 
 //UserType - grqphql объект пользователя
@@ -88,6 +82,8 @@ func ChangeUser(p gql.ResolveParams, paramName string) (interface{}, error) {
 		return nil, err
 	}
 
+	helpers.LogPut("", "Updating "+paramName)
+
 	switch paramName {
 	case "Nickname":
 		user.Nickname = new
@@ -127,6 +123,8 @@ func UpdateUserOnServer(p gql.ResolveParams, user User) (interface{}, error) {
 //ResolvePutNewNickname - Смена NickName пользователя
 func ResolvePutNewNickname(p gql.ResolveParams) (interface{}, error) {
 
+	helpers.LogPut("", "ResolvePutNewNickname function")
+
 	tempUser, err := ChangeUser(p, "Nickname")
 
 	if err != nil {
@@ -148,6 +146,8 @@ func ResolvePutNewNickname(p gql.ResolveParams) (interface{}, error) {
 //ResolvePutNewAvatar - Смена Avatar пользователя
 func ResolvePutNewAvatar(p gql.ResolveParams) (interface{}, error) {
 
+	helpers.LogPut("", "ResolvePutNewAvatar function")
+
 	tempUser, err := ChangeUser(p, "Avatar")
 
 	if err != nil {
@@ -168,6 +168,8 @@ func ResolvePutNewAvatar(p gql.ResolveParams) (interface{}, error) {
 
 //ResolvePutNewDescription - Смена Description пользователя
 func ResolvePutNewDescription(p gql.ResolveParams) (interface{}, error) {
+
+	helpers.LogPut("", "ResolvePutNewDescription function")
 
 	tempUser, err := ChangeUser(p, "Description")
 
