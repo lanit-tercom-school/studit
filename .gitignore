@@ -263,4 +263,5 @@ backend/src/main-service/swagger/*
 backend/src/test/main.go
 backend/src/test/debug
 backend/src/auth-service/debug
+backend/src/file-service/files/*
 .vscode/launch.json
