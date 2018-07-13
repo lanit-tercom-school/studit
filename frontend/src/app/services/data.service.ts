@@ -151,7 +151,7 @@ export class DataService {
       this.tasksForViewing.next(tasks);
       this.taskService.getTaskItemsFromGitHub(gitHubUrl)
         .subscribe(res => {
-          if (res != null && tasks != res) {
+          if (res != null && tasks !== res) {
             this.dataStore.tasks[url] = res;
             this.tasksForViewing.next(Object.assign({}, this.dataStore).tasks[url]);
           }

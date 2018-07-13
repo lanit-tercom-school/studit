@@ -81,7 +81,7 @@ export class AuthService {
       }
     } &variables=` + JSON.stringify(variable);
         return this.http.get(environment.apiUrl + '/graphql?query=' + query)
-            .catch((error: any) => { return Observable.throw(error) }).map(res => {
+            .catch((error: any) => { return Observable.throw(error); }).map(res => {
                 return res.json().data.Auth.Activation;
             });
     }
@@ -99,7 +99,7 @@ export class AuthService {
     }
     } &variables=` + JSON.stringify(variables);
         return this.http.get(environment.apiUrl + '/graphql?query=' + query)
-            .catch((error: any) => { return Observable.throw(error) });
+            .catch((error: any) => { return Observable.throw(error); });
     }
 
 }
