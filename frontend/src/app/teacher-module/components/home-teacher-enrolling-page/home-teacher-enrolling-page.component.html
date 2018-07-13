@@ -6,8 +6,8 @@
 <div *ngFor="let Enroll of EnrollList | async" class="card card-outline">
   <div class="row">
     <div class="card col-sm-2 hidden-xs col-sm-offset-1">
-      <img class="card-img" src="{{Enroll.Project.Logo}}"
-        alt="Card image cap">
+      <img *ngIf='Enroll.Project.Logo' class="card-img" src="{{Enroll.Project.Logo}}" alt="Card image cap">
+      <img *ngIf='!Enroll.Project.Logo' class="card-img" src="./assets/no_image.png" alt="Card image cap">
     </div>
     <div class="col-sm-8 project-info">
       <p class="lead"> <a class="Name" routerLink="/user/{{Enroll.User.Id}}">{{Enroll.User.Nickname}}</a> хочет записаться на {{Enroll.Project.Name}}</p>
