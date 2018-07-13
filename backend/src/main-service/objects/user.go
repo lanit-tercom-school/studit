@@ -78,8 +78,15 @@ func ChangeUser(p gql.ResolveParams, paramName string) (interface{}, error) {
 
 	user := User{}
 	id := strconv.Itoa(p.Context.Value("CurrentUser").(CurrentClient).UserId)
+	url := conf.Configuration.DataServiceURL + "v1/user/" + id
 
-	err := helpers.HttpGetWithToken(conf.Configuration.DataServiceURL+"v1/user/"+id, token, &user)
+	helpers.LogGet(url, "Getting user by id and token")
+	err := helpers.HttpGetWithToken(url, token, &user)
+
+	if err != nil {
+		helpers.LogErrorGet(url, err)
+		return nil, err
+	}
 
 	switch paramName {
 	case "Nickname":
@@ -106,7 +113,13 @@ func UpdateUserOnServer(p gql.ResolveParams, user User) (interface{}, error) {
 
 	message := Message{}
 
+	helpers.LogPut(url, "Putting user into data by token")
 	err := helpers.HttpPutWithToken(url, token, user, &message)
+
+	if err != nil {
+		helpers.LogErrorPut(url, err)
+		return nil, err
+	}
 
 	return message, err
 }
@@ -114,13 +127,20 @@ func UpdateUserOnServer(p gql.ResolveParams, user User) (interface{}, error) {
 //ResolvePutNewNickname - Смена NickName пользователя
 func ResolvePutNewNickname(p gql.ResolveParams) (interface{}, error) {
 
-	user, err := ChangeUser(p, "Nickname")
+	tempUser, err := ChangeUser(p, "Nickname")
 
 	if err != nil {
 		return nil, err
 	}
 
-	message, err := UpdateUserOnServer(p, user.(User))
+	user, ok := tempUser.(User)
+
+	if !ok {
+		err = errors.New("missed user")
+		return nil, err
+	}
+
+	message, err := UpdateUserOnServer(p, user)
 
 	return message, err
 }
@@ -128,13 +148,20 @@ func ResolvePutNewNickname(p gql.ResolveParams) (interface{}, error) {
 //ResolvePutNewAvatar - Смена Avatar пользователя
 func ResolvePutNewAvatar(p gql.ResolveParams) (interface{}, error) {
 
-	user, err := ChangeUser(p, "Avatar")
+	tempUser, err := ChangeUser(p, "Avatar")
 
 	if err != nil {
 		return nil, err
 	}
 
-	message, err := UpdateUserOnServer(p, user.(User))
+	user, ok := tempUser.(User)
+
+	if !ok {
+		err = errors.New("missed user")
+		return nil, err
+	}
+
+	message, err := UpdateUserOnServer(p, user)
 
 	return message, err
 }
@@ -142,13 +169,20 @@ func ResolvePutNewAvatar(p gql.ResolveParams) (interface{}, error) {
 //ResolvePutNewDescription - Смена Description пользователя
 func ResolvePutNewDescription(p gql.ResolveParams) (interface{}, error) {
 
-	user, err := ChangeUser(p, "Description")
+	tempUser, err := ChangeUser(p, "Description")
 
 	if err != nil {
 		return nil, err
 	}
 
-	message, err := UpdateUserOnServer(p, user.(User))
+	user, ok := tempUser.(User)
+
+	if !ok {
+		err = errors.New("missed user")
+		return nil, err
+	}
+
+	message, err := UpdateUserOnServer(p, user)
 
 	return message, err
 }
