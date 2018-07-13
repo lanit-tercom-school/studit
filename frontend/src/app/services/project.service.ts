@@ -23,7 +23,7 @@ export class ProjectService {
 
   getMainPageProjects(): Observable<ProjectItem[]> {
     let query = `{ 
-      ProjectList(Limit: "3" Offset: "0")
+      ProjectList(Limit: "10" Offset: "0")
       {
         ProjectList {
           Description
