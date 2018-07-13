@@ -70,6 +70,8 @@ func ResolveGetUserById(p gql.ResolveParams) (interface{}, error) {
 	return user, err
 }
 
+/* ChangeUser получает из Data Service текущего пользователя
+изменяет нужное поле ползователя */
 func ChangeUser(p gql.ResolveParams, paramName string) (interface{}, error) {
 	new := helpers.InterfaceToString(p.Args["New"])
 	token := helpers.InterfaceToString(p.Context.Value("Token"))
@@ -94,15 +96,59 @@ func ChangeUser(p gql.ResolveParams, paramName string) (interface{}, error) {
 	return user, err
 }
 
+// UpdateUserOnServer загружает пользователя в DataService
+func UpdateUserOnServer(p gql.ResolveParams, user User) (interface{}, error) {
+	token := helpers.InterfaceToString(p.Context.Value("Token"))
+
+	id := p.Context.Value("CurrentUser").(CurrentClient).UserId
+
+	url := conf.Configuration.DataServiceURL + "v1/user/" + strconv.Itoa(id)
+
+	message := Message{}
+
+	err := helpers.HttpPutWithToken(url, token, user, &message)
+
+	return message, err
+}
+
 //ResolvePutNewNickname - Смена NickName пользователя
 func ResolvePutNewNickname(p gql.ResolveParams) (interface{}, error) {
 
-	token := helpers.InterfaceToString(p.Context.Value("Token"))
-
 	user, err := ChangeUser(p, "Nickname")
 
-	message := Message{}
-	err = helpers.HttpPutWithToken(conf.Configuration.DataServiceURL+"v1/user/"+strconv.Itoa(p.Context.Value("CurrentUser").(CurrentClient).UserId), token, user, &message)
+	if err != nil {
+		return nil, err
+	}
+
+	message, err := UpdateUserOnServer(p, user.(User))
+
+	return message, err
+}
+
+//ResolvePutNewAvatar - Смена Avatar пользователя
+func ResolvePutNewAvatar(p gql.ResolveParams) (interface{}, error) {
+
+	user, err := ChangeUser(p, "Avatar")
+
+	if err != nil {
+		return nil, err
+	}
+
+	message, err := UpdateUserOnServer(p, user.(User))
+
+	return message, err
+}
+
+//ResolvePutNewDescription - Смена Description пользователя
+func ResolvePutNewDescription(p gql.ResolveParams) (interface{}, error) {
+
+	user, err := ChangeUser(p, "Description")
+
+	if err != nil {
+		return nil, err
+	}
+
+	message, err := UpdateUserOnServer(p, user.(User))
 
 	return message, err
 }
