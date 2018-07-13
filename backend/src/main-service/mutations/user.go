@@ -17,7 +17,7 @@ var UserQueryType = gql.NewObject(
 		Name: "UserQuery",
 		Fields: gql.Fields{
 			"ChangeNickname": &gql.Field{
-				Type: objects.UserType,
+				Type: objects.MessageType,
 				Args: gql.FieldConfigArgument{
 					"New": &gql.ArgumentConfig{
 						Type: gql.String,
@@ -26,7 +26,7 @@ var UserQueryType = gql.NewObject(
 				Resolve: objects.ResolvePutNewNickname,
 			},
 			"ChangeAvatar": &gql.Field{
-				Type: objects.UserType,
+				Type: objects.MessageType,
 				Args: gql.FieldConfigArgument{
 					"New": &gql.ArgumentConfig{
 						Type: gql.String,
@@ -35,7 +35,7 @@ var UserQueryType = gql.NewObject(
 				Resolve: objects.ResolvePutNewAvatar,
 			},
 			"ChangeDescription": &gql.Field{
-				Type: objects.UserType,
+				Type: objects.MessageType,
 				Args: gql.FieldConfigArgument{
 					"New": &gql.ArgumentConfig{
 						Type: gql.String,
