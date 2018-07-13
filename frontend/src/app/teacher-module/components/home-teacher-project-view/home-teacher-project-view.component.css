@@ -1,7 +1,9 @@
 @import url('https://fonts.googleapis.com/css?family=Jura');
+
 .card {
     margin-bottom: 3rem;
     word-wrap: break-word;
+    padding: 0rem;
 }
 
 .row {
@@ -15,9 +17,7 @@
     margin: 0rem;
     
 }
-.card{
-    padding: 0rem;
-}
+
 
 a {
     text-decoration: none;

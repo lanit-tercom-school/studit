@@ -1,5 +1,6 @@
 import { Component, OnInit, DoCheck } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
+
 import { Router } from '@angular/router';
 import { AuthService } from 'services/auth.service';
 import { NewsItem } from 'models/news-item';
@@ -7,11 +8,14 @@ import { DataService } from 'services/data.service';
 import { FileService } from 'services/file.service';
 import { TeacherService } from 'services/teacher.service';
 
+
+
 @Component({
   selector: 'app-main-news-page',
   templateUrl: './main-news-page.component.html',
   styleUrls: ['./main-news-page.component.css']
 })
+
 export class MainNewsPageComponent implements OnInit, DoCheck {
   public CreatedNews = new NewsItem();
   public IsCreated = false;
@@ -29,11 +33,13 @@ export class MainNewsPageComponent implements OnInit, DoCheck {
     window.scrollTo(0, 0);
     this.CreatedNews.Image = './assets/no_image.png';
     this.CurrentUser = JSON.parse(localStorage.getItem('current_user'));
+
+  
   }
   ngDoCheck() {
     this.url = this.router.routerState.snapshot.url;
   }
-  
+
   logout() {
     this.auth.unauthentificatenow();
     this.router.navigateByUrl('/auth');
