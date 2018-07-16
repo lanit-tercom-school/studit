@@ -21,3 +21,27 @@ h1
 .form-group{
     margin: 1.3rem 0rem ;
 }
+input.ng-touched.ng-invalid 
+{
+    background: white;
+    border:solid red 2px;
+}
+input.ng-touched.ng-valid {
+    background: white;
+    border:solid green 2px;
+}
+.alert-danger{
+    background: none;
+    border: none;
+    height: 3rem;
+    padding-top: 1rem;
+    color: white;
+    font-family: 'Jura', sans-serif;
+    margin-bottom: 1rem;
+}
+.form-control{
+    background: white;
+}
+.btm-default{
+    color: black;
+}

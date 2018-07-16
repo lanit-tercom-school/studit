@@ -11,7 +11,7 @@ import { UserRegister } from 'models/user-register';
 })
 export class RegistrationPageComponent implements OnInit {
 
-  public User: UserRegister = { login: "", nickname: "", password: "" };
+  public User: UserRegister = { login: '', nickname: '', password: '' };
   private error: string;
 
   constructor(private auth: AuthService, private router: Router) { }
@@ -31,3 +31,4 @@ export class RegistrationPageComponent implements OnInit {
   }
 
 }
+
