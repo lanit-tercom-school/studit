@@ -55,6 +55,10 @@ export class StudentProjectPageComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
   }
+  
+  getProjectNewsItem(): ProjectNewsItem[] {
+    return this.projectService.getProjectNewsItem(1);
+  }
 
   getProjectTasks(gitHubUrl: string) {
     this.data.loadTaskByGitHubUrl(gitHubUrl);
