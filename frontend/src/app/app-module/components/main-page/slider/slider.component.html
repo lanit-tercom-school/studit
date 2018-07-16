@@ -7,7 +7,8 @@
           <div class="swiper-slide" *ngFor="let project of ProjectList | async">
             <div class="row for_border">
               <div class="col-sm-5 col-sm-offset-1">
-                <img class="project-logo" src="{{project.Logo}}" alt="Project logo">
+                <img *ngIf='project.Logo' class="project-logo" src="{{project.Logo}}" alt="Project logo">
+                <img *ngIf='!project.Logo' class="project-logo" src="./assets/no_image.png" alt="Project logo">
               </div>
               <div class="swiper-text col-sm-4">
                 <h3 class="swiper-project-name" routerLink="/project/{{project.Id}}">{{project.Name}}</h3>
