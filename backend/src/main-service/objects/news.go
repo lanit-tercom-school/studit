@@ -106,6 +106,7 @@ func ResolvePostNews(p gql.ResolveParams) (interface{}, error) {
 	helpers.LogAccesDenied("PostNews")
 	return nil, errors.New("Access is denied")
 }
+
 func ResolveGetNewsList(p gql.ResolveParams) (interface{}, error) {
 	var limit, offset string
 	limit, ok := p.Args["Limit"].(string)
@@ -123,10 +124,11 @@ func ResolveGetNewsList(p gql.ResolveParams) (interface{}, error) {
 	return set, err
 }
 
+//Sends "news" object to server
 func UpdateNewsOnServer(p gql.ResolveParams, news News) (interface{}, error) {
 	c := p.Context.Value("CurrentUser").(CurrentClient)
 	if c.PermissionLevel >= LEADER {
-		helpers.LogAccesAllowed("PutNews")
+		helpers.LogAccesAllowed("UpadateNewsOnServer")
 
 		token := helpers.InterfaceToString(p.Context.Value("Token"))
 		url := conf.Configuration.DataServiceURL + "v1/news/" + strconv.Itoa(news.Id)
@@ -141,14 +143,17 @@ func UpdateNewsOnServer(p gql.ResolveParams, news News) (interface{}, error) {
 		return message, err
 	}
 
+	helpers.LogAccesDenied("UpadateNewsOnServer")
 	return nil, errors.New("Access is denied")
 }
 
+//Changes one of selected fields in news object and sends it on server
 func ChangeNewsField(p gql.ResolveParams, fieldName string) (interface{}, error) {
-	helpers.LogPut("", "ResolvePutNewNewsTitle function")
+	helpers.LogPut("ChangeNewsField", "function")
 	tempNews, err := ResolveGetNews(p)
 
 	if err != nil {
+		err = errors.New("do not get news")
 		return nil, err
 	}
 

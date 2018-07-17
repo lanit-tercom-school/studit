@@ -58,6 +58,7 @@ var EditNewsQueryType = gql.NewObject(
 	},
 )
 
+//You can check this queries in Altair
 func init() {
 	PostNews = gql.Field{
 		Type: objects.NewsType,
