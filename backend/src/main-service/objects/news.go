@@ -2,6 +2,7 @@ package objects
 
 import (
 	"errors"
+	"strconv"
 	"time"
 
 	"main-service/conf"
@@ -120,4 +121,69 @@ func ResolveGetNewsList(p gql.ResolveParams) (interface{}, error) {
 	var set NewsSet
 	err := helpers.HttpGet(conf.Configuration.DataServiceURL+"v1/news/?limit="+limit+"&offset="+offset, &set)
 	return set, err
+}
+
+func UpdateNewsOnServer(p gql.ResolveParams, news News) (interface{}, error) {
+	c := p.Context.Value("CurrentUser").(CurrentClient)
+	if c.PermissionLevel >= LEADER {
+		helpers.LogAccesAllowed("PutNews")
+
+		token := helpers.InterfaceToString(p.Context.Value("Token"))
+		url := conf.Configuration.DataServiceURL + "v1/news/" + strconv.Itoa(news.Id)
+		message := Message{}
+		err := helpers.HttpPutWithToken(url, token, news, &message)
+
+		if err != nil {
+			helpers.LogErrorPut(url, err)
+			return nil, err
+		}
+
+		return message, err
+	}
+
+	return nil, errors.New("Access is denied")
+}
+
+func ChangeNewsField(p gql.ResolveParams, fieldName string) (interface{}, error) {
+	helpers.LogPut("", "ResolvePutNewNewsTitle function")
+	tempNews, err := ResolveGetNews(p)
+
+	if err != nil {
+		return nil, err
+	}
+
+	news, ok := tempNews.(News)
+
+	if !ok {
+		err = errors.New("missed news")
+		return nil, err
+	}
+
+	new := helpers.InterfaceToString(p.Args["New"])
+
+	switch fieldName {
+	case "Title":
+		news.Title = new
+	case "Description":
+		news.Description = new
+	case "Image":
+		news.Image = new
+	default:
+		err = errors.New("Invalid field")
+		return nil, err
+	}
+
+	return UpdateNewsOnServer(p, news)
+}
+
+func ResolvePutNewsTitle(p gql.ResolveParams) (interface{}, error) {
+	return ChangeNewsField(p, "Title")
+}
+
+func ResolvePutNewsDescription(p gql.ResolveParams) (interface{}, error) {
+	return ChangeNewsField(p, "Description")
+}
+
+func ResolvePutNewsImage(p gql.ResolveParams) (interface{}, error) {
+	return ChangeNewsField(p, "Image")
 }
