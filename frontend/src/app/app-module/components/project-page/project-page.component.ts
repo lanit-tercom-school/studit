@@ -11,6 +11,7 @@ import { MaterialsItem } from 'models/materials-item';
 import { ProjectItem } from 'models/project-item';
 import { ProjectNewsItem } from 'models/proj-news-item';
 import { TasksItem } from 'models/tasks-item';
+import { TestImageService } from 'services/testImage.service';
 
 @Component({
   selector: 'app-project-page',
@@ -27,7 +28,8 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private http: Http,
     private data: DataService,
-    private projectService: ProjectService
+    private projectService: ProjectService,
+    private testImageService: TestImageService
   )
   { }
 
@@ -49,7 +51,9 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
     this.data.ProjectForViewing.subscribe(res => {
       if (res != null)
         this.ProjectObs.next(res);
-        console.log(res);
+        this.testImageService.testImage(this.ProjectObs.value.Logo, ()=> {
+          this.ProjectObs.value.Logo = "";
+        });
     });
 
   }

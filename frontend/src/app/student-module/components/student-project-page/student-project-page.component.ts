@@ -14,6 +14,7 @@ import { ProjectItem } from 'models/project-item';
 import { ProjectNewsItem } from 'models/proj-news-item';
 import { TasksItem } from 'models/tasks-item';
 import { UserInfo } from 'models/user-info';
+import { TestImageService } from 'services/testImage.service';
 
 type StatusEnroll = 'Enrolling' | 'InProject' | 'Unenrolling';
 
@@ -41,6 +42,7 @@ export class StudentProjectPageComponent implements OnInit, OnDestroy {
     private studentService: StudentService,
     private projectService: ProjectService,
     private taskService: TaskService,
+    private testImageService: TestImageService
   ) { }
 
   ngOnInit() {
@@ -66,7 +68,10 @@ export class StudentProjectPageComponent implements OnInit, OnDestroy {
     this.data.ProjectForViewing.subscribe(res => {
       if (res != null) {
         this.ProjectObs.next(res);
-        this.getProjectTasks(res.GitHubUrl)
+        this.getProjectTasks(res.GitHubUrl);
+        this.testImageService.testImage(this.ProjectObs.value.Logo, ()=> {
+          this.ProjectObs.value.Logo = "";
+        });
       }
     });
 
