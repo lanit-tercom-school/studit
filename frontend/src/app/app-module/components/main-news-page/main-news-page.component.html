@@ -24,7 +24,7 @@
 			</div>
 			<div class="modal-body">
 				<input class="form-control" id="EnrollNewsName" [(ngModel)]="CreatedNews.Title" name="EnrollNewsName" #EnrollNewsName="ngModel"
-				 required pattern="([\S]+[a-zA-Zа-яА-Я-_\s]+)">
+				 required pattern="([\S]+[a-zA-Zа-яА-Я-_\s\.\;\:\(\)]+)">
 				<div [hidden]="EnrollNewsName.valid || EnrollNewsName.untouched" class="alert alert-danger">
 					Введите название новости
 				</div>
@@ -59,11 +59,9 @@
 
 <div id="Created" class="modal fade" data-backdrop="static">
 	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
+			<div class="modal-header comp">
 				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
 				<h4 class="modal-title">Новость создана</h4>
 			</div>
-		</div>
 	</div>
 </div>
