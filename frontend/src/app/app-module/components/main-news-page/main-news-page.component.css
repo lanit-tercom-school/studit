@@ -83,3 +83,7 @@ textarea{
   resize: none;
   height: 15rem;
 }
+.comp{
+  background-color: white;
+  border-radius: 1rem;
+}
