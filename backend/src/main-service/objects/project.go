@@ -4,6 +4,7 @@ import (
 	"errors"
 	"main-service/conf"
 	"main-service/helpers"
+	"strconv"
 	"time"
 
 	gql "github.com/graphql-go/graphql"
@@ -105,7 +106,7 @@ func ResolvePostProject(p gql.ResolveParams) (interface{}, error) {
 			GitHubUrl:      helpers.InterfaceToString(p.Args["GitHubUrl"]),
 			Tags:           helpers.InterfaceToArrayStrings(p.Args["Tags"]),
 		}
-		err := helpers.HttpPost(conf.Configuration.DataServiceURL+"v1/project/", projectToSend, &projectToGet)
+		err := helpers.HttpPost(conf.Configuration.DataServiceURL+"v1/project_user/", projectToSend, &projectToGet)
 		user := User{
 			Id: c.UserId,
 		}
@@ -119,11 +120,94 @@ func ResolvePostProject(p gql.ResolveParams) (interface{}, error) {
 			SignedDate: time.Now(),
 			Progress:   0,
 		}
-		helpers.HttpPost(conf.Configuration.DataServiceURL+"v1/project_user/", projectUserToSend, &projectUserToGet)
+		helpers.HttpPost(conf.Configuration.DataServiceURL+"v1/project/", projectUserToSend, &projectUserToGet)
 		return projectToGet, err
 	}
 	helpers.LogAccesDenied("PostProject")
 	return nil, errors.New("Access is denied")
+}
+
+func UpdateProjectOnServer(p gql.ResolveParams, project Project) (interface{}, error) {
+	c := p.Context.Value("CurrentUser").(CurrentClient)
+	if c.PermissionLevel >= LEADER {
+		helpers.LogAccesAllowed("UpadateProjectOnServer")
+
+		token := helpers.InterfaceToString(p.Context.Value("Token"))
+		url := conf.Configuration.DataServiceURL + "v1/project/" + strconv.Itoa(project.Id)
+		message := Message{}
+		err := helpers.HttpPutWithToken(url, token, project, &message)
+
+		if err != nil {
+			helpers.LogErrorPut(url, err)
+			return nil, err
+		}
+
+		return message, err
+	}
+
+	helpers.LogAccesDenied("UpadateProjectOnServer")
+	return nil, errors.New("Access is denied")
+}
+
+func ChangeProjectField(p gql.ResolveParams, fieldName string) (interface{}, error) {
+	helpers.LogPut("ChangeProjectField", "function")
+	tempProject, err := ResolveGetProjectById(p)
+
+	if err != nil {
+		err = errors.New("do not get project")
+		return nil, err
+	}
+
+	project, ok := tempProject.(Project)
+
+	if !ok {
+		err = errors.New("missed project")
+		return nil, err
+	}
+
+	switch fieldName {
+	case "Name":
+		project.Name = helpers.InterfaceToString(p.Args["New"])
+	case "Description":
+		project.Description = helpers.InterfaceToString(p.Args["New"])
+	case "Logo":
+		project.Logo = helpers.InterfaceToString(p.Args["New"])
+	case "Tags":
+		project.Tags = helpers.InterfaceToArrayStrings(p.Args["New"])
+	case "GitHubUrl":
+		project.GitHubUrl = helpers.InterfaceToString(p.Args["New"])
+	case "Status":
+		project.Status = helpers.InterfaceToString(p.Args["New"])
+	default:
+		err = errors.New("Invalid field")
+		return nil, err
+	}
+
+	return UpdateProjectOnServer(p, project)
+}
+
+func ResolvePutProjectName(p gql.ResolveParams) (interface{}, error) {
+	return ChangeProjectField(p, "Name")
+}
+
+func ResolvePutProjectDescription(p gql.ResolveParams) (interface{}, error) {
+	return ChangeProjectField(p, "Description")
+}
+
+func ResolvePutProjectLogo(p gql.ResolveParams) (interface{}, error) {
+	return ChangeProjectField(p, "Logo")
+}
+
+func ResolvePutProjectTags(p gql.ResolveParams) (interface{}, error) {
+	return ChangeProjectField(p, "Tags")
+}
+
+func ResolvePutProjectGitHubUrl(p gql.ResolveParams) (interface{}, error) {
+	return ChangeProjectField(p, "GitHubUrl")
+}
+
+func ResolvePutProjectStatus(p gql.ResolveParams) (interface{}, error) {
+	return ChangeProjectField(p, "Status")
 }
 
 func ResolveGetProjectList(p gql.ResolveParams) (interface{}, error) {
