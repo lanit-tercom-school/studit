@@ -23,7 +23,11 @@
 				<h4 class="modal-title">Название новости</h4>
 			</div>
 			<div class="modal-body">
-				<input class="form-control" id="EnrollNewsName" [(ngModel)]="CreatedNews.Title" name="EnrollNewsName" maxlength="300">
+				<input class="form-control" id="EnrollNewsName" [(ngModel)]="CreatedNews.Title" name="EnrollNewsName" #EnrollNewsName="ngModel"
+				 required>
+				<div [hidden]="EnrollNewsName.valid || EnrollNewsName.untouched" class="alert alert-danger">
+					Введите название новости
+				</div>
 			</div>
 			<div class="modal-header">
 				<h4 class="modal-title">Изображение новости</h4>
@@ -37,11 +41,15 @@
 				<h4 class="modal-title">Описание новости</h4>
 			</div>
 			<div class="modal-body">
-				<textarea class="form-control" id="EnrollNewsDescription" [(ngModel)]="CreatedNews.Description" name="EnrollNewsDescription"
-				 autofocus></textarea>
+				<textarea class="form-control" id="EnrollNewsDescription" [(ngModel)]="CreatedNews.Description" #EnrollNewsDescription="ngModel"
+				 required name="EnrollNewsDescription" autofocus></textarea>
+				<div [hidden]="EnrollNewsDescription.valid || EnrollNewsDescription.untouched" class="alert alert-danger">
+					Введите описание новости
+				</div>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-primary" (click)="makeNews()" data-dismiss="modal">Отправить</button>
+				<button type="button" class="btn btn-primary" *ngIf="((EnrollNewsName.valid==true)&&(EnrollNewsDescription.valid==true))" (click)="makeNews()" data-dismiss="modal">Отправить</button>
+				<button type="button" class="btn btm-default btn-block" *ngIf="((EnrollNewsName.valid==false)||(EnrollNewsDescription.valid==false))">Отправить</button>
 				<button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
 			</div>
 		</div>
