@@ -18,6 +18,11 @@ h1{
   background-color: var(--logo-color);
   border-color: var(--dark-logo-color);
 }
+.form-inline
+{
+  margin-bottom: 5px;
+  margin-top: 0px;
+}
 
 .btn-primary:hover{
   background-color: var(--dark-logo-color);
@@ -31,10 +36,6 @@ h1{
   width: 50%;
 }
 
-.form-inline
-{
-  margin-top: 1rem;
-}
 
 .block-form
 {
