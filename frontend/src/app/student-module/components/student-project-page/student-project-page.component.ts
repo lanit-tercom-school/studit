@@ -55,7 +55,7 @@ export class StudentProjectPageComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
   }
-  
+
   getProjectNewsItem(): ProjectNewsItem[] {
     return this.projectService.getProjectNewsItem(1);
   }
@@ -97,13 +97,13 @@ export class StudentProjectPageComponent implements OnInit, OnDestroy {
     this.EnrollButtonStatus = 'Enrolling';
     this.data.UserProjects.subscribe(res => {
       if (res != null) {
-        if (res.find(pr => pr.Id === this.projectId)) {
+        if (res.find(pr => pr.Id == this.projectId)) {
           this.EnrollButtonStatus = 'InProject';
         }
       }
     });
     this.data.UserEnrolledProjects.subscribe(res => {
-      if (res != null && res.find(pr => pr.Project.Id === this.projectId)) {
+      if (res != null && res.find(pr => pr.Project.Id == this.projectId)) {
         this.EnrollButtonStatus = 'Unenrolling';
         res.forEach(p => {
           if (p.Project.Id === this.projectId) {
