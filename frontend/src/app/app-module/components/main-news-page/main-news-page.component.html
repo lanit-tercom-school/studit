@@ -48,9 +48,21 @@
 				</div>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-primary" *ngIf="((EnrollNewsName.valid==true)&&(EnrollNewsDescription.valid==true))" (click)="makeNews()" data-dismiss="modal">Отправить</button>
+				<button type="button" class="btn btn-primary" *ngIf="((EnrollNewsName.valid==true)&&(EnrollNewsDescription.valid==true))"
+				 (click)="makeNews()" data-toggle="modal" data-target="#Created" data-dismiss="modal">Отправить</button>
 				<button type="button" class="btn btm-default btn-block" *ngIf="((EnrollNewsName.valid==false)||(EnrollNewsDescription.valid==false))">Отправить</button>
 				<button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="Created" class="modal fade" data-backdrop="static">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+				<h4 class="modal-title">Новость создана</h4>
 			</div>
 		</div>
 	</div>
