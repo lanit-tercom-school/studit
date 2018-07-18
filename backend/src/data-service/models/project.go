@@ -71,7 +71,13 @@ func UpdateProjectById(m *Project) (err error) {
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
 		var num int64
-		if num, err = o.Update(m); err == nil {
+		v.Description = m.Description
+		v.GitHubUrl = m.GitHubUrl
+		v.Logo = m.Logo
+		v.Name = m.Name
+		v.Status = m.Status
+		v.Tags = m.Tags
+		if num, err = o.Update(&v); err == nil {
 			fmt.Println("Number of records updated in database:", num)
 		}
 	}
