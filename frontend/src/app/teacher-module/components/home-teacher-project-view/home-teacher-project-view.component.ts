@@ -39,7 +39,7 @@ export class HomeTeacherProjectViewComponent implements OnInit {
       })
     });
   }
-  
+
   load(event) {
     this.fileService.uploadFiles(event.target.files).subscribe(res => {
       this.CreatedProject.Logo = res;

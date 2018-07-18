@@ -34,7 +34,7 @@ export class MainNewsPageComponent implements OnInit, DoCheck {
     this.CreatedNews.Image = './assets/no_image.png';
     this.CurrentUser = JSON.parse(localStorage.getItem('current_user'));
 
-  
+
   }
   ngDoCheck() {
     this.url = this.router.routerState.snapshot.url;
