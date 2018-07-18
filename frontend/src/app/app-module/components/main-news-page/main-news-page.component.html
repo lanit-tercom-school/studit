@@ -24,7 +24,7 @@
 			</div>
 			<div class="modal-body">
 				<input class="form-control" id="EnrollNewsName" [(ngModel)]="CreatedNews.Title" name="EnrollNewsName" #EnrollNewsName="ngModel"
-				 required>
+				 required pattern="([\S]+[a-zA-Zа-яА-Я-_\s]+)">
 				<div [hidden]="EnrollNewsName.valid || EnrollNewsName.untouched" class="alert alert-danger">
 					Введите название новости
 				</div>
@@ -42,7 +42,7 @@
 			</div>
 			<div class="modal-body">
 				<textarea class="form-control" id="EnrollNewsDescription" [(ngModel)]="CreatedNews.Description" #EnrollNewsDescription="ngModel"
-				 required name="EnrollNewsDescription" autofocus></textarea>
+				 required name="EnrollNewsDescription"></textarea>
 				<div [hidden]="EnrollNewsDescription.valid || EnrollNewsDescription.untouched" class="alert alert-danger">
 					Введите описание новости
 				</div>
