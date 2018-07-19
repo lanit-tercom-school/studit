@@ -79,9 +79,9 @@ SELECT row_to_json(t) arr
               , edited "Edited", tags "Tags", image "Image"
                   FROM news
                  WHERE tags `+sqlTagsOperator+` string_to_array($1, ',')
-              `+orderClause+`
+              `+orderClause+`ORDER BY created ASC
                 OFFSET $2 LIMIT $3 ) d)
-          FROM news) t`, tags, offset, limit).QueryRow(&set)
+          FROM news ) t`, tags, offset, limit).QueryRow(&set)
 	if err != nil {
 		fmt.Println(err)
 		return nil, err
