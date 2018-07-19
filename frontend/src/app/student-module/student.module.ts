@@ -14,12 +14,14 @@ import { StudentPublicPageComponent } from './components/student-public-page/stu
 import { StudentSettingsPageComponent } from './components/student-settings-page/student-settings-page.component';
 import { HomeStudentEnrollingPageComponent } from './components/home-student-enrolling-page/home-student-enrolling-page.component';
 import { ProjectUsersViewComponent } from './components/project-users-view/project-users-view.component';
+import { SharedModule } from 'shared-module/shared.module';
 
 @NgModule({
   imports: [
     CommonModule,
     StudentRoutingModule,
     FormsModule,
+    SharedModule
   ],
   declarations: [
     StudentProjectTasksComponent,
