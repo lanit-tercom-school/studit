@@ -54,18 +54,6 @@ var EditProjectQueryType = gql.NewObject(
 				},
 				Resolve: objects.ResolvePutProjectLogo,
 			},
-			"ChangeTags": &gql.Field{
-				Type: objects.MessageType,
-				Args: gql.FieldConfigArgument{
-					"New": &gql.ArgumentConfig{
-						Type: gql.String,
-					},
-					"Id": &gql.ArgumentConfig{
-						Type: gql.String,
-					},
-				},
-				Resolve: objects.ResolvePutProjectTags,
-			},
 			"ChangeGitHubUrl": &gql.Field{
 				Type: objects.MessageType,
 				Args: gql.FieldConfigArgument{
