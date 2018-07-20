@@ -100,4 +100,9 @@ export class StudentSettingsPageComponent implements OnInit {
     this.Passwords.new = '';
     this.NewPasswordAgain = '';
   }
+changeAvatar() {
+  this.userService.updateAvatar(this.CurrentUser.User.Avatar).subscribe(res => {
+    console.log(res);
+  });
+}
 }
