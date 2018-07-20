@@ -15,7 +15,7 @@ import { ProjectShort } from 'models/project-short';
 export class UserPublicPageComponent implements OnInit {
 
   public CurrentUser: BehaviorSubject<CurrentUser> = new BehaviorSubject(new CurrentUser());
-  public Projects: Observable<ProjectShort[]> = new Observable<ProjectShort[]>();
+  public Projects: BehaviorSubject<ProjectShort[]> = new BehaviorSubject<ProjectShort[]>([]);
   public UserId: number = -1;
   constructor(
     private userService: UserService,
@@ -24,19 +24,19 @@ export class UserPublicPageComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.route.params
-      .subscribe(params => {
-        this.UserId = +params['id'];
-        this.Projects = this.studentService.getProjectByUsers(this.UserId);
-        this.userService.getUserById(this.UserId)
-          .subscribe(res => {
-            let c: CurrentUser = new (CurrentUser);
-            c.User.Avatar = res.Avatar;
-            c.User.Id = +res.Id;
-            c.User.Description = res.Description;
-            c.User.Nickname = res.Nickname;
-            this.CurrentUser.next(c);
-          });
+    this.route.params.subscribe(params => {
+      this.UserId = +params['id'];
+      this.studentService.getProjectByUsers(this.UserId).subscribe(data=>{
+        this.Projects.next(data);
       });
+      this.userService.getUserById(this.UserId).subscribe(res => {
+        let c: CurrentUser = new (CurrentUser);
+        c.User.Avatar = res.Avatar;
+        c.User.Id = +res.Id;
+        c.User.Description = res.Description;
+        c.User.Nickname = res.Nickname;
+        this.CurrentUser.next(c);
+      });
+    });
   }
 }
