@@ -42,7 +42,7 @@ export class StudentService {
   }
 
   postNewAvatar(token: string, avatar: string): Observable<UserInfo[]> {
-    let variable = {avatar: avatar };
+    let variable = { avatar: avatar };
     console.log(JSON.stringify(variable));
     let query = `mutation ($title: String!, $description: String!, $image: String!) {
       PostNews(Title: $title, Description: $description, Image: $image) {
@@ -84,12 +84,7 @@ export class StudentService {
       .map(response => {
         let projects: ProjectShort[] = [];
         response.json().data.User.ProjectOn.forEach(element => {
-          let project: ProjectShort = {
-            id: element.Project.Id,
-            name: element.Project.Name,
-            logo: element.Project.Logo
-          }
-          projects.push(project);
+          projects.push(element.Project);
         });
         return projects;
       });
