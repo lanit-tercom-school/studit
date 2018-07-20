@@ -1,13 +1,17 @@
 @import url('https://fonts.googleapis.com/css?family=Jura');
 .card{
   background-color: var(--section-color); 
-  padding: 2rem 1rem 2rem 1rem;
+  padding: 2rem 1rem 2rem 1rem; 
+  margin: 1rem 0rem;
 }
-
 .row{ 
     margin: 0rem 0rem 0rem 0rem;
 }
 
+.content{
+  font-family: 'Jura', sans-serif;
+    font-size: 1.3rem;
+}
 
   .status{
     margin-top:1rem;

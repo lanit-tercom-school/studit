@@ -55,7 +55,7 @@ func GetAllProject(offset int64, limit int64) ([]Project, error) {
 	list := []Project{}
 	o := orm.NewOrm()
 	qs := o.QueryTable(new(Project))
-	_, err := qs.Exclude("status", PROJECT_STATUS_ENDED).Offset(offset).Limit(limit).All(&list)
+	_, err := qs.Exclude("status", PROJECT_STATUS_ENDED).OrderBy("created").Offset(offset).Limit(limit).All(&list)
 	if err != nil {
 		beego.Trace(err.Error())
 		return nil, err

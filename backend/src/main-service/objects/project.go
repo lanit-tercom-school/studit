@@ -165,19 +165,18 @@ func ChangeProjectField(p gql.ResolveParams, fieldName string) (interface{}, err
 		return nil, err
 	}
 
+	new := helpers.InterfaceToString(p.Args["New"])
 	switch fieldName {
 	case "Name":
-		project.Name = helpers.InterfaceToString(p.Args["New"])
+		project.Name = new
 	case "Description":
-		project.Description = helpers.InterfaceToString(p.Args["New"])
+		project.Description = new
 	case "Logo":
-		project.Logo = helpers.InterfaceToString(p.Args["New"])
-	case "Tags":
-		project.Tags = helpers.InterfaceToArrayStrings(p.Args["New"])
+		project.Logo = new
 	case "GitHubUrl":
-		project.GitHubUrl = helpers.InterfaceToString(p.Args["New"])
+		project.GitHubUrl = new
 	case "Status":
-		project.Status = helpers.InterfaceToString(p.Args["New"])
+		project.Status = new
 	default:
 		err = errors.New("Invalid field")
 		return nil, err
@@ -196,10 +195,6 @@ func ResolvePutProjectDescription(p gql.ResolveParams) (interface{}, error) {
 
 func ResolvePutProjectLogo(p gql.ResolveParams) (interface{}, error) {
 	return ChangeProjectField(p, "Logo")
-}
-
-func ResolvePutProjectTags(p gql.ResolveParams) (interface{}, error) {
-	return ChangeProjectField(p, "Tags")
 }
 
 func ResolvePutProjectGitHubUrl(p gql.ResolveParams) (interface{}, error) {

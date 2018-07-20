@@ -38,7 +38,26 @@ export class UserService {
       });
 
   }
-//TODO: It not work!
+
+  updateAvatar(url: string): Observable<UserInfo> {
+    let variable = { newUrl: url };
+    let query = `mutation($newUrl:String)
+      {
+        User{
+          ChangeAvatar(New: $newUrl){
+              Message
+          }
+        }
+      }&variables=`+ JSON.stringify(variable);
+    let headers = new Headers();
+    headers.append('Authorization', 'Bearer ' + JSON.parse(localStorage.getItem('current_user')).Token);
+    return this.http.get(environment.apiUrl + '/graphql?query=' + query, { headers: headers })
+      .map((response: Response) => {
+        return response.json().data.User;
+      });
+  }
+
+  //TODO: It not work!
   deleteUserById(id: number, token: string) {
     let headers = new Headers();
     headers.append('Accept', 'application/json');
@@ -63,23 +82,23 @@ export class UserService {
   }
 
   // метод общий для студента и руководителя
-  getProjectsOfUser(token: string, id_: number):Observable<ProjectItem[]> {
+  getProjectsOfUser(token: string, id_: number): Observable<ProjectItem[]> {
     var variable = { id: id_ };
-    var query = `query($id:ID)  {
-   User(Id:$id)
-   {
-     ProjectOn
-     {
-       Project
+    var query = `query($id: ID)  {
+      User(Id: $id)
+      {
+        ProjectOn
         {
-          Id
-          Description
-          Name
-          Logo
+          Project
+          {
+            Id
+            Description
+            Name
+            Logo
+          }
         }
       }
-  }
-}&variables=`+ JSON.stringify(variable);
+    }& variables=`+ JSON.stringify(variable);
     let headers = new Headers();
     headers.append('Authorization', 'Bearer ' + token);
     return this.http.get(environment.apiUrl + '/graphql?query=' + query, { headers: headers })
