@@ -5,7 +5,7 @@
     <div class="col-sm-12 col-md-5 col-lg-3 offset-lg-2" align="center">
       <img id="user-avatar" src="{{CurrentUser.User.Avatar}}" alt="Teacher photo">
           <input type="file" (change)="load($event)" accept=".jpg,.png" size="5">
-          <button role="button" class="btn btn-primary" (click)="changeAvatar()">Подтвердить</button>
+          <button role="button" class="btn btn-primary" (click)="changeAvatar()" data-toggle="modal" data-target="#created">Подтвердить</button>
     </div>
     <div class="col-sm-12 col-md-5 col-lg-7" align="left">
       <form class="block-form">
@@ -75,3 +75,11 @@
     </div>
   </div>
 </div>
+<div id="created" class="modal fade" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-header comp">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+          <h4 class="modal-title">Ваши изменения сохранены</h4>
+        </div>
+    </div>
+  </div>
