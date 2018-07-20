@@ -6,7 +6,7 @@
     <div class="form-group row">
       <div class="col-sm-6">
         <input type="text" name="name" class="form-control" id="inputName" placeholder="Полное имя (ФИО)" [(ngModel)]="User.nickname" #name="ngModel"
-          required pattern="(([a-zA-Zа-яёА-ЯЁ\-]+\s+[a-zA-Zа-яёА-ЯЁ\-]+\s+[a-zA-Zа-яёА-ЯЁ\-]+)||([a-zA-Zа-яёА-ЯЁ\-]+\s+[a-zA-Zа-яёА-ЯЁ\-]+))" />
+          required pattern="(([a-zA-Zа-яёА-ЯЁ\-]+\s+[a-zA-Zа-яёА-ЯЁ\-]+\s+[a-zA-Zа-яёА-ЯЁ\-]+)||([a-zA-Zа-яёА-ЯЁ\-]+\s+[a-zA-Zа-яёА-ЯЁ\-]+)||([a-zA-Zа-яёА-ЯЁ\-]+\s+[a-zA-Zа-яёА-ЯЁ\-]+\s+[a-zA-Zа-яёА-ЯЁ\-]+\s+[a-zA-Zа-яёА-ЯЁ\-]+))" />
         <div [hidden]="name.valid || name.untouched" class="alert alert-danger">
           Неверно указано имя
         </div>
