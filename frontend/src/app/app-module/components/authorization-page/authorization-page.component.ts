@@ -1,5 +1,5 @@
 import { Component, OnInit, NgModule } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, Route, ActivatedRoute, Params } from '@angular/router';
 
 import { AuthService } from 'services/auth.service';
 import { DataService } from 'services/data.service';
@@ -16,15 +16,16 @@ export class AuthorizationPageComponent implements OnInit {
 
   public LocalUser: User = { login: "", password: "" };
   private error: any;
-  private ReturnUrl: string
+  private ReturnUrl: string;
 
-  constructor(private auth: AuthService, private router: Router, private data: DataService) { }
+  constructor(private auth: AuthService, private router: Router, private data: DataService, private activatedRoute:ActivatedRoute) {
+   }
 
   ngOnInit() {
     window.scrollTo(0,0);
     this.auth.unauthentificatenow();
     this.ReturnUrl = this.router.routerState.snapshot.root.queryParams['ReturnUrl'] || '/home';
-  }
+    }
 
   login() {
     this.auth.authenticatenow(this.LocalUser).subscribe(
@@ -34,7 +35,7 @@ export class AuthorizationPageComponent implements OnInit {
           this.ReturnUrl = '/home';
         }
         this.router.navigate([this.ReturnUrl]);*/
-        this.router.navigate([this.returnPage()]);
+        this.router.navigateByUrl(this.returnPage());
       },
       error => {
         console.log(error);

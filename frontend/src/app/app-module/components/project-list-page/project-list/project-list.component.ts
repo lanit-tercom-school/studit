@@ -4,6 +4,8 @@ import { Observable } from "rxjs/Observable";
 import { DataService } from 'services/data.service';
 import { ProjectItem } from 'models/project-item';
 
+import { Router, ActivatedRoute, Params } from '@angular/router';//
+
 @Component({
   selector: 'app-project-list',
   templateUrl: './project-list.component.html',
@@ -17,14 +19,26 @@ export class ProjectListComponent implements OnInit {
   public TotalNumberOfItem: Observable<number>;
 
   public Loading: boolean;
-  constructor(private data: DataService) { }
+
+  constructor(private data: DataService, private activatedRoute: ActivatedRoute, private router: Router) { }
 
   ngOnInit() {
     this.data.NumberOfProjectOnPage = 2;
-    this.getPage(1);
+    this.activatedRoute.queryParams.subscribe((params: Params) => {
+      let a = params['page'];
+      console.log(a);
+      if (a) {
+        this.getPage(a, false);
+      } else {
+        this.getPage(1, true);
+      }
+    });
   }
 
-  getPage(page: number) {
+  getPage(page: number, shouldChangeQuery: boolean) {
+    if (shouldChangeQuery) {
+      this.router.navigate(['projects'], { queryParams: { 'page': page } });
+    }
     this.TotalNumberOfItem = this.data.ProjectCountObs;
     this.Loading = true;
     let offset = 0;

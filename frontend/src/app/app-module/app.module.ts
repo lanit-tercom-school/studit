@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
-import { NgxPaginationModule } from 'ngx-pagination'; 
+import { NgxPaginationModule } from 'ngx-pagination';
 import { SwiperModule } from 'angular2-useful-swiper';
 
 import { AppRouterProvider } from './routes';
@@ -56,6 +56,10 @@ import { TechnologiesComponent } from './components/main-page/technologies/techn
 import { UserProjectsViewComponent } from './components/user-projects-view/user-projects-view.component';
 import { TestImageService } from 'services/testImage.service';
 
+/*  */
+import { UrlSerializer } from '@angular/router';
+import { CustomUrlSerializer } from '../utils/CustomUrlSerializer';
+
 
 @NgModule({
   imports: [
@@ -108,8 +112,9 @@ import { TestImageService } from 'services/testImage.service';
     AuthService,
     DataService,
     PathManager,
-    TestImageService
-    ],
+    TestImageService,
+    { provide: UrlSerializer, useClass: CustomUrlSerializer }//здесь
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
