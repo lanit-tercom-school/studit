@@ -42,7 +42,7 @@
         </div>
         <div class="modal-body">
           <input class="form-control" [(ngModel)]="CreatedProject.Name" name="projectName" required #projectName="ngModel"
-            required pattern='([\S]+[a-zA-Zа-яА-Я-_\s\.\;\:\(\)\+\=\*\№\#\@\"]+)'>
+            required pattern='([\S]+[a-zA-Zа-яА-Я0-9-_\s\.\;\:\(\)\+\=\*\№\#\@\"\!\?\,\<\>]+)'>
           <div [hidden]="projectName.valid || projectName.untouched" class="alert alert-danger">
             Введите название проекта
           </div>

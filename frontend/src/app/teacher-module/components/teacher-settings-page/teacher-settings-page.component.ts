@@ -49,9 +49,9 @@ export class TeacherSettingsPageComponent implements OnInit {
     this.email = JSON.parse(localStorage.getItem('current_user')).User.Id;
   }
   load(event) {
-  this.fileService.uploadFiles(event.target.files).subscribe(res => {
-    this.CurrentUser.User.Avatar = res;
-  });
+    this.fileService.uploadFiles(event.target.files).subscribe(res => {
+      this.CurrentUser.User.Avatar = res;
+    });
   }
 
   ShowHide() {
@@ -88,5 +88,11 @@ export class TeacherSettingsPageComponent implements OnInit {
     this.Passwords.old = '';
     this.Passwords.new = '';
     this.NewPasswordAgain = '';
+  }
+
+  changeAvatar() {
+      this.userService.updateAvatar(this.CurrentUser.User.Avatar).subscribe(res => {
+        console.log(res);
+      });
   }
 }
