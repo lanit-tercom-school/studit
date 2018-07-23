@@ -49,11 +49,11 @@ func ResetPassword(login, pass, newPassword string) error {
 			if err != nil {
 				return err
 			} else {
-				return errors.New("Wrong login")
+				return errors.New("401 Unauthorized: Wrong login")
 			}
 		}
 	} else {
-		return errors.New("Wrong login or pass")
+		return errors.New("401 Unauthorized: Wrong login or pass")
 	}
 }
 
@@ -96,7 +96,7 @@ func (c *ResetPasswordController) ResetPasswordAction() {
 	v := ResetPasswordActionJson{}
 	beego.Trace("New password reset")
 	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err != nil {
-		beego.Debug("Reset error:", err.Error())
+		beego.Debug("400 Bad Request:", err.Error())
 		c.Data["json"] = MakeMessageForSending(err.Error())
 		c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
 	} else {

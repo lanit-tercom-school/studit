@@ -35,8 +35,8 @@ func init() {
 		r = auth_config.String("jwt_secret")
 	}
 	if r == "" {
-		beego.Critical("Empty secure token")
-		panic("Empty secure token")
+		beego.Critical("401 Unauthorized")
+		panic("401 Unauthorized")
 	}
 	jwtManager = jwt.HmacSha256(r)
 }
@@ -50,11 +50,11 @@ func TryToLogin(login, password string) (user models.User, err error) {
 
 	err = user.Read("login")
 	if err != nil {
-		return user, errors.New("Can't find User with this login (dev)") // TODO: should be changed to "Invalid login or password"
+		return user, errors.New("404 Not Found: Invalid login or password")
 	} else if user.Id < 1 {
-		return user, errors.New("Bad user ID (dev)") // TODO: should be changed to "Invalid login or password"
+		return user, errors.New("401 Unauthorized: Invalid login")
 	} else if user.Password != CustomStr(password).ToSHA1() {
-		return user, errors.New("Invalid login or password")
+		return user, errors.New("401 Unauthorized: Invalid password")
 	} else {
 		return user, nil // all OK
 	}
@@ -74,7 +74,7 @@ func (c *AuthController) Login() {
 	var v Usr
 	// Парсим тело запроса
 	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err != nil {
-		beego.Debug(c.Ctx.Input.IP(), "Login error (403):", err.Error())
+		beego.Debug(c.Ctx.Input.IP(), "403 Forbidden:", err.Error())
 		c.Data["json"] = err.Error()
 		c.Ctx.Output.SetStatus(HTTP_FORBIDDEN)
 	} else {
@@ -82,7 +82,7 @@ func (c *AuthController) Login() {
 		// Ищем в бд соответствия
 		user, err := TryToLogin(v.Login, v.Password)
 		if err != nil {
-			beego.Debug("Login error (403):", err.Error())
+			beego.Debug(err.Error())
 			c.Data["json"] = err.Error()
 			c.Ctx.Output.SetStatus(HTTP_FORBIDDEN)
 		} else {
@@ -96,7 +96,7 @@ func (c *AuthController) Login() {
 
 			token, err := jwtManager.Encode(claim)
 			if err != nil {
-				beego.Debug("Encode error (500):", err.Error())
+				beego.Debug("500 Internal Server Error:", err.Error())
 				c.Data["json"] = err.Error()
 				c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
 			}
