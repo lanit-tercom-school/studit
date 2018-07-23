@@ -5,8 +5,8 @@
   <form class="col-sm-offset-4">
     <div class="form-group row">
       <div class="col-sm-6">
-        <input type="text" name="name" class="form-control" id="inputName" placeholder="Полное имя" [(ngModel)]="User.nickname" #name="ngModel"
-          required pattern="(([a-zA-Zа-яА-Я]+\s+[a-zA-Zа-яА-Я]+\s+[a-zA-Zа-яА-Я]+)||([a-zA-Zа-яА-Я]+\s+[a-zA-Zа-яА-Я]+))" />
+        <input type="text" name="name" class="form-control" id="inputName" placeholder="Полное имя (ФИО)" [(ngModel)]="User.nickname" #name="ngModel"
+          required pattern="(([a-zA-Zа-яёА-ЯЁ\-]+\s+[a-zA-Zа-яёА-ЯЁ\-]+\s+[a-zA-Zа-яёА-ЯЁ\-]+)||([a-zA-Zа-яёА-ЯЁ\-]+\s+[a-zA-Zа-яёА-ЯЁ\-]+)||([a-zA-Zа-яёА-ЯЁ\-]+\s+[a-zA-Zа-яёА-ЯЁ\-]+\s+[a-zA-Zа-яёА-ЯЁ\-]+\s+[a-zA-Zа-яёА-ЯЁ\-]+))" />
         <div [hidden]="name.valid || name.untouched" class="alert alert-danger">
           Неверно указано имя
         </div>
@@ -26,7 +26,7 @@
     <form class="form-horizontal" role="form">
       <div class="form-group">
         <div class="col-sm-6">
-          <input type="password" class="form-control" name="password" id="inputEmail3" placeholder="Пароль" [(ngModel)]="User.password"
+          <input type="password" class="form-control" name="password" id="inputEmail3" placeholder="Пароль (не менее 6 символов)" [(ngModel)]="User.password"
             #password="ngModel" required pattern="[a-zA-Z0-9]{6,}" />
           <div [hidden]="password.valid || password.untouched" class="alert alert-danger">
             Некорректный пароль
