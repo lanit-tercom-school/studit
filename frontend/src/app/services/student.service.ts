@@ -103,7 +103,7 @@ export class StudentService {
     {
       Message
     }
-} &variables=`+ JSON.stringify(variable);
+} &variables=` + JSON.stringify(variable);
     let headers = new Headers();
     headers.append('Authorization', 'Bearer ' + token);
     return this.http.get(environment.apiUrl + '/graphql?query=' + query, { headers: headers })

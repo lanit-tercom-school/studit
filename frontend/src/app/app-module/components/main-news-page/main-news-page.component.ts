@@ -55,7 +55,7 @@ export class MainNewsPageComponent implements OnInit, DoCheck {
     // tslint:disable-next-line:max-line-length
     this.teacherService.postNewNews(JSON.parse(localStorage.getItem('current_user')).Token, this.CreatedNews.Title, this.CreatedNews.Description,this.CreatedNews.Image)
       .subscribe(() => {
-        console.log('Project was added');
+        console.log('News was added');
         this.IsCreated = true;
         // this.router.navigate(['/home']);
       });
