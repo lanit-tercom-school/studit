@@ -35,7 +35,7 @@ export class DataService {
   private projectCount: number;
   private newsCountObs: BehaviorSubject<number> = new BehaviorSubject<number>(0);
 
-  private numberOfProjectsOnPage: number=2;
+  private numberOfProjectsOnPage: number = 2;
   private projectsCountObs: BehaviorSubject<number> = new BehaviorSubject<number>(7);
   private projectForViewing: BehaviorSubject<ProjectItem> = new BehaviorSubject<ProjectItem>(null);
   private newsForViewing: BehaviorSubject<NewsItem> = new BehaviorSubject<NewsItem>(null);
@@ -49,10 +49,10 @@ export class DataService {
     projectsForMainPage: ProjectItem[];
     enrollsForTeacher: EnrollItem[];
   } = {
-    news: [], projects: [], userProjects: [],
-    userEnrolledProjects: [], projectsForMainPage: [], enrollsForTeacher: [],
-    tasks: new Map<string, TasksItem[]>([]),
-  };
+      news: [], projects: [], userProjects: [],
+      userEnrolledProjects: [], projectsForMainPage: [], enrollsForTeacher: [],
+      tasks: new Map<string, TasksItem[]>([]),
+    };
 
   constructor(
     private teacherService: TeacherService,
@@ -192,10 +192,8 @@ export class DataService {
       this.userService.getProjectsOfUser(this.userToken, this.userId).subscribe(res => {
         if (res != null) {
           this.dataStore.userProjects = res;
-          //this.dataStore.userProjects.forEach(a => { a.Logo = this.addApiUrl(a.Logo); })
           this.userProjects.next(Object.assign({}, this.dataStore).userProjects);
         }
-
       });
     } else {
       console.log('Error in data.service: can not load usersProject without auth');
