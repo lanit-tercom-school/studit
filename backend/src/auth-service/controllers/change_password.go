@@ -58,14 +58,19 @@ func (c *ChangePasswordController) ChangePassword() {
 			c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
 		} else {
 			user.Password = v.NewPassword
-			err := ChangePasswordForUser(user)
-			if err != nil {
-				beego.Critical(c.Ctx.Input.IP(), "Change password in `ChangePasswordForUser` error:", err.Error())
-				c.Data["json"] = MakeMessageForSending(err.Error())
-				c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
+			if len(user.Password) <= 6 {
+				c.Data["json"] = MakeMessageForSending(HTTP_NOT_ACCEPTABLE_STR)
+				c.Ctx.Output.SetStatus(HTTP_NOT_ACCEPTABLE)
 			} else {
-				beego.Trace("Password was changed")
-				c.Data["json"] = MakeMessageForSending("Ok")
+				err := ChangePasswordForUser(user)
+				if err != nil {
+					beego.Critical(c.Ctx.Input.IP(), "Change password in `ChangePasswordForUser` error:", err.Error())
+					c.Data["json"] = MakeMessageForSending(err.Error())
+					c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
+				} else {
+					beego.Trace("Password was changed")
+					c.Data["json"] = MakeMessageForSending("Ok")
+				}
 			}
 		}
 	}

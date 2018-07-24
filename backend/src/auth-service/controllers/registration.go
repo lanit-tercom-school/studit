@@ -201,6 +201,12 @@ func (c *RegistrationController) Register() {
 			beego.Debug("nickname:", u.Nickname)
 			c.Data["json"] = "Wrong Login/Password/Nickname"
 			c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
+		} else if len(u.Password) <= 6 {
+			beego.Debug("login:", u.Login)
+			beego.Debug("password:", u.Password)
+			beego.Debug("nickname:", u.Nickname)
+			c.Data["json"] = "Password is too short"
+			c.Ctx.Output.SetStatus(HTTP_NOT_ACCEPTABLE)
 		} else {
 			beego.Trace("Valid combo login & password & nickname")
 
