@@ -15,7 +15,7 @@
           <label class="col-sm-2 col-md-3 col-lg-2 col-form-label">Nickname</label>
           <input name="nickname" class="form-control" [(ngModel)]="CurrentUser.User.Nickname">
         </div>
-        <button type="submit" role="button" class="btn btn-primary">Подтвердить</button>
+        <button type="submit" role="button" (click)="changeNickname()" class="btn btn-primary" data-toggle="modal" data-target="#created" data-dismiss="modal">Подтвердить</button>
       </form>
 
       <form class="block-form">
@@ -36,7 +36,7 @@
           <input type="checkbox" value="contactsHidden"> Не показывать контакты на моей странице
         </label>
         <br>
-        <button type="submit" role="button" class="btn btn-primary">Подтвердить</button>
+        <button type="submit" role="button"  class="btn btn-primary">Подтвердить</button>
       </form>
 
       <form class="block-form">
@@ -44,10 +44,10 @@
         <form class="form-inline">
           <div class="row">
             <label class="col-sm-2 form-label" for="inputDescription">О себе</label>
-            <textarea class="form-control" id="inputDescription" maxlength="300">{{CurrentUser.User.Description}}</textarea>
+            <textarea name="description" class="form-control" id="inputDescription" maxlength="300" [(ngModel)]="CurrentUser.User.Description"></textarea>
           </div>
         </form>
-        <button type="submit" role="button" class="btn btn-primary">Подтвердить</button>
+        <button type="submit" role="button" (click)="changeDescription()" class="btn btn-primary" data-toggle="modal" data-target="#created">Подтвердить</button>
       </form>
 
       <form class="block-form">
@@ -70,12 +70,13 @@
             <label class="col-sm-2 col-md-3 col-lg-3  col-form-label">Повторите пароль</label>
             <input type="password" [(ngModel)]="NewPasswordAgain" name="newPasswordAgain" class="form-control">
           </div>
-          <button type="submit" role="button" (click)="ChangePassword()" class="btn btn-primary">Подтвердить</button>
+          <button type="submit" role="button" (click)="ChangePassword()" class="btn btn-primary" data-toggle="modal" data-target="#created">Подтвердить</button>
         </form>
       </form>
     </div>
   </div>
 </div>
+
 <div id="created" class="modal fade" data-backdrop="static">
     <div class="modal-dialog">
         <div class="modal-header comp">
