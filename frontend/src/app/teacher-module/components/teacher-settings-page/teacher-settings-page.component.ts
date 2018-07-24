@@ -5,6 +5,7 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { FileService } from 'services/file.service';
 import { UserService } from "services/user.service";
 import { CurrentUser } from 'models/current-user';
+import { TestImageService } from 'services/testImage.service';
 
 @Component({
   selector: 'app-teacher-settings-page',
@@ -32,7 +33,7 @@ export class TeacherSettingsPageComponent implements OnInit {
   private error: any;
   private email: string;
 
-  constructor(private userService: UserService, private route: ActivatedRoute, private fileService: FileService) { }
+  constructor(private userService: UserService, private route: ActivatedRoute, private fileService: FileService, private testImageService: TestImageService) { }
 
   ngOnInit() {
     this.CurrentUser.User.Login = JSON.parse(localStorage.getItem('current_user')).User.Login;
@@ -41,6 +42,9 @@ export class TeacherSettingsPageComponent implements OnInit {
         this.userService.getUserById(JSON.parse(localStorage.getItem('current_user')).User.Id)
           .subscribe(res => {
             this.CurrentUser.User.Avatar = res.Avatar;
+            this.testImageService.testImage(this.CurrentUser.User.Avatar, () => {
+              this.CurrentUser.User.Avatar = "";
+            })
             this.CurrentUser.User.Id = +res.Id;
             this.CurrentUser.User.Description = res.Description;
             this.CurrentUser.User.Nickname = res.Nickname;
@@ -91,8 +95,8 @@ export class TeacherSettingsPageComponent implements OnInit {
   }
 
   changeAvatar() {
-      this.userService.updateAvatar(this.CurrentUser.User.Avatar).subscribe(res => {
-        console.log(res);
-      });
+    this.userService.updateAvatar(this.CurrentUser.User.Avatar).subscribe(res => {
+      console.log(res);
+    });
   }
 }

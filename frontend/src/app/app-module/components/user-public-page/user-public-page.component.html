@@ -1,10 +1,12 @@
 <div class="container">
   <div class="row" id="main-info">
     <div class="col-sm-3 hidden-xs" id="author-photo">
-      <img width="225px" height="225px" src="{{CurrentUser.value.User.Avatar}}" alt="Student photo">
+      <img width="225px" height="225px" *ngIf='CurrentUser.value.User.Avatar' src="{{CurrentUser.value.User.Avatar}}" alt="Student photo">
+      <img width="225px" height="225px" *ngIf='!CurrentUser.value.User.Avatar' src="./assets/no_image.png" alt="Student photo">
     </div>
     <div class="visible-xs col-xs-5" id="author-photo">
-      <img width="100px" height="100px" src="{{CurrentUser.value.User.Avatar}}" alt="Student photo">
+      <img width="100px" height="100px" *ngIf='CurrentUser.value.User.Avatar' src="{{CurrentUser.value.User.Avatar}}" alt="Student photo">
+      <img width="100px" height="100px" *ngIf='!CurrentUser.value.User.Avatar' src="./assets/no_image.png" alt="Student photo">
     </div>
     <div class="col-sm-8 col-xs-6 offset-sm-1">
       <h3>{{CurrentUser.value.User.Nickname}}</h3>

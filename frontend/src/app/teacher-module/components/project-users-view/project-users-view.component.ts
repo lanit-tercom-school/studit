@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 import { UserInfo } from 'models/user-info';
+import { TestImageService } from 'services/testImage.service';
 
 @Component({
   selector: 'app-project-users-view',
@@ -10,12 +11,20 @@ import { UserInfo } from 'models/user-info';
 })
 
 export class ProjectUsersViewComponent implements OnInit {
-  @Input() public ProjectUsersList: BehaviorSubject<UserInfo[]>;
-
-  constructor() { }
+  @Input() public ProjectUsersListBS: BehaviorSubject<UserInfo[]>;
+  public ProjectUsersList:UserInfo[]=[];
+  constructor(private testImageService:TestImageService) { }
 
   ngOnInit() {
-    
+    this.ProjectUsersListBS.subscribe(data => {
+      this.ProjectUsersList = data;
+      this.ProjectUsersList.forEach(item => {
+        this.testImageService.testImage(item.Avatar, ()=> {
+          item.Avatar = "";
+          console.log('Sss');
+        });
+      })
+    });
   }
 
 }

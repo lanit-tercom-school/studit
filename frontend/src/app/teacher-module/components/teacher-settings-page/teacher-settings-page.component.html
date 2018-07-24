@@ -3,7 +3,8 @@
   <hr>
   <div class="row">
     <div class="col-sm-12 col-md-5 col-lg-3 offset-lg-2" align="center">
-      <img id="user-avatar" src="{{CurrentUser.User.Avatar}}" alt="Teacher photo">
+      <img *ngIf='CurrentUser.User.Avatar' id="user-avatar" src="{{CurrentUser.User.Avatar}}" alt="Teacher photo">
+      <img *ngIf='!CurrentUser.User.Avatar' id="user-avatar" src="./assets/no_image.png" alt="Teacher photo">
           <input type="file" (change)="load($event)" accept=".jpg,.png" size="5">
           <button role="button" class="btn btn-primary" (click)="changeAvatar()" data-toggle="modal" data-target="#created">Подтвердить</button>
     </div>

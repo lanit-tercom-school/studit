@@ -6,6 +6,7 @@ import { StudentService } from 'services/student.service';
 import { UserService } from 'services/user.service';
 import { CurrentUser } from 'models/current-user';
 import { ProjectShort } from 'models/project-short';
+import { TestImageService } from 'services/testImage.service';
 
 @Component({
   selector: 'app-user-public-page',
@@ -20,7 +21,8 @@ export class UserPublicPageComponent implements OnInit {
   constructor(
     private userService: UserService,
     private route: ActivatedRoute,
-    private studentService: StudentService
+    private studentService: StudentService,
+    private testImageService: TestImageService
   ) { }
 
   ngOnInit() {
@@ -37,6 +39,13 @@ export class UserPublicPageComponent implements OnInit {
         c.User.Nickname = res.Nickname;
         this.CurrentUser.next(c);
       });
+    });
+    this.CurrentUser.subscribe(res => {
+      if (res != null) {
+        this.testImageService.testImage(this.CurrentUser.value.User.Avatar, ()=> {
+          this.CurrentUser.value.User.Avatar = "";
+        });
+      }
     });
   }
 }
