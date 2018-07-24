@@ -12,13 +12,14 @@ import { environment } from '../../environments/environment';
 import { User } from 'models/user';
 import { Message } from 'models/message';
 import { UserRegister } from 'models/user-register';
+import { CurrentUser } from 'models/current-user';
 
 @Injectable()
 export class AuthService {
     //TODO: Add types to all methods!
 
     constructor(private http: Http) {
-        this.checktoken();
+        this.fetchFromLocalStorage();
     }
 
     authenticatenow(user: User) {
@@ -53,16 +54,45 @@ export class AuthService {
                 }
             });
     }
+    saveInLocalStorage(v: CurrentUser): void {
+        localStorage.setItem('current_user', JSON.stringify(v));
+        let expirDate = moment(JSON.parse(localStorage.getItem('current_user')).DataOfExpiration, 'YYYY-MM-DD hh:mm:ss[.sssssss]');
+        let millisecondsBetweenExpirationAndNow: number = expirDate.milliseconds() - Date.now();
+        if (v != null && millisecondsBetweenExpirationAndNow > 0) {
+            this.setLogOutTimer(millisecondsBetweenExpirationAndNow);
+        }
+    }
 
-    checktoken() {
+    fetchFromLocalStorage(): void {
+        let data = JSON.parse(localStorage.getItem('current_user'));
+        if (data != null) {
+            let expirDate = moment(JSON.parse(localStorage.getItem('current_user')).DataOfExpiration, 'YYYY-MM-DD hh:mm:ss[.sssssss]');
+            let millisecondsBetweenExpirationAndNow: number = expirDate.valueOf() - Date.now();
+            console.log(millisecondsBetweenExpirationAndNow);
+            if (millisecondsBetweenExpirationAndNow < 0) {
+                localStorage.removeItem('current_user');
+            } else {
+                this.setLogOutTimer(millisecondsBetweenExpirationAndNow);
+            }
+        }
+    }
+    setLogOutTimer(delayInMilliseconds: number): void {
+        setTimeout(() => {
+            localStorage.removeItem('current_user');
+            window.location.reload(false);
+        }, delayInMilliseconds);
+    }
+
+/*     checktoken() {
+        console.log('*');
         if (localStorage.getItem('current_user')) {
             let today = moment();
             let other = moment(JSON.parse(localStorage.getItem('current_user')).DataOfExpiration, 'YYYY-MM-DD hh:mm:ss[.sssssss]');
             if (other.isBefore(today)) {
                 localStorage.removeItem('current_user');
-            }
+            } 
         }
-    }
+    } */
 
     unauthentificatenow() {
         localStorage.removeItem('current_user');

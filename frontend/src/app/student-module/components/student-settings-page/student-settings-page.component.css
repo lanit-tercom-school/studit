@@ -36,7 +36,10 @@ h1{
   width: 50%;
 }
 
-
+.comp{
+  background-color: white;
+  border-radius: 1rem;
+}
 .block-form
 {
   margin-bottom: 2.5rem;

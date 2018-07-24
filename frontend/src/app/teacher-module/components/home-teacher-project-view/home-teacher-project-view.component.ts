@@ -33,13 +33,13 @@ export class HomeTeacherProjectViewComponent implements OnInit {
     this.ProjectList = this.data.UserProjects;
     this.ProjectList.subscribe(data => {
       data.forEach(item => {
-        this.testImageService.testImage(item.Logo, ()=> {
-          item.Logo = "";
+        this.testImageService.testImage(item.Logo, () => {
+          item.Logo = '';
         });
       })
     });
   }
-  
+
   load(event) {
     this.fileService.uploadFiles(event.target.files).subscribe(res => {
       this.CreatedProject.Logo = res;

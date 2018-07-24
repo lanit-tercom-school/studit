@@ -40,11 +40,9 @@ import { NewsItemComponent } from './components/main-news-page/news-list/news-it
 import { MainFullNewsPageComponent } from './components/main-full-news-page/main-full-news-page.component';
 
 import { ProjectPageComponent } from './components/project-page/project-page.component';
-import { MaterialsComponent } from '../shared-components/project-items/materials/materials.component';
+/* import { MaterialsComponent } from '../shared-components/project-items/materials/materials.component';
 import { MaterialsItemComponent } from '../shared-components/project-items/materials/materials-item/materials-item.component';
-import { ProjNewsComponent } from '../shared-components/project-items/proj-news/proj-news.component';
-import { ProjNewsItemComponent } from "../shared-components/project-items/proj-news/proj-news-item/proj-news-item.component";
-
+ */
 import { AuthorizationPageComponent } from './components/authorization-page/authorization-page.component';
 import { RegistrationPageComponent } from './components/registration-page/registration-page.component';
 import { ValidationPageComponent } from './components/registration-page/validation-page/validation-page.component';
@@ -55,6 +53,7 @@ import { ErrorPageComponent } from './components/error-page/error-page.component
 import { TechnologiesComponent } from './components/main-page/technologies/technologies.component';
 import { UserProjectsViewComponent } from './components/user-projects-view/user-projects-view.component';
 import { TestImageService } from 'services/testImage.service';
+import { SharedModule } from 'shared-module/shared.module';
 
 
 @NgModule({
@@ -64,7 +63,8 @@ import { TestImageService } from 'services/testImage.service';
     HttpModule,
     AppRouterProvider,
     NgxPaginationModule,
-    SwiperModule
+    SwiperModule,
+    SharedModule
   ],
   declarations: [
     AppComponent,
@@ -85,10 +85,8 @@ import { TestImageService } from 'services/testImage.service';
     NewsItemComponent,
     MainFullNewsPageComponent,
     ProjectPageComponent,
-    MaterialsComponent,
-    MaterialsItemComponent,
-    ProjNewsComponent,
-    ProjNewsItemComponent,
+  /*   MaterialsComponent,
+    MaterialsItemComponent, */
     AuthorizationPageComponent,
     RegistrationPageComponent,
     ValidationPageComponent,
@@ -110,6 +108,8 @@ import { TestImageService } from 'services/testImage.service';
     PathManager,
     TestImageService
     ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  exports:[
+  ]
 })
 export class AppModule { }
