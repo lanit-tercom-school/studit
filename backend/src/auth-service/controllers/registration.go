@@ -201,7 +201,7 @@ func (c *RegistrationController) Register() {
 			beego.Debug("nickname:", u.Nickname)
 			c.Data["json"] = "Wrong Login/Password/Nickname"
 			c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
-		} else if len(u.Password) <= 6 {
+		} else if len(u.Password) < 6 {
 			beego.Debug("login:", u.Login)
 			beego.Debug("password:", u.Password)
 			beego.Debug("nickname:", u.Nickname)

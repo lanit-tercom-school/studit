@@ -58,7 +58,7 @@ func (c *ChangePasswordController) ChangePassword() {
 			c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
 		} else {
 			user.Password = v.NewPassword
-			if len(user.Password) <= 6 {
+			if len(user.Password) < 6 {
 				c.Data["json"] = MakeMessageForSending(HTTP_NOT_ACCEPTABLE_STR)
 				c.Ctx.Output.SetStatus(HTTP_NOT_ACCEPTABLE)
 			} else {
