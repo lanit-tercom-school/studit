@@ -76,18 +76,17 @@ func init() {
 		},
 		Resolve: objects.ResolvePostNews,
 	}
-  	DeleteNews = gql.Field{
+	DeleteNews = gql.Field{
 		Type: objects.MessageType,
 		Args: gql.FieldConfigArgument{
 			"Id": &gql.ArgumentConfig{
 				Type: gql.NewNonNull(gql.Int),
 			},
 		},
-		Resolve: objects.ResolveDelуteNews,
-    }
+		Resolve: objects.ResolveDeleteNews,
+	}
 	EditNews = gql.Field{
 		Type:    EditNewsQueryType,
 		Resolve: func(p gql.ResolveParams) (interface{}, error) { return NewsData{}, nil },
-
 	}
 }
