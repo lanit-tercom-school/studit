@@ -10,6 +10,7 @@ import (
 	"log"
 	"mime/multipart"
 	"net/http"
+	"strconv"
 	"strings"
 )
 
@@ -242,7 +243,7 @@ func HttpDelete(url string, send interface{}, get interface{}) (err error) {
 	}
 	LogDelete(url, "Received "+resp.Status)
 	if !(resp.StatusCode >= 200 && resp.StatusCode < 300) {
-		err = errors.New(GetErrorMessageFromResponse(url, resp))
+		err = errors.New(strconv.Itoa(resp.StatusCode))
 		LogErrorDelete(url, err)
 		return
 	}
