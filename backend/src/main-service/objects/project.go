@@ -242,13 +242,11 @@ func ResolveDeleteProject(p gql.ResolveParams) (interface{}, error) {
 		if err_del_enrolls := helpers.HttpDelete(conf.Configuration.DataServiceURL+"v1/project_enroll/?project_id="+strconv.Itoa(id), nil, &messageToGet); err_del_enrolls.Error() != "404" && err_del_enrolls != nil {
 			return nil, err_del_enrolls
 		}
-		//helpers.LogDelete(conf.Configuration.DataServiceURL+"v1/project_enroll/?project_id="+strconv.Itoa(id), err_del_enrolls.Error())
 
 		helpers.LogAccesAllowed("DeleteProjectUsers")
 		if err_del_users := helpers.HttpDelete(conf.Configuration.DataServiceURL+"v1/project_user/?project_id="+strconv.Itoa(id), nil, &messageToGet); err_del_users.Error() != "404" && err_del_users != nil {
 			return nil, err_del_users
 		}
-		//helpers.LogDelete(conf.Configuration.DataServiceURL+"v1/project_user/?project_id="+strconv.Itoa(id), err_del_users.Error())
 		helpers.LogAccesAllowed("DeleteProject")
 		err := helpers.HttpDelete(conf.Configuration.DataServiceURL+"v1/project/"+strconv.Itoa(id), nil, &messageToGet)
 
