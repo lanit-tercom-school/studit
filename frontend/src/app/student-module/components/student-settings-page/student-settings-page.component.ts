@@ -13,7 +13,7 @@ import { CurrentUser } from 'models/current-user';
   styleUrls: ['./student-settings-page.component.css']
 })
 export class StudentSettingsPageComponent implements OnInit {
-
+  public PhoneNumber: string;
   public CurrentUser: CurrentUser = {
     User: {
       Avatar: '',
@@ -107,5 +107,5 @@ export class StudentSettingsPageComponent implements OnInit {
       console.log(res);
     });
   }
-  
+
 }
