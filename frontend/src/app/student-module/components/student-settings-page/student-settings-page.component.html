@@ -38,7 +38,7 @@
         </div>
         <div class="form-inline">
           <label class="col-sm-2 form-label" for="inputPhone">Телефон</label>
-          <input name="phone" class="form-control" id="inputPhone" placeholder="+79991114477" [(ngModel)]="PhoneNumber" #phone="ngModel" pattern="\++[0-9]{11,}">
+          <input name="phone" class="form-control" id="inputPhone" placeholder="+79999999999" [(ngModel)]="PhoneNumber" #phone="ngModel" pattern="\++[0-9]{11,}">
           <div [hidden]="phone.valid || phone.untouched" class="col-sm-offset-2 alert alert-danger">
             Некорректный номер телефона
           </div>
@@ -49,7 +49,7 @@
           <input type="checkbox" value="contactsHidden"> Не показывать контакты на моей странице
         </label>
         <br>
-        <button type="submit" role="button" *ngIf="((email.valid==true)&&(phone.valid==true))" class="btn btn-primary" (click)="changeDescription()" data-toggle="modal" data-target="#created">Подтвердить</button>
+        <button type="submit" role="button" *ngIf="((email.valid==true)&&(phone.valid==true))" class="btn btn-primary" data-toggle="modal" data-target="#created">Подтвердить</button>
         <button type="submit" role="button" *ngIf="((email.valid==false)||(phone.valid==false))" class="btn btn-primary">Подтвердить</button>
       </form>
 
@@ -61,7 +61,7 @@
             <textarea class="form-control" id="inputDescription" maxlength="300">{{CurrentUser.User.Description}}</textarea>
           </div>
         </form>
-        <button type="submit" role="button" class="btn btn-primary">Подтвердить</button>
+        <button type="submit" role="button" class="btn btn-primary" (click)="changeDescription()" data-toggle="modal" data-target="#created">Подтвердить</button>
       </form>
 
       <form class="block-form">

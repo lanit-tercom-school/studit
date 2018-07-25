@@ -12,7 +12,7 @@ import { CurrentUser } from 'models/current-user';
   styleUrls: ['./teacher-settings-page.component.css']
 })
 export class TeacherSettingsPageComponent implements OnInit {
-
+  public PhoneNumber: string;
   public CurrentUser: CurrentUser = {
     User: {
       Avatar: './assets/no_image.png',

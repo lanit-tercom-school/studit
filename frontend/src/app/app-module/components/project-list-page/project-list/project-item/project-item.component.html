@@ -1,14 +1,16 @@
 <div class="hidden-xs">
   <div class="card">
     <a routerLink="/project/{{ProjectItem.Id}}" routerLinkActive="active">
-         <img *ngIf='ProjectItem.Logo' class="card-img-top" src="{{ProjectItem.Logo}}" alt="Card image cap">
-         <img *ngIf='!ProjectItem.Logo' class="card-img-top" src="./assets/no_image.png">
+      <img *ngIf='ProjectItem.Logo' class="card-img-top" src="{{ProjectItem.Logo}}" alt="Card image cap">
+      <img *ngIf='!ProjectItem.Logo' class="card-img-top" src="./assets/no_image.png">
       <div class="card-block">
-        <h4 class="card-title">{{ProjectItem.Name.split(".", 1)}}...</h4>
-        <p class="card-text">{{ProjectItem.Description.split(".", 1)}}...</p>
+        <h4 *ngIf='ProjectItem.Name.length>=40' class="card-title">{{ProjectItem.Name.split(".", 1)}}...</h4>
+        <h4 *ngIf='ProjectItem.Name.length<40' class="card-title">{{ProjectItem.Name}}</h4>
+        <p *ngIf='ProjectItem.Description.length>=120'class="card-text">{{ProjectItem.Description.split(".", 1)}}...</p>
+        <p *ngIf='ProjectItem.Description.length<120'class="card-text">{{ProjectItem.Description}}</p>
         <p class="card-text" style="text-align: right;"></p>
       </div>
-     </a>
+    </a>
   </div>
 </div>
 <div class="visible-xs">
@@ -17,7 +19,7 @@
       <div class="row">
         <div class="col-xs-4">
           <img class="card-img-top-xs" src="{{ProjectItem.Logo}}" alt="Card image cap">
-         <img *ngIf='!ProjectItem.Logo' class="card-img-top" src="./assets/no_image.png">
+          <img *ngIf='!ProjectItem.Logo' class="card-img-top" src="./assets/no_image.png">
         </div>
         <div class="card-block-xs">
           <div class="col-xs-8">
