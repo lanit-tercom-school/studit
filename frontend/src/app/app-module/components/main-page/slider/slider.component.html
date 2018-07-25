@@ -9,15 +9,15 @@
               <div class="col-sm-5 col-sm-offset-1">
                 <img class="project-logo" src="{{project.Logo}}" alt="Project logo">
               </div>
-              <div class="swiper-text col-sm-4">
+              <div class="swiper-text col-sm-5">
                 <h3 class="swiper-project-name" routerLink="/project/{{project.Id}}">{{project.Name}}</h3>
-                <p class="swiper-project-description">{{project.Description}}</p>
+                <p class="swiper-project-description">{{project.Description.split(".", 2)}}...</p>
               </div>
             </div>
           </div>
         </div>
-        <div class="swiper-button-next hidden-xs"></div>
-        <div class="swiper-button-prev hidden-xs"></div>
+        <a class="swiper-button-next hidden-xs"></a>
+        <a class="swiper-button-prev hidden-xs"></a>
       </swiper>
     </div>
   </div>

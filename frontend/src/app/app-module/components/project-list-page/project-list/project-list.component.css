@@ -7,3 +7,6 @@
 .has-text-centered{
     margin-top: 2rem;
 }
+.row{
+    overflow: hidden;
+}
