@@ -32,8 +32,8 @@ func init() {
 		r = auth_config.String("jwt_secret")
 	}
 	if r == "" {
-		beego.Critical("Empty secure token")
-		panic("Empty secure token")
+		beego.Critical(string(HTTP_BAD_REQUEST) + HTTP_BAD_REQUEST_STR + ":" + "Empty secure token") //400
+		panic(string(HTTP_BAD_REQUEST) + HTTP_BAD_REQUEST_STR + ":" + "Empty secure token")          //400
 	}
 	jwtManager = jwt.HmacSha256(r)
 }
@@ -47,26 +47,26 @@ func newClient(token string) (client CurrentClient) {
 		PermissionLevel: VIEWER,
 	}
 	if len(token) < 2 {
-		beego.Debug("Token too short")
+		beego.Debug(string(HTTP_BAD_REQUEST) + HTTP_BAD_REQUEST_STR + ":" + "Token too short")
 		return
 	} else if err := jwtManager.Validate(token); err == nil {
 		claims, _ := jwtManager.Decode(token) // err не нужна, т.к. проверяется во время .Validate()
 		userId, err := claims.Get("user_id")
 		userPermissionLevel, err1 := claims.Get("perm_lvl")
 		if err != nil {
-			beego.Critical("Can't get user_id", err.Error())
+			beego.Critical(string(HTTP_BAD_REQUEST)+HTTP_BAD_REQUEST_STR+":"+"Can't get user_id", err.Error())
 
 		} else if int(userId.(float64)) < 0 {
-			beego.Critical("UserId below 0")
+			beego.Critical(string(HTTP_NOT_FOUND) + HTTP_NOT_FOUND_STR + ":" + "UserId below 0")
 
 		} else if err1 != nil {
-			beego.Critical("Can't get perm_lvl", err.Error())
+			beego.Critical(string(HTTP_FORBIDDEN)+HTTP_FORBIDDEN_STR+":"+"Can't get perm_lvl", err.Error())
 
 		} else if int(userPermissionLevel.(float64)) < 0 {
-			beego.Critical("UserPermissionLevel below 0")
+			beego.Critical(string(HTTP_FORBIDDEN) + HTTP_FORBIDDEN_STR + ":" + "UserPermissionLevel below 0")
 
 		} else if int(userPermissionLevel.(float64)) > MaxPermissionLevel {
-			beego.Critical("UserPermissionLevel is", userPermissionLevel, "that higher than", MaxPermissionLevel)
+			beego.Critical(string(HTTP_FORBIDDEN)+HTTP_FORBIDDEN_STR+":"+"UserPermissionLevel is", userPermissionLevel, "that higher than", MaxPermissionLevel)
 
 		} else {
 			beego.Trace("Success validation for", userId, ", Permission level", userPermissionLevel)
@@ -74,7 +74,7 @@ func newClient(token string) (client CurrentClient) {
 			client.PermissionLevel = int(userPermissionLevel.(float64))
 		}
 	} else {
-		beego.Debug("Invalid token", err.Error())
+		beego.Debug(string(HTTP_NOT_ACCEPTABLE)+HTTP_NOT_ACCEPTABLE_STR+":"+"Invalid token", err.Error())
 	}
 	return
 }
@@ -94,7 +94,7 @@ func (c *ControllerWithAuthorization) Prepare() {
 	beego.Trace("Start validation")
 	clientToken := c.Ctx.Input.Header("Bearer-token")
 	if clientToken == "" {
-		beego.Debug("Empty token")
+		beego.Debug(string(HTTP_BAD_REQUEST) + HTTP_BAD_REQUEST_STR + ":" + "Empty token")
 		c.CurrentUser.PermissionLevel = VIEWER
 		c.Data["json"] = HTTP_UNAUTHORIZED_STR
 	} else {
