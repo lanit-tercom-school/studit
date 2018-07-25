@@ -57,6 +57,43 @@ export class UserService {
       });
   }
 
+  updateNickname(url:string):Observable<UserInfo> {
+    let variable = { newUrl: url };
+    let query = `mutation($newUrl:String)
+      {
+        User{
+          ChangeNickname(New: $newUrl){
+              Message
+          }
+        }
+      }&variables=`+ JSON.stringify(variable);
+    let headers = new Headers();
+    headers.append('Authorization', 'Bearer ' + JSON.parse(localStorage.getItem('current_user')).Token);
+    return this.http.get(environment.apiUrl + '/graphql?query=' + query, { headers: headers })
+      .map((response: Response) => {
+        return response.json().data.User;
+      });
+  }
+
+  
+  updateDescription(url: string): Observable<UserInfo> {
+    let variable = { newUrl: url };
+    let query = `mutation($newUrl:String)
+      {
+        User{
+          ChangeDescription(New: $newUrl){
+              Message
+          }
+        }
+      }&variables=`+ JSON.stringify(variable);
+    let headers = new Headers();
+    headers.append('Authorization', 'Bearer ' + JSON.parse(localStorage.getItem('current_user')).Token);
+    return this.http.get(environment.apiUrl + '/graphql?query=' + query, { headers: headers })
+      .map((response: Response) => {
+        return response.json().data.User;
+      });
+  }
+
   //TODO: It not work!
   deleteUserById(id: number, token: string) {
     let headers = new Headers();
@@ -73,12 +110,22 @@ export class UserService {
     return this.http.put(environment.apiUrl + '/v1/user/id/' + id, user, { headers: headers });
   }
   //TODO: It not work!
-  changePasswordForUser(token: string, passwords) {
+  changePasswordForUser(newpass: string, oldpass: string): Observable<UserInfo> {
+    let variable = { newUrl: newpass, oldUrl: oldpass };
+    let query = `mutation($newUrl:String, $oldUrl:String)
+      {
+        Auth{
+          ChangePass(New: $newUrl, Old:$oldUrl){
+              Message
+          }
+        }
+      }&variables=`+ JSON.stringify(variable);
     let headers = new Headers();
-    headers.append('Content-Type', 'application/json');
-    headers.append('Accept', 'application/json');
-    headers.append('Bearer-token', token);
-    return this.http.put(environment.apiUrl + '/v1/auth/change-password/', passwords, { headers: headers });
+    headers.append('Authorization', 'Bearer ' + JSON.parse(localStorage.getItem('current_user')).Token);
+    return this.http.get(environment.apiUrl + '/graphql?query=' + query, { headers: headers })
+      .map((response: Response) => {
+        return response.json().data.User;
+      });
   }
 
   // метод общий для студента и руководителя

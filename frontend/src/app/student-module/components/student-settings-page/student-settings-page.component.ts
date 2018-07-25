@@ -13,7 +13,7 @@ import { CurrentUser } from 'models/current-user';
   styleUrls: ['./student-settings-page.component.css']
 })
 export class StudentSettingsPageComponent implements OnInit {
-
+  public PhoneNumber: string;
   public CurrentUser: CurrentUser = {
     User: {
       Avatar: '',
@@ -34,7 +34,7 @@ export class StudentSettingsPageComponent implements OnInit {
   private email: string;
   public IsCreated = false;
   constructor(private userService: UserService, private studentService: StudentService,
-    private route: ActivatedRoute,  private fileService: FileService) { }
+    private route: ActivatedRoute, private fileService: FileService) { }
 
   ngOnInit() {
     this.CurrentUser.User.Login = JSON.parse(localStorage.getItem('current_user')).User.Login;
@@ -52,9 +52,9 @@ export class StudentSettingsPageComponent implements OnInit {
     this.email = JSON.parse(localStorage.getItem('current_user')).User.Id;
   }
   load(event) {
-  this.fileService.uploadFiles(event.target.files).subscribe(res => {
-    this.CurrentUser.User.Avatar = res;
-  });
+    this.fileService.uploadFiles(event.target.files).subscribe(res => {
+      this.CurrentUser.User.Avatar = res;
+    });
   }
   /* makeAvatar() {
     this.studentService.postNewAvatar(JSON.parse(localStorage.getItem('current_user')).Token, this.CurrentUser.User.Avatar)
@@ -80,18 +80,9 @@ export class StudentSettingsPageComponent implements OnInit {
       this.ClearPasswords();
     }
     else {
-      this.userService.changePasswordForUser(JSON.parse(localStorage.getItem('current_user')).Token, this.Passwords)
-        .subscribe(res => {
-          this.IsChanged = true;
-          this.Clicked = false;
-          this.ClearPasswords();
-        },
-        error => {
-          this.error = error;
-          alert('Ошибка! ' + this.error);
-          this.ClearPasswords();
-          this.IsChanged = false;
-        });
+      this.userService.changePasswordForUser(this.Passwords.new, this.Passwords.old).subscribe(res => {
+        console.log(res);
+      });
     }
   }
 
@@ -100,9 +91,21 @@ export class StudentSettingsPageComponent implements OnInit {
     this.Passwords.new = '';
     this.NewPasswordAgain = '';
   }
-changeAvatar() {
-  this.userService.updateAvatar(this.CurrentUser.User.Avatar).subscribe(res => {
-    console.log(res);
-  });
-}
+  changeAvatar() {
+    this.userService.updateAvatar(this.CurrentUser.User.Avatar).subscribe(res => {
+      console.log(res);
+    });
+  }
+
+  changeNickname() {
+    this.userService.updateNickname(this.CurrentUser.User.Nickname).subscribe(res => {
+      console.log(res);
+    });
+  }
+  changeDescription() {
+    this.userService.updateDescription(this.CurrentUser.User.Description).subscribe(res => {
+      console.log(res);
+    });
+  }
+
 }
