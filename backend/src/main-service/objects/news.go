@@ -2,6 +2,7 @@ package objects
 
 import (
 	"errors"
+	"strconv"
 	"time"
 
 	"main-service/conf"
@@ -120,4 +121,23 @@ func ResolveGetNewsList(p gql.ResolveParams) (interface{}, error) {
 	var set NewsSet
 	err := helpers.HttpGet(conf.Configuration.DataServiceURL+"v1/news/?limit="+limit+"&offset="+offset, &set)
 	return set, err
+}
+
+func ResolveDeleteNews(p gql.ResolveParams) (interface{}, error) {
+	c := p.Context.Value("CurrentUser").(CurrentClient)
+
+	id, ok := p.Args["Id"].(int)
+	if !ok {
+		return nil, errors.New("Missed Id")
+	}
+
+	messageToGet := Message{}
+	if c.PermissionLevel >= LEADER {
+		helpers.LogAccesAllowed("DeleteNews")
+		err := helpers.HttpDelete(conf.Configuration.DataServiceURL+"v1/news/"+strconv.Itoa(id), nil, &messageToGet)
+		return messageToGet, err
+	}
+
+	helpers.LogAccesDenied("DeleteNews")
+	return nil, errors.New("Access is denied")
 }

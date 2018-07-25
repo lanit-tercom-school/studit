@@ -7,6 +7,7 @@ import (
 )
 
 var PostNews gql.Field
+var DeleteNews gql.Field
 
 func init() {
 	PostNews = gql.Field{
@@ -23,5 +24,15 @@ func init() {
 			},
 		},
 		Resolve: objects.ResolvePostNews,
+	}
+
+	DeleteNews = gql.Field{
+		Type: objects.MessageType,
+		Args: gql.FieldConfigArgument{
+			"Id": &gql.ArgumentConfig{
+				Type: gql.NewNonNull(gql.Int),
+			},
+		},
+		Resolve: objects.ResolveDeleteNews,
 	}
 }
