@@ -22,16 +22,18 @@ export class ProjectService {
   }
 
   getMainPageProjects(): Observable<ProjectItem[]> {
-    var query = `{ 
-      ProjectList(Limit: "3" Offset: "0")
+    let query = `{ 
+      ProjectList(Limit: "10" Offset: "0")
       {
-        Description
-        DateOfCreation
-        Logo
-        Tags
-        Id
-        GitHubUrl
-        Name
+        ProjectList {
+          Description
+          DateOfCreation
+          Logo
+          Tags
+          Id
+          Name
+          GitHubUrl
+        }
       }
     }`;
     return this.http.get(environment.apiUrl + '/graphql?query=' + query)
@@ -39,17 +41,17 @@ export class ProjectService {
         /*  let res = response.json().data.ProjectList;
           res.forEach(element => {
            element.Logo = environment.apiUrl + element.Logo;
-         }); 
+         });
          return res; */
-        return response.json().data.ProjectList;
+        return response.json().data.ProjectList.ProjectList;
       });
 
   }
 
   // получить все проекты
   getProjectItems(limit_: number, offset_: number): Observable<ProjectList> {
-    var variables = { limit: limit_, offset: offset_ };
-    var query = `query($limit:String, $offset: String)
+    let variables = { limit: limit_, offset: offset_ };
+    let query = `query($limit:String, $offset: String)
    {
      ProjectList(Offset: $offset Limit: $limit){
       ProjectList {
@@ -63,7 +65,7 @@ export class ProjectService {
       }
       TotalCount
     }
-  }&variables=`+ JSON.stringify(variables);
+  }&variables=` + JSON.stringify(variables);
     return this.http.get(environment.apiUrl + '/graphql?query=' + query)
       .map((response: Response) => {
         let res = response.json().data.ProjectList;
@@ -72,8 +74,8 @@ export class ProjectService {
   }
 
   getProjectById(id_: number): Observable<ProjectItem> {
-    var variable = { id: id_ };
-    var query = `query($id:ID)
+    let variable = { id: id_ };
+    let query = `query($id:ID)
    {
     Project(Id: $id)
     {

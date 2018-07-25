@@ -8,7 +8,8 @@
     <div class="card card-outline">
       <div class="row">
         <div class="col-sm-2 hidden-xs col-sm-offset-1">
-          <img class="card-img" src="{{Enroll.Project.Logo}}" alt="Добавление картинки в процессе">
+          <img *ngIf='Enroll.Project.Logo' class="card-img" src="{{Enroll.Project.Logo}}" alt="Добавление картинки в процессе">
+          <img *ngIf='!Enroll.Project.Logo' class="card-img" src="./assets/no_image.png" alt="Добавление картинки в процессе">
         </div>
         <div class="col-md-8 col-sm-8 col-md-offset-2 project-info">
           <p class="lead">{{Enroll.Project.Name}}</p>

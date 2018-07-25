@@ -2,8 +2,8 @@
   <div class="card">
     <div class="row" id="main-info">
       <div class="col-md-3 col-md-12" id="project-img-status">
-        <img *ngIf="ProjectObs.value.Logo!==undefined" width="225px" height="225px" src="{{ProjectObs.value.Logo}}" alt="Project">
-        <img *ngIf="ProjectObs.value.Logo===undefined" width="225px" height="225px" src="./assets/no_image.png" alt="Project">
+        <img *ngIf="ProjectObs.value.Logo" width="225px" height="225px" src="{{ProjectObs.value.Logo}}" alt="Project">
+        <img *ngIf="!ProjectObs.value.Logo" width="225px" height="225px" src="./assets/no_image.png" alt="Project">
       </div>
       <div class="col-md-8">
         <h2 id="project-name">{{ProjectObs.value.Name}}</h2>
@@ -14,13 +14,13 @@
     </div>
   </div>
   <div class="row">
-    <div class="content">
+    <!-- <div class="content">
       <div class="col-md-4 col-md-offset-1" id="materials">
         <app-materials [MaterialsList]=getMaterialsItems()></app-materials>
       </div>
-    </div>
+    </div> -->
     <div class="content">
-      <div class="col-md-4 col-md-offset-2">
+      <div class="col-md-4 col-md-offset-4">
         <div class="heading">
           <app-proj-news [ProjectNewsList]=getProjectNewsItem()>
             <a href="#" class="btn btn-secondary">Author profile</a>) ></app-proj-news>

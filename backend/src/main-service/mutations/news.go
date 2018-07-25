@@ -6,9 +6,60 @@ import (
 	gql "github.com/graphql-go/graphql"
 )
 
+type NewsData struct {
+	message objects.Message
+}
+
 var PostNews gql.Field
 var DeleteNews gql.Field
 
+var EditNews gql.Field
+
+var EditNewsQueryType = gql.NewObject(
+	gql.ObjectConfig{
+		Name: "NewsQuery",
+		Fields: gql.Fields{
+			"ChangeTitle": &gql.Field{
+				Type: objects.MessageType,
+				Args: gql.FieldConfigArgument{
+					"New": &gql.ArgumentConfig{
+						Type: gql.String,
+					},
+					"Id": &gql.ArgumentConfig{
+						Type: gql.String,
+					},
+				},
+				Resolve: objects.ResolvePutNewsTitle,
+			},
+			"ChangeDescription": &gql.Field{
+				Type: objects.MessageType,
+				Args: gql.FieldConfigArgument{
+					"New": &gql.ArgumentConfig{
+						Type: gql.String,
+					},
+					"Id": &gql.ArgumentConfig{
+						Type: gql.String,
+					},
+				},
+				Resolve: objects.ResolvePutNewsDescription,
+			},
+			"ChangeImage": &gql.Field{
+				Type: objects.MessageType,
+				Args: gql.FieldConfigArgument{
+					"New": &gql.ArgumentConfig{
+						Type: gql.String,
+					},
+					"Id": &gql.ArgumentConfig{
+						Type: gql.String,
+					},
+				},
+				Resolve: objects.ResolvePutNewsImage,
+			},
+		},
+	},
+)
+
+//You can check this queries in Altair
 func init() {
 	PostNews = gql.Field{
 		Type: objects.NewsType,
@@ -25,14 +76,18 @@ func init() {
 		},
 		Resolve: objects.ResolvePostNews,
 	}
-
-	DeleteNews = gql.Field{
+  	DeleteNews = gql.Field{
 		Type: objects.MessageType,
 		Args: gql.FieldConfigArgument{
 			"Id": &gql.ArgumentConfig{
 				Type: gql.NewNonNull(gql.Int),
 			},
 		},
-		Resolve: objects.ResolveDeleteNews,
+		Resolve: objects.ResolveDelуteNews,
+    }
+	EditNews = gql.Field{
+		Type:    EditNewsQueryType,
+		Resolve: func(p gql.ResolveParams) (interface{}, error) { return NewsData{}, nil },
+
 	}
 }

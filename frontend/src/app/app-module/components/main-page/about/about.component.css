@@ -17,3 +17,30 @@ p{
     font-size: x-large;
     font-weight: 550;
 }
+input.ng-touched.ng-invalid 
+{
+    background: white;
+    border:solid red 2px;
+}
+input.ng-touched.ng-valid {
+    background: white;
+    border:solid green 2px;
+}
+.alert-danger{
+    background: none;
+    border: none;
+    height: 3rem;
+    padding-top: 1rem;
+    color: white;
+    font-family: 'Jura', sans-serif;
+    margin-bottom: 1rem;
+}
+.alert{
+    text-align: left;
+}
+.form-control{
+    background: white;
+}
+.btm-default{
+    color: black;
+}

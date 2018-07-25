@@ -1,7 +1,9 @@
 @import url('https://fonts.googleapis.com/css?family=Jura');
+
 .card {
     margin-bottom: 3rem;
     word-wrap: break-word;
+    padding: 0rem;
 }
 
 .row {
@@ -15,9 +17,7 @@
     margin: 0rem;
     
 }
-.card{
-    padding: 0rem;
-}
+
 
 a {
     text-decoration: none;
@@ -98,4 +98,36 @@ img {
 textarea {
     resize: none;
     height: 15rem;
+}
+
+.comp{
+    background-color: white;
+    border-radius: 1rem;
+}
+input.ng-touched.ng-invalid 
+{
+    background: white;
+    border:solid red 2px;
+}
+input.ng-touched.ng-valid {
+    background: white;
+    border:solid green 2px;
+}
+textarea.ng-touched.ng-invalid 
+{
+    background: white;
+    border:solid red 2px;
+}
+textarea.ng-touched.ng-valid {
+    background: white;
+    border:solid green 2px;
+}
+.alert-danger{
+    background: none;
+    border: none;
+    height: 3rem;
+    padding-top: 1rem;
+    color: black;
+    font-family: 'Jura', sans-serif;
+    margin-bottom: 1rem;
 }

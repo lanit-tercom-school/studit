@@ -39,11 +39,38 @@ h1 {
     background-color: var(--dark-logo-color);
     border-color: var(--dark-logo-color);
 }
-
+input.ng-touched.ng-invalid 
+{
+    background: white;
+    border:solid red 2px;
+}
+input.ng-touched.ng-valid {
+    background: white;
+    border:solid green 2px;
+}
+textarea.ng-touched.ng-invalid 
+{
+    background: white;
+    border:solid red 2px;
+}
+textarea.ng-touched.ng-valid {
+    background: white;
+    border:solid green 2px;
+}
+.alert-danger{
+    background: none;
+    border: none;
+    height: 3rem;
+    padding-top: 1rem;
+    color: black;
+    font-family: 'Jura', sans-serif;
+    margin-bottom: 1rem;
+}
 
 img{
   margin-bottom: 1rem;
   margin-top: 1rem;
+  max-width: 100%;
 }
 .modal-image{
   width: 10rem;
@@ -55,4 +82,8 @@ img{
 textarea{
   resize: none;
   height: 15rem;
+}
+.comp{
+  background-color: white;
+  border-radius: 1rem;
 }

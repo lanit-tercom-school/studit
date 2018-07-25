@@ -5,6 +5,7 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 import { NewsItem } from 'models/news-item';
 import { DataService } from 'services/data.service';
+import { TestImageService } from 'services/testImage.service';
 //import { ApiService } from 'services/api.service';
 
 @Component({
@@ -20,7 +21,7 @@ export class NewsListComponent implements OnInit {
 
   public Loading: boolean;
   public NewsList: Observable<NewsItem[]>;
-  constructor(private data: DataService) { }
+  constructor(private data: DataService, private testImageService: TestImageService) { }
 
   ngOnInit() {
     this.data.NumberOfNewsOnPage = 3;
@@ -35,6 +36,13 @@ export class NewsListComponent implements OnInit {
       offset = (page - 1) * this.Limit;
     this.data.loadNews(offset);
     this.NewsList = this.data.News;
+    this.NewsList.subscribe(data => {
+      data.forEach(item => {
+        this.testImageService.testImage(item.Image, ()=> {
+          item.Image = "";
+        });
+      })
+    });
     this.PageNumber = page;
     this.Loading = false;
     window.scrollTo(0, 0);

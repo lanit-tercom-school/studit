@@ -55,7 +55,7 @@ func GetAllProject(offset int64, limit int64) ([]Project, error) {
 	list := []Project{}
 	o := orm.NewOrm()
 	qs := o.QueryTable(new(Project))
-	_, err := qs.Exclude("status", PROJECT_STATUS_ENDED).Offset(offset).Limit(limit).All(&list)
+	_, err := qs.Exclude("status", PROJECT_STATUS_ENDED).OrderBy("created").Offset(offset).Limit(limit).All(&list)
 	if err != nil {
 		beego.Trace(err.Error())
 		return nil, err
@@ -71,7 +71,13 @@ func UpdateProjectById(m *Project) (err error) {
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
 		var num int64
-		if num, err = o.Update(m); err == nil {
+		v.Description = m.Description
+		v.GitHubUrl = m.GitHubUrl
+		v.Logo = m.Logo
+		v.Name = m.Name
+		v.Status = m.Status
+		v.Tags = m.Tags
+		if num, err = o.Update(&v); err == nil {
 			fmt.Println("Number of records updated in database:", num)
 		}
 	}

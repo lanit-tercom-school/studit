@@ -16,7 +16,7 @@ export class StudentSettingsPageComponent implements OnInit {
 
   public CurrentUser: CurrentUser = {
     User: {
-      Avatar: './assets/no_image.png',
+      Avatar: '',
       Description: '',
       Id: -1,
       Login: '',
@@ -38,6 +38,7 @@ export class StudentSettingsPageComponent implements OnInit {
 
   ngOnInit() {
     this.CurrentUser.User.Login = JSON.parse(localStorage.getItem('current_user')).User.Login;
+    console.log(CurrentUser);
     this.route.params
       .subscribe(params => {
         this.userService.getUserById(JSON.parse(localStorage.getItem('current_user')).User.Id)
@@ -99,4 +100,9 @@ export class StudentSettingsPageComponent implements OnInit {
     this.Passwords.new = '';
     this.NewPasswordAgain = '';
   }
+changeAvatar() {
+  this.userService.updateAvatar(this.CurrentUser.User.Avatar).subscribe(res => {
+    console.log(res);
+  });
+}
 }

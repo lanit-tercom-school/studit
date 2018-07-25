@@ -6,7 +6,8 @@
 		<p>{{ ReadingNews.value.LastEdit| date: 'short'}}</p>
 		<div class="row">
 			<div class="col-lg-4 col-sm-12">
-				<img src="{{ReadingNews.value.Image}}" alt="Waiting for picture...">
+				<img *ngIf='ReadingNews.value.Image' src="{{ReadingNews.value.Image}}" alt="Waiting for picture...">
+				<img *ngIf='!ReadingNews.value.Image' src="./assets/no_image.png" alt="Waiting for picture...">				
 			</div>
 			<div class="col-lg-8 col-sm-12">
 				<p class="text">{{ ReadingNews.value.Description}}</p>

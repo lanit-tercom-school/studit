@@ -22,23 +22,26 @@
      border: 1px solid var(--dark-logo-color);
      border-radius: 5px;
      padding: 1rem;
+     min-height: 40rem;
 }
 
 .swiper-section{
     margin-top: 3rem;
 }
 
- h1{
+h1{
     font-family: 'Jura', sans-serif;
     font-size: 4.5rem;
     margin-bottom: 5rem;
  }
 
- .project-logo{
+.project-logo{
      margin-top: 1rem;
      max-height: 40rem;
  }
-
+.swiper{
+    min-height: 40rem;
+}
 
  
 

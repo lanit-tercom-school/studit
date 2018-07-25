@@ -4,6 +4,7 @@ import (
 	"errors"
 	"main-service/conf"
 	"main-service/helpers"
+	"strconv"
 
 	gql "github.com/graphql-go/graphql"
 )
@@ -43,6 +44,13 @@ var UserType = gql.NewObject(
 	},
 )
 
+type UserDataToSend struct {
+	Id          int    `json:"id"`
+	Nickname    string `json:"nickname"`
+	Description string `json:"description"`
+	Avatar      string `json:"avatar"`
+}
+
 //ResolveGetUserById - Получение пользователя по Id с data-service
 func ResolveGetUserById(p gql.ResolveParams) (interface{}, error) {
 	var id string
@@ -54,4 +62,129 @@ func ResolveGetUserById(p gql.ResolveParams) (interface{}, error) {
 	var user User
 	err := helpers.HttpGet(conf.Configuration.DataServiceURL+"v1/user/"+id, &user)
 	return user, err
+}
+
+/* ChangeUser получает из Data Service текущего пользователя
+изменяет нужное поле ползователя */
+func ChangeUser(p gql.ResolveParams, paramName string) (interface{}, error) {
+	new := helpers.InterfaceToString(p.Args["New"])
+	token := helpers.InterfaceToString(p.Context.Value("Token"))
+
+	user := User{}
+	id := strconv.Itoa(p.Context.Value("CurrentUser").(CurrentClient).UserId)
+	url := conf.Configuration.DataServiceURL + "v1/user/" + id
+
+	helpers.LogGet(url, "Getting user by id and token")
+	err := helpers.HttpGetWithToken(url, token, &user)
+
+	if err != nil {
+		helpers.LogErrorGet(url, err)
+		return nil, err
+	}
+
+	helpers.LogPut("", "Updating "+paramName)
+
+	switch paramName {
+	case "Nickname":
+		user.Nickname = new
+	case "Avatar":
+		user.Avatar = new
+	case "Description":
+		user.Description = new
+	default:
+		err = errors.New("Invalid param")
+		return nil, err
+	}
+
+	return user, err
+}
+
+// UpdateUserOnServer загружает пользователя в DataService
+func UpdateUserOnServer(p gql.ResolveParams, user User) (interface{}, error) {
+	token := helpers.InterfaceToString(p.Context.Value("Token"))
+
+	id := p.Context.Value("CurrentUser").(CurrentClient).UserId
+
+	url := conf.Configuration.DataServiceURL + "v1/user/" + strconv.Itoa(id)
+
+	message := Message{}
+
+	helpers.LogPut(url, "Putting user into data by token")
+	err := helpers.HttpPutWithToken(url, token, user, &message)
+
+	if err != nil {
+		helpers.LogErrorPut(url, err)
+		return nil, err
+	}
+
+	return message, err
+}
+
+//ResolvePutNewNickname - Смена NickName пользователя
+func ResolvePutNewNickname(p gql.ResolveParams) (interface{}, error) {
+
+	helpers.LogPut("", "ResolvePutNewNickname function")
+
+	tempUser, err := ChangeUser(p, "Nickname")
+
+	if err != nil {
+		return nil, err
+	}
+
+	user, ok := tempUser.(User)
+
+	if !ok {
+		err = errors.New("missed user")
+		return nil, err
+	}
+
+	message, err := UpdateUserOnServer(p, user)
+
+	return message, err
+}
+
+//ResolvePutNewAvatar - Смена Avatar пользователя
+func ResolvePutNewAvatar(p gql.ResolveParams) (interface{}, error) {
+
+	helpers.LogPut("", "ResolvePutNewAvatar function")
+
+	tempUser, err := ChangeUser(p, "Avatar")
+
+	if err != nil {
+		return nil, err
+	}
+
+	user, ok := tempUser.(User)
+
+	if !ok {
+		err = errors.New("missed user")
+		return nil, err
+	}
+
+	message, err := UpdateUserOnServer(p, user)
+
+	return message, err
+}
+
+//ResolvePutNewDescription - Смена Description пользователя
+func ResolvePutNewDescription(p gql.ResolveParams) (interface{}, error) {
+
+	helpers.LogPut("", "ResolvePutNewDescription function")
+
+	tempUser, err := ChangeUser(p, "Description")
+
+	if err != nil {
+		return nil, err
+	}
+
+	user, ok := tempUser.(User)
+
+	if !ok {
+		err = errors.New("missed user")
+		return nil, err
+	}
+
+	message, err := UpdateUserOnServer(p, user)
+
+	return message, err
 }

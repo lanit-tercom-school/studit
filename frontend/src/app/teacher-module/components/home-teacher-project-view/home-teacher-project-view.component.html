@@ -8,11 +8,12 @@
   <div *ngFor="let Project of ProjectList | async" class="card card-outline">
     <div class="row">
       <div class="card col-sm-2 hidden-xs col-sm-offset-1">
-        <img class="card-img" src="{{Project.Logo}}">
+        <img *ngIf='Project.Logo' class="card-img" src="{{Project.Logo}}">
+        <img *ngIf='!Project.Logo' class="card-img" src="./assets/no_image.png">
       </div>
       <div class="col-sm-8 project-info">
         <p class="lead">{{Project.Name}}</p>
-        <p>{{Project.Description}}</p>
+        <p>{{Project.Description.split(".", 2)}}...</p>
         <div class="read-more">
           <a routerLink="/project/{{Project.Id}}" routerLinkActive="active">
             <p>Подробнее
@@ -40,27 +41,44 @@
           <h4 class="modal-title">Название проекта</h4>
         </div>
         <div class="modal-body">
-          <input class="form-control" placeholder="" [(ngModel)]="CreatedProject.Name" name="projectName" required>
+          <input class="form-control" [(ngModel)]="CreatedProject.Name" name="projectName" #projectName="ngModel"
+            required maxlength="200" pattern='([\S]+[a-zA-Zа-яёА-ЯЁ0-9-_\s\.\;\:\(\)\+\=\*\№\#\@\"\!\?\,\<\>]+)'>
+          <div [hidden]="projectName.valid || projectName.untouched" class="alert alert-danger">
+            Введите название проекта
+          </div>
         </div>
         <div class="modal-header">
           <h4 class="modal-title">Изображение проекта</h4>
         </div>
         <div class="modal-image col-sm-offset-1">
-          <img id="project-avatar" src={{CreatedProject.Logo}} alt="Project photo">
+          <img *ngIf='CreatedProject.Logo' id="project-avatar" src={{CreatedProject.Logo}} alt="Project photo">
+          <img *ngIf='!CreatedProject.Logo' id="project-avatar" src='./assets/no_image.png' alt="Project photo">
           <input type="file" (change)="load($event)" accept=".jpg,.png" size="5">
         </div>
         <div class="modal-header">
           <h4 class="modal-title">Описание проекта</h4>
         </div>
         <div class="modal-body">
-          <textarea class="form-control" id="inputProjDescription" [(ngModel)]="CreatedProject.Description" name="projDescription"
-            required></textarea>
+          <textarea class="form-control" id="inputProjDescription" [(ngModel)]="CreatedProject.Description" name="ProjDescription"
+             #projDescription="ngModel" required></textarea>
+           <div [hidden]="projDescription.valid || projDescription.untouched" class="alert alert-danger">
+             Введите описание проекта
+           </div>
         </div>
         <div class="modal-footer">
-          <button role="button" class="btn btn-primary btn-submit" type="submit" (click)="makeProject()" data-dismiss="modal">Создать</button>
+          <button type="button" class="btn btn-primary" *ngIf="((projectName.valid==true)&&(projDescription.valid==true))" (click)="makeProject()" data-toggle="modal" data-target="#created" data-dismiss="modal">Создать</button>
+          <button type="button" class="btn btm-default btn-block" *ngIf="((projectName.valid==false)||(projDescription.valid==false))">Создать</button>
           <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
         </div>
       </div>
     </div>
   </div>
- 
+
+  <div id="created" class="modal fade" data-backdrop="static">
+      <div class="modal-dialog">
+          <div class="modal-header comp">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h4 class="modal-title">Проект создан</h4>
+          </div>
+      </div>
+    </div>

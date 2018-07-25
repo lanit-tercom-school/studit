@@ -1,9 +1,11 @@
 <h5 align="center">Участвует в проектах:</h5>
 <hr>
-<a routerLink="/project/{{project.id}}" *ngFor="let project of UsersProjectList | async">
+<a routerLink="/project/{{project.Id}}" *ngFor="let project of UsersProjectList | async">
         <div class="row view">
                 <div class="col-sm-offset-1">
-                        <img src="{{project.logo}}"> {{project.name}}
+                        <img *ngIf='project.Logo' src="{{project.Logo}}"> 
+                        <img *ngIf='!project.Logo' src="./assets/no_image.png">
+                        {{project.Name}}
                 </div>
         </div>
 </a>

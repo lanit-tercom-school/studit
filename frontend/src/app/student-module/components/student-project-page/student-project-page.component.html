@@ -2,7 +2,8 @@
 	<div class="card card-outline">
 		<div class="row" id="main-info">
 			<div class="col-sm-3" id="project-img-status">
-				<img class="card-img" src="{{ProjectObs.value.Logo}}" alt="Project image">
+				<img *ngIf='ProjectObs.value.Logo' class="card-img" src="{{ProjectObs.value.Logo}}" alt="Project image">
+				<img *ngIf='!ProjectObs.value.Logo' class="card-img" src="./assets/no_image.png" alt="Project image">
 				<div [ngSwitch]="EnrollButtonStatus" class="status">
 					<div *ngSwitchCase="'Enrolling'">
 						<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#enrollMessageModal">Подать заявку</button>
@@ -21,20 +22,36 @@
 			<div class="col-sm-8 offset-sm-1">
 				<h2 id="project-name">{{ProjectObs.value.Name}}</h2>
 				<p class="project-description">{{ProjectObs.value.Description}}</p>
-				<i>Теги:</i> <a class="blacktag" href="#">lorem ipsum</a>
+				<i>Теги:</i>
+				<a class="blacktag" href="#">lorem ipsum</a>
 			</div>
 		</div>
 	</div>
-	<div class="row">
-		<div class="col-sm-12 col-md-4 col-md-offset-1">
-			<app-student-project-tasks [TasksItemList]="TasksObs"></app-student-project-tasks>
+	<div [ngSwitch]="EnrollButtonStatus" class="status">
+		<div *ngSwitchCase="'InProject'">
+			<div class="row">
+				<div class="col-sm-12 col-md-4 col-md-offset-1">
+					<app-student-project-tasks [TasksItemList]="TasksObs"></app-student-project-tasks>
+				</div>
+				<div class="col-sm-12 col-md-4 col-md-offset-2">
+					<app-project-users-view [ProjectUsersList]="ProjectUsers"></app-project-users-view>
+				</div>
+			</div>
 		</div>
-		<div class="col-sm-12 col-md-4 col-md-offset-2">
-			<app-project-users-view [ProjectUsersList]="ProjectUsers"></app-project-users-view>
+		<div *ngSwitchDefault>
+			<div class="row">
+				<div class="content">
+					<div class="col-md-4 col-md-offset-4">
+						<div class="heading">
+							<app-proj-news [ProjectNewsList]=getProjectNewsItem()>
+								<a href="#" class="btn btn-secondary">Author profile</a>) ></app-proj-news>
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
 </div>
-
 
 <!--Модальное окно-->
 <div id="enrollMessageModal" class="modal fade" data-backdrop="static">

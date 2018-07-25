@@ -1,9 +1,9 @@
 @import url('https://fonts.googleapis.com/css?family=Jura');
 
-.section-home-student-page
+ .container
 {
-   margin: 0.5rem auto;
-}
+   margin: 2.5rem auto;
+} 
 
 
 a{
