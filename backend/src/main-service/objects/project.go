@@ -106,7 +106,7 @@ func ResolvePostProject(p gql.ResolveParams) (interface{}, error) {
 			GitHubUrl:      helpers.InterfaceToString(p.Args["GitHubUrl"]),
 			Tags:           helpers.InterfaceToArrayStrings(p.Args["Tags"]),
 		}
-		err := helpers.HttpPost(conf.Configuration.DataServiceURL+"v1/project_user/", projectToSend, &projectToGet)
+		err := helpers.HttpPost(conf.Configuration.DataServiceURL+"v1/project/", projectToSend, &projectToGet)
 		user := User{
 			Id: c.UserId,
 		}
@@ -120,7 +120,7 @@ func ResolvePostProject(p gql.ResolveParams) (interface{}, error) {
 			SignedDate: time.Now(),
 			Progress:   0,
 		}
-		helpers.HttpPost(conf.Configuration.DataServiceURL+"v1/project/", projectUserToSend, &projectUserToGet)
+		helpers.HttpPost(conf.Configuration.DataServiceURL+"v1/project_user/", projectUserToSend, &projectUserToGet)
 		return projectToGet, err
 	}
 	helpers.LogAccesDenied("PostProject")

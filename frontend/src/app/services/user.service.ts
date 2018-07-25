@@ -22,8 +22,8 @@ export class UserService {
 
 
   getUserById(id_: number): Observable<UserInfo> {
-    var variable = { id: id_ };
-    var query = `query($id:ID)  {
+    let variable = { id: id_ };
+    let query = `query($id:ID)  {
    User(Id:$id)
    {
     Id
@@ -31,7 +31,7 @@ export class UserService {
     Avatar
     Description
   }
-}&variables=`+ JSON.stringify(variable);
+}&variables=` + JSON.stringify(variable);
     return this.http.get(environment.apiUrl + '/graphql?query=' + query)
       .map((response: Response) => {
         return response.json().data.User;
@@ -45,6 +45,43 @@ export class UserService {
       {
         User{
           ChangeAvatar(New: $newUrl){
+              Message
+          }
+        }
+      }&variables=`+ JSON.stringify(variable);
+    let headers = new Headers();
+    headers.append('Authorization', 'Bearer ' + JSON.parse(localStorage.getItem('current_user')).Token);
+    return this.http.get(environment.apiUrl + '/graphql?query=' + query, { headers: headers })
+      .map((response: Response) => {
+        return response.json().data.User;
+      });
+  }
+
+  updateNickname(url:string):Observable<UserInfo> {
+    let variable = { newUrl: url };
+    let query = `mutation($newUrl:String)
+      {
+        User{
+          ChangeNickname(New: $newUrl){
+              Message
+          }
+        }
+      }&variables=`+ JSON.stringify(variable);
+    let headers = new Headers();
+    headers.append('Authorization', 'Bearer ' + JSON.parse(localStorage.getItem('current_user')).Token);
+    return this.http.get(environment.apiUrl + '/graphql?query=' + query, { headers: headers })
+      .map((response: Response) => {
+        return response.json().data.User;
+      });
+  }
+
+  
+  updateDescription(url: string): Observable<UserInfo> {
+    let variable = { newUrl: url };
+    let query = `mutation($newUrl:String)
+      {
+        User{
+          ChangeDescription(New: $newUrl){
               Message
           }
         }
@@ -73,18 +110,28 @@ export class UserService {
     return this.http.put(environment.apiUrl + '/v1/user/id/' + id, user, { headers: headers });
   }
   //TODO: It not work!
-  changePasswordForUser(token: string, passwords) {
+  changePasswordForUser(newpass: string, oldpass: string): Observable<UserInfo> {
+    let variable = { newUrl: newpass, oldUrl: oldpass };
+    let query = `mutation($newUrl:String, $oldUrl:String)
+      {
+        Auth{
+          ChangePass(New: $newUrl, Old:$oldUrl){
+              Message
+          }
+        }
+      }&variables=`+ JSON.stringify(variable);
     let headers = new Headers();
-    headers.append('Content-Type', 'application/json');
-    headers.append('Accept', 'application/json');
-    headers.append('Bearer-token', token);
-    return this.http.put(environment.apiUrl + '/v1/auth/change-password/', passwords, { headers: headers });
+    headers.append('Authorization', 'Bearer ' + JSON.parse(localStorage.getItem('current_user')).Token);
+    return this.http.get(environment.apiUrl + '/graphql?query=' + query, { headers: headers })
+      .map((response: Response) => {
+        return response.json().data.User;
+      });
   }
 
   // метод общий для студента и руководителя
   getProjectsOfUser(token: string, id_: number): Observable<ProjectItem[]> {
-    var variable = { id: id_ };
-    var query = `query($id: ID)  {
+    let variable = { id: id_ };
+    let query = `query($id: ID)  {
       User(Id: $id)
       {
         ProjectOn
@@ -98,16 +145,16 @@ export class UserService {
           }
         }
       }
-    }& variables=`+ JSON.stringify(variable);
+    }&variables=` + JSON.stringify(variable);
     let headers = new Headers();
     headers.append('Authorization', 'Bearer ' + token);
     return this.http.get(environment.apiUrl + '/graphql?query=' + query, { headers: headers })
       .map((response: Response) => {
         let projects = new Array<ProjectItem>();
         response.json().data.User.ProjectOn.forEach(element => {
-          projects.push(element.Project)
+          projects.push(element.Project);
         });
-        return projects
+        return projects;
       });
   }
 }

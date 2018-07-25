@@ -69,18 +69,9 @@ export class TeacherSettingsPageComponent implements OnInit {
       this.ClearPasswords();
     }
     else {
-      this.userService.changePasswordForUser(JSON.parse(localStorage.getItem('current_user')).token, this.Passwords)
-        .subscribe(res => {
-          this.IsChanged = true;
-          this.Clicked = false;
-          this.ClearPasswords();
-        },
-          error => {
-            this.error = error;
-            alert('Ошибка! ' + this.error);
-            this.ClearPasswords();
-            this.IsChanged = false;
-          });
+      this.userService.changePasswordForUser(this.Passwords.new, this.Passwords.old).subscribe(res => {
+        console.log(res);
+      });
     }
   }
 
@@ -95,4 +86,17 @@ export class TeacherSettingsPageComponent implements OnInit {
         console.log(res);
       });
   }
+
+  changeNickname() {
+    this.userService.updateNickname(this.CurrentUser.User.Nickname).subscribe(res => {
+      console.log(res);
+    });
+  }
+  changeDescription() {
+    this.userService.updateDescription(this.CurrentUser.User.Description).subscribe(res => {
+      console.log(res);
+    });
+  }
+  
+
 }
