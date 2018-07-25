@@ -1,4 +1,4 @@
--- noinspection SqlNoDataSourceInspectionForFile
+﻿-- noinspection SqlNoDataSourceInspectionForFile
 
 -- table order convention - new entities as late as possible,
 -- tables with FOREIGN KEY as earlier as possible 
@@ -220,4 +220,18 @@ CREATE TABLE news (
     title             TEXT                          NOT NULL,
 
     CONSTRAINT news_pk PRIMARY KEY (id)
+);
+
+CREATE TABLE project_news 
+( 
+id                                                SERIAL, 
+project_id 	       INTEGER NOT		    NULL, 
+created 	       TIMESTAMP WITH TIME ZONE NOT NULL, 
+description            TEXT NOT                     NULL, 
+image                  TEXT NOT                     NULL, 
+edited                 TIMESTAMP WITH TIME ZONE NOT NULL, 
+title                  TEXT                     NOT NULL, 
+
+CONSTRAINT project_news_pk PRIMARY KEY (id), 
+CONSTRAINT project_news_fk0 FOREIGN KEY (project_id) REFERENCES project(id) 
 );
