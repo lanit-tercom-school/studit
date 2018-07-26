@@ -71,6 +71,15 @@ export class TeacherSettingsPageComponent implements OnInit {
     else {
       this.userService.changePasswordForUser(this.Passwords.new, this.Passwords.old).subscribe(res => {
         console.log(res);
+        if (res === "Ok") {
+          console.log("Yep!")
+          this.IsChanged=true;
+        } else {
+          console.log(this.IsChanged, res);
+          this.IsChanged=false;
+          alert('Неверный пароль!');
+        }        
+
       });
     }
   }
