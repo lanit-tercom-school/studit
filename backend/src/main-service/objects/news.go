@@ -124,6 +124,25 @@ func ResolveGetNewsList(p gql.ResolveParams) (interface{}, error) {
 	return set, err
 }
 
+func ResolveDeleteNews(p gql.ResolveParams) (interface{}, error) {
+	c := p.Context.Value("CurrentUser").(CurrentClient)
+
+	id, ok := p.Args["Id"].(int)
+	if !ok {
+		return nil, errors.New("Missed Id")
+	}
+
+	messageToGet := Message{}
+	if c.PermissionLevel >= LEADER {
+		helpers.LogAccesAllowed("DeleteNews")
+		err := helpers.HttpDelete(conf.Configuration.DataServiceURL+"v1/news/"+strconv.Itoa(id), nil, &messageToGet)
+		return messageToGet, err
+	}
+
+	helpers.LogAccesDenied("DeleteNews")
+	return nil, errors.New("Access is denied")
+}
+
 //Sends "news" object to server
 func UpdateNewsOnServer(p gql.ResolveParams, news News) (interface{}, error) {
 	c := p.Context.Value("CurrentUser").(CurrentClient)
@@ -191,4 +210,5 @@ func ResolvePutNewsDescription(p gql.ResolveParams) (interface{}, error) {
 
 func ResolvePutNewsImage(p gql.ResolveParams) (interface{}, error) {
 	return ChangeNewsField(p, "Image")
+
 }

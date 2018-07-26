@@ -7,15 +7,26 @@
         <div class="col-sm-4">
             <form>
                 <div class="form-group row">
-                    <input type="text" name="name" class="form-control" id="inputName" placeholder="Полное имя" [(ngModel)]="User.nickname">
+                    <input type="text" name="name" class="form-control" id="inputName" placeholder="Полное имя (ФИО)" [(ngModel)]="User.nickname" #name="ngModel"
+                    required pattern="(([a-zA-Zа-яёА-ЯЁ\-]+\s+[a-zA-Zа-яёА-ЯЁ\-]+\s+[a-zA-Zа-яёА-ЯЁ\-]+)||([a-zA-Zа-яёА-ЯЁ\-]+\s+[a-zA-Zа-яёА-ЯЁ\-]+)||([a-zA-Zа-яёА-ЯЁ\-]+\s+[a-zA-Zа-яёА-ЯЁ\-]+\s+[a-zA-Zа-яёА-ЯЁ\-]+\s+[a-zA-Zа-яёА-ЯЁ\-]+))" />
+                  <div [hidden]="name.valid || name.untouched" class="alert alert-danger">
+                    Неверно указано имя
+                  </div>
                 </div>
                 <div class="form-group row">
-                    <input type="email" name="email" class="form-control" id="inputEmail3" placeholder="Email" [(ngModel)]="User.login">
+                    <input type="email" name="email" class="form-control" id="inputEmail3" placeholder="Email" [(ngModel)]="User.login" #email="ngModel" required pattern="[a-zA-Z0-9_\.-]+@[a-zA-Z0-9_]+?\.[a-zA-Z]{2,}" />
+                    <div [hidden]="email.valid || email.untouched" class="alert alert-danger">
+                      Некорректный email
+                    </div>
                 </div>
                 <div class="form-group row">
-                    <input type="password" name="password" class="form-control" id="inputPassword3" placeholder="Пароль" [(ngModel)]="User.password">
+                    <input type="password" name="password" class="form-control" id="inputPassword3" placeholder="Пароль (не менее 6 символов)" [(ngModel)]="User.password" #password="ngModel" required pattern="[a-zA-Z0-9]{6,}" />
+                    <div [hidden]="password.valid || password.untouched" class="alert alert-danger">
+                      Некорректный пароль
+                    </div>
                 </div>
-                <button role="button" class="btn btn-lg btn-warning" role="button" (click)="register()">Зарегистрироваться</button>
+                <button role="button" type="submit" class="btn btn-warning" *ngIf="((name.valid==true)&&(email.valid==true)&&(password.valid==true))" (click)="register()">Зарегистрироваться</button>
+        <button role="button" type="submit" class="btn btn-warning" *ngIf="((name.valid==false)||(email.valid==false)||(password.valid==false))">Зарегистрироваться</button>
             </form>
         </div>
     </div>

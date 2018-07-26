@@ -11,6 +11,7 @@ type ProjectData struct {
 }
 
 var PostProject gql.Field
+var DeleteProject gql.Field
 
 var EditProject gql.Field
 
@@ -108,8 +109,20 @@ func init() {
 		},
 		Resolve: objects.ResolvePostProject,
 	}
+
+	DeleteProject = gql.Field{
+		Type: objects.MessageType,
+		Args: gql.FieldConfigArgument{
+			"Id": &gql.ArgumentConfig{
+				Type: gql.NewNonNull(gql.Int),
+			},
+		},
+		Resolve: objects.ResolveDeleteProject,
+  }
+  
 	EditProject = gql.Field{
 		Type:    EditProjectQueryType,
 		Resolve: func(p gql.ResolveParams) (interface{}, error) { return ProjectData{}, nil },
+
 	}
 }

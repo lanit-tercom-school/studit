@@ -13,7 +13,7 @@
       </div>
       <div class="col-sm-8 project-info">
         <p class="lead">{{Project.Name}}</p>
-        <p>{{Project.Description}}</p>
+        <p>{{Project.Description.split(".", 2)}}...</p>
         <div class="read-more">
           <a routerLink="/project/{{Project.Id}}" routerLinkActive="active">
             <p>Подробнее
@@ -41,8 +41,8 @@
           <h4 class="modal-title">Название проекта</h4>
         </div>
         <div class="modal-body">
-          <input class="form-control" [(ngModel)]="CreatedProject.Name" name="projectName" required #projectName="ngModel"
-            required pattern='([\S]+[a-zA-Zа-яёА-ЯЁ0-9-_\s\.\;\:\(\)\+\=\*\№\#\@\"\!\?\,\<\>]+)'>
+          <input class="form-control" [(ngModel)]="CreatedProject.Name" name="projectName" #projectName="ngModel"
+            required maxlength="200" pattern='([\S]+[a-zA-Zа-яёА-ЯЁ0-9-_\s\.\;\:\(\)\+\=\*\№\#\@\"\!\?\,\<\>]+)'>
           <div [hidden]="projectName.valid || projectName.untouched" class="alert alert-danger">
             Введите название проекта
           </div>
