@@ -44,9 +44,6 @@ var SignupDataType = gql.NewObject(
 			"ActivationCode": &gql.Field{
 				Type: gql.String,
 			},
-			"Message": &gql.Field{
-				Type: gql.String,
-			},
 		},
 	},
 )
@@ -67,9 +64,6 @@ var SigninDataType = gql.NewObject(
 			},
 			"PermissionLevel": &gql.Field{
 				Type: gql.Int,
-			},
-			"Message": &gql.Field{
-				Type: gql.String,
 			},
 		},
 	},
