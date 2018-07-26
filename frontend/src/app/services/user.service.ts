@@ -57,7 +57,7 @@ export class UserService {
       });
   }
 
-  updateNickname(url:string):Observable<UserInfo> {
+  updateNickname(url: string): Observable<UserInfo> {
     let variable = { newUrl: url };
     let query = `mutation($newUrl:String)
       {
@@ -75,7 +75,7 @@ export class UserService {
       });
   }
 
-  
+
   updateDescription(url: string): Observable<UserInfo> {
     let variable = { newUrl: url };
     let query = `mutation($newUrl:String)
@@ -110,7 +110,7 @@ export class UserService {
     return this.http.put(environment.apiUrl + '/v1/user/id/' + id, user, { headers: headers });
   }
   //TODO: It not work!
-  changePasswordForUser(newpass: string, oldpass: string): Observable<UserInfo> {
+  changePasswordForUser(newpass: string, oldpass: string): Observable<String> {
     let variable = { newUrl: newpass, oldUrl: oldpass };
     let query = `mutation($newUrl:String, $oldUrl:String)
       {
@@ -124,7 +124,11 @@ export class UserService {
     headers.append('Authorization', 'Bearer ' + JSON.parse(localStorage.getItem('current_user')).Token);
     return this.http.get(environment.apiUrl + '/graphql?query=' + query, { headers: headers })
       .map((response: Response) => {
-        return response.json().data.User;
+        let responseData = response.json().data;
+        if (responseData && responseData.Auth && responseData.Auth.ChangePass && responseData.Auth.ChangePass.Message) {
+          return responseData.Auth.ChangePass.Message;
+        }
+        return "Error";
       });
   }
 
