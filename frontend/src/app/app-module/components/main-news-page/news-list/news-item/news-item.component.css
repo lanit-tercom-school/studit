@@ -15,3 +15,31 @@
 a{
   color: var(--dark-logo-color);
 }
+.newscard-title{
+  font-family: 'Jura', sans-serif;
+  font-size: 2rem;
+  font-weight: 900;
+  margin-bottom: 1rem;
+}
+.p{
+  font-size: 1.5rem;
+  line-height: 0.5rem;
+}
+.clip{
+  overflow: hidden;
+   text-overflow: ellipsis;
+   display: -webkit-box;
+   -webkit-box-orient: vertical;
+   -webkit-line-clamp: 2; /* number of lines to show */
+   line-height: 2rem;        /* fallback */
+   max-height: 4rem;       /* fallback */
+ }
+ .cut{
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3; /* number of lines to show */
+  line-height: 2rem;        /* fallback */
+  max-height: 6rem;       /* fallback */
+ }

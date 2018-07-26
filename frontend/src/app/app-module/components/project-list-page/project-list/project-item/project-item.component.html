@@ -4,10 +4,8 @@
       <img *ngIf='ProjectItem.Logo' class="card-img-top" src="{{ProjectItem.Logo}}" alt="Card image cap">
       <img *ngIf='!ProjectItem.Logo' class="card-img-top" src="./assets/no_image.png">
       <div class="card-block">
-        <h4 *ngIf='ProjectItem.Name.length>=40' class="card-title">{{ProjectItem.Name.split(".", 1)}}...</h4>
-        <h4 *ngIf='ProjectItem.Name.length<40' class="card-title">{{ProjectItem.Name}}</h4>
-        <p *ngIf='ProjectItem.Description.length>=120'class="card-text">{{ProjectItem.Description.split(".", 1)}}...</p>
-        <p *ngIf='ProjectItem.Description.length<120'class="card-text">{{ProjectItem.Description}}</p>
+        <h4 class="clip card-title">{{ProjectItem.Name}}</h4>
+        <p class="cut card-text">{{ProjectItem.Description}}</p>
         <p class="card-text" style="text-align: right;"></p>
       </div>
     </a>

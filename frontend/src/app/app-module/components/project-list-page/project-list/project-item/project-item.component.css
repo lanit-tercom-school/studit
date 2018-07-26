@@ -49,4 +49,27 @@ a{
   font-family: 'Jura', sans-serif;
   font-size: 1.7rem;
   font-weight: 900;
+  margin-bottom: 1rem;
 }
+.p{
+  font-size: 1.1rem;
+  line-height: 0.3rem;
+}
+.clip{
+  overflow: hidden;
+   text-overflow: ellipsis;
+   display: -webkit-box;
+   -webkit-box-orient: vertical;
+   -webkit-line-clamp: 2; /* number of lines to show */
+   line-height: 1.7rem;        /* fallback */
+   max-height: 3.4rem;       /* fallback */
+ }
+ .cut{
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 5; /* number of lines to show */
+  line-height: 1.4rem;        /* fallback */
+  max-height: 7rem;       /* fallback */
+ }
