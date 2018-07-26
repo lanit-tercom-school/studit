@@ -24,7 +24,7 @@
 			</div>
 			<div class="modal-body">
 				<input class="form-control" id="EnrollNewsName" [(ngModel)]="CreatedNews.Title" name="EnrollNewsName" #EnrollNewsName="ngModel"
-				 required maxlength="200" pattern='([\S]+[a-zA-Zа-яёА-ЯЁ0-9-_\s\.\;\:\(\)\+\=\*\№\#\@\"\!\?\,\<\>]+)'>
+				 required maxlength="400" pattern='([\S]+[a-zA-Zа-яёА-ЯЁ0-9-_\s\.\;\:\(\)\+\=\*\№\#\@\"\!\?\,\<\>]+)'>
 				<div [hidden]="EnrollNewsName.valid || EnrollNewsName.untouched" class="alert alert-danger">
 					Введите название новости
 				</div>
