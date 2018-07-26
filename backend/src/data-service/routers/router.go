@@ -34,6 +34,12 @@ func init() {
 			),
 		),
 
+		beego.NSNamespace("/project_news",
+			beego.NSInclude(
+				&controllers.ProjectNewsController{},
+			),
+		),
+
 		beego.NSNamespace("/contact_type",
 			beego.NSInclude(
 				&controllers.ContactTypeController{},
