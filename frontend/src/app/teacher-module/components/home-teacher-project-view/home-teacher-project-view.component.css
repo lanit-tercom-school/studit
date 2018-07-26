@@ -52,6 +52,7 @@ h3 {
 
 .lead {
     font-family: 'Jura', sans-serif;
+    font-size: 2rem;
 }
 
 .btn {
@@ -131,3 +132,21 @@ textarea.ng-touched.ng-valid {
     font-family: 'Jura', sans-serif;
     margin-bottom: 1rem;
 }
+.clip{
+    overflow: hidden;
+     text-overflow: ellipsis;
+     display: -webkit-box;
+     -webkit-box-orient: vertical;
+     -webkit-line-clamp: 2; /* number of lines to show */
+     line-height: 2rem;        /* fallback */
+     max-height: 4.1rem;       /* fallback */
+   }
+   .cut{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3; /* number of lines to show */
+    line-height: 1.4rem;        /* fallback */
+    max-height: 4.2rem;       /* fallback */
+   }
