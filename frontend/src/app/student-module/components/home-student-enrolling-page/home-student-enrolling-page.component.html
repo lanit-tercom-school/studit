@@ -12,8 +12,8 @@
           <img *ngIf='!Enroll.Project.Logo' class="card-img" src="./assets/no_image.png" alt="Добавление картинки в процессе">
         </div>
         <div class="col-md-8 col-sm-8 col-md-offset-2 project-info">
-          <p class="lead">{{Enroll.Project.Name}}</p>
-          <p class="message">{{Enroll.Message}}</p>
+          <p class="clip lead">{{Enroll.Project.Name}}</p>
+          <p class="cut message">{{Enroll.Message}}</p>
           <div class="read-more">
             <a routerLink="/project/{{Enroll.Project.Id}}" routerLinkActive="active">
               <p>Подробнее <i class="fa fa-angle-double-right" aria-hidden="true"></i></p>

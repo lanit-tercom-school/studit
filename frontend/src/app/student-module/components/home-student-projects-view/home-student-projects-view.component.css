@@ -54,7 +54,7 @@ h3{
 }
 .lead{
     font-family: 'Jura', sans-serif;
-     
+    font-size: 2rem;
 }
 .message{
     font-size: 14px;
@@ -64,4 +64,22 @@ img {
     -webkit-box-shadow: 7px 12px 15px 0px rgba(0, 0, 0, 0.62);
     -moz-box-shadow: 7px 12px 15px 0px rgba(0, 0, 0, 0.62);
     box-shadow: 7px 12px 15px 0px rgba(0, 0, 0, 0.62);
+}
+.clip{
+    overflow: hidden;
+     text-overflow: ellipsis;
+     display: -webkit-box;
+     -webkit-box-orient: vertical;
+     -webkit-line-clamp: 2; /* number of lines to show */
+     line-height: 2rem;        /* fallback */
+     max-height: 4.1rem;       /* fallback */
+   }
+.cut{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3; /* number of lines to show */
+    line-height: 1.4rem;        /* fallback */
+    max-height: 4.2rem;       /* fallback */
 }
