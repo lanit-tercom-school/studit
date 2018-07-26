@@ -27,9 +27,7 @@
       <form class="block-form">
         <legend>Контакты</legend>
         <div class="form-inline">
-          <label class="col-sm-2 col-md-3 col-lg-2 col-form-label" for="inputEmail">E-mail
-            <sup>*</sup>
-          </label>
+          <label class="col-sm-2 col-md-3 col-lg-2 col-form-label" for="inputEmail">E-mail</label>
           <input name="email" class="form-control" [(ngModel)]="CurrentUser.User.Login" #email="ngModel" pattern="[a-zA-Z0-9_\.-]+@[a-zA-Z0-9_]+?\.[a-zA-Z]{2,}"
           />
           <div [hidden]="email.valid || email.untouched" class="col-sm-offset-2 alert alert-danger">
@@ -42,12 +40,7 @@
           <div [hidden]="phone.valid || phone.untouched" class="col-sm-offset-2 alert alert-danger">
             Некорректный номер телефона
           </div>
-        </div>
-        <small class="help-inline">*Заполняется для уведомлений</small>
-        <br>
-        <label class="checkbox">
-          <input type="checkbox" value="contactsHidden"> Не показывать контакты на моей странице
-        </label>
+        </div>  
         <br>
         <button type="submit" role="button" *ngIf="((email.valid==true)&&(phone.valid==true))" class="btn btn-primary" data-toggle="modal" data-target="#created">Подтвердить</button>
         <button type="submit" role="button" *ngIf="((email.valid==false)||(phone.valid==false))" class="btn btn-primary">Подтвердить</button>
@@ -58,18 +51,19 @@
         <form class="form-inline">
           <div class="row">
             <label class="col-sm-2 form-label" for="inputDescription">О себе</label>
-            <textarea class="form-control" id="inputDescription" maxlength="300">{{CurrentUser.User.Description}}</textarea>
+            <textarea name="description" class="form-control" id="inputDescription" maxlength="300" [(ngModel)]="CurrentUser.User.Description"></textarea>
           </div>
         </form>
-        <button type="submit" role="button" class="btn btn-primary" (click)="changeDescription()" data-toggle="modal" data-target="#created">Подтвердить</button>
+        <button type="submit" role="button" (click)="changeDescription()" class="btn btn-primary" data-toggle="modal" data-target="#created">Подтвердить</button>
       </form>
+  
 
       <form class="block-form">
         <legend>Изменение пароля</legend>
         <button class="btn btn-primary" *ngIf="!Clicked" role="button" (click)="ShowHide()">Сменить пароль</button>
         <button class="btn btn-default" *ngIf="Clicked" role="button" (click)="ShowHide()">Скрыть</button>
         <span *ngIf="IsChanged">
-          <p class="text-success">Пароль успешно изменен.</p>
+          <h3 class="text-success">Пароль успешно изменен!</h3>
         </span>
         <form *ngIf="Clicked && !IsChanged">
           <div class="form-inline">
@@ -78,7 +72,10 @@
           </div>
           <div class="form-inline">
             <label class="col-sm-2 col-md-3 col-lg-3  col-form-label">Новый пароль</label>
-            <input type="password" [(ngModel)]="Passwords.new" name="newPassword" class="form-control">
+            <input type="password" [(ngModel)]="Passwords.new" name="newPassword" class="form-control"#password="ngModel" required pattern="[a-zA-Z0-9]{6,}" />
+            <div [hidden]="password.valid || password.untouched" class="col-sm-offset-3 alert alert-danger">
+              Некорректный пароль
+            </div>
           </div>
           <div class="form-inline">
             <label class="col-sm-2 col-md-3 col-lg-3  col-form-label">Повторите пароль</label>
