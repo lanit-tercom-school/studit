@@ -61,8 +61,8 @@ a{
    display: -webkit-box;
    -webkit-box-orient: vertical;
    -webkit-line-clamp: 2; /* number of lines to show */
-   line-height: 1.7rem;        /* fallback */
-   max-height: 3.4rem;       /* fallback */
+   line-height: 1.8rem;        /* fallback */
+   max-height: 3.6rem;       /* fallback */
  }
  .cut{
   overflow: hidden;
@@ -70,6 +70,6 @@ a{
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 5; /* number of lines to show */
-  line-height: 1.4rem;        /* fallback */
-  max-height: 7rem;       /* fallback */
+  line-height: 1.5rem;        /* fallback */
+  max-height: 7.6rem;       /* fallback */
  }
