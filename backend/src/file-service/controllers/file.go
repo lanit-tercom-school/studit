@@ -39,17 +39,18 @@ func (c *FileController) Post() {
 		file, handler, err := c.Ctx.Request.FormFile("uploadfile")
 		if err != nil {
 			beego.Trace(err)
+			beego.Debug(string(HTTP_INTERNAL_SERVER_ERROR) + HTTP_INTERNAL_SERVER_ERROR_STR + ":" + "Upload error")
 			c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
 			return
 		}
 		defer file.Close()
 		filename := uuid.New().String()
 		//u, err := models.GetUserById(c.CurrentUser.UserId)
-		if err != nil {
-			beego.Trace(err)
-			c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
-			return
-		}
+		// if err != nil {
+		// 	beego.Trace(err)
+		// 	c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
+		// 	return
+		// }
 		t := models.File{
 			User:           c.CurrentUser.UserId,
 			Name:           handler.Filename,
@@ -59,6 +60,7 @@ func (c *FileController) Post() {
 		id, err := models.AddFile(&t)
 		if err != nil {
 			beego.Trace(err)
+			beego.Debug(string(HTTP_INTERNAL_SERVER_ERROR) + HTTP_INTERNAL_SERVER_ERROR_STR + ":" + "AddFile error")
 			c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
 			return
 		}
@@ -66,6 +68,7 @@ func (c *FileController) Post() {
 		f, err := os.Create("files/" + filename)
 		if err != nil {
 			beego.Trace(err)
+			beego.Debug(string(HTTP_INTERNAL_SERVER_ERROR) + HTTP_INTERNAL_SERVER_ERROR_STR + ":" + "Create file error")
 			c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
 			return
 		}
@@ -75,7 +78,8 @@ func (c *FileController) Post() {
 		c.Ctx.Output.SetStatus(HTTP_CREATED)
 	} else {
 		beego.Trace("Can not upload file. Access is denied")
-		c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
+		beego.Debug(string(HTTP_FORBIDDEN) + HTTP_FORBIDDEN_STR + ":" + "Wrong permission level")
+		c.Ctx.Output.SetStatus(HTTP_FORBIDDEN)
 	}
 	c.ServeJSON()
 }
@@ -93,6 +97,7 @@ func (c *FileController) GetOne() {
 		idStr, err := strconv.Atoi(c.Ctx.Input.Param(":id"))
 		if err != nil {
 			beego.Trace(err)
+			beego.Debug(string(HTTP_INTERNAL_SERVER_ERROR) + HTTP_INTERNAL_SERVER_ERROR_STR + ":" + "Convertation error (Atoi method)")
 			c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
 		} else {
 			f, err := models.GetFileById(idStr)
@@ -102,16 +107,19 @@ func (c *FileController) GetOne() {
 					c.Ctx.Output.SetStatus(HTTP_OK)
 				} else {
 					beego.Trace("Access is denied")
-					c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
+					beego.Debug(string(HTTP_FORBIDDEN) + HTTP_FORBIDDEN_STR + ":" + "Have not access (Not a file user, not an admin)")
+					c.Ctx.Output.SetStatus(HTTP_FORBIDDEN)
 				}
 			} else {
 				beego.Trace(err)
+				beego.Debug(string(HTTP_INTERNAL_SERVER_ERROR) + HTTP_INTERNAL_SERVER_ERROR_STR + ":" + "GetFileById error")
 				c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
 			}
 		}
 	} else {
 		beego.Trace("Access is denied")
-		c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
+		beego.Debug(string(HTTP_FORBIDDEN) + HTTP_FORBIDDEN_STR + ":" + "Wrong permission level")
+		c.Ctx.Output.SetStatus(HTTP_FORBIDDEN)
 	}
 	c.ServeJSON()
 }
@@ -134,6 +142,7 @@ func (c *FileController) GetAll() {
 				c.Ctx.Output.SetStatus(HTTP_OK)
 			} else {
 				beego.Trace(err)
+				beego.Debug(string(HTTP_INTERNAL_SERVER_ERROR) + HTTP_INTERNAL_SERVER_ERROR_STR)
 				c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
 			}
 		} else {
@@ -144,16 +153,19 @@ func (c *FileController) GetAll() {
 					c.Ctx.Output.SetStatus(HTTP_OK)
 				} else {
 					beego.Trace(err)
+					beego.Debug(string(HTTP_INTERNAL_SERVER_ERROR) + HTTP_INTERNAL_SERVER_ERROR_STR)
 					c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
 				}
 			} else {
 				beego.Trace("Access is denied")
-				c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
+				beego.Debug(string(HTTP_FORBIDDEN) + HTTP_FORBIDDEN_STR + ":" + "Wrong permission level")
+				c.Ctx.Output.SetStatus(HTTP_FORBIDDEN)
 			}
 		}
 	} else {
 		beego.Trace("Access is denied")
-		c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
+		beego.Debug(string(HTTP_FORBIDDEN) + HTTP_FORBIDDEN_STR + ":" + "Wrong permission level")
+		c.Ctx.Output.SetStatus(HTTP_FORBIDDEN)
 	}
 	c.ServeJSON()
 }
@@ -179,6 +191,7 @@ func (c *FileController) Delete() {
 					_, err := models.DeleteFile(f)
 					if err != nil {
 						beego.Trace(err)
+						beego.Debug(string(HTTP_INTERNAL_SERVER_ERROR) + HTTP_INTERNAL_SERVER_ERROR_STR)
 						c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
 					} else {
 						os.Remove(f.Path)
@@ -187,16 +200,19 @@ func (c *FileController) Delete() {
 					}
 				} else {
 					beego.Trace("Access is denied")
-					c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
+					beego.Debug(string(HTTP_FORBIDDEN) + HTTP_FORBIDDEN_STR + ":" + "Wrong permission level")
+					c.Ctx.Output.SetStatus(HTTP_FORBIDDEN)
 				}
 			} else {
 				beego.Trace(err)
+				beego.Debug(string(HTTP_INTERNAL_SERVER_ERROR) + HTTP_INTERNAL_SERVER_ERROR_STR)
 				c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
 			}
 		}
 	} else {
 		beego.Trace("Access is denied")
-		c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
+		beego.Debug(string(HTTP_FORBIDDEN) + HTTP_FORBIDDEN_STR + ":" + "Wrong permission level")
+		c.Ctx.Output.SetStatus(HTTP_FORBIDDEN)
 	}
 	c.ServeJSON()
 }
