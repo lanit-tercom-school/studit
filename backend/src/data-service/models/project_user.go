@@ -134,8 +134,8 @@ func UpdateProjectUserById(m *ProjectUser) (err error) {
 	return
 }
 
-// DeleteProjectUser deletes ProjectUser by Id and returns error if
-// the record to be deleted doesn't exist
+//DeleteProjectUser deletes ProjectUser by Id and returns error if
+//the recor to be deleted doesn't exist
 func DeleteProjectUser(id int) (err error) {
 	o := orm.NewOrm()
 	v := ProjectUser{Id: id}
@@ -143,6 +143,38 @@ func DeleteProjectUser(id int) (err error) {
 	if err = o.Read(&v); err == nil {
 		var num int64
 		if num, err = o.Delete(&ProjectUser{Id: id}); err == nil {
+			fmt.Println("Number of records deleted in database:", num)
+		}
+	}
+	return
+}
+
+// DeleteProjectUserProjectId deletes ProjectUser by ProjectId and returns error if
+// records to be deleted doesn't exist
+func DeleteProjectUserProjectId(project_id int) (err error) {
+	o := orm.NewOrm()
+	project := Project{Id: project_id}
+	v := ProjectUser{Project: &project}
+	// ascertain id exists in the database
+	if err = o.Read(&v, "Project"); err == nil {
+		var num int64
+		if num, err = o.Delete(&v, "Project"); err == nil {
+			fmt.Println("Number of records deleted in database:", num)
+		}
+	}
+	return
+}
+
+// DeleteProjectUserUserId deletes ProjectUser by UserId and returns error if
+// records to be deleted doesn't exist
+func DeleteProjectUserUserId(user_id int) (err error) {
+	o := orm.NewOrm()
+	user := User{Id: user_id}
+	v := ProjectUser{User: &user}
+	// ascertain id exists in the database
+	if err = o.Read(&v, "User"); err == nil {
+		var num int64
+		if num, err = o.Delete(&v, "User"); err == nil {
 			fmt.Println("Number of records deleted in database:", num)
 		}
 	}

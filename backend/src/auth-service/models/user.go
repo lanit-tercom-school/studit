@@ -55,7 +55,7 @@ func GetUserByLogin(login string) (*User, error) {
 	if err == orm.ErrMultiRows {
 		panic(err)
 	} else if err == orm.ErrNoRows {
-		return nil, errors.New("Not found")
+		return nil, errors.New("404 Not found")
 	} else {
 		return &anotherUser, nil
 	}
@@ -111,12 +111,12 @@ type MainUserInfo struct {
 func GetMainUserInfo(id int) *MainUserInfo {
 	resp, err := http.Get(fmt.Sprintf("http://localhost:8081/v1/user/id/%d?cut=true", id))
 	if err != nil {
-		beego.Critical("Get MainUserInfo error:", err.Error())
+		beego.Critical("403 Forbidden: Get MainUserInfo error:", err.Error())
 		return nil
 	} else {
 		defer resp.Body.Close()
 		if body, err := ioutil.ReadAll(resp.Body); err != nil {
-			beego.Critical("Get MainUserInfo error:", err.Error())
+			beego.Critical("403 Forbidden: Get MainUserInfo error:", err.Error())
 			return nil
 		} else {
 			var temp struct {

@@ -45,12 +45,12 @@ func StartActivationCycle() {
 		select {
 		case user, ok := <-ac:
 			if !ok {
-				beego.Critical("Activation channel is corrupted")
-				panic("Activation channel is corrupted")
+				beego.Critical("522 Connection Timed Out: Activation channel is corrupted")
+				panic("522 Connection Timed Out: Activation channel is corrupted")
 			} else {
 				if !connected {
 					if client, err = rpc.DialHTTP("tcp", dataServiceRpc); err != nil {
-						beego.Critical("Can't connect to RPC Service:", err.Error())
+						beego.Critical("522 Connection Timed Out: Can't connect to RPC Service:", err.Error())
 					} else {
 						connected = true
 					}
@@ -93,7 +93,7 @@ func AddForActivationQueue(user ActivationUser) {
 	}
 	err := u.Insert()
 	if err != nil {
-		beego.Critical("Fatal error when activating new user", err.Error())
+		beego.Critical("522 Connection Timed Out: Fatal error when activating new user", err.Error())
 	}
 }
 
@@ -109,7 +109,7 @@ func LoadActivationQueue() {
 
 	users, err := models.GetAllPendingForActivationUsers()
 	if err != nil {
-		beego.Critical("Can't read pending users", err.Error())
+		beego.Critical("400 Bad Request: Can't read pending users", err.Error())
 	} else {
 		for _, user := range users {
 			x := ActivationUser{
@@ -154,10 +154,10 @@ func NewUser(pass string, usr RegistrationUserModel) error {
 		Login: usr.Login,
 	}
 	if u.FindByLogin() {
-		return errors.New("User with this nickname is already registered")
+		return errors.New("400 Bad Request: User with this nickname is already registered")
 	}
 	if _, err := unactivated_users[pass]; err {
-		return errors.New("Already in")
+		return errors.New("400 Bad Request: Already in")
 	}
 	usr.Password = CustomStr(usr.Password).ToSHA1()
 	unactivated_users[pass] = usr
@@ -180,7 +180,7 @@ func ActivateUser(pass string) error {
 			return nil
 		}
 	} else {
-		return errors.New("Wrong pass")
+		return errors.New("401 Unauthorized: Wrong pass")
 	}
 }
 
@@ -201,6 +201,12 @@ func (c *RegistrationController) Register() {
 			beego.Debug("nickname:", u.Nickname)
 			c.Data["json"] = "Wrong Login/Password/Nickname"
 			c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
+		} else if len(u.Password) < 6 {
+			beego.Debug("login:", u.Login)
+			beego.Debug("password:", u.Password)
+			beego.Debug("nickname:", u.Nickname)
+			c.Data["json"] = "Password is too short"
+			c.Ctx.Output.SetStatus(HTTP_NOT_ACCEPTABLE)
 		} else {
 			beego.Trace("Valid combo login & password & nickname")
 
