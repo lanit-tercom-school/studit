@@ -52,7 +52,7 @@ var ProjectOnType = gql.NewObject(
 func ResolveGetProjectOnByUser(p gql.ResolveParams) (interface{}, error) {
 	c := p.Context.Value("CurrentUser").(CurrentClient)
 	u := p.Source.(User)
-	if c.PermissionLevel !=VIEWER {
+	if c.PermissionLevel != VIEWER {
 		helpers.LogAccesAllowed("GetProjectOnByUser")
 		var projectUsers []ProjectUser
 		var projectOn ProjectOn
@@ -83,7 +83,7 @@ func ResolveGetEnrollsByProjectOn(p gql.ResolveParams) (interface{}, error) {
 
 func ResolveGetEnrollsByUser(p gql.ResolveParams) (interface{}, error) {
 	u := p.Source.(User)
-	if p.Context.Value("CurrentUser").(CurrentClient).PermissionLevel >= LEADER || p.Context.Value("CurrentUser").(CurrentClient).UserId == u.Id{
+	if p.Context.Value("CurrentUser").(CurrentClient).PermissionLevel >= LEADER || p.Context.Value("CurrentUser").(CurrentClient).UserId == u.Id {
 		helpers.LogAccesAllowed("GetEnrollsByUSer")
 		var projectEnrolls []ProjectEnroll
 		err := helpers.HttpGet(conf.Configuration.DataServiceURL+"v1/project_enroll/?query=User:"+strconv.Itoa(u.Id), &projectEnrolls)
@@ -182,7 +182,7 @@ func ResolveDeleteProjectOn(p gql.ResolveParams) (interface{}, error) {
 	}
 	if c.UserId == projectUserToGet.User.Id || c.PermissionLevel == ADMIN || (c.PermissionLevel == LEADER && ok) {
 		helpers.LogAccesAllowed("DeleteProjectOn")
-		err := helpers.HttpDelete(conf.Configuration.DataServiceURL+"v1/project_user/"+strconv.Itoa(id), nil, &messageToGet)
+		err := helpers.HttpDelete(conf.Configuration.DataServiceURL+"v1/project_user/?query=db_id"+strconv.Itoa(id), nil, &messageToGet)
 		return messageToGet, err
 	}
 

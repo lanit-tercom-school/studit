@@ -169,20 +169,58 @@ func (c *ProjectUserController) Put() {
 
 // Delete ...
 // @Title Delete
-// @Description delete the ProjectUser
-// @Param	id		path 	string	true		"The id you want to delete"
+// @Description delete the ProjectUser by db_id, user_id or project_id !!вот тут может фигня!!
+// @Param	db_id	query	string	false	"The db_id you want to delete"
+// @Param	project_id	query	string	false	"The project_id you want to delete"
+// @Param	user_id	query	string false	"The user_id you want to delete"
 // @Success 200 {string} delete success!
-// @Failure 403 id is empty
-// @router /:id [delete]
+// @Failure 403
+// @router / [delete]
 func (c *ProjectUserController) Delete() {
-	idStr := c.Ctx.Input.Param(":id")
-	id, _ := strconv.Atoi(idStr)
-	if err := models.DeleteProjectUser(id); err == nil {
-		c.Ctx.Output.SetStatus(HTTP_OK)
-		c.Data["json"] = MakeMessageForSending(HTTP_OK_STR)
-	} else {
-		c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
-		c.Data["json"] = MakeMessageForSending(err.Error())
+	if db_id, err := c.GetInt("db_id"); err == nil {
+
+		if err := models.DeleteProjectUser(db_id); err == nil {
+			c.Ctx.Output.SetStatus(HTTP_OK)
+			c.Data["json"] = MakeMessageForSending(HTTP_OK_STR)
+		} else if err.Error() == "<QuerySeter> no row found" {
+			c.Ctx.Output.SetStatus(HTTP_NOT_FOUND)
+			c.Data["json"] = MakeMessageForSending(HTTP_NOT_FOUND_STR)
+		} else {
+			c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
+			c.Data["json"] = MakeMessageForSending(err.Error())
+		}
+		c.ServeJSON()
 	}
-	c.ServeJSON()
+
+	if project_id, err := c.GetInt("project_id"); err == nil {
+
+		if err := models.DeleteProjectUserProjectId(project_id); err == nil {
+			c.Ctx.Output.SetStatus(HTTP_OK)
+			c.Data["json"] = MakeMessageForSending(HTTP_OK_STR)
+		} else if err.Error() == "<QuerySeter> no row found" {
+			c.Ctx.Output.SetStatus(HTTP_NOT_FOUND)
+			c.Data["json"] = MakeMessageForSending(HTTP_NOT_FOUND_STR)
+		} else {
+			c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
+			c.Data["json"] = MakeMessageForSending(err.Error())
+		}
+		c.ServeJSON()
+
+	}
+
+	if user_id, err := c.GetInt("user_id"); err == nil {
+
+		if err := models.DeleteProjectUserUserId(user_id); err == nil {
+			c.Ctx.Output.SetStatus(HTTP_OK)
+			c.Data["json"] = MakeMessageForSending(HTTP_OK_STR)
+		} else if err.Error() == "<QuerySeter> no row found" {
+			c.Ctx.Output.SetStatus(HTTP_NOT_FOUND)
+			c.Data["json"] = MakeMessageForSending(HTTP_NOT_FOUND_STR)
+		} else {
+			c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
+			c.Data["json"] = MakeMessageForSending(err.Error())
+		}
+		c.ServeJSON()
+
+	}
 }

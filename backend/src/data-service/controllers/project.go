@@ -152,9 +152,12 @@ func (c *ProjectController) Delete() {
 	if err := models.DeleteProject(id); err == nil {
 		c.Ctx.Output.SetStatus(HTTP_OK)
 		c.Data["json"] = MakeMessageForSending(HTTP_OK_STR)
+	} else if err.Error() == "<QuerySeter> no row found" {
+		c.Ctx.Output.SetStatus(HTTP_NOT_FOUND)
+		c.Data["json"] = MakeMessageForSending(HTTP_NOT_FOUND_STR)
 	} else {
 		c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
-		MakeMessageForSending(err.Error())
+		c.Data["json"] = MakeMessageForSending(err.Error())
 	}
 	c.ServeJSON()
 }
