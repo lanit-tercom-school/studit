@@ -23,11 +23,11 @@ func TryToChangePassword(user_id int, password string) (user *models.User, err e
 	user, err = models.GetUserById(user_id)
 
 	if err != nil {
-		return user, errors.New("Can't find User with this login (dev)") // TODO: should be changed to "Invalid login or password"
+		return user, errors.New("404 Not Found: Invalid login or password")
 	} else if user.Id < 1 {
-		return user, errors.New("Bad user ID (dev)") // TODO: should be changed to "Invalid login or password"
+		return user, errors.New("401 Unauthorized: Invalid login")
 	} else if user.Password != CustomStr(password).ToSHA1() {
-		return user, errors.New("Invalid login or password")
+		return user, errors.New("401 Unauthorized: Invalid password")
 	} else {
 		return user, nil // all OK
 	}
@@ -47,25 +47,30 @@ func (c *ChangePasswordController) ChangePassword() {
 	v := ChangePasswordJson{}
 	beego.Trace("New password change")
 	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err != nil {
-		beego.Debug("Change error:", err.Error())
+		beego.Debug("500 Server error :", err.Error())
 		c.Data["json"] = MakeMessageForSending(err.Error())
 		c.Ctx.Output.SetStatus(HTTP_BAD_REQUEST)
 	} else {
 		user, err := TryToChangePassword(c.CurrentUser.UserId, v.OldPassword)
 		if err != nil {
-			beego.Critical(c.Ctx.Input.IP(), "Change password in `TryToChangePassword` error:", err.Error())
+			beego.Critical(c.Ctx.Input.IP(), err.Error())
 			c.Data["json"] = MakeMessageForSending(err.Error())
 			c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
 		} else {
 			user.Password = v.NewPassword
-			err := ChangePasswordForUser(user)
-			if err != nil {
-				beego.Critical(c.Ctx.Input.IP(), "Change password in `ChangePasswordForUser` error:", err.Error())
-				c.Data["json"] = MakeMessageForSending(err.Error())
-				c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
+			if len(user.Password) < 6 {
+				c.Data["json"] = MakeMessageForSending(HTTP_NOT_ACCEPTABLE_STR)
+				c.Ctx.Output.SetStatus(HTTP_NOT_ACCEPTABLE)
 			} else {
-				beego.Trace("Password was changed")
-				c.Data["json"] = MakeMessageForSending("Ok")
+				err := ChangePasswordForUser(user)
+				if err != nil {
+					beego.Critical(c.Ctx.Input.IP(), "Change password in `ChangePasswordForUser` error:", err.Error())
+					c.Data["json"] = MakeMessageForSending(err.Error())
+					c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
+				} else {
+					beego.Trace("Password was changed")
+					c.Data["json"] = MakeMessageForSending("Ok")
+				}
 			}
 		}
 	}
@@ -80,7 +85,7 @@ func (c *ChangePasswordController) ChangePassword() {
 // @router / [put]
 func (c *ChangePasswordController) Put() {
 	if c.CurrentUser.PermissionLevel < models.USER {
-		beego.Debug("Unregistered user want to change password")
+		beego.Debug("401 Unauthorized: Unregistered user want to change password")
 		c.Data["json"] = MakeMessageForSending(HTTP_FORBIDDEN_STR)
 		c.Ctx.Output.SetStatus(HTTP_FORBIDDEN)
 	} else {

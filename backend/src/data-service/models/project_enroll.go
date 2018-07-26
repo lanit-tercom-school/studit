@@ -148,3 +148,35 @@ func DeleteProjectEnroll(id int) (err error) {
 	}
 	return
 }
+
+// DeleteProjectEnrollProjectId deletes ProjectEnroll by ProjectId and returns error if
+// records to be deleted doesn't exist
+func DeleteProjectEnrollProjectId(project_id int) (err error) {
+	o := orm.NewOrm()
+	project := Project{Id: project_id}
+	v := ProjectEnroll{Project: &project}
+	// ascertain id exists in the database
+	if err = o.Read(&v, "Project"); err == nil {
+		var num int64
+		if num, err = o.Delete(&v, "Project"); err == nil {
+			fmt.Println("Number of records deleted in database:", num)
+		}
+	}
+	return
+}
+
+// DeleteProjectEnrollUserId deletes ProjectEnroll by UserId and returns error if
+// records to be deleted doesn't exist
+func DeleteProjectEnrollUserId(user_id int) (err error) {
+	o := orm.NewOrm()
+	user := User{Id: user_id}
+	v := ProjectEnroll{User: &user}
+	// ascertain id exists in the database
+	if err = o.Read(&v, "User"); err == nil {
+		var num int64
+		if num, err = o.Delete(&v, "User"); err == nil {
+			fmt.Println("Number of records deleted in database:", num)
+		}
+	}
+	return
+}

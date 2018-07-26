@@ -3,6 +3,5 @@
 		<p class="newscard-text">{{ NewsItem.LastEdit| date: 'short'}}</p>
 		<h4 class="clip newscard-title">{{ NewsItem.Title}}</h4>
 		<p class="cut newscard-text">{{NewsItem.Description}}</p>
-		
 		<a [routerLink]="['/news',  NewsItem.Id]">Читать далее</a>
 </div>

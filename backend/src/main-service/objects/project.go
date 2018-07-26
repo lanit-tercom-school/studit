@@ -2,6 +2,7 @@ package objects
 
 import (
 	"errors"
+	"log"
 	"main-service/conf"
 	"main-service/helpers"
 	"strconv"
@@ -30,6 +31,11 @@ type Project struct {
 type ProjectSet struct {
 	TotalCount  int
 	ProjectList []Project
+}
+
+//НЕ ЗАБЫТЬ УДАЛИТЬ!!!
+func Log(text string) {
+	log.Printf("Log: %v\n", text)
 }
 
 //ProjectType - grqphql объект проекта
@@ -220,4 +226,33 @@ func ResolveGetProjectList(p gql.ResolveParams) (interface{}, error) {
 	var set ProjectSet
 	err := helpers.HttpGet(conf.Configuration.DataServiceURL+"v1/project/?limit="+limit+"&offset="+offset, &set)
 	return set, err
+}
+
+func ResolveDeleteProject(p gql.ResolveParams) (interface{}, error) {
+	c := p.Context.Value("CurrentUser").(CurrentClient)
+
+	id, ok := p.Args["Id"].(int)
+	if !ok {
+		return nil, errors.New("Missed Id")
+	}
+
+	messageToGet := Message{}
+	if c.PermissionLevel >= LEADER {
+		helpers.LogAccesAllowed("DeleteProjectEnrolls")
+		if err_del_enrolls := helpers.HttpDelete(conf.Configuration.DataServiceURL+"v1/project_enroll/?project_id="+strconv.Itoa(id), nil, &messageToGet); err_del_enrolls.Error() != "404" && err_del_enrolls != nil {
+			return nil, err_del_enrolls
+		}
+
+		helpers.LogAccesAllowed("DeleteProjectUsers")
+		if err_del_users := helpers.HttpDelete(conf.Configuration.DataServiceURL+"v1/project_user/?project_id="+strconv.Itoa(id), nil, &messageToGet); err_del_users.Error() != "404" && err_del_users != nil {
+			return nil, err_del_users
+		}
+		helpers.LogAccesAllowed("DeleteProject")
+		err := helpers.HttpDelete(conf.Configuration.DataServiceURL+"v1/project/"+strconv.Itoa(id), nil, &messageToGet)
+
+		return messageToGet, err
+	}
+
+	helpers.LogAccesDenied("DeleteProject")
+	return nil, errors.New("Access is denied")
 }

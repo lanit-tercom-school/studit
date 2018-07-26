@@ -6,6 +6,7 @@ const (
 	HTTP_BAD_REQUEST           = 400
 	HTTP_UNAUTHORIZED          = 401
 	HTTP_FORBIDDEN             = 403
+	HTTP_NOT_FOUND             = 404
 	HTTP_INTERNAL_SERVER_ERROR = 500
 )
 
@@ -15,5 +16,6 @@ const (
 	HTTP_BAD_REQUEST_STR           = "Bad Request"
 	HTTP_UNAUTHORIZED_STR          = "Unauthorized"
 	HTTP_FORBIDDEN_STR             = "Forbidden"
+	HTTP_NOT_FOUND_STR             = "Not Found"
 	HTTP_INTERNAL_SERVER_ERROR_STR = "Internal Server Error"
 )
