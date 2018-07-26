@@ -66,52 +66,51 @@ func (mail *Mail) Send(smtpUrl string, smtpPort string) error {
 		ServerName:         smtpUrl,
 	}
 
-	var sendingEmailError = "403 Forbidden: "
 	conn, err := tls.Dial("tcp", smtpUrl+":"+smtpPort, tlsconfig)
 	if err != nil {
-		beego.Error(sendingEmailError + err.Error())
+		beego.Error("Sending email error" + err.Error())
 		return err
 	}
 
 	client, err := smtp.NewClient(conn, smtpUrl)
 	if err != nil {
-		beego.Error(sendingEmailError + err.Error())
+		beego.Error("Sending email error" + err.Error())
 		return err
 	}
 
 	// step 1: Use Auth
 	if err = client.Auth(auth); err != nil {
-		beego.Error(sendingEmailError + err.Error())
+		beego.Error("Sending email error" + err.Error())
 		return err
 	}
 
 	// step 2: add all from and to
 	if err = client.Mail(mail.senderId); err != nil {
-		beego.Error(sendingEmailError + err.Error())
+		beego.Error("Sending email error" + err.Error())
 		return err
 	}
 
 	if err = client.Rcpt(mail.toId); err != nil {
-		beego.Error(sendingEmailError + err.Error())
+		beego.Error("Sending email error" + err.Error())
 		return err
 	}
 
 	// Data
 	w, err := client.Data()
 	if err != nil {
-		beego.Error(sendingEmailError + err.Error())
+		beego.Error("Sending email error" + err.Error())
 		return err
 	}
 
 	_, err = w.Write([]byte(mail.BuildMessage()))
 	if err != nil {
-		beego.Error(sendingEmailError + err.Error())
+		beego.Error("Sending email error" + err.Error())
 		return err
 	}
 
 	err = w.Close()
 	if err != nil {
-		beego.Error(sendingEmailError + err.Error())
+		beego.Error("Sending email error" + err.Error())
 		return err
 	}
 

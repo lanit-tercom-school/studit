@@ -82,7 +82,7 @@ func (c *AuthController) Login() {
 		// Ищем в бд соответствия
 		user, err := TryToLogin(v.Login, v.Password)
 		if err != nil {
-			beego.Debug(err.Error())
+			beego.Debug("Login error (403):", err.Error())
 			c.Data["json"] = err.Error()
 			c.Ctx.Output.SetStatus(HTTP_FORBIDDEN)
 		} else {

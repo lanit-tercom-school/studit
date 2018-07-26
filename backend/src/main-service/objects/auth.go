@@ -44,6 +44,9 @@ var SignupDataType = gql.NewObject(
 			"ActivationCode": &gql.Field{
 				Type: gql.String,
 			},
+			"Message": &gql.Field{
+				Type: gql.String,
+			},
 		},
 	},
 )
@@ -64,6 +67,9 @@ var SigninDataType = gql.NewObject(
 			},
 			"PermissionLevel": &gql.Field{
 				Type: gql.Int,
+			},
+			"Message": &gql.Field{
+				Type: gql.String,
 			},
 		},
 	},
@@ -97,6 +103,7 @@ func ResolveGetSignupDataByLoginPasswordNickname(p gql.ResolveParams) (interface
 	err := helpers.HttpPost(conf.Configuration.AuthServiceURL+"v1/signup/", sendData, &getData)
 	return getData, err
 }
+
 func ResolveGetActivationDataByCode(p gql.ResolveParams) (interface{}, error) {
 	var code string
 	var ok bool
