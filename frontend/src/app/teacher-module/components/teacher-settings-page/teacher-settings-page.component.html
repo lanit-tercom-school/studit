@@ -63,7 +63,7 @@
         <button class="btn btn-primary" *ngIf="!Clicked" role="button" (click)="ShowHide()">Сменить пароль</button>
         <button class="btn btn-default" *ngIf="Clicked" role="button" (click)="ShowHide()">Скрыть</button>
         <span *ngIf="IsChanged">
-          <p class="text-success">Пароль успешно изменен.</p>
+          <h3 class="text-success">Пароль успешно изменен!</h3>
         </span>
         <form *ngIf="Clicked && !IsChanged">
           <div class="form-inline">
@@ -72,13 +72,17 @@
           </div>
           <div class="form-inline">
             <label class="col-sm-2 col-md-3 col-lg-3  col-form-label">Новый пароль</label>
-            <input type="password" [(ngModel)]="Passwords.new" name="newPassword" class="form-control">
+            <input type="password" [(ngModel)]="Passwords.new" name="newPassword" class="form-control" #password="ngModel" required pattern="[a-zA-Z0-9]{6,}" />
+            <div [hidden]="password.valid || password.untouched" class="col-sm-offset-3 alert alert-danger">
+              Некорректный пароль
+            </div>
           </div>
           <div class="form-inline">
             <label class="col-sm-2 col-md-3 col-lg-3  col-form-label">Повторите пароль</label>
             <input type="password" [(ngModel)]="NewPasswordAgain" name="newPasswordAgain" class="form-control">
           </div>
-          <button type="submit" role="button" (click)="ChangePassword()" class="btn btn-primary">Подтвердить</button>
+          <button type="submit" role="button" *ngIf="password.valid==true" (click)="ChangePassword()" class="btn btn-primary">Подтвердить</button>
+          <button type="submit" role="button" *ngIf="password.valid==false" class="btn btn-primary">Подтвердить</button>
         </form>
       </form>
     </div>
