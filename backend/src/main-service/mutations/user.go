@@ -43,6 +43,18 @@ var UserQueryType = gql.NewObject(
 				},
 				Resolve: objects.ResolvePutNewDescription,
 			},
+			"ChangeContact": &gql.Field{
+				Type: objects.MessageType,
+				Args: gql.FieldConfigArgument{
+					"TypeId": &gql.ArgumentConfig{
+						Type: gql.String,
+					},
+					"New": &gql.ArgumentConfig{
+						Type: gql.String,
+					},
+				},
+				Resolve: objects.ResolvePutNewContact,
+			},
 		},
 	},
 )

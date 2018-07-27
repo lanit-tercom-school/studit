@@ -23,6 +23,18 @@ type User struct {
 	Avatar      string
 }
 
+type ContactType struct {
+	Id   int
+	Type string
+}
+
+type UserContact struct {
+	Id      int          `json:"Id"`
+	Contact string       `json:"Contact"`
+	Type    *ContactType `json:"Type"`
+	User    *User        `json:"UserId"`
+}
+
 //UserType - grqphql объект пользователя
 var UserType = gql.NewObject(
 	gql.ObjectConfig{
@@ -187,4 +199,44 @@ func ResolvePutNewDescription(p gql.ResolveParams) (interface{}, error) {
 	message, err := UpdateUserOnServer(p, user)
 
 	return message, err
+}
+
+func ResolvePutNewContact(p gql.ResolveParams) (interface{}, error) {
+	id := helpers.InterfaceToString(p.Args["TypeId"])
+	new := helpers.InterfaceToString(p.Args["New"])
+	token := helpers.InterfaceToString(p.Context.Value("Token"))
+	user_id := strconv.Itoa(p.Context.Value("CurrentUser").(CurrentClient).UserId)
+
+	message := Message{}
+	var contact []UserContact
+	contactToGet := UserContact{}
+	if err := helpers.HttpGetWithToken(conf.Configuration.DataServiceURL+"v1/user_contact/?query=user_id:"+user_id+",type_id:"+id, token, &contact); err != nil {
+		return nil, err
+	}
+	if contact[0] != contactToGet {
+		contactToSend := contact[0]
+		contactToSend.Contact = new
+		if err := helpers.HttpPutWithToken(conf.Configuration.DataServiceURL+"v1/user_contact/"+strconv.Itoa(contactToSend.Id), token, contactToSend, &message); err != nil {
+			return nil, err
+		}
+		return message, nil
+	} else {
+		user := User{}
+		if err := helpers.HttpGetWithToken(conf.Configuration.DataServiceURL+"v1/user/"+user_id, token, &user); err != nil {
+			return nil, err
+		}
+		contactType := ContactType{}
+		if err := helpers.HttpGetWithToken(conf.Configuration.DataServiceURL+"v1/contact_type/"+id, token, &contactType); err != nil {
+			return nil, err
+		}
+		contactToSend := UserContact{
+			Contact: new,
+			User:    &user,
+			Type:    &contactType,
+		}
+		if err := helpers.HttpPost(conf.Configuration.DataServiceURL+"v1/user_contact/", contactToSend, &message); err != nil {
+			return nil, err
+		}
+		return message, nil
+	}
 }
