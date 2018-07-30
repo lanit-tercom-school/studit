@@ -231,7 +231,6 @@ func ResolvePutNewContact(p gql.ResolveParams) (interface{}, error) {
 		if err := helpers.HttpPost(conf.Configuration.DataServiceURL+"v1/user_contact/", contactToSend, &message); err != nil {
 			return nil, err
 		}
-		message.Message = "OK"
 		return message, nil
 	}
 }
