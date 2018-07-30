@@ -209,11 +209,10 @@ func ResolvePutNewContact(p gql.ResolveParams) (interface{}, error) {
 
 	message := Message{}
 	var contact []UserContact
-	contactToGet := UserContact{}
 	if err := helpers.HttpGetWithToken(conf.Configuration.DataServiceURL+"v1/user_contact/?query=user_id:"+user_id+",type_id:"+id, token, &contact); err != nil {
 		return nil, err
 	}
-	if contact[0] != contactToGet {
+	if len(contact) >= 1 {
 		contactToSend := contact[0]
 		contactToSend.Contact = new
 		if err := helpers.HttpPutWithToken(conf.Configuration.DataServiceURL+"v1/user_contact/"+strconv.Itoa(contactToSend.Id), token, contactToSend, &message); err != nil {
@@ -221,14 +220,9 @@ func ResolvePutNewContact(p gql.ResolveParams) (interface{}, error) {
 		}
 		return message, nil
 	} else {
-		user := User{}
-		if err := helpers.HttpGetWithToken(conf.Configuration.DataServiceURL+"v1/user/"+user_id, token, &user); err != nil {
-			return nil, err
-		}
-		contactType := ContactType{}
-		if err := helpers.HttpGetWithToken(conf.Configuration.DataServiceURL+"v1/contact_type/"+id, token, &contactType); err != nil {
-			return nil, err
-		}
+		user := User{Id: p.Context.Value("CurrentUser").(CurrentClient).UserId}
+		id_int, _ := strconv.Atoi(id)
+		contactType := ContactType{Id: id_int}
 		contactToSend := UserContact{
 			Contact: new,
 			User:    &user,
@@ -237,6 +231,7 @@ func ResolvePutNewContact(p gql.ResolveParams) (interface{}, error) {
 		if err := helpers.HttpPost(conf.Configuration.DataServiceURL+"v1/user_contact/", contactToSend, &message); err != nil {
 			return nil, err
 		}
+		message.Message = "OK"
 		return message, nil
 	}
 }

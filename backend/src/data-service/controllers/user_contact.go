@@ -36,7 +36,7 @@ func (c *UserContactController) Post() {
 	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
 		if _, err := models.AddUserContact(&v); err == nil {
 			c.Ctx.Output.SetStatus(HTTP_CREATED)
-			c.Data["json"] = v
+			c.Data["json"] = MakeMessageForSending(HTTP_CREATED_STR)
 		} else {
 			c.Ctx.Output.SetStatus(HTTP_INTERNAL_SERVER_ERROR)
 			c.Data["json"] = MakeMessageForSending(err.Error())
