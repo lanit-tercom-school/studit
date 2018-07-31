@@ -8,6 +8,7 @@ import (
 
 var PostProjectEnroll gql.Field
 var DeleteProjectEnroll gql.Field
+var GetProjectEnroll gql.Field
 
 func init() {
 	PostProjectEnroll = gql.Field{
