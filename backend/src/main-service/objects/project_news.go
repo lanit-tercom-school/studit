@@ -13,13 +13,13 @@ import (
 
 // структура новости, которую мы передаем дата-сервису
 type ProjectNews struct {
-	Id          int
-	Project_id  int
-	Title       string
-	Description string
-	Created     time.Time
-	Edited      time.Time
-	Image       string
+	Id          int       `json:"Id"`
+	Project_id  int       `json:"Project_id"`
+	Title       string    `json:"Title"`
+	Description string    `json:"Description"`
+	Created     time.Time `json:"Created"`
+	Edited      time.Time `json:"Edited"`
+	Image       string    `json:"Image"`
 }
 
 // Функция, которая отправляет запрос дата-сервису для добавления новости к проекту
