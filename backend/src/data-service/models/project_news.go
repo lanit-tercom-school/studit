@@ -20,12 +20,16 @@ func init() {
 	orm.RegisterModel(new(ProjectNews))
 }
 
+// AddProjectNews добавляет новость проекта в БД
+// throws error if couldn't insert project news into data base
 func AddProjectNews(m *ProjectNews) (id int64, err error) {
 	o := orm.NewOrm()
 	id, err = o.Insert(m)
 	return
 }
 
+// GetProjectNewsById достает новость проекта по id новости из БД
+// throws error if news with this ID don't exist
 func GetProjectNewsById(id int) (v *ProjectNews, err error) {
 	o := orm.NewOrm()
 	v = &ProjectNews{Id: id}
